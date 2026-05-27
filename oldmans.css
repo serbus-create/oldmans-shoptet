@@ -1,3 +1,20 @@
+/* === BANNER — přes celou šířku === */
+.banners-row,
+.row.banners-row {
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+.wide-carousel {
+  width: 100% !important;
+  border-radius: 0 !important;
+}
+.wide-carousel .item img {
+  width: 100% !important;
+  height: auto !important;
+  border-radius: 0 !important;
+}
+
 /* ================================================
    OLD MAN'S — Shoptet Classic custom styles v2.0
    Kompletní přepis headeru + patičky
@@ -568,86 +585,6 @@
   .wide-carousel { grid-row: 1 !important; }
 }
 
-
-/* === BANNER — peek efekt jako na oldmans.cz === */
-.banners-row,
-.row.banners-row {
-  position: relative !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  overflow: visible !important;
-}
-
-.wide-carousel {
-  max-width: calc(100% - 160px) !important;
-  margin: 0 auto !important;
-  border-radius: 20px !important;
-  overflow: hidden !important;
-  position: relative !important;
-}
-
-.wide-carousel .item img,
-.wide-carousel .carousel-inner img {
-  border-radius: 20px !important;
-  width: 100% !important;
-  height: auto !important;
-}
-
-/* Šipky */
-.wide-carousel .carousel-control {
-  width: 50px !important;
-  height: 52px !important;
-  background: #f7c91b !important;
-  border-radius: 5px !important;
-  top: 50% !important;
-  bottom: auto !important;
-  transform: translateY(-50%) !important;
-  opacity: 1 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  position: absolute !important;
-}
-
-.wide-carousel .carousel-control.left {
-  left: -65px !important;
-}
-
-.wide-carousel .carousel-control.right {
-  right: -65px !important;
-}
-
-.wide-carousel .carousel-control span {
-  color: #000 !important;
-  font-size: 18px !important;
-  font-weight: bold !important;
-}
-
-/* Pagination dots */
-.wide-carousel .carousel-indicators {
-  bottom: 15px !important;
-}
-
-.wide-carousel .carousel-indicators li {
-  background: rgba(255,255,255,0.5) !important;
-  border: none !important;
-  width: 10px !important;
-  height: 10px !important;
-  border-radius: 5px !important;
-}
-
-.wide-carousel .carousel-indicators .active {
-  background: #f7c91b !important;
-  width: 30px !important;
-}
-
-@media (max-width: 768px) {
-  .wide-carousel {
-    max-width: calc(100% - 60px) !important;
-  }
-  .wide-carousel .carousel-control.left { left: -32px !important; }
-  .wide-carousel .carousel-control.right { right: -32px !important; }
-}
 
 /* === KATEGORIE NAVIGACE === */
 #om-cat-menu {
