@@ -1,16 +1,19 @@
 (function() {
   function injectAll() {
 
-    // Skryjeme jen header-top, navigaci zachováme
+    // Skryjeme jen header-top
     var headerTop = document.querySelector('#header .header-top');
     if (headerTop) headerTop.style.display = 'none';
 
-    // Topbar
+    // Skryjeme původní navigaci Shoptetu
+    var headerBottom = document.querySelector('#header .header-bottom');
+    if (headerBottom) headerBottom.style.display = 'none';
+
+    // Custom header
     var topbar = document.createElement('div');
     topbar.id = 'om-topbar';
     topbar.innerHTML = '<div class="om-topbar-inner"><a href="tel:+420774772405">📞 +420 774 772 405</a><div><a href="/jak-nakupovat/">Jak nakupovat</a> | <a href="/obchodni-podminky/">Obchodní podmínky</a></div></div>';
 
-    // Custom header
     var header = document.createElement('div');
     header.id = 'om-header';
     header.innerHTML = `
@@ -28,7 +31,7 @@
           </div>
         </a>
         <div class="om-search">
-          <form action="/action/ProductSearch/prepareString/" method="post" id="omSearchForm">
+          <form action="/action/ProductSearch/prepareString/" method="post">
             <input type="hidden" name="language" value="cs">
             <input type="search" name="string" placeholder="Napište, co hledáte..">
             <button type="submit">Hledat</button>
@@ -48,18 +51,75 @@
         </div>
       </div>`;
 
-    // Vložíme před #header
+    // Kategorie navigace — přesně jako na WP
+    var catMenu = document.createElement('div');
+    catMenu.id = 'om-cat-menu';
+    catMenu.innerHTML = `
+      <div class="om-cat-menu-inner">
+        <ul class="om-cat-list" id="omCatList">
+          <li class="cat-favorite"><a href="/stitky/top-produkty/"><span class="cat-icon">⭐</span> Bestseller</a></li>
+          <li class="cat-sale"><a href="/stitky/akcni-cena/"><span class="cat-icon">🏷️</span> V akci</a></li>
+          <li><a href="/kategorie/omacky-a-majonezy/">Omáčky a majonézy</a></li>
+          <li><a href="/kategorie/salatove-dressingy/">Salátové dresingy</a></li>
+          <li><a href="/kategorie/chilli-omacky/">Chilli omáčky</a></li>
+          <li><a href="/kategorie/chilli-mash/">Chilli Mash</a></li>
+          <li><a href="/kategorie/okurkove-relishe/">Okurkové Relishe</a></li>
+          <li><a href="/kategorie/premiove-pomazanky/">Prémiové pomazánky</a></li>
+          <li><a href="/kategorie/snacky-a-orechy/">Snacky a ořechy</a></li>
+          <li><a href="/kategorie/gumovi-medvidci/">Gumoví medvídci</a></li>
+          <li class="om-more-btn" id="omMoreBtn" style="display:none">
+            <span>≡ Více</span>
+            <ul class="om-more-submenu" id="omMoreSubmenu"></ul>
+          </li>
+        </ul>
+      </div>`;
+
     var shoptetHeader = document.querySelector('#header');
     if (shoptetHeader) {
-      shoptetHeader.parentNode.insertBefore(header, shoptetHeader);
+      shoptetHeader.parentNode.insertBefore(catMenu, shoptetHeader);
+      shoptetHeader.parentNode.insertBefore(header, catMenu);
       shoptetHeader.parentNode.insertBefore(topbar, header);
     }
 
-    // Navigace - stylujeme
-    var nav = document.querySelector('#navigation');
-    if (nav) {
-      nav.style.background = '#fff';
-    }
+    // Responsive kategorie menu — skryje přebývající položky do "Více"
+    setTimeout(function() {
+      var list = document.getElementById('omCatList');
+      var moreBtn = document.getElementById('omMoreBtn');
+      var moreSubmenu = document.getElementById('omMoreSubmenu');
+      if (!list || !moreBtn) return;
+
+      var items = Array.from(list.children).filter(function(li) { return li !== moreBtn; });
+      var menuWidth = list.offsetWidth;
+      var moreWidth = 80;
+      var total = 0;
+      var overflow = [];
+
+      items.forEach(function(li) { li.style.display = 'inline-flex'; });
+
+      items.forEach(function(li, i) {
+        total += li.offsetWidth + 10;
+        if (total + moreWidth > menuWidth) {
+          overflow.push(i);
+        }
+      });
+
+      if (overflow.length > 0) {
+        overflow.forEach(function(i) {
+          items[i].style.display = 'none';
+          var clone = items[i].cloneNode(true);
+          clone.style.display = 'flex';
+          moreSubmenu.appendChild(clone);
+        });
+        moreBtn.style.display = 'inline-flex';
+      }
+
+      moreBtn.addEventListener('mouseenter', function() {
+        moreSubmenu.style.display = 'block';
+      });
+      moreBtn.addEventListener('mouseleave', function() {
+        moreSubmenu.style.display = 'none';
+      });
+    }, 200);
 
     // Homepage sekce
     if (window.location.pathname !== '/' && window.location.pathname !== '') return;
@@ -94,7 +154,7 @@
       </div>
     </div>`;
 
-    // Kategorie
+    // Kategorie sekce
     var categories = document.createElement('div');
     categories.className = 'om-section om-categories';
     categories.innerHTML = `<div class="om-section-inner">
