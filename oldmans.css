@@ -1,54 +1,66 @@
-/* === OPRAVA BANNERU A HEADERU === */
-
-/* Skryjeme původní Shoptet header-top */
+/* === BANNER + HEADER === */
 #header .header-top { display: none !important; }
 #header .header-bottom { display: none !important; }
 
-/* Banner přes celou šířku */
-#content-wrapper {
-  padding: 0 !important;
+/* Banner - plná šířka */
+#content-wrapper,
+.content-wrapper-in,
+#content.content.wide,
+#content.content {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
   max-width: 100% !important;
+  width: 100% !important;
 }
-.content-wrapper-in {
+
+.overall-wrapper > #content-wrapper {
   padding: 0 !important;
 }
-#content.content.wide {
-  padding: 0 !important;
-  max-width: 100% !important;
-}
-.banners-row,
-.row.banners-row {
-  padding: 0 !important;
+
+.row.banners-row,
+.banners-row {
   margin: 0 !important;
-  width: 100% !important;
+  padding: 0 !important;
   max-width: 100% !important;
+  width: 100% !important;
 }
-.wide-carousel,
-#carousel {
-  width: 100% !important;
+
+.wide-carousel {
   max-width: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
   border-radius: 0 !important;
-  margin: 0 !important;
 }
+
+.wide-carousel .carousel,
 .wide-carousel .carousel-inner,
 .wide-carousel .item,
 .wide-carousel .item.active {
-  width: 100% !important;
   max-width: 100% !important;
+  width: 100% !important;
 }
-.wide-carousel .item img,
-.wide-carousel .carousel-inner img,
-#carousel img {
+
+.wide-carousel img,
+#carousel img,
+.wide-carousel .item a img {
   width: 100% !important;
   max-width: 100% !important;
   height: auto !important;
-  border-radius: 0 !important;
   display: block !important;
+  border-radius: 0 !important;
 }
 
-/* Container šířka */
+/* Zbytek stránky - container */
+.benefitBanner,
+.welcome-wrapper,
+.om-section {
+  max-width: 100% !important;
+}
+
 .container {
   max-width: 1400px !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
 }
 
 
