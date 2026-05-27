@@ -1,19 +1,31 @@
-(function() {
+(function () {
+
+  /* =====================================================
+     OLD MAN'S Shoptet – Custom Header + Homepage sekce
+     GitHub: serbus-create/oldmans-shoptet
+     Verze: 3.0
+     ===================================================== */
+
   function injectAll() {
 
-    // Skryjeme jen header-top
+    /* -------------------------------------------------
+       1. SKRYJEME PŮVODNÍ SHOPTET HEADER
+    ------------------------------------------------- */
     var headerTop = document.querySelector('#header .header-top');
     if (headerTop) headerTop.style.display = 'none';
-
-    // Skryjeme původní navigaci Shoptetu
     var headerBottom = document.querySelector('#header .header-bottom');
     if (headerBottom) headerBottom.style.display = 'none';
 
-    // Custom header
+    /* -------------------------------------------------
+       2. TOP BAR
+    ------------------------------------------------- */
     var topbar = document.createElement('div');
     topbar.id = 'om-topbar';
     topbar.innerHTML = '<div class="om-topbar-inner"><a href="tel:+420774772405">📞 +420 774 772 405</a><div><a href="/jak-nakupovat/">Jak nakupovat</a> | <a href="/obchodni-podminky/">Obchodní podmínky</a></div></div>';
 
+    /* -------------------------------------------------
+       3. HLAVNÍ HEADER
+    ------------------------------------------------- */
     var header = document.createElement('div');
     header.id = 'om-header';
     header.innerHTML = `
@@ -45,13 +57,15 @@
           <div class="om-login"><a href="/muj-ucet/">👤</a></div>
           <div class="om-cart">
             <a href="/kosik/" class="cart-count toggle-window" data-target="cart" data-hover="true" data-redirect="true">
-              <span class="cart-price visible-lg-inline-block" data-testid="headerCartPrice">Prázdný košík</span>
+              <span id="om-cart-price" class="cart-price">Košík</span>
             </a>
           </div>
         </div>
       </div>`;
 
-    // Kategorie navigace — přesně jako na WP
+    /* -------------------------------------------------
+       4. KATEGORIE MENU
+    ------------------------------------------------- */
     var catMenu = document.createElement('div');
     catMenu.id = 'om-cat-menu';
     catMenu.innerHTML = `
@@ -74,6 +88,7 @@
         </ul>
       </div>`;
 
+    /* Vložíme header před #header */
     var shoptetHeader = document.querySelector('#header');
     if (shoptetHeader) {
       shoptetHeader.parentNode.insertBefore(catMenu, shoptetHeader);
@@ -81,30 +96,29 @@
       shoptetHeader.parentNode.insertBefore(topbar, header);
     }
 
-    // Responsive kategorie menu — skryje přebývající položky do "Více"
-    setTimeout(function() {
+    /* -------------------------------------------------
+       5. RESPONSIVE KATEGORIE MENU – overflow do "Více"
+    ------------------------------------------------- */
+    setTimeout(function () {
       var list = document.getElementById('omCatList');
       var moreBtn = document.getElementById('omMoreBtn');
       var moreSubmenu = document.getElementById('omMoreSubmenu');
       if (!list || !moreBtn) return;
 
-      var items = Array.from(list.children).filter(function(li) { return li !== moreBtn; });
+      var items = Array.from(list.children).filter(function (li) { return li !== moreBtn; });
       var menuWidth = list.offsetWidth;
-      var moreWidth = 80;
+      var moreWidth = 90;
       var total = 0;
       var overflow = [];
 
-      items.forEach(function(li) { li.style.display = 'inline-flex'; });
-
-      items.forEach(function(li, i) {
-        total += li.offsetWidth + 10;
-        if (total + moreWidth > menuWidth) {
-          overflow.push(i);
-        }
+      items.forEach(function (li) { li.style.display = 'inline-flex'; });
+      items.forEach(function (li, i) {
+        total += li.offsetWidth + 4;
+        if (total + moreWidth > menuWidth) overflow.push(i);
       });
 
       if (overflow.length > 0) {
-        overflow.forEach(function(i) {
+        overflow.forEach(function (i) {
           items[i].style.display = 'none';
           var clone = items[i].cloneNode(true);
           clone.style.display = 'flex';
@@ -113,15 +127,36 @@
         moreBtn.style.display = 'inline-flex';
       }
 
-      moreBtn.addEventListener('mouseenter', function() {
-        moreSubmenu.style.display = 'block';
-      });
-      moreBtn.addEventListener('mouseleave', function() {
-        moreSubmenu.style.display = 'none';
-      });
-    }, 200);
+      moreBtn.addEventListener('mouseenter', function () { moreSubmenu.style.display = 'block'; });
+      moreBtn.addEventListener('mouseleave', function () { moreSubmenu.style.display = 'none'; });
+    }, 250);
 
-    // Homepage sekce
+    /* -------------------------------------------------
+       6. DYNAMICKÝ KOŠÍK – číst ze Shoptet DOM
+    ------------------------------------------------- */
+    function syncCart() {
+      var priceEl = document.querySelector('.header-cart-total, .cart-total-price, [data-testid="headerCartPrice"]');
+      var countEl = document.querySelector('.header-cart-items-count, .cart-count-value, [data-testid="headerCartCount"]');
+      var omPrice = document.getElementById('om-cart-price');
+      if (!omPrice) return;
+
+      var price = priceEl ? priceEl.textContent.trim() : '';
+      var count = countEl ? countEl.textContent.trim() : '';
+
+      if (price && price !== '0' && price !== '0 Kč') {
+        omPrice.textContent = (count ? count + ' × ' : '') + price;
+      } else {
+        omPrice.textContent = 'Prázdný košík';
+      }
+    }
+    setTimeout(syncCart, 800);
+    setTimeout(syncCart, 2000);
+    document.addEventListener('click', function () { setTimeout(syncCart, 500); });
+
+    /* -------------------------------------------------
+       7. HOMEPAGE SEKCE
+       Vkládáme za .benefitBanner (USP lišta Shoptetu)
+    ------------------------------------------------- */
     if (window.location.pathname !== '/' && window.location.pathname !== '') return;
 
     var benefitBanner = document.querySelector('.benefitBanner');
@@ -129,7 +164,7 @@
     var parent = benefitBanner.parentNode;
     var ref = benefitBanner.nextSibling;
 
-    // Partneři
+    /* --- 7a. PARTNEŘI (scrollující pás) --- */
     var partners = document.createElement('div');
     partners.className = 'om-section om-partners';
     partners.innerHTML = `<div class="om-section-inner">
@@ -141,74 +176,184 @@
           <img src="https://oldmans.cz/wp-content/uploads/2024/01/oldmans-partner-bageterie-boulevard-logo.png" alt="Bageterie">
           <img src="https://oldmans.cz/wp-content/uploads/2023/06/turbopizza.png" alt="Turbo Pizza">
           <img src="https://oldmans.cz/wp-content/uploads/2024/01/oldmans-partner-faency-fries-logo.png" alt="Fancy Fries">
+          <img src="https://oldmans.cz/wp-content/uploads/2023/06/bagel-lange.png" alt="Bagel Lounge">
           <img src="https://oldmans.cz/wp-content/uploads/2024/07/oldmans-partner-rohlik-logo.png" alt="Rohlik">
           <img src="https://oldmans.cz/wp-content/uploads/2024/07/oldmans-logo-partner-zvoska.png" alt="Zvoska">
           <img src="https://oldmans.cz/wp-content/uploads/2024/07/oldmans-logo-partner-foodora.png" alt="Foodora">
           <img src="https://oldmans.cz/wp-content/uploads/2024/07/oldmans-logo-partner-fany.png" alt="Fany">
+          <img src="https://oldmans.cz/wp-content/uploads/2026/01/ruds-pizza-partner-om.jpg" alt="Ruds Pizza">
+          <img src="https://oldmans.cz/wp-content/uploads/2024/07/oldmans-logo-partner-jalta.png" alt="Jalta">
           <img src="https://oldmans.cz/wp-content/uploads/2024/07/oldmans-partner-hotel-u-prince-logo.png" alt="Hotel U Prince">
           <img src="https://oldmans.cz/wp-content/uploads/2024/11/pizza-raketou-logo-partner.png" alt="Raketou">
+          <img src="https://oldmans.cz/wp-content/uploads/2024/07/oldmans-partner-bauer-group-logo.png" alt="Bauer Group">
+          <!-- duplikát pro plynulé scrollování -->
           <img src="https://oldmans.cz/wp-content/uploads/2025/01/oldmans-partner-shell.png" alt="Shell">
           <img src="https://oldmans.cz/wp-content/uploads/2024/01/oldmans-partner-bageterie-boulevard-logo.png" alt="Bageterie">
           <img src="https://oldmans.cz/wp-content/uploads/2024/07/oldmans-partner-rohlik-logo.png" alt="Rohlik">
+          <img src="https://oldmans.cz/wp-content/uploads/2023/06/turbopizza.png" alt="Turbo Pizza">
+          <img src="https://oldmans.cz/wp-content/uploads/2024/07/oldmans-logo-partner-foodora.png" alt="Foodora">
         </div>
       </div>
     </div>`;
 
-    // Kategorie sekce
+    /* --- 7b. O NÁS --- */
+    var about = document.createElement('div');
+    about.className = 'om-section om-about';
+    about.innerHTML = `<div class="om-section-inner">
+      <div class="om-about-inner">
+        <div class="om-about-text">
+          <h2>OLD MAN's : omáčky na míru</h2>
+          <p><strong>RODINNÁ firma THE SAUCE MAKERS s.r.o a značka OLD MAN's – Prémiové Omáčky a Dressingy PRO LIDI, kteří Milují Chuťové Dobrodružství.</strong></p>
+          <p>Firma zakládaná v roce 2020 je výsledkem vášně zakladatele Tomáše, který sbíral receptury na omáčky z celého světa. Jeho touha propojit různé kuchyně a kultury vedla k vytvoření značky OLD MAN's.</p>
+          <p>OLD MAN's přináší prémiové omáčky a dressingy, které mají potěšit chuťové buňky a obohatit vaše pokrmy.</p>
+          <a href="/o-nas/" class="om-btn-red">Více o nás</a>
+        </div>
+        <div class="om-about-img">
+          <img src="https://oldmans.cz/wp-content/themes/rev-klient/assets/img/about-logo.png" alt="OLD MAN'S">
+        </div>
+      </div>
+    </div>`;
+
+    /* --- 7c. KATEGORIE OMÁČEK --- */
     var categories = document.createElement('div');
     categories.className = 'om-section om-categories';
     categories.innerHTML = `<div class="om-section-inner">
       <p class="om-subtitle">Vyberte si dle vaší chuti</p>
-      <h2>Kategorie omáček</h2>
+      <h2><span>Kategorie</span> omáček</h2>
       <div class="om-cats-grid">
-        <a href="/kategorie/salatove-dressingy--squeeze-blast/" class="om-cat-item">🧴 Squeeze Blast</a>
-        <a href="/kategorie/omacky-a-majonezy/" class="om-cat-item">🥫 Omáčky a majonézy</a>
-        <a href="/kategorie/salatove-dressingy/" class="om-cat-item">🥗 Salátové dresingy</a>
-        <a href="/kategorie/chilli-mash/" class="om-cat-item">🌶️ Chilli omáčky</a>
-        <a href="/kategorie/chilli-mash/" class="om-cat-item">🔥 Chilli Mash</a>
-        <a href="/kategorie/okurkove-relishe/" class="om-cat-item">🥒 Okurkové Relishe</a>
-        <a href="/kategorie/premiove-pomazanky/" class="om-cat-item">🧈 Prémiové pomazánky</a>
-        <a href="/kategorie/snacky-a-orechy/" class="om-cat-item">🥜 Snacky a ořechy</a>
-        <a href="/kategorie/gumovi-medvidci/" class="om-cat-item">🐻 Gumoví medvídci</a>
+        <a href="/kategorie/salatove-dressingy--squeeze-blast/" class="om-cat-item">
+          <span class="om-cat-icon">🧴</span> Squeeze Blast
+        </a>
+        <a href="/kategorie/omacky-a-majonezy/" class="om-cat-item">
+          <img src="https://oldmans.cz/wp-content/uploads/2025/07/specials-oldmans.png" alt=""> Omáčky a majonézy
+        </a>
+        <a href="/kategorie/omacky-a-majonezy--burger-a-steak/" class="om-cat-item">
+          <img src="https://oldmans.cz/wp-content/uploads/2025/07/burger.png" alt=""> Burger a steak
+        </a>
+        <a href="/kategorie/chilli-omacky/" class="om-cat-item">
+          <img src="https://oldmans.cz/wp-content/uploads/2024/01/oldmans-icons-chilli.png" alt=""> Chilli omáčky
+        </a>
+        <a href="/kategorie/salatove-dressingy/" class="om-cat-item">
+          <img src="https://oldmans.cz/wp-content/uploads/2024/01/oldmans-icons-salads.png" alt=""> Salátové dresingy
+        </a>
+        <a href="/kategorie/omacky-a-majonezy--ceska-klasika/" class="om-cat-item">
+          <img src="https://oldmans.cz/wp-content/uploads/2025/07/czech-republic.png" alt=""> Česká klasika
+        </a>
+        <a href="/kategorie/chilli-mash/" class="om-cat-item">
+          <img src="https://oldmans.cz/wp-content/uploads/2025/07/chilli-mash.png" alt=""> Chilli Mash
+        </a>
+        <a href="/kategorie/okurkove-relishe/" class="om-cat-item">
+          <img src="https://oldmans.cz/wp-content/uploads/2025/07/cucumber.png" alt=""> Okurkové Relishe
+        </a>
+        <a href="/kategorie/premiove-pomazanky/" class="om-cat-item">
+          <img src="https://oldmans.cz/wp-content/uploads/2025/07/sauce-cat.png" alt=""> Prémiové pomazánky
+        </a>
+        <a href="/kategorie/snacky-a-orechy/" class="om-cat-item">
+          <img src="https://oldmans.cz/wp-content/uploads/2025/07/nuts.png" alt=""> Snacky a ořechy
+        </a>
+        <a href="/kategorie/gumovi-medvidci/" class="om-cat-item">
+          <img src="https://oldmans.cz/wp-content/uploads/2025/07/bears.png" alt=""> Gumoví medvídci
+        </a>
       </div>
     </div>`;
 
-    // Recepty
+    /* --- 7d. NAPSALI O NÁS (Apetit) --- */
+    var apetit = document.createElement('div');
+    apetit.className = 'om-section om-apetit';
+    apetit.innerHTML = `<div class="om-section-inner">
+      <div class="om-apetit-inner">
+        <div class="om-apetit-img">
+          <a href="https://www.apetitonline.cz/old-mans-premiova-kvalita-v-kazde-lahvi" target="_blank">
+            <img src="https://oldmans.cz/wp-content/uploads/2024/10/foto-clanek.jpg" alt="Apetit clanek">
+          </a>
+        </div>
+        <div class="om-apetit-text">
+          <img src="https://www.gastrotek.cz/assets/img/partners/apetit.jpg" alt="Apetit" class="om-apetit-logo">
+          <h2>Napsali o nás</h2>
+          <p>Značka OLD MAN's se stala známou v gastronomických kruzích díky svým prémiovým omáčkám a dressingům. Společnost byla založena z potřeby nabídnout trhu produkty, které svou chutí a složením vynikají nad běžnými alternativami.</p>
+          <p>Nyní se značka připravuje na vstup na retailový trh, aby i domácí kuchaři mohli ochutnat prémiovost, kterou doposud nabízeli pouze restaurace.</p>
+          <p><em>Apetit (apetitonline.cz)</em></p>
+          <a href="https://www.apetitonline.cz/old-mans-premiova-kvalita-v-kazde-lahvi" target="_blank" class="om-btn-red">Přečíst celý článek</a>
+        </div>
+      </div>
+    </div>`;
+
+    /* --- 7e. RECEPTY S OBRÁZKY --- */
     var recipes = document.createElement('div');
     recipes.className = 'om-section om-recipes';
     recipes.innerHTML = `<div class="om-section-inner">
       <div class="om-section-header">
-        <h2>Vybrané recepty</h2>
+        <h2>🍴 Vybrané recepty</h2>
         <a href="/recepty/" class="om-btn-more">Ukázat všechny</a>
       </div>
-      <div class="om-recipes-list">
-        <a href="/recepty/" class="om-recipe-item">🧀 Smashburger s karamelizovanou cibulkou a Cheddarovým dipem</a>
-        <a href="/recepty/" class="om-recipe-item">🥓 Snídaňový muffin se slaninou, vejcem a Slaninovou Majonézou</a>
-        <a href="/recepty/" class="om-recipe-item">🥗 Caesar wrap s kuřetem a parmazánem</a>
-        <a href="/recepty/" class="om-recipe-item">🌶️ Loaded hranolky s Jalapeño Majonézou a čedarem</a>
-        <a href="/recepty/" class="om-recipe-item">🌶️🔥 Pikantní kuřecí tacos s Habanero Majonézou</a>
-        <a href="/recepty/" class="om-recipe-item">🍗 Buffalo křidýlka s blue cheese dipem</a>
+      <div class="om-recipes-grid">
+        <a href="/recepty/smashburger-s-karamelizovanou-cibulkou-a-cheddarovym-dipem/" class="om-recipe-item">
+          <img src="https://oldmans.cz/wp-content/uploads/2025/07/smashburger-s-karamelizovanou-cibulkou-a-cheddarovym-dipem.jpg" alt="">
+          <div class="om-recipe-title">🧀 Smashburger s karamelizovanou cibulkou a Cheddarovým dipem</div>
+        </a>
+        <a href="/recepty/snidanovy-muffin-se-slaninou-vejcem-a-slaninovou-majonezou/" class="om-recipe-item">
+          <img src="https://oldmans.cz/wp-content/uploads/2025/07/snidanovy-muffin-se-slaninou-vejcem-a-slaninovou-majonezou.jpg" alt="">
+          <div class="om-recipe-title">🥓 Snídaňový muffin se slaninou, vejcem a Slaninovou Majonézou</div>
+        </a>
+        <a href="/recepty/caesar-wrap-s-kuretem-a-parmazanem/" class="om-recipe-item">
+          <img src="https://oldmans.cz/wp-content/uploads/2025/07/caesar-wrap-s-kuretem-a-parmazanem.jpg" alt="">
+          <div class="om-recipe-title">🥗 Caesar wrap s kuřetem a parmazánem</div>
+        </a>
+        <a href="/recepty/loaded-hranolky-s-jalapeno-majonezou-a-cedarem/" class="om-recipe-item">
+          <img src="https://oldmans.cz/wp-content/uploads/2025/07/loaded-hranolky-s-jalapeno-majonezou-a-cedarem.jpg" alt="">
+          <div class="om-recipe-title">🌶️ Loaded hranolky s Jalapeño Majonézou a čedarem</div>
+        </a>
+        <a href="/recepty/pikantni-kureci-tacos-s-habanero-majonezou/" class="om-recipe-item">
+          <img src="https://oldmans.cz/wp-content/uploads/2025/07/pikantni-kureci-tacos-s-habanero-majonezou.jpg" alt="">
+          <div class="om-recipe-title">🌶️🔥 Pikantní kuřecí tacos s Habanero Majonézou</div>
+        </a>
+        <a href="/recepty/grilovana-bbq-zebra-s-cesnekovo-bbq-majonezou/" class="om-recipe-item">
+          <img src="https://oldmans.cz/wp-content/uploads/2025/07/grilovana-bbq-zebra-s-cesnekovo-bbq-majonezou.jpg" alt="">
+          <div class="om-recipe-title">🧄 Grilovaná BBQ žebra s česnekovo-BBQ majonézou</div>
+        </a>
+        <a href="/recepty/buffalo-kridylka-s-blue-cheese-dipem/" class="om-recipe-item">
+          <img src="https://oldmans.cz/wp-content/uploads/2025/07/buffalo-kridylka-s-blue-cheese-dipem.jpg" alt="">
+          <div class="om-recipe-title">🍗 Buffalo křidýlka s blue cheese dipem</div>
+        </a>
+        <a href="/recepty/luxusni-sendvic-s-roastbeefem-a-lanyzovou-majonezou/" class="om-recipe-item">
+          <img src="https://oldmans.cz/wp-content/uploads/2025/07/luxusni-sendvic-s-roastbeefem-a-lanyzovou-majonezou.jpg" alt="">
+          <div class="om-recipe-title">🌱 Luxusní sendvič s roastbeefem a lanýžovou majonézou</div>
+        </a>
       </div>
     </div>`;
 
-    // Instagram
+    /* --- 7f. INSTAGRAM --- */
     var instagram = document.createElement('div');
     instagram.className = 'om-section om-instagram';
-    instagram.innerHTML = `<div class="om-section-inner om-insta-inner">
-      <p class="om-subtitle">Sledujte nás</p>
-      <h2>Na INSTAGRAMU</h2>
-      <p>Chcete být v obraze co se u nás děje? Sledujte nás na instagramu!</p>
-      <a href="https://www.instagram.com/old_mans_style/" target="_blank" class="om-btn-primary">Sledovat @OLD_MANS_STYLE</a>
+    instagram.innerHTML = `<div class="om-section-inner">
+      <div class="om-insta-inner">
+        <div class="om-insta-text">
+          <p class="om-subtitle">Sledujte nás</p>
+          <h2>Na INSTAGRAMU</h2>
+          <p>Chcete být v obraze co se u nás děje, nebo jestli náhodou neděláme novou omáčku?</p>
+          <p><strong>Sledujte nás na instagramu a dozvíte se víc!</strong></p>
+          <a href="https://www.instagram.com/old_mans_style/" target="_blank" class="om-btn-primary">📸 Sledovat @OLD_MANS_STYLE</a>
+        </div>
+        <div class="om-insta-grid">
+          <a href="https://www.instagram.com/old_mans_style/" target="_blank"><img src="https://oldmans.cz/wp-content/uploads/2024/11/oldmans-ig-01.webp" alt=""></a>
+          <a href="https://www.instagram.com/old_mans_style/" target="_blank"><img src="https://oldmans.cz/wp-content/uploads/2024/11/oldmans-ig-02.webp" alt=""></a>
+          <a href="https://www.instagram.com/old_mans_style/" target="_blank"><img src="https://oldmans.cz/wp-content/uploads/2024/11/oldmans-ig-03.webp" alt=""></a>
+          <a href="https://www.instagram.com/old_mans_style/" target="_blank"><img src="https://oldmans.cz/wp-content/uploads/2024/11/oldmans-ig-04.webp" alt=""></a>
+        </div>
+      </div>
     </div>`;
 
-    [partners, categories, recipes, instagram].forEach(function(el) {
+    /* Vložíme v pořadí: partneři, o nás, kategorie, apetit, recepty, instagram */
+    [partners, about, categories, apetit, recipes, instagram].forEach(function (el) {
       parent.insertBefore(el, ref);
     });
   }
 
+  /* Spustíme po načtení DOM */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', injectAll);
   } else {
     injectAll();
   }
+
 })();
