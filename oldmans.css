@@ -1,157 +1,41 @@
-/* OLD MAN'S — Shoptet Classic v1.1 */
+/* OLD MAN'S Shoptet v1.2 */
 
-/* === NAVIGACE — bílá === */
-#navigation,
-#navigation ul,
-#navigation > ul,
-#navigation li,
-.navigation,
-[class*="navigation"] {
-  background: #ffffff !important;
-  background-color: #ffffff !important;
-}
+/* Header */
+#header,.header{background:#fff!important;border-bottom:1px solid #eee!important;padding:10px 0!important}
 
-#navigation li a {
-  color: #222222 !important;
-  font-weight: 500 !important;
-  font-size: 15px !important;
-}
+/* Logo */
+.logo img,[class*="logo"] img{max-height:65px!important;width:auto!important}
 
-#navigation li:hover {
-  background: rgba(247,201,27,0.10) !important;
-}
+/* Search */
+.search-form{background:#f3f3f4!important;border-radius:50px!important;overflow:hidden!important;height:52px!important;display:flex!important;align-items:center!important;padding:4px!important}
+.search-form input{background:transparent!important;border:none!important;outline:none!important;font-size:15px!important;flex:1!important;padding:0 16px!important;box-shadow:none!important}
+.search-form button,.btn-search,[class*="search"] button[type="submit"]{background:#111!important;color:#fff!important;border:none!important;border-radius:50px!important;padding:0 22px!important;height:44px!important;font-size:15px!important;font-weight:600!important;cursor:pointer!important;white-space:nowrap!important}
 
-#navigation li a:hover { color: #000 !important; }
+/* Navigace */
+#navigation,#navigation ul,#navigation li{background:#fff!important;background-color:#fff!important}
+#navigation li a{color:#222!important;font-weight:500!important;font-size:15px!important}
+#navigation li:hover{background:rgba(247,201,27,.10)!important}
+#navigation li a:hover{color:#000!important}
+#navigation button{background:#111!important;color:#fff!important;border-radius:5px!important}
 
-#navigation button,
-#navigation [class*="more"] {
-  background: #111111 !important;
-  color: #fff !important;
-}
+/* Produkty */
+.product-item{border-radius:10px!important;border:1px solid #cbcbcb!important;background:#fff!important;transition:border-color .3s!important}
+.product-item:hover{border-color:#000!important;box-shadow:0 4px 15px rgba(0,0,0,.08)!important}
+.product-item [class*="price"]{font-weight:600!important;color:#000!important}
+.product-item [class*="buy"],.product-item [class*="cart"]{background:#79b530!important;color:#fff!important;border:none!important;border-radius:3px!important;transition:.4s!important}
+.product-item [class*="buy"]:hover{background:#000!important}
 
-/* === HEADER === */
-#header, .header, [id="header"] {
-  background: #fff !important;
-  border-bottom: 1px solid #eee !important;
-}
+/* Patička */
+#footer,footer,.footer,[class*="footer"]{background:#111!important;background-color:#111!important;color:#ccc!important}
+#footer *,footer *{color:#ccc!important}
+#footer a:hover,footer a:hover{color:#f7c91b!important}
+#footer h4,#footer h5,footer h4,footer h5{color:#fff!important}
+#footer .theme-btn,footer .theme-btn{background:#f7c91b!important;color:#000!important;border-radius:5px!important;padding:8px 20px!important;display:inline-flex!important;align-items:center!important;gap:8px!important}
 
-/* Vyhledávání */
-.search-form button,
-.btn-search,
-[class*="search"] button[type="submit"] {
-  background: #111111 !important;
-  color: #fff !important;
-  border-radius: 50px !important;
-  font-weight: 600 !important;
-}
+/* Slider */
+.swiper-pagination-bullet{background:#fff!important;opacity:.5!important}
+.swiper-pagination-bullet-active{background:#f7c91b!important;opacity:1!important;width:30px!important;border-radius:5px!important}
 
-/* === BANNERY — přes celou šířku === */
-.homepage-banner,
-[class*="banner"],
-[class*="carousel"],
-.slider_area {
-  width: 100% !important;
-  max-width: 100% !important;
-}
-
-/* === PRODUKTOVÉ KARTY === */
-.product-item {
-  border-radius: 10px !important;
-  border: 1px solid #cbcbcb !important;
-  transition: border-color .3s !important;
-  background: #fff !important;
-}
-
-.product-item:hover {
-  border-color: #000 !important;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08) !important;
-}
-
-.product-item h3,
-.product-item [class*="title"] {
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  color: #000 !important;
-}
-
-/* Ceny */
-.product-item [class*="price"] {
-  font-weight: 600 !important;
-  color: #000 !important;
-}
-
-/* Tlačítko Do košíku — zelené */
-.product-item .btn-buy,
-.product-item [class*="buy"],
-.product-item [class*="cart"] {
-  background: #79b530 !important;
-  color: #fff !important;
-  border: none !important;
-  border-radius: 3px !important;
-  transition: .4s !important;
-}
-
-.product-item [class*="buy"]:hover {
-  background: #000 !important;
-}
-
-/* === PATIČKA — tmavá === */
-#footer, footer, .footer,
-[class*="footer"] {
-  background: #111111 !important;
-  background-color: #111111 !important;
-  color: #ccc !important;
-}
-
-#footer *, footer *, .footer * {
-  color: #cccccc !important;
-}
-
-#footer a, footer a {
-  color: #ccc !important;
-}
-
-#footer a:hover, footer a:hover {
-  color: #f7c91b !important;
-}
-
-#footer h4, #footer h5,
-footer h4, footer h5 {
-  color: #fff !important;
-}
-
-/* Instagram tlačítko */
-#footer .theme-btn, footer .theme-btn {
-  background: #f7c91b !important;
-  color: #000 !important;
-  border-radius: 5px !important;
-  padding: 8px 20px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-}
-
-/* === SWIPER PAGINATION === */
-.swiper-pagination-bullet {
-  background: #fff !important;
-  opacity: .5 !important;
-}
-
-.swiper-pagination-bullet-active {
-  background: #f7c91b !important;
-  opacity: 1 !important;
-  width: 30px !important;
-  border-radius: 5px !important;
-}
-
-/* === TLAČÍTKA === */
-.btn-primary {
-  background: #f7c91b !important;
-  color: #000 !important;
-  font-weight: 700 !important;
-  border: none !important;
-}
-
-.btn-primary:hover {
-  background: #e6b800 !important;
-}
+/* Tlačítka */
+.btn-primary{background:#f7c91b!important;color:#000!important;font-weight:700!important;border:none!important;border-radius:5px!important}
+.btn-primary:hover{background:#e6b800!important}
