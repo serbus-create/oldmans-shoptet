@@ -1,11 +1,15 @@
 (function() {
   function injectHeader() {
+    // Najdeme původní header Shoptetu
+    var shoptetHeader = document.querySelector('#header, .header-main, [id="header"]');
+    if (!shoptetHeader) return;
+
     // Topbar
     var topbar = document.createElement('div');
     topbar.id = 'om-topbar';
     topbar.innerHTML = '<div class="om-topbar-inner"><a href="tel:+420774772405">📞 +420 774 772 405</a><div><a href="/jak-nakupovat/">Jak nakupovat</a> | <a href="/obchodni-podminky/">Obchodní podmínky</a></div></div>';
 
-    // Header
+    // Custom header
     var header = document.createElement('div');
     header.id = 'om-header';
     header.innerHTML = `
@@ -38,9 +42,12 @@
         </div>
       </div>`;
 
-    var body = document.body;
-    body.insertBefore(header, body.firstChild);
-    body.insertBefore(topbar, body.firstChild);
+    // Vložíme PŘED původní header — neskrýváme ho, jen přidáme náš
+    shoptetHeader.parentNode.insertBefore(header, shoptetHeader);
+    shoptetHeader.parentNode.insertBefore(topbar, header);
+
+    // Skryjeme jen samotný header Shoptetu, ne navigaci
+    shoptetHeader.style.display = 'none';
   }
 
   if (document.readyState === 'loading') {
