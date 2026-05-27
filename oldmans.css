@@ -1,0 +1,424 @@
+/* ================================================
+   OLD MAN'S — Shoptet Classic custom styles v2.0
+   Kompletní přepis headeru + patičky
+   ================================================ */
+
+/* === RESET SHOPTET HEADERU === */
+#header, .header, [id="header"],
+#header .header-wrapper,
+#header .header-top,
+#header .header-middle,
+#header .header-bottom {
+  display: none !important;
+}
+
+/* === NÁHRADNÍ LIŠTA === */
+#om-topbar {
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px;
+  color: #666;
+  padding: 6px 0;
+}
+#om-topbar .om-topbar-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#om-topbar a { color: #666; text-decoration: none; }
+#om-topbar a:hover { color: #000; }
+
+/* === CUSTOM HEADER === */
+#om-header {
+  background: #fff;
+  border-bottom: 1px solid #eeeeee;
+  padding: 10px 0;
+  position: relative;
+  z-index: 999;
+}
+#om-header .om-header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* Logo */
+#om-header .om-logo img {
+  height: 65px;
+  width: auto;
+  display: block;
+}
+
+/* Kontakt */
+#om-header .om-contact {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: #000;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+#om-header .om-contact-icon {
+  width: 44px;
+  height: 44px;
+}
+#om-header .om-contact-icon img {
+  width: 100%;
+  height: 100%;
+}
+#om-header .om-contact-numb {
+  font-weight: 600;
+  color: #11c65d;
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: -5px;
+}
+#om-header .om-contact-text {
+  color: #999;
+  font-size: 13px;
+}
+#om-header .om-contact:hover .om-contact-numb {
+  text-decoration: underline;
+}
+
+/* Search */
+#om-header .om-search {
+  flex: 1;
+  max-width: 848px;
+  margin: 0 16px;
+}
+#om-header .om-search form {
+  display: flex;
+  align-items: center;
+  background: #f3f3f4;
+  border-radius: 50px;
+  padding: 4px 4px 4px 0;
+  height: 52px;
+  transition: box-shadow .3s;
+  position: relative;
+}
+#om-header .om-search form:hover {
+  box-shadow: 0 0 0 2px #f7c91b;
+}
+#om-header .om-search input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 0 8px 0 50px;
+  font-size: 15px;
+  color: #000;
+  outline: none;
+  height: 100%;
+}
+#om-header .om-search form:before {
+  content: "🔍";
+  position: absolute;
+  left: 18px;
+  font-size: 16px;
+  pointer-events: none;
+}
+#om-header .om-search button {
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 0 22px;
+  height: 44px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: .3s;
+}
+#om-header .om-search button:hover {
+  background: #333;
+}
+
+/* Nav links (Recepty, B2B) */
+#om-header .om-nav {
+  display: flex;
+  gap: 7px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
+}
+#om-header .om-nav a {
+  color: #666;
+  font-size: 15px;
+  font-weight: 400;
+  padding: 17px 13px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: .4s;
+}
+#om-header .om-nav a:hover { color: #000; }
+
+/* Ikony vpravo */
+#om-header .om-icons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+}
+#om-header .om-login a {
+  font-size: 25px;
+  color: #000;
+  text-decoration: none;
+  display: flex;
+}
+#om-header .om-login a:hover { color: #f7c91b; }
+
+/* Košík */
+#om-header .om-cart a {
+  display: flex;
+  align-items: center;
+  column-gap: 15px;
+  position: relative;
+  background: #f3f3f4;
+  border-radius: 50px;
+  padding: 4px 20px 4px 4px;
+  height: 52px;
+  font-weight: 560;
+  color: #000;
+  font-size: 15px;
+  text-decoration: none;
+  transition: .3s;
+}
+#om-header .om-cart a:before {
+  content: "🛒";
+  display: flex;
+  width: 44px;
+  height: 44px;
+  background: #f7c91b;
+  border-radius: 50px;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+#om-header .om-cart a:hover { background: #ebebeb; }
+
+/* === NAVIGACE KATEGORIÍ === */
+#navigation, #navigation ul, #navigation li {
+  background: #fff !important;
+  background-color: #fff !important;
+}
+#navigation li a {
+  color: #222 !important;
+  font-weight: 500 !important;
+  font-size: 15px !important;
+}
+#navigation li:hover { background: rgba(247,201,27,.10) !important; }
+#navigation li a:hover { color: #000 !important; }
+#navigation button { background: #111 !important; color: #fff !important; }
+
+/* === PRODUKTY === */
+.product-item {
+  border-radius: 10px !important;
+  border: 1px solid #cbcbcb !important;
+  background: #fff !important;
+  transition: border-color .3s !important;
+}
+.product-item:hover {
+  border-color: #000 !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,.08) !important;
+}
+.product-item [class*="price"] { font-weight: 600 !important; color: #000 !important; }
+.product-item [class*="buy"], .product-item [class*="add-to-cart"] {
+  background: #79b530 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 3px !important;
+  transition: .4s !important;
+}
+.product-item [class*="buy"]:hover { background: #000 !important; }
+
+/* === PATIČKA === */
+#footer, footer, .footer, [class*="footer"] {
+  background: #111 !important;
+  background-color: #111 !important;
+  color: #ccc !important;
+}
+#footer *, footer * { color: #ccc !important; }
+#footer a, footer a { color: #ccc !important; text-decoration: none !important; }
+#footer a:hover, footer a:hover { color: #f7c91b !important; }
+#footer h4, #footer h5, footer h4, footer h5 { color: #fff !important; }
+#footer .theme-btn, footer .theme-btn {
+  background: #f7c91b !important;
+  color: #000 !important;
+  border-radius: 5px !important;
+  padding: 8px 20px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+/* === SWIPER === */
+.swiper-pagination-bullet { background: #fff !important; opacity: .5 !important; }
+.swiper-pagination-bullet-active {
+  background: #f7c91b !important;
+  opacity: 1 !important;
+  width: 30px !important;
+  border-radius: 5px !important;
+}
+
+/* === RESPONZIVITA === */
+@media (max-width: 1399px) { #om-header .om-contact { display: none; } }
+@media (max-width: 1199px) { #om-header .om-cart a { font-size: 0; padding-inline: 3px; } }
+@media (max-width: 992px) {
+  #om-header .om-nav { display: none; }
+  #om-header .om-search { margin-inline: 0; max-width: 100%; }
+}
+
+/* =====================
+   HOMEPAGE SEKCE
+   ===================== */
+
+.om-section {
+  padding: 50px 0;
+  width: 100%;
+}
+
+.om-section-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.om-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.om-section-header h2,
+.om-section h2 {
+  font-size: 22px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #000;
+  margin: 0 0 20px;
+}
+
+.om-subtitle {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.om-btn-more {
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 5px;
+  padding: 6px 16px;
+  font-size: 13px;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: .3s;
+}
+.om-btn-more:hover { background: #000; color: #fff; }
+
+.om-btn-primary {
+  background: #f7c91b;
+  color: #000;
+  border-radius: 5px;
+  padding: 10px 22px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-block;
+  transition: .3s;
+  margin-top: 15px;
+}
+.om-btn-primary:hover { background: #e6b800; }
+
+/* Partneři - scrollující */
+.om-partners { background: #f9f9f9; overflow: hidden; }
+.om-partners h3 { font-size: 20px; font-weight: 700; text-align: center; margin-bottom: 25px; }
+.om-partners-track { overflow: hidden; }
+.om-partners-list {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  animation: om-scroll 25s linear infinite;
+  width: max-content;
+}
+.om-partners-list img { height: 50px; width: auto; object-fit: contain; filter: grayscale(30%); transition: .3s; }
+.om-partners-list img:hover { filter: grayscale(0); }
+@keyframes om-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Kategorie */
+.om-cats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+}
+.om-cat-item {
+  background: #f3f3f4;
+  border-radius: 10px;
+  padding: 20px 15px;
+  text-decoration: none;
+  color: #000;
+  font-weight: 500;
+  font-size: 15px;
+  transition: .3s;
+  display: block;
+}
+.om-cat-item:hover { background: #f7c91b; }
+
+/* O nás */
+.om-about { background: #fff; }
+.om-about-inner {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+}
+.om-about-text { flex: 1; }
+.om-about-text h2 { text-transform: none !important; font-size: 28px !important; }
+.om-about-text p { color: #444; line-height: 1.7; margin-bottom: 15px; }
+.om-about-img { flex-shrink: 0; }
+.om-about-img img { max-width: 300px; }
+
+/* Recepty */
+.om-recipes { background: #f9f9f9; }
+.om-recipes-list { display: flex; flex-direction: column; gap: 12px; }
+.om-recipe-item {
+  color: #000;
+  text-decoration: none;
+  font-size: 15px;
+  padding: 12px 16px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  transition: .3s;
+}
+.om-recipe-item:hover { border-color: #000; }
+
+/* Instagram */
+.om-instagram { background: #111; }
+.om-insta-inner { text-align: center; }
+.om-instagram h2 { color: #fff !important; }
+.om-instagram .om-subtitle { color: #aaa; }
+.om-instagram p { color: #ccc; }
+
+/* Responzivita */
+@media (max-width: 768px) {
+  .om-about-inner { flex-direction: column; }
+  .om-about-img { display: none; }
+  .om-cats-grid { grid-template-columns: repeat(2, 1fr); }
+}
