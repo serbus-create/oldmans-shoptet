@@ -343,10 +343,40 @@
       </div>
     </div>`;
 
-    /* Vložíme v pořadí: partneři, o nás, kategorie, apetit, recepty, instagram */
-    [partners, about, categories, apetit, recipes, instagram].forEach(function (el) {
-      parent.insertBefore(el, ref);
-    });
+    /* Shoptet produktové sekce */
+    var bestsellers = document.querySelector('.homepage-products-heading-1');
+    var bestsellersWrapper = bestsellers ? bestsellers.nextElementSibling : null;
+    var sale = document.querySelector('.homepage-products-heading-2');
+    var saleWrapper = sale ? sale.nextElementSibling : null;
+
+    /* Pomocná funkce — vloží element ZA jiný element */
+    function insertAfter(newEl, refEl) {
+      if (refEl && refEl.parentNode) {
+        refEl.parentNode.insertBefore(newEl, refEl.nextSibling);
+      } else {
+        parent.appendChild(newEl);
+      }
+    }
+
+    /* POŘADÍ dle originálu oldmans.cz:
+       USP → Bestsellery → Partneři → O nás → Kategorie → Apetit
+       → Omáčky ve slevě → Recepty → Instagram */
+
+    var anchor = bestsellersWrapper || benefitBanner;
+    insertAfter(partners, anchor);
+    insertAfter(about, partners);
+    insertAfter(categories, about);
+    insertAfter(apetit, categories);
+
+    /* Přesuneme "Omáčky ve slevě" za Apetit */
+    if (sale && saleWrapper) {
+      insertAfter(sale, apetit);
+      insertAfter(saleWrapper, sale);
+    }
+
+    var afterSale = saleWrapper || apetit;
+    insertAfter(recipes, afterSale);
+    insertAfter(instagram, recipes);
   }
 
   /* Spustíme po načtení DOM */
