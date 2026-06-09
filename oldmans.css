@@ -143,6 +143,15 @@
   transition: box-shadow .3s; position: relative;
 }
 #om-header .om-search form:hover { box-shadow: 0 0 0 2px #f7c91b; }
+#om-header .om-search input:focus { outline: none !important; box-shadow: none !important; }
+#om-header .om-search form:focus-within { box-shadow: 0 0 0 2px #f7c91b !important; }
+#om-header .om-search input,
+#om-header .om-search input:focus,
+#om-header .om-search input:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
 #om-header .om-search input {
   flex: 1; border: none; background: transparent;
   padding: 0 8px 0 50px; font-size: 15px; color: #000;
