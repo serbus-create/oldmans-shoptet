@@ -378,26 +378,19 @@
     insertAfter(recipes, afterSale);
     insertAfter(instagram, recipes);
 
-    /* Přepíšeme inline width na produktových kartách (Shoptet dává 428px inline) */
+    /* MutationObserver — čeká až Shoptet načte produkty a pak je nastyluje */
     function fixProductCards() {
-      /* Každá karta .product má inline style="width: 428px" — přepíšeme na 220px */
       document.querySelectorAll('.products-block .product').forEach(function(el) {
         el.style.setProperty('width', '220px', 'important');
         el.style.setProperty('min-width', '220px', 'important');
         el.style.setProperty('max-width', '220px', 'important');
       });
-
-      /* Skryjeme popisky a kód produktu */
       document.querySelectorAll('.products-block .item-description, .products-block .p-code').forEach(function(el) {
         el.style.setProperty('display', 'none', 'important');
       });
-
-      /* Skryjeme +/- quantity */
       document.querySelectorAll('.products-block .buy-form .count, .products-block .item-quantity').forEach(function(el) {
         el.style.setProperty('display', 'none', 'important');
       });
-
-      /* Zelené košík tlačítko */
       document.querySelectorAll('.products-block .to-cart-button').forEach(function(el) {
         el.style.setProperty('background', '#79b530', 'important');
         el.style.setProperty('color', '#fff', 'important');
@@ -407,10 +400,21 @@
       });
     }
 
-    /* Spustíme hned a pak po chvíli (Shoptet lazy-loaduje produkty) */
-    setTimeout(fixProductCards, 500);
-    setTimeout(fixProductCards, 1500);
-    setTimeout(fixProductCards, 3000);
+    /* Spustíme hned */
+    fixProductCards();
+
+    /* A sledujeme DOM — jakmile Shoptet přidá produkty, spustíme znovu */
+    var observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(m) {
+        if (m.addedNodes.length > 0) {
+          fixProductCards();
+        }
+      });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    /* Odpojíme observer po 10 sekundách */
+    setTimeout(function() { observer.disconnect(); }, 10000);
   }
 
   /* Spustíme po načtení DOM */
