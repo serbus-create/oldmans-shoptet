@@ -1,0 +1,468 @@
+/* ================================================
+   OLD MAN'S — Shoptet Disco — Custom CSS v3.1
+   GitHub: serbus-create/oldmans-shoptet
+   Cil: vizualne sedet na oldmans.cz (WordPress)
+   ================================================ */
+
+/* ──────────────────────────────────────────────
+   SKRYTI RUSIVYCH SHOPTET PRVKU
+────────────────────────────────────────────── */
+/* Shoptet horni navigacni lista (Jak nakupovat | CZK | Prihlaseni) */
+.top-navigation-bar { display: none !important; }
+
+/* "Vitejte v nasem obchode" uvitaci text */
+.welcome-wrapper { display: none !important; }
+
+/* Puvodni Shoptet header */
+#header .header-top,
+#header .header-bottom { display: none !important; }
+
+/* ── OBSAH – normalni kontejner (odsazeni po stranach) ── */
+#content-wrapper.container,
+#content-wrapper {
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  box-sizing: border-box !important;
+}
+.content-wrapper-in,
+#content.content.wide,
+#content.content {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* ── BANNER – "prorazi" do plne sirky i uvnitr kontejneru ── */
+.banners-row, .row.banners-row {
+  position: relative !important;
+  left: 50% !important;
+  right: 50% !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-left: -50vw !important;
+  margin-right: -50vw !important;
+  padding: 0 !important;
+}
+.wide-carousel {
+  width: 100% !important; max-width: 100% !important;
+  margin: 0 !important; border-radius: 0 !important;
+}
+.wide-carousel img, #carousel img {
+  width: 100% !important; max-width: 100% !important;
+  height: auto !important; display: block !important;
+  border-radius: 0 !important;
+}
+
+.om-section { max-width: 100%; }
+
+/* USP lista (benefity) – samostatne vystredena, neprustrelna proti cache */
+.benefitBanner,
+.benefitBanner.position--benefitHomepage {
+  position: static !important;
+  left: auto !important;
+  right: auto !important;
+  width: auto !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  padding: 35px 20px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: space-between !important;
+  gap: 25px !important;
+  box-sizing: border-box !important;
+}
+.benefitBanner__item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  flex: 1 1 220px !important;
+  min-width: 0 !important;
+}
+.benefitBanner__picture { flex-shrink: 0 !important; }
+.benefitBanner__title { font-size: 17px !important; font-weight: 700 !important; color: #000 !important; }
+.benefitBanner__data { font-size: 14px !important; color: #777 !important; line-height: 1.4 !important; }
+@media (max-width: 992px) {
+  .benefitBanner__item { flex: 1 1 45% !important; }
+}
+@media (max-width: 576px) {
+  .benefitBanner__item { flex: 1 1 100% !important; }
+}
+.container { max-width: 1400px !important; padding-left: 20px !important; padding-right: 20px !important; }
+
+/* ──────────────────────────────────────────────
+   TOP BAR
+────────────────────────────────────────────── */
+#om-topbar {
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px;
+  color: #666;
+  padding: 6px 0;
+}
+#om-topbar .om-topbar-inner {
+  max-width: 1400px; margin: 0 auto; padding: 0 20px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+#om-topbar a { color: #666; text-decoration: none; }
+#om-topbar a:hover { color: #000; }
+
+/* ──────────────────────────────────────────────
+   HEADER
+────────────────────────────────────────────── */
+#om-header {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  box-shadow: 0 2px 10px rgba(0,0,0,.06);
+}
+#om-header .om-header-inner {
+  max-width: 1400px; margin: 0 auto; padding: 0 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+}
+#om-header .om-logo img { height: 55px; width: auto; display: block; }
+
+/* Kontakt */
+#om-header .om-contact { display: flex; align-items: center; gap: 16px; color: #000; text-decoration: none; flex-shrink: 0; }
+#om-header .om-contact-icon { width: 44px; height: 44px; }
+#om-header .om-contact-icon img { width: 100%; height: 100%; }
+#om-header .om-contact-numb { font-weight: 600; color: #11c65d; font-size: 16px; line-height: 1.5; margin-bottom: -5px; }
+#om-header .om-contact-text { color: #999; font-size: 13px; }
+#om-header .om-contact:hover .om-contact-numb { text-decoration: underline; }
+
+/* Vyhledavani */
+#om-header .om-search { flex: 1; max-width: 848px; margin: 0 16px; }
+#om-header .om-search form {
+  display: flex; align-items: center; background: #f3f3f4;
+  border-radius: 50px; padding: 4px 4px 4px 0; height: 52px;
+  transition: box-shadow .3s; position: relative;
+}
+#om-header .om-search form:hover { box-shadow: 0 0 0 2px #f7c91b; }
+#om-header .om-search input {
+  flex: 1; border: none; background: transparent;
+  padding: 0 8px 0 50px; font-size: 15px; color: #000;
+  outline: none; height: 100%;
+}
+#om-header .om-search form:before {
+  content: "🔍"; position: absolute; left: 18px;
+  font-size: 16px; pointer-events: none;
+}
+#om-header .om-search button {
+  background: #000; color: #fff; border: none; border-radius: 50px;
+  padding: 0 22px; height: 44px; font-size: 15px;
+  font-weight: 600; cursor: pointer; white-space: nowrap; transition: .3s;
+}
+#om-header .om-search button:hover { background: #9f1400; }
+
+/* Nav */
+#om-header .om-nav { display: flex; gap: 7px; list-style: none; margin: 0; padding: 0; flex-shrink: 0; }
+#om-header .om-nav a {
+  color: #666; font-size: 15px; padding: 17px 13px;
+  display: flex; align-items: center; gap: 7px;
+  text-decoration: none; white-space: nowrap; transition: .3s;
+}
+#om-header .om-nav a:hover { color: #000; background: rgba(247,201,27,.1); border-radius: 5px; }
+
+/* Ikony */
+#om-header .om-icons { display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
+#om-header .om-login a { font-size: 24px; color: #000; text-decoration: none; display: flex; transition: .3s; }
+#om-header .om-login a:hover { color: #f7c91b; }
+
+/* Kosik */
+#om-header .om-cart a {
+  display: flex; align-items: center; column-gap: 12px;
+  background: #f3f3f4; border-radius: 50px;
+  padding: 4px 20px 4px 4px; height: 52px;
+  font-weight: 600; color: #000; font-size: 15px;
+  text-decoration: none; transition: .3s;
+}
+#om-header .om-cart a:before {
+  content: "🛒"; display: flex; width: 44px; height: 44px;
+  background: #f7c91b; border-radius: 50px;
+  align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+#om-header .om-cart a:hover { background: #ebebeb; }
+
+/* ──────────────────────────────────────────────
+   KATEGORIE MENU
+────────────────────────────────────────────── */
+#om-cat-menu {
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  width: 100%;
+}
+#om-cat-menu .om-cat-menu-inner {
+  max-width: 1400px; margin: 0 auto; padding: 0 20px;
+}
+.om-cat-list {
+  display: flex; flex-wrap: nowrap; list-style: none;
+  margin: 0; padding: 0; align-items: center;
+  overflow: hidden; position: relative;
+}
+.om-cat-list > li {
+  display: inline-flex; white-space: nowrap;
+  font-size: 14px; font-weight: 500; border-radius: 5px;
+  transition: .3s; align-items: center;
+}
+.om-cat-list > li > a {
+  color: #000; padding: 14px 13px;
+  display: flex; align-items: center; gap: 5px;
+  text-decoration: none;
+}
+.om-cat-list > li:hover { background: rgba(247,201,27,.1); }
+.om-cat-list .cat-favorite > a { color: #79b530; }
+.om-cat-list .cat-sale > a { color: #E74E1B; }
+.om-cat-list .cat-favorite:hover { background: rgba(121,181,48,.1) !important; }
+.om-cat-list .cat-sale:hover { background: rgba(231,78,27,.1) !important; }
+
+/* Více dropdown */
+.om-more-btn { margin-left: auto; position: relative; cursor: pointer; }
+.om-more-btn > span { padding: 14px 13px; display: flex; align-items: center; color: #000; }
+.om-more-submenu {
+  display: none; position: absolute; right: 0; top: 100%;
+  background: #fff; box-shadow: 0 6px 20px rgba(0,0,0,.08);
+  padding: 10px; border-radius: 0 0 10px 10px;
+  min-width: 200px; z-index: 999; list-style: none;
+}
+.om-more-submenu li { display: flex !important; padding: 8px 12px; }
+.om-more-submenu li a { color: #000; text-decoration: none; }
+
+/* ──────────────────────────────────────────────
+   PRODUKTY
+────────────────────────────────────────────── */
+.product-item {
+  border-radius: 10px !important;
+  border: 1px solid #cbcbcb !important;
+  background: #fff !important;
+  transition: border-color .3s, box-shadow .3s !important;
+}
+.product-item:hover {
+  border-color: #000 !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,.08) !important;
+}
+.product-item [class*="price"] { font-weight: 600 !important; }
+.product-item [class*="price--sale"],
+.product-item ins .price,
+.product-item .price ins { color: #9f1400 !important; font-weight: 700 !important; }
+.product-item [class*="buy"],
+.product-item [class*="add-to-cart"],
+.product-item .to-cart-button {
+  background: #79b530 !important; color: #fff !important;
+  border: none !important; border-radius: 3px !important;
+  transition: .3s !important;
+}
+.product-item [class*="buy"]:hover,
+.product-item .to-cart-button:hover { background: #000 !important; }
+
+/* Stitky */
+.product-item .bool-sale { background: #fb5f2b !important; color: #fff !important; border-radius: 4px !important; }
+.product-item .bool-new { background: #9f1400 !important; color: #fff !important; border-radius: 4px !important; }
+
+/* ──────────────────────────────────────────────
+   HOMEPAGE SEKCE – spolecne
+────────────────────────────────────────────── */
+.om-section {
+  padding: 55px 0;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  box-sizing: border-box;
+}
+.om-section-inner { max-width: 1400px; margin: 0 auto; padding: 0 20px; box-sizing: border-box; }
+.om-section-header {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 12px;
+}
+.om-section-header h2, .om-section > .om-section-inner > h2 {
+  font-size: 22px !important; font-weight: 800 !important;
+  text-transform: uppercase !important; letter-spacing: 1px !important;
+  color: #000 !important; margin: 0 0 20px !important;
+}
+.om-section-header h2 { margin: 0 !important; }
+.om-subtitle { color: #666; font-size: 14px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+
+/* Tlacitka */
+.om-btn-more {
+  color: #000; border: 1px solid #000; border-radius: 5px;
+  padding: 7px 18px; font-size: 13px; text-decoration: none;
+  text-transform: uppercase; transition: .3s; white-space: nowrap;
+}
+.om-btn-more:hover { background: #000; color: #fff; }
+.om-btn-red {
+  display: inline-block; background: #9f1400; color: #fff !important;
+  border-radius: 5px; padding: 12px 28px; font-weight: 600;
+  font-size: 15px; text-decoration: none !important; transition: .3s; margin-top: 15px;
+}
+.om-btn-red:hover { background: #7a0f00; color: #fff !important; }
+.om-btn-primary {
+  display: inline-block; background: #f7c91b; color: #000 !important;
+  border-radius: 5px; padding: 12px 28px; font-weight: 700;
+  text-decoration: none !important; transition: .3s; margin-top: 15px;
+}
+.om-btn-primary:hover { background: #e6b800; }
+
+/* ──────────────────────────────────────────────
+   PARTNEŘI – scrollujici pas
+────────────────────────────────────────────── */
+.om-partners { background: #f9f9f9; overflow: hidden; }
+.om-partners h3 { font-size: 20px; font-weight: 700; margin-bottom: 25px; }
+.om-partners-track { overflow: hidden; }
+.om-partners-list {
+  display: flex; align-items: center; gap: 50px;
+  animation: om-scroll 30s linear infinite; width: max-content;
+}
+.om-partners-list img { height: 55px; width: auto; object-fit: contain; filter: grayscale(20%); transition: .3s; }
+.om-partners-list img:hover { filter: none; }
+@keyframes om-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ──────────────────────────────────────────────
+   O NAS
+────────────────────────────────────────────── */
+.om-about { background: #fff; }
+.om-about-inner { display: flex; align-items: center; gap: 60px; }
+.om-about-text { flex: 1; }
+.om-about-text h2 { font-size: 32px !important; text-transform: none !important; line-height: 1.2 !important; }
+.om-about-text p { color: #444; line-height: 1.8; margin-bottom: 14px; font-size: 16px; }
+.om-about-img { flex-shrink: 0; }
+.om-about-img img { max-width: 220px; }
+@media (max-width: 768px) {
+  .om-about-inner { flex-direction: column; }
+  .om-about-img { display: none; }
+}
+
+/* ──────────────────────────────────────────────
+   KATEGORIE
+────────────────────────────────────────────── */
+.om-categories { background: #f5f5f5; }
+.om-categories h2 span { color: #9f1400; }
+.om-cats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+}
+.om-cat-item {
+  background: #fff; border: 1px solid #e1e1e1; border-radius: 10px;
+  padding: 16px 18px; text-decoration: none; color: #000;
+  font-weight: 500; font-size: 14px; transition: .3s;
+  display: flex; align-items: center; gap: 10px;
+}
+.om-cat-item img { width: 36px; height: 36px; object-fit: contain; flex-shrink: 0; }
+.om-cat-item:hover { border-color: #9f1400; background: #9f1400; color: #fff !important; }
+.om-cat-item:hover img { filter: brightness(10); }
+
+/* ──────────────────────────────────────────────
+   APETIT / NAPSALI O NAS
+────────────────────────────────────────────── */
+.om-apetit { background: #fff; }
+.om-apetit-inner { display: flex; align-items: center; gap: 50px; }
+.om-apetit-img { flex-shrink: 0; }
+.om-apetit-img img { border-radius: 12px; max-width: 280px; width: 100%; }
+.om-apetit-text { flex: 1; }
+.om-apetit-logo { max-width: 70px; margin-bottom: 14px; }
+.om-apetit-text h2 { font-size: 30px !important; font-weight: 700 !important; margin-bottom: 16px !important; text-transform: none !important; }
+.om-apetit-text p { color: #444; line-height: 1.8; margin-bottom: 12px; font-size: 15px; }
+@media (max-width: 768px) {
+  .om-apetit-inner { flex-direction: column; }
+  .om-apetit-img { order: -1; }
+  .om-apetit-img img { max-width: 100%; }
+}
+
+/* ──────────────────────────────────────────────
+   RECEPTY S OBRAZKY
+────────────────────────────────────────────── */
+.om-recipes { background: #f9f9f9; }
+.om-recipes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+.om-recipe-item {
+  background: #fff; border-radius: 12px;
+  border: 1px solid #e7e8ea; overflow: hidden;
+  text-decoration: none; color: #000;
+  transition: border-color .3s, transform .25s;
+  display: block;
+}
+.om-recipe-item:hover { border-color: #000; transform: translateY(-3px); }
+.om-recipe-item img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+.om-recipe-title {
+  padding: 14px; font-size: 14px; font-weight: 600;
+  line-height: 1.5; color: #000;
+}
+
+/* ──────────────────────────────────────────────
+   INSTAGRAM
+────────────────────────────────────────────── */
+.om-instagram { background: #111; }
+.om-insta-inner {
+  display: flex; align-items: center;
+  gap: 50px; justify-content: space-between;
+}
+.om-insta-text { flex: 1; }
+.om-instagram h2 { color: #fff !important; font-size: 38px !important; text-transform: uppercase !important; }
+.om-instagram .om-subtitle { color: #aaa; }
+.om-instagram p { color: #ccc; margin-bottom: 10px; }
+.om-insta-grid {
+  flex-shrink: 0; display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px; max-width: 380px; width: 100%;
+}
+.om-insta-grid a img {
+  width: 100%; aspect-ratio: 1; object-fit: cover;
+  border-radius: 10px; display: block; transition: opacity .3s;
+}
+.om-insta-grid a:hover img { opacity: .75; }
+@media (max-width: 992px) {
+  .om-insta-inner { flex-direction: column; text-align: center; }
+  .om-insta-grid { max-width: 100%; }
+}
+
+/* ──────────────────────────────────────────────
+   PATICKA
+────────────────────────────────────────────── */
+#footer, footer, .footer, [class*="footer"] {
+  background: #111 !important; background-color: #111 !important; color: #ccc !important;
+}
+#footer *, footer * { color: #ccc !important; }
+#footer a, footer a { color: #ccc !important; text-decoration: none !important; }
+#footer a:hover, footer a:hover { color: #f7c91b !important; }
+#footer h4, #footer h5, footer h4, footer h5 { color: #fff !important; font-weight: 700 !important; }
+
+/* ──────────────────────────────────────────────
+   SWIPER TECKICKY
+────────────────────────────────────────────── */
+.swiper-pagination-bullet { background: #fff !important; opacity: .5 !important; }
+.swiper-pagination-bullet-active {
+  background: #f7c91b !important; opacity: 1 !important;
+  width: 30px !important; border-radius: 5px !important;
+}
+
+/* ──────────────────────────────────────────────
+   RESPONZIVITA
+────────────────────────────────────────────── */
+@media (max-width: 1399px) { #om-header .om-contact { display: none; } }
+@media (max-width: 1199px) { #om-header .om-cart a { font-size: 0; padding-inline: 3px; } }
+@media (max-width: 992px) {
+  #om-header .om-nav { display: none; }
+  #om-header .om-search { margin-inline: 0; max-width: 100%; }
+}
+@media (max-width: 768px) {
+  .om-cats-grid { grid-template-columns: repeat(2, 1fr); }
+  .om-recipes-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .om-recipes-grid { grid-template-columns: 1fr; }
+}
