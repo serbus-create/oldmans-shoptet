@@ -475,3 +475,53 @@
 @media (max-width: 480px) {
   .om-recipes-grid { grid-template-columns: 1fr; }
 }
+
+/* ──────────────────────────────────────────────
+   SHOPTET PRODUKTOVÉ SEKCE (Bestsellery, Slevy)
+   Menší karty, více vedle sebe jako na originálu
+────────────────────────────────────────────── */
+
+/* Nadpisy sekcí */
+.homepage-group-title {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  color: #000 !important;
+  padding: 30px 0 15px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+.homepage-group-title:before {
+  content: "⭐";
+  font-size: 16px;
+}
+.homepage-products-heading-2:before { content: "🏷️" !important; }
+
+/* Slider wrapper */
+.product-slider-holder {
+  padding: 0 0 30px !important;
+}
+
+/* Produktové karty — menší, více vedle sebe */
+.product-slider-holder .product-item,
+.product-slider-holder .item {
+  max-width: 200px !important;
+}
+
+/* Skrýt dlouhé popisky produktů */
+.product-slider-holder .product-item .item-description,
+.product-slider-holder .product-item .description,
+.product-slider-holder [class*="description"] {
+  display: none !important;
+}
+
+/* Navigační šipky slideru */
+.product-slider-holder .slick-prev,
+.product-slider-holder .slick-next,
+.product-slider-holder [class*="slider-nav"] {
+  background: #f7c91b !important;
+  border-radius: 5px !important;
+  color: #000 !important;
+}
