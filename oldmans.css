@@ -39,7 +39,35 @@
   height: auto !important; display: block !important;
   border-radius: 0 !important;
 }
-.benefitBanner, .welcome-wrapper, .om-section { max-width: 100% !important; }
+.welcome-wrapper, .om-section { max-width: 100% !important; }
+
+/* USP lista (benefity) – odsazeni jako ostatni sekce */
+.benefitBanner {
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  padding: 35px 20px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: space-between !important;
+  gap: 25px !important;
+  box-sizing: border-box !important;
+}
+.benefitBanner__item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  flex: 1 1 200px !important;
+  min-width: 0 !important;
+}
+.benefitBanner__picture { flex-shrink: 0 !important; }
+.benefitBanner__title { font-size: 17px !important; font-weight: 700 !important; color: #000 !important; }
+.benefitBanner__data { font-size: 14px !important; color: #777 !important; line-height: 1.4 !important; }
+@media (max-width: 992px) {
+  .benefitBanner__item { flex: 1 1 45% !important; }
+}
+@media (max-width: 576px) {
+  .benefitBanner__item { flex: 1 1 100% !important; }
+}
 .container { max-width: 1400px !important; padding-left: 20px !important; padding-right: 20px !important; }
 
 /* ──────────────────────────────────────────────
