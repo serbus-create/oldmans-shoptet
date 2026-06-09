@@ -478,50 +478,130 @@
 
 /* ──────────────────────────────────────────────
    SHOPTET PRODUKTOVÉ SEKCE (Bestsellery, Slevy)
-   Menší karty, více vedle sebe jako na originálu
+   Styl dle originálu oldmans.cz
 ────────────────────────────────────────────── */
 
-/* Nadpisy sekcí */
+/* Wrapper celé sekce */
+.homepage-products-heading-1,
+.homepage-products-heading-2,
+.product-slider-holder {
+  max-width: 1400px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  box-sizing: border-box !important;
+}
+
+/* Nadpisy sekcí — jako na originálu */
 .homepage-group-title {
-  font-size: 18px !important;
+  font-size: 16px !important;
   font-weight: 800 !important;
   text-transform: uppercase !important;
   letter-spacing: 1px !important;
   color: #000 !important;
-  padding: 30px 0 15px !important;
+  padding: 35px 0 15px !important;
   display: flex !important;
   align-items: center !important;
-  gap: 10px !important;
+  justify-content: space-between !important;
+  border-bottom: 2px solid #f0f0f0 !important;
+  margin-bottom: 20px !important;
 }
-.homepage-group-title:before {
-  content: "⭐";
-  font-size: 16px;
-}
-.homepage-products-heading-2:before { content: "🏷️" !important; }
+.homepage-products-heading-1:before { content: "⭐ "; }
+.homepage-products-heading-2:before { content: "🏷️ "; }
 
-/* Slider wrapper */
+/* "Zobrazit všechny" link vpravo */
+.homepage-group-title a,
+.homepage-group-title .show-all {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #000 !important;
+  border: 1px solid #000 !important;
+  border-radius: 4px !important;
+  padding: 5px 14px !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  letter-spacing: .5px !important;
+  transition: .3s !important;
+}
+.homepage-group-title a:hover { background: #000 !important; color: #fff !important; }
+
+/* Slider — kompaktní */
 .product-slider-holder {
-  padding: 0 0 30px !important;
+  padding: 0 20px 40px !important;
+  overflow: hidden !important;
 }
 
-/* Produktové karty — menší, více vedle sebe */
-.product-slider-holder .product-item,
-.product-slider-holder .item {
-  max-width: 200px !important;
+/* Produktová karta — menší */
+.product-slider-holder .product-item {
+  border-radius: 10px !important;
+  border: 1px solid #e0e0e0 !important;
+  background: #fff !important;
+  transition: border-color .3s, box-shadow .3s !important;
+  overflow: hidden !important;
+}
+.product-slider-holder .product-item:hover {
+  border-color: #000 !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,.08) !important;
 }
 
-/* Skrýt dlouhé popisky produktů */
-.product-slider-holder .product-item .item-description,
-.product-slider-holder .product-item .description,
-.product-slider-holder [class*="description"] {
+/* Skrýt popisky — jen foto + název + cena + košík */
+.product-slider-holder [class*="description"],
+.product-slider-holder [class*="item-description"],
+.product-slider-holder .item-description,
+.product-slider-holder p:not([class*="price"]):not([class*="avail"]) {
   display: none !important;
 }
 
-/* Navigační šipky slideru */
+/* Cena */
+.product-slider-holder [class*="price"] {
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  color: #000 !important;
+}
+.product-slider-holder [class*="price--sale"],
+.product-slider-holder ins .price {
+  color: #9f1400 !important;
+}
+
+/* Tlačítko Do košíku — zelené, kompaktní, bez +/- */
+.product-slider-holder .to-cart-button,
+.product-slider-holder [class*="buy"],
+.product-slider-holder [class*="add-to-cart"] {
+  background: #79b530 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 4px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  padding: 8px 14px !important;
+  width: 100% !important;
+  text-align: center !important;
+  transition: background .3s !important;
+}
+.product-slider-holder .to-cart-button:hover,
+.product-slider-holder [class*="buy"]:hover {
+  background: #000 !important;
+}
+
+/* Skrýt +/- quantity tlačítka */
+.product-slider-holder .item-quantity,
+.product-slider-holder [class*="quantity"],
+.product-slider-holder [class*="amount-control"] {
+  display: none !important;
+}
+
+/* Šipky slideru — žluté */
 .product-slider-holder .slick-prev,
 .product-slider-holder .slick-next,
-.product-slider-holder [class*="slider-nav"] {
+.product-slider-holder .carousel-control,
+.product-slider-holder [class*="slider-arrow"] {
   background: #f7c91b !important;
   border-radius: 5px !important;
   color: #000 !important;
+  opacity: 1 !important;
+}
+.product-slider-holder .slick-prev:hover,
+.product-slider-holder .slick-next:hover {
+  background: #e6b800 !important;
 }
