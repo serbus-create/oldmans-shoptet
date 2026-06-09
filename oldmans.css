@@ -1,15 +1,19 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v3.0
+   OLD MAN'S — Shoptet Disco — Custom CSS v3.1
    GitHub: serbus-create/oldmans-shoptet
-   ================================================
-   Barvy:
-     Cervena:   #9f1400
-     Zluta:     #f7c91b
-     Zelena:    #79b530
-     Seda bg:   #f5f5f5
+   Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
 
-/* ── RESET SHOPTET HEADERU ── */
+/* ──────────────────────────────────────────────
+   SKRYTI RUSIVYCH SHOPTET PRVKU
+────────────────────────────────────────────── */
+/* Shoptet horni navigacni lista (Jak nakupovat | CZK | Prihlaseni) */
+.top-navigation-bar { display: none !important; }
+
+/* "Vitejte v nasem obchode" uvitaci text */
+.welcome-wrapper { display: none !important; }
+
+/* Puvodni Shoptet header */
 #header .header-top,
 #header .header-bottom { display: none !important; }
 
