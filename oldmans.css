@@ -58,12 +58,16 @@
 
 .om-section { max-width: 100%; }
 
-/* USP lista (benefity) – uvnitr kontejneru, bez bocniho paddingu navic */
+/* USP lista (benefity) – samostatne vystredena, neprustrelna proti cache */
 .benefitBanner,
 .benefitBanner.position--benefitHomepage {
-  max-width: 100% !important;
-  margin: 0 !important;
-  padding: 35px 0 !important;
+  position: static !important;
+  left: auto !important;
+  right: auto !important;
+  width: auto !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  padding: 35px 20px !important;
   display: flex !important;
   flex-wrap: wrap !important;
   justify-content: space-between !important;
@@ -74,7 +78,7 @@
   display: flex !important;
   align-items: center !important;
   gap: 16px !important;
-  flex: 1 1 200px !important;
+  flex: 1 1 220px !important;
   min-width: 0 !important;
 }
 .benefitBanner__picture { flex-shrink: 0 !important; }
