@@ -376,7 +376,94 @@
 
     var afterSale = saleWrapper || apetit;
     insertAfter(recipes, afterSale);
+    /* --- 7g. ČERVENÁ USP LIŠTA --- */
+    var uspBar = document.createElement('div');
+    uspBar.className = 'om-usp-bar';
+    uspBar.innerHTML = `
+      <div class="om-usp-inner">
+        <div class="om-usp-item">
+          <div class="om-usp-icon">🚚</div>
+          <div class="om-usp-text">
+            <strong>VYROBÍME DO 24H</strong>
+            <span>Produkty expedujeme během 3-5 prac. dní.</span>
+          </div>
+        </div>
+        <div class="om-usp-item">
+          <div class="om-usp-icon">👍</div>
+          <div class="om-usp-text">
+            <strong>350 000 +</strong>
+            <span>Spokojených zákazníků</span>
+          </div>
+        </div>
+        <div class="om-usp-item">
+          <div class="om-usp-icon">📦</div>
+          <div class="om-usp-text">
+            <strong>DOPRAVA ZDARMA</strong>
+            <span>U objednávek nad 1 350 Kč</span>
+          </div>
+        </div>
+        <div class="om-usp-item">
+          <div class="om-usp-icon">✅</div>
+          <div class="om-usp-text">
+            <strong>RUČNÍ VÝROBA</strong>
+            <span>Produkty se vyrábí vždy čerstvě v den Vaší objednávky</span>
+          </div>
+        </div>
+      </div>`;
+
+    /* --- 7h. CUSTOM FOOTER --- */
+    var customFooter = document.createElement('div');
+    customFooter.className = 'om-custom-footer';
+    customFooter.innerHTML = `
+      <div class="om-footer-inner">
+        <div class="om-footer-col">
+          <h4>Kontaktní údaje</h4>
+          <p><strong>Adresa kanceláře</strong> : Areál VRL Praha<br>Ke Kablu 378, 102 00, Praha - Dolní Měcholupy</p>
+          <p><strong>E-mail</strong> : <a href="mailto:podpora@oldmans.cz">podpora@oldmans.cz</a></p>
+          <p><strong>Telefon</strong> : <a href="tel:+420774772405">+420 774 772 405</a></p>
+          <br>
+          <strong>Sledujte nás na instagramu</strong><br><br>
+          <a href="https://www.instagram.com/old_mans_style/" target="_blank" class="om-footer-ig">📷 SLEDOVAT @OLD_MANS_STYLE</a>
+        </div>
+        <div class="om-footer-col">
+          <h4>Menu</h4>
+          <ul>
+            <li><a href="/">Úvod</a></li>
+            <li><a href="/o-nas/">O nás</a></li>
+            <li><a href="/kategorie/">Omáčky a dressingy</a></li>
+            <li><a href="/stitky/top-produkty/">TOP Produkty</a></li>
+            <li><a href="/kontakty/">Kontakt</a></li>
+          </ul>
+        </div>
+        <div class="om-footer-col">
+          <h4>Kategorie</h4>
+          <ul>
+            <li><a href="/kategorie/squeeze-blast/">Squeeze Blast</a></li>
+            <li><a href="/kategorie/omacky-a-majonezy/">Omáčky a majonézy</a></li>
+            <li><a href="/kategorie/salatove-dressingy/">Salátové dressingy</a></li>
+            <li><a href="/kategorie/chilli-mash/">Chilli Mash</a></li>
+            <li><a href="/kategorie/okurkove-relishe/">Okurkové Relishe</a></li>
+            <li><a href="/kategorie/premiove-pomazanky/">Prémiové pomazánky</a></li>
+            <li><a href="/kategorie/snacky-a-orechy/">Snacky a ořechy</a></li>
+            <li><a href="/kategorie/gumovi-medvidci/">Gumoví medvídci</a></li>
+          </ul>
+        </div>
+        <div class="om-footer-col">
+          <h4>Informace</h4>
+          <ul>
+            <li><a href="/doprava-a-platba/">Doprava a platba</a></li>
+            <li><a href="/velkoobchod/">Velkoobchod</a></li>
+            <li><a href="/obchodni-podminky/">Obchodní podmínky</a></li>
+            <li><a href="/reklamace/">Reklamace</a></li>
+            <li><a href="/caste-dotazy/">Časté dotazy</a></li>
+            <li><a href="/podminky-ochrany-osobnich-udaju/">Ochrana osobních údajů</a></li>
+          </ul>
+        </div>
+      </div>`;
+
     insertAfter(instagram, recipes);
+    insertAfter(uspBar, instagram);
+    insertAfter(customFooter, uspBar);
 
     /* Nastavíme 5 sloupců PŘED inicializací Shoptet slideru */
     document.querySelectorAll('.product-slider[data-columns]').forEach(function(el) {
