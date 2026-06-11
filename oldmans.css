@@ -532,11 +532,12 @@
 .products-block .price-final { color: #000 !important; }
 .products-block .price-before { color: #999 !important; text-decoration: line-through !important; font-size: 12px !important; }
 
-/* Skrýt +/- quantity */
-.products-block .buy-form .count,
-.products-block .buy-form [class*="count"],
-.products-block .item-quantity,
-.products-block [class*="amount"] { display: none !important; }
+/* Skrýt popisky, kód, hvězdičky a +/- quantity */
+.products-block .p-desc,
+.products-block .p-code,
+.products-block .ratings-wrapper { display: none !important; }
+
+.products-block .quantity { display: none !important; }
 
 
 /* Šipky — žluté */
