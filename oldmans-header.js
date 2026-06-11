@@ -378,7 +378,13 @@
     insertAfter(recipes, afterSale);
     insertAfter(instagram, recipes);
 
-    /* Spustíme jednorázově po 2 sekundách — až Shoptet slider dokončí inicializaci */
+    /* Nastavíme 5 sloupců PŘED inicializací Shoptet slideru */
+    document.querySelectorAll('.product-slider[data-columns]').forEach(function(el) {
+      el.setAttribute('data-columns', '5');
+      el.setAttribute('data-columns-mobile', '2');
+    });
+
+    /* Skryjeme popisky po inicializaci slideru */
     setTimeout(function() {
       document.querySelectorAll('.products-block .p-desc, .products-block .p-code, .products-block .ratings-wrapper').forEach(function(el) {
         el.style.setProperty('display', 'none', 'important');
