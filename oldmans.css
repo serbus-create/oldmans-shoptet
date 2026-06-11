@@ -538,21 +538,6 @@
 .products-block .item-quantity,
 .products-block [class*="amount"] { display: none !important; }
 
-/* Tlačítko Do košíku — zelené */
-.products-block .to-cart-button,
-.products-block [class*="to-cart"],
-.products-block .btn-cart {
-  background: #79b530 !important;
-  color: #fff !important;
-  border: none !important;
-  border-radius: 4px !important;
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  padding: 8px 14px !important;
-  width: 100% !important;
-  transition: background .3s !important;
-}
-.products-block .to-cart-button:hover { background: #000 !important; }
 
 /* Šipky — žluté */
 .product-slider-navigation {
