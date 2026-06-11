@@ -552,3 +552,92 @@
   opacity: 1 !important;
 }
 .product-slider-navigation:hover { background: #e6b800 !important; }
+
+/* ──────────────────────────────────────────────
+   ČERVENÁ USP LIŠTA
+────────────────────────────────────────────── */
+.om-usp-bar {
+  background: #9f1400;
+  width: 100%;
+  padding: 35px 0;
+}
+.om-usp-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  box-sizing: border-box;
+}
+.om-usp-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-right: 1px solid rgba(255,255,255,.2);
+  padding-right: 20px;
+}
+.om-usp-item:last-child { border-right: none; }
+.om-usp-icon { font-size: 32px; flex-shrink: 0; }
+.om-usp-text strong {
+  display: block;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.om-usp-text span { color: rgba(255,255,255,.8); font-size: 13px; line-height: 1.4; }
+@media (max-width: 768px) {
+  .om-usp-inner { grid-template-columns: repeat(2, 1fr); }
+  .om-usp-item { border-right: none; }
+}
+
+/* ──────────────────────────────────────────────
+   CUSTOM FOOTER
+────────────────────────────────────────────── */
+.om-custom-footer {
+  background: #f5f5f5;
+  padding: 50px 0 30px;
+  width: 100%;
+}
+.om-footer-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  box-sizing: border-box;
+}
+.om-footer-col h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 20px;
+}
+.om-footer-col p { color: #555; font-size: 14px; line-height: 1.7; margin-bottom: 8px; }
+.om-footer-col a { color: #555; text-decoration: none; transition: color .3s; }
+.om-footer-col a:hover { color: #9f1400; }
+.om-footer-col ul { list-style: none; padding: 0; margin: 0; }
+.om-footer-col ul li { margin-bottom: 10px; font-size: 14px; }
+.om-footer-ig {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  background: #f7c91b !important;
+  color: #000 !important;
+  border-radius: 5px;
+  padding: 10px 18px;
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none !important;
+  transition: background .3s;
+}
+.om-footer-ig:hover { background: #e6b800 !important; color: #000 !important; }
+@media (max-width: 992px) {
+  .om-footer-inner { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 576px) {
+  .om-footer-inner { grid-template-columns: 1fr; }
+}
