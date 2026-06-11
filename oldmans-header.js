@@ -379,23 +379,15 @@
     insertAfter(instagram, recipes);
 
     /* MutationObserver — čeká až Shoptet načte produkty a pak je nastyluje */
-    function fixProductCards() {
-      /* Skryjeme popisek, kód a hvězdičky — NEMĚNÍME šířku karet, ať slider funguje */
+    /* Spustíme jednorázově po 2 sekundách — až Shoptet slider dokončí inicializaci */
+    setTimeout(function() {
       document.querySelectorAll('.products-block .p-desc, .products-block .p-code, .products-block .ratings-wrapper').forEach(function(el) {
         el.style.setProperty('display', 'none', 'important');
       });
       document.querySelectorAll('.products-block .quantity').forEach(function(el) {
         el.style.setProperty('display', 'none', 'important');
       });
-    }
-
-    /* Spustíme hned */
-    fixProductCards();
-
-    /* MutationObserver — skrývá popisky jakmile slider produkty přerovná */
-    var observer = new MutationObserver(function() { fixProductCards(); });
-    observer.observe(document.body, { childList: true, subtree: true });
-    setTimeout(function() { observer.disconnect(); }, 10000);
+    }, 2000);
   }
 
   /* Spustíme po načtení DOM */
