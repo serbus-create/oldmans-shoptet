@@ -403,17 +403,13 @@
     /* Spustíme hned */
     fixProductCards();
 
-    /* A sledujeme DOM — jakmile Shoptet přidá produkty, spustíme znovu */
-    var observer = new MutationObserver(function(mutations) {
-      mutations.forEach(function(m) {
-        if (m.addedNodes.length > 0) {
-          fixProductCards();
-        }
-      });
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
+    /* Interval — opakovaně přepisuje šířky dokud je Shoptet nenastaví naposledy */
+    var fixInterval = setInterval(fixProductCards, 200);
+    setTimeout(function() { clearInterval(fixInterval); }, 8000);
 
-    /* Odpojíme observer po 10 sekundách */
+    /* MutationObserver jako záloha */
+    var observer = new MutationObserver(function() { fixProductCards(); });
+    observer.observe(document.body, { childList: true, subtree: true });
     setTimeout(function() { observer.disconnect(); }, 10000);
   }
 
