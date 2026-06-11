@@ -380,16 +380,10 @@
 
     /* MutationObserver — čeká až Shoptet načte produkty a pak je nastyluje */
     function fixProductCards() {
-      document.querySelectorAll('.products-block .product').forEach(function(el) {
-        el.style.setProperty('width', '220px', 'important');
-        el.style.setProperty('min-width', '220px', 'important');
-        el.style.setProperty('max-width', '220px', 'important');
-      });
-      /* Skryjeme popisek a kód produktu */
+      /* Skryjeme popisek, kód a hvězdičky — NEMĚNÍME šířku karet, ať slider funguje */
       document.querySelectorAll('.products-block .p-desc, .products-block .p-code, .products-block .ratings-wrapper').forEach(function(el) {
         el.style.setProperty('display', 'none', 'important');
       });
-      /* Skryjeme +/- quantity */
       document.querySelectorAll('.products-block .quantity').forEach(function(el) {
         el.style.setProperty('display', 'none', 'important');
       });
@@ -398,11 +392,7 @@
     /* Spustíme hned */
     fixProductCards();
 
-    /* Interval — opakovaně přepisuje šířky dokud je Shoptet nenastaví naposledy */
-    var fixInterval = setInterval(fixProductCards, 200);
-    setTimeout(function() { clearInterval(fixInterval); }, 8000);
-
-    /* MutationObserver jako záloha */
+    /* MutationObserver — skrývá popisky jakmile slider produkty přerovná */
     var observer = new MutationObserver(function() { fixProductCards(); });
     observer.observe(document.body, { childList: true, subtree: true });
     setTimeout(function() { observer.disconnect(); }, 10000);
