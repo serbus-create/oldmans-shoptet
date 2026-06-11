@@ -385,18 +385,13 @@
         el.style.setProperty('min-width', '220px', 'important');
         el.style.setProperty('max-width', '220px', 'important');
       });
-      document.querySelectorAll('.products-block .item-description, .products-block .p-code').forEach(function(el) {
+      /* Skryjeme popisek a kód produktu */
+      document.querySelectorAll('.products-block .p-desc, .products-block .p-code, .products-block .ratings-wrapper').forEach(function(el) {
         el.style.setProperty('display', 'none', 'important');
       });
-      document.querySelectorAll('.products-block .buy-form .count, .products-block .item-quantity').forEach(function(el) {
+      /* Skryjeme +/- quantity */
+      document.querySelectorAll('.products-block .quantity').forEach(function(el) {
         el.style.setProperty('display', 'none', 'important');
-      });
-      document.querySelectorAll('.products-block .to-cart-button').forEach(function(el) {
-        el.style.setProperty('background', '#79b530', 'important');
-        el.style.setProperty('color', '#fff', 'important');
-        el.style.setProperty('border', 'none', 'important');
-        el.style.setProperty('border-radius', '4px', 'important');
-        el.style.setProperty('width', '100%', 'important');
       });
     }
 
