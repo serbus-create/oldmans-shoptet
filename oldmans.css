@@ -442,13 +442,13 @@
 /* ──────────────────────────────────────────────
    PATICKA
 ────────────────────────────────────────────── */
-#footer, footer, .footer, [class*="footer"] {
+#footer, footer.footer {
   background: #111 !important; background-color: #111 !important; color: #ccc !important;
 }
-#footer *, footer * { color: #ccc !important; }
-#footer a, footer a { color: #ccc !important; text-decoration: none !important; }
-#footer a:hover, footer a:hover { color: #f7c91b !important; }
-#footer h4, #footer h5, footer h4, footer h5 { color: #fff !important; font-weight: 700 !important; }
+#footer *, footer.footer * { color: #ccc !important; }
+#footer a, footer.footer a { color: #ccc !important; text-decoration: none !important; }
+#footer a:hover, footer.footer a:hover { color: #f7c91b !important; }
+#footer h4, #footer h5, footer.footer h4, footer.footer h5 { color: #fff !important; font-weight: 700 !important; }
 
 /* ──────────────────────────────────────────────
    SWIPER TECKICKY
