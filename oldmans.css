@@ -597,10 +597,11 @@
    CUSTOM FOOTER
 ────────────────────────────────────────────── */
 .om-custom-footer {
-  background: #f5f5f5;
+  background: #f5f5f5 !important;
   padding: 50px 0 30px;
   width: 100%;
 }
+.om-custom-footer * { color: #555 !important; }
 .om-footer-inner {
   max-width: 1400px;
   margin: 0 auto;
@@ -610,18 +611,19 @@
   gap: 40px;
   box-sizing: border-box;
 }
-.om-footer-col h4 {
+.om-custom-footer .om-footer-col h4 {
   font-size: 16px;
   font-weight: 700;
-  color: #000;
+  color: #000 !important;
   margin-bottom: 20px;
 }
-.om-footer-col p { color: #555; font-size: 14px; line-height: 1.7; margin-bottom: 8px; }
-.om-footer-col a { color: #555; text-decoration: none; transition: color .3s; }
-.om-footer-col a:hover { color: #9f1400; }
+.om-custom-footer .om-footer-col p { color: #555 !important; font-size: 14px; line-height: 1.7; margin-bottom: 8px; }
+.om-custom-footer .om-footer-col p strong { color: #000 !important; }
+.om-custom-footer .om-footer-col a { color: #555 !important; text-decoration: none; transition: color .3s; }
+.om-custom-footer .om-footer-col a:hover { color: #9f1400 !important; }
 .om-footer-col ul { list-style: none; padding: 0; margin: 0; }
 .om-footer-col ul li { margin-bottom: 10px; font-size: 14px; }
-.om-footer-ig {
+.om-custom-footer .om-footer-ig {
   display: inline-flex !important;
   align-items: center;
   gap: 8px;
@@ -634,7 +636,7 @@
   text-decoration: none !important;
   transition: background .3s;
 }
-.om-footer-ig:hover { background: #e6b800 !important; color: #000 !important; }
+.om-custom-footer .om-footer-ig:hover { background: #e6b800 !important; color: #000 !important; }
 @media (max-width: 992px) {
   .om-footer-inner { grid-template-columns: 1fr 1fr; }
 }
