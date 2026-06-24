@@ -847,9 +847,13 @@ body.type-category .products.products-page .product ins .price {
 body.type-category .products.products-page .product .p-tools {
   margin: 0 0 0 auto !important;
   flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  width: auto !important;
 }
 body.type-category .products.products-page .product .pr-action {
   margin: 0 !important;
+  width: auto !important;
+  display: inline-block !important;
 }
 body.type-category .products.products-page .product .add-to-cart-button,
 body.type-category .products.products-page .product .to-cart-button,
@@ -862,12 +866,13 @@ body.type-category .products.products-page .product [class*="buy"] {
   color: #fff !important;
   border: none !important;
   border-radius: 8px !important;
-  padding: 8px 14px !important;
-  font-size: 13px !important;
+  padding: 9px 16px !important;
+  font-size: 14px !important;
   font-weight: 600 !important;
   white-space: nowrap !important;
   width: auto !important;
   min-width: 0 !important;
+  line-height: 1.2 !important;
   cursor: pointer !important;
   transition: background .25s, transform .15s, box-shadow .25s !important;
 }
