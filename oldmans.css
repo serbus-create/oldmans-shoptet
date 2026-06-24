@@ -789,7 +789,7 @@ body.type-category .products.products-page .product .availability {
   display: flex !important;
   align-items: center !important;
   gap: 6px !important;
-  font-size: 13px !important;
+  font-size: 14px !important;
   font-weight: 500 !important;
   line-height: 1.4 !important;
   text-align: left !important;
@@ -797,7 +797,7 @@ body.type-category .products.products-page .product .availability {
 }
 body.type-category .products.products-page .product .availability:before {
   content: "🚚" !important;
-  font-size: 13px !important;
+  font-size: 14px !important;
   line-height: 1 !important;
 }
 
@@ -812,6 +812,7 @@ body.type-category .products.products-page .product .p-bottom > div {
   display: flex !important;
   align-items: center !important;
   gap: 10px !important;
+  padding-right: 4px !important;
 }
 body.type-category .products.products-page .product .p-bottom .prices {
   margin: 0 !important;
@@ -856,16 +857,17 @@ body.type-category .products.products-page .product [class*="buy"] {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 7px !important;
+  gap: 6px !important;
   background: #79b530 !important;
   color: #fff !important;
   border: none !important;
   border-radius: 8px !important;
-  padding: 9px 16px !important;
-  font-size: 14px !important;
+  padding: 8px 14px !important;
+  font-size: 13px !important;
   font-weight: 600 !important;
   white-space: nowrap !important;
   width: auto !important;
+  min-width: 0 !important;
   cursor: pointer !important;
   transition: background .25s, transform .15s, box-shadow .25s !important;
 }
