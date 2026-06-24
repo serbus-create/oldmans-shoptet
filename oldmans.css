@@ -766,11 +766,15 @@ body.type-category .products.products-page .product .name {
   text-align: left !important;
 }
 body.type-category .products.products-page .product .name,
-body.type-category .products.products-page .product .name span {
+body.type-category .products.products-page .product .name span,
+body.type-category .products.products-page .product .name a {
   font-size: 17px !important;
   font-weight: 700 !important;
   line-height: 1.3 !important;
   color: #1a1a1a !important;
+  text-align: left !important;
+  justify-content: flex-start !important;
+  display: block !important;
 }
 
 /* ── Dostupnost — vlevo, barevná, prostor pod ── */
