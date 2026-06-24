@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 3.0
+     Verze: 3.1
      ===================================================== */
 
   function injectAll() {
@@ -376,6 +376,7 @@
 
     var afterSale = saleWrapper || apetit;
     insertAfter(recipes, afterSale);
+
     /* --- 7g. ČERVENÁ USP LIŠTA --- */
     var uspBar = document.createElement('div');
     uspBar.className = 'om-usp-bar';
