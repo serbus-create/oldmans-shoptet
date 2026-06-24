@@ -761,7 +761,7 @@ body.type-category .products.products-page .product .p-in-in {
 body.type-category .products.products-page .product .name {
   display: block !important;
   width: 100% !important;
-  margin: 0 0 10px !important;
+  margin: 0 0 8px !important;
   min-height: 40px !important;
   text-align: left !important;
 }
@@ -777,7 +777,7 @@ body.type-category .products.products-page .product .name span {
 body.type-category .products.products-page .product .ratings-wrapper {
   display: block !important;
   width: 100% !important;
-  margin: 0 0 14px !important;
+  margin: 0 0 12px !important;
   text-align: left !important;
 }
 body.type-category .products.products-page .product .stars-placeholder,
@@ -786,12 +786,19 @@ body.type-category .products.products-page .product .ratings-wrapper [class*="st
   display: none !important;
 }
 body.type-category .products.products-page .product .availability {
-  display: block !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
   font-size: 13px !important;
   font-weight: 500 !important;
   line-height: 1.4 !important;
   text-align: left !important;
   margin: 0 !important;
+}
+body.type-category .products.products-page .product .availability:before {
+  content: "🚚" !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
 }
 
 /* ── Spodní lišta: cena vlevo + tlačítko vpravo na jednom řádku ── */
@@ -799,7 +806,7 @@ body.type-category .products.products-page .product .p-bottom {
   display: flex !important;
   align-items: center !important;
   justify-content: flex-start !important;
-  gap: 12px !important;
+  gap: 10px !important;
   margin-top: auto !important;
   padding: 0 !important;
 }
@@ -807,13 +814,16 @@ body.type-category .products.products-page .product .p-bottom .prices {
   margin: 0 !important;
   text-align: left !important;
   flex-shrink: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  line-height: 1.1 !important;
 }
 body.type-category .products.products-page .product .price-final {
-  font-size: 20px !important;
+  font-size: 17px !important;
   font-weight: 800 !important;
   color: #1a1a1a !important;
   white-space: nowrap !important;
-  line-height: 1.1 !important;
+  line-height: 1.15 !important;
 }
 body.type-category .products.products-page .product .price-before {
   display: block !important;
@@ -822,13 +832,14 @@ body.type-category .products.products-page .product .price-before {
   color: #aaa !important;
   text-decoration: line-through !important;
   line-height: 1.2 !important;
+  margin: 0 !important;
 }
 body.type-category .products.products-page .product .price-final.price--sale,
 body.type-category .products.products-page .product ins .price {
   color: #9f1400 !important;
 }
 
-/* ── Tlačítko — vpravo, automaticky odsunuté ── */
+/* ── Tlačítko — vpravo, kompaktní, s ikonou košíku ── */
 body.type-category .products.products-page .product .p-tools {
   margin: 0 0 0 auto !important;
   flex-shrink: 0 !important;
@@ -842,24 +853,30 @@ body.type-category .products.products-page .product [class*="buy"] {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+  gap: 7px !important;
   background: #79b530 !important;
   color: #fff !important;
   border: none !important;
-  border-radius: 10px !important;
-  padding: 11px 20px !important;
+  border-radius: 8px !important;
+  padding: 9px 16px !important;
   font-size: 14px !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   white-space: nowrap !important;
   width: auto !important;
   cursor: pointer !important;
-  box-shadow: 0 3px 8px rgba(121,181,48,.30) !important;
   transition: background .25s, transform .15s, box-shadow .25s !important;
+}
+body.type-category .products.products-page .product .add-to-cart-button:before,
+body.type-category .products.products-page .product .to-cart-button:before {
+  content: "🛒" !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
 }
 body.type-category .products.products-page .product .add-to-cart-button:hover,
 body.type-category .products.products-page .product .to-cart-button:hover {
-  background: #000 !important;
-  box-shadow: 0 6px 16px rgba(0,0,0,.22) !important;
-  transform: translateY(-2px) !important;
+  background: #6aa028 !important;
+  box-shadow: 0 4px 12px rgba(121,181,48,.30) !important;
+  transform: translateY(-1px) !important;
 }
 
 /* ── Skrýt popisky, kód, quantity ── */
