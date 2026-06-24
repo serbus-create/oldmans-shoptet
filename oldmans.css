@@ -912,17 +912,24 @@ h2.products-top-header { display: none !important; }
 body.type-category .listSorting.listSorting--dropdown {
   display: block !important;
   position: static !important;
+  width: 100% !important;
 }
 /* Schovat toggle "Řadit podle: ..." */
 body.type-category .listSorting .sortingToggle {
   display: none !important;
 }
-/* Rozbalit menu s odkazy do řádku tabů */
+/* Rozbalit menu s odkazy do vodorovného řádku tabů */
 body.type-category .listSorting #listSortingControls,
 body.type-category .listSorting .listSorting__controls {
   display: flex !important;
   position: static !important;
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  bottom: auto !important;
+  flex-direction: row !important;
   flex-wrap: wrap !important;
+  justify-content: flex-start !important;
   gap: 6px !important;
   background: #f5f5f5 !important;
   border: none !important;
@@ -931,15 +938,18 @@ body.type-category .listSorting .listSorting__controls {
   border-radius: 12px !important;
   margin: 0 !important;
   min-width: 0 !important;
-  width: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
   opacity: 1 !important;
   visibility: visible !important;
   transform: none !important;
+  pointer-events: auto !important;
 }
 /* Jednotlivé taby */
 body.type-category .listSorting .listSorting__control {
   display: inline-flex !important;
   align-items: center !important;
+  justify-content: center !important;
   background: transparent !important;
   border: none !important;
   border-radius: 8px !important;
@@ -949,6 +959,8 @@ body.type-category .listSorting .listSorting__control {
   color: #1a1a1a !important;
   cursor: pointer !important;
   white-space: nowrap !important;
+  width: auto !important;
+  text-align: center !important;
   transition: background .2s, color .2s !important;
 }
 body.type-category .listSorting .listSorting__control:hover {
