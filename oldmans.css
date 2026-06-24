@@ -558,8 +558,12 @@
 ────────────────────────────────────────────── */
 .om-usp-bar {
   background: #9f1400;
-  width: 100%;
+  width: 100vw !important;
+  position: relative !important;
+  left: 50% !important;
+  margin-left: -50vw !important;
   padding: 35px 0;
+  box-sizing: border-box;
 }
 .om-usp-inner {
   max-width: 1400px;
@@ -599,7 +603,11 @@
 .om-custom-footer {
   background: #f5f5f5 !important;
   padding: 50px 0 30px;
-  width: 100%;
+  width: 100vw !important;
+  position: relative !important;
+  left: 50% !important;
+  margin-left: -50vw !important;
+  box-sizing: border-box;
 }
 .om-custom-footer * { color: #555 !important; }
 .om-footer-inner {
