@@ -773,7 +773,7 @@ body.type-category .products.products-page .product .ratings-wrapper {
   display: none !important;
 }
 
-/* ── Skrýt "Nejprodávanější" blok na stránce kategorie — jen produkty, ne sorting tabs ── */
-.products-top-wrapper .products-top { display: none !important; }
-.products-top-wrapper .toggle-top-products { display: none !important; }
-.products-top-wrapper .products-top-header { display: none !important; }
+/* ── Skrýt "Nejprodávanější" blok — jen produkty a tlačítko "Zobrazit více", ne sorting tabs ── */
+.products-inline.products-top { display: none !important; }
+.toggle-top-products { display: none !important; }
+h2.products-top-header { display: none !important; }
