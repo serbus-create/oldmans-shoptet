@@ -656,14 +656,11 @@
 
 /* ══════════════════════════════════════════════
    STRÁNKA KATEGORIE — přiblížení k oldmans.cz
-   v3.2
+   v3.3 — selektory dle skutečného DOM
    ══════════════════════════════════════════════ */
 
 /* ── Nadpis kategorie — červený, verzálky ── */
-h1.category-title,
-.category-title,
-h1.page-heading,
-.page-heading {
+h1.category-title {
   color: #9f1400 !important;
   font-size: 26px !important;
   font-weight: 800 !important;
@@ -671,39 +668,51 @@ h1.page-heading,
   letter-spacing: 1px !important;
 }
 
-/* ── 5 produktů v řadě ── */
-.products-list .product,
-.category-products .product {
+/* ── 5 produktů v řadě
+   Shoptet řídí počet sloupců přes body.columns-4
+   Přebijeme na columns-5 (20% šířka)
+────────────────────────────────────────────── */
+body.type-category .products.products-page .product {
   width: 20% !important;
   max-width: 20% !important;
   flex: 0 0 20% !important;
 }
 @media (max-width: 1199px) {
-  .products-list .product,
-  .category-products .product {
+  body.type-category .products.products-page .product {
     width: 25% !important;
     max-width: 25% !important;
     flex: 0 0 25% !important;
   }
 }
 @media (max-width: 768px) {
-  .products-list .product,
-  .category-products .product {
+  body.type-category .products.products-page .product {
     width: 50% !important;
     max-width: 50% !important;
     flex: 0 0 50% !important;
   }
 }
 
+/* ── Karta produktu — zakulacení, border ── */
+body.type-category .products.products-page .product .p {
+  border-radius: 10px !important;
+  border: 1px solid #e0e0e0 !important;
+  overflow: hidden !important;
+  background: #fff !important;
+  transition: border-color .3s, box-shadow .3s !important;
+  height: 100% !important;
+}
+body.type-category .products.products-page .product .p:hover {
+  border-color: #000 !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,.08) !important;
+}
+
 /* ── Větší obrázek produktu ── */
-.products-list .product .p-image,
-.category-products .product .p-image {
+body.type-category .products.products-page .product .p-image {
   padding-bottom: 100% !important;
 }
 
 /* ── Cena + tlačítko vedle sebe ── */
-.products-list .product .p-bottom,
-.category-products .product .p-bottom {
+body.type-category .products.products-page .product .p-bottom {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
@@ -711,37 +720,30 @@ h1.page-heading,
   padding: 0 10px 12px !important;
 }
 
-/* ── Základní cena ── */
-.products-list .product .price-final,
-.category-products .product .price-final {
+/* ── Cena základní ── */
+body.type-category .products.products-page .product .price-final {
   font-size: 16px !important;
   font-weight: 700 !important;
   color: #000 !important;
 }
 
-/* ── Sleva — přeškrtnutá šedá + červená akční cena ── */
-.products-list .product .price-before,
-.category-products .product .price-before {
+/* ── Sleva — přeškrtnutá šedá + červená akční ── */
+body.type-category .products.products-page .product .price-before {
   font-size: 12px !important;
   color: #999 !important;
   text-decoration: line-through !important;
   display: block !important;
   line-height: 1.2 !important;
 }
-.products-list .product .price-final.price--sale,
-.category-products .product .price-final.price--sale,
-.products-list .product ins .price,
-.category-products .product ins .price {
+body.type-category .products.products-page .product .price-final.price--sale,
+body.type-category .products.products-page .product ins .price {
   color: #9f1400 !important;
 }
 
-/* ── Tlačítko „Do košíku" / „Koupit" — zelené, kompaktní ── */
-.products-list .product .add-to-cart-button,
-.category-products .product .add-to-cart-button,
-.products-list .product [class*="buy"],
-.category-products .product [class*="buy"],
-.products-list .product .to-cart-button,
-.category-products .product .to-cart-button {
+/* ── Tlačítko „Do košíku" — zelené, kompaktní, vpravo ── */
+body.type-category .products.products-page .product .add-to-cart-button,
+body.type-category .products.products-page .product .to-cart-button,
+body.type-category .products.products-page .product [class*="buy"] {
   background: #79b530 !important;
   color: #fff !important;
   border: none !important;
@@ -754,56 +756,19 @@ h1.page-heading,
   flex-shrink: 0 !important;
   transition: background .3s !important;
 }
-.products-list .product .add-to-cart-button:hover,
-.category-products .product .add-to-cart-button:hover,
-.products-list .product .to-cart-button:hover,
-.category-products .product .to-cart-button:hover {
+body.type-category .products.products-page .product .add-to-cart-button:hover,
+body.type-category .products.products-page .product .to-cart-button:hover {
   background: #000 !important;
 }
 
-/* ── Skrýt quantity +/- na stránce kategorie ── */
-.products-list .product .quantity,
-.category-products .product .quantity {
+/* ── Skrýt quantity +/- ── */
+body.type-category .products.products-page .product .quantity {
   display: none !important;
 }
 
-/* ── Sorting — vizuální styl tab tlačítek ── */
-.sorting-bar,
-.products-ordering {
-  display: flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-  flex-wrap: wrap !important;
-  margin-bottom: 20px !important;
-}
-.sorting-bar a,
-.products-ordering a,
-.sorting-bar select,
-.products-ordering select {
-  background: #f3f3f4 !important;
-  border: 1px solid #e0e0e0 !important;
-  border-radius: 5px !important;
-  padding: 7px 16px !important;
-  font-size: 13px !important;
-  color: #000 !important;
-  text-decoration: none !important;
-  cursor: pointer !important;
-  transition: .3s !important;
-  -webkit-appearance: none !important;
-  appearance: none !important;
-}
-.sorting-bar a:hover,
-.products-ordering a:hover {
-  background: #000 !important;
-  color: #fff !important;
-  border-color: #000 !important;
-}
-.sorting-bar a.active,
-.products-ordering a.active,
-.sorting-bar a[aria-current],
-.products-ordering a[aria-current] {
-  background: #f7c91b !important;
-  border-color: #f7c91b !important;
-  color: #000 !important;
-  font-weight: 700 !important;
+/* ── Skrýt popisky a kód ── */
+body.type-category .products.products-page .product .p-desc,
+body.type-category .products.products-page .product .p-code,
+body.type-category .products.products-page .product .ratings-wrapper {
+  display: none !important;
 }
