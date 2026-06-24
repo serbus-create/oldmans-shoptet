@@ -714,10 +714,19 @@ body.type-category .products.products-page .product .p-image {
 /* ── Cena + tlačítko vedle sebe ── */
 body.type-category .products.products-page .product .p-bottom {
   display: flex !important;
+  flex-wrap: wrap !important;
   align-items: center !important;
   justify-content: space-between !important;
-  gap: 8px !important;
+  gap: 4px 8px !important;
   padding: 0 10px 12px !important;
+}
+
+/* ── Dostupnost — celá šířka nad cenou ── */
+body.type-category .products.products-page .product .availability {
+  width: 100% !important;
+  font-size: 12px !important;
+  margin-bottom: 2px !important;
+  order: -1 !important;
 }
 
 /* ── Cena základní ── */
