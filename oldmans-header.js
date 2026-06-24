@@ -499,17 +499,29 @@
     });
   }
 
+  /* Sledujeme změny v seznamu produktů (AJAX řazení, filtrování) */
+  function observeProducts() {
+    var target = document.querySelector('.products-page') || document.querySelector('#products') || document.body;
+    if (!target) return;
+    var observer = new MutationObserver(function () {
+      setAvailabilityIcons();
+    });
+    observer.observe(target, { childList: true, subtree: true });
+  }
+
   /* Spustíme po načtení DOM */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', injectAll);
     document.addEventListener('DOMContentLoaded', function () {
       setTimeout(setAvailabilityIcons, 300);
       setTimeout(setAvailabilityIcons, 1500);
+      setTimeout(observeProducts, 1800);
     });
   } else {
     injectAll();
     setTimeout(setAvailabilityIcons, 300);
     setTimeout(setAvailabilityIcons, 1500);
+    setTimeout(observeProducts, 1800);
   }
 
 })();
