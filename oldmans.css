@@ -772,3 +772,6 @@ body.type-category .products.products-page .product .p-code,
 body.type-category .products.products-page .product .ratings-wrapper {
   display: none !important;
 }
+
+/* ── Skrýt "Nejprodávanější" blok na stránce kategorie ── */
+.products-top-wrapper { display: none !important; }
