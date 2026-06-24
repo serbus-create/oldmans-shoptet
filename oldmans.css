@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v3.1
+   OLD MAN'S — Shoptet Disco — Custom CSS v3.2
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -654,41 +654,156 @@
   .om-footer-inner { grid-template-columns: 1fr; }
 }
 
-/* ──────────────────────────────────────────────
-   PRODUKTOVÁ STRÁNKA KATEGORIE
-────────────────────────────────────────────── */
-/* 5 produktů v řadě místo 6 */
+/* ══════════════════════════════════════════════
+   STRÁNKA KATEGORIE — přiblížení k oldmans.cz
+   v3.2
+   ══════════════════════════════════════════════ */
+
+/* ── Nadpis kategorie — červený, verzálky ── */
+h1.category-title,
+.category-title,
+h1.page-heading,
+.page-heading {
+  color: #9f1400 !important;
+  font-size: 26px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+}
+
+/* ── 5 produktů v řadě ── */
 .products-list .product,
 .category-products .product {
   width: 20% !important;
   max-width: 20% !important;
   flex: 0 0 20% !important;
 }
+@media (max-width: 1199px) {
+  .products-list .product,
+  .category-products .product {
+    width: 25% !important;
+    max-width: 25% !important;
+    flex: 0 0 25% !important;
+  }
+}
+@media (max-width: 768px) {
+  .products-list .product,
+  .category-products .product {
+    width: 50% !important;
+    max-width: 50% !important;
+    flex: 0 0 50% !important;
+  }
+}
 
-/* Větší obrázek */
+/* ── Větší obrázek produktu ── */
 .products-list .product .p-image,
 .category-products .product .p-image {
   padding-bottom: 100% !important;
 }
 
-/* Tlačítko vedle ceny — jako na originálu */
+/* ── Cena + tlačítko vedle sebe ── */
 .products-list .product .p-bottom,
 .category-products .product .p-bottom {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  gap: 10px !important;
-}
-.products-list .product .add-to-cart-button,
-.category-products .product .add-to-cart-button {
-  width: auto !important;
-  padding: 8px 16px !important;
-  font-size: 13px !important;
-  white-space: nowrap !important;
+  gap: 8px !important;
+  padding: 0 10px 12px !important;
 }
 
-/* Skrýt quantity +/- na kategoriích */
+/* ── Základní cena ── */
+.products-list .product .price-final,
+.category-products .product .price-final {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #000 !important;
+}
+
+/* ── Sleva — přeškrtnutá šedá + červená akční cena ── */
+.products-list .product .price-before,
+.category-products .product .price-before {
+  font-size: 12px !important;
+  color: #999 !important;
+  text-decoration: line-through !important;
+  display: block !important;
+  line-height: 1.2 !important;
+}
+.products-list .product .price-final.price--sale,
+.category-products .product .price-final.price--sale,
+.products-list .product ins .price,
+.category-products .product ins .price {
+  color: #9f1400 !important;
+}
+
+/* ── Tlačítko „Do košíku" / „Koupit" — zelené, kompaktní ── */
+.products-list .product .add-to-cart-button,
+.category-products .product .add-to-cart-button,
+.products-list .product [class*="buy"],
+.category-products .product [class*="buy"],
+.products-list .product .to-cart-button,
+.category-products .product .to-cart-button {
+  background: #79b530 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 5px !important;
+  padding: 8px 14px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+  width: auto !important;
+  flex-shrink: 0 !important;
+  transition: background .3s !important;
+}
+.products-list .product .add-to-cart-button:hover,
+.category-products .product .add-to-cart-button:hover,
+.products-list .product .to-cart-button:hover,
+.category-products .product .to-cart-button:hover {
+  background: #000 !important;
+}
+
+/* ── Skrýt quantity +/- na stránce kategorie ── */
 .products-list .product .quantity,
 .category-products .product .quantity {
   display: none !important;
+}
+
+/* ── Sorting — vizuální styl tab tlačítek ── */
+.sorting-bar,
+.products-ordering {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  flex-wrap: wrap !important;
+  margin-bottom: 20px !important;
+}
+.sorting-bar a,
+.products-ordering a,
+.sorting-bar select,
+.products-ordering select {
+  background: #f3f3f4 !important;
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 5px !important;
+  padding: 7px 16px !important;
+  font-size: 13px !important;
+  color: #000 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  transition: .3s !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+.sorting-bar a:hover,
+.products-ordering a:hover {
+  background: #000 !important;
+  color: #fff !important;
+  border-color: #000 !important;
+}
+.sorting-bar a.active,
+.products-ordering a.active,
+.sorting-bar a[aria-current],
+.products-ordering a[aria-current] {
+  background: #f7c91b !important;
+  border-color: #f7c91b !important;
+  color: #000 !important;
+  font-weight: 700 !important;
 }
