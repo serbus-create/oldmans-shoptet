@@ -721,12 +721,21 @@ body.type-category .products.products-page .product .p-bottom {
   padding: 0 10px 12px !important;
 }
 
-/* ── Dostupnost — celá šířka nad cenou ── */
+/* ── Offer wrapper — flex pro cenu a dostupnost ── */
+body.type-category .products.products-page .product [data-micro="offer"] {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  flex: 1 !important;
+}
+
+/* ── Dostupnost — viditelná ── */
 body.type-category .products.products-page .product .availability {
-  width: 100% !important;
+  display: block !important;
   font-size: 12px !important;
-  margin-bottom: 2px !important;
-  order: -1 !important;
+  min-height: auto !important;
+  width: auto !important;
+  height: auto !important;
 }
 
 /* ── Cena základní ── */
