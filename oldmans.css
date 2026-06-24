@@ -692,84 +692,76 @@ body.type-category .products.products-page .product {
   }
 }
 
-/* ── Karta produktu — zakulacení, border ── */
+/* ── Karta produktu — zakulacení, jemný border, hover lift ── */
+body.type-category .products.products-page .product {
+  padding: 8px !important;
+}
 body.type-category .products.products-page .product .p {
-  border-radius: 10px !important;
-  border: 1px solid #e0e0e0 !important;
+  border-radius: 14px !important;
+  border: 1px solid #e7e7e7 !important;
   overflow: hidden !important;
   background: #fff !important;
-  transition: border-color .3s, box-shadow .3s !important;
+  transition: border-color .25s, box-shadow .25s, transform .25s !important;
   height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
 }
 body.type-category .products.products-page .product .p:hover {
-  border-color: #000 !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,.08) !important;
+  border-color: #d4d4d4 !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,.10) !important;
+  transform: translateY(-3px) !important;
 }
 
-/* ── Větší obrázek produktu ── */
+/* ── Obrázek — čtvercový, jemné pozadí, padding ── */
 body.type-category .products.products-page .product .p-image {
   padding-bottom: 100% !important;
+  background: #fafafa !important;
+  margin: 0 !important;
+}
+body.type-category .products.products-page .product .image {
+  display: block !important;
+  padding: 12px !important;
+  background: #fafafa !important;
 }
 
-/* ── Layout karty: název, dostupnost, pak cena vlevo + tlačítko vpravo ── */
+/* ── Vnitřní obsah karty — flex sloupec, zarovnání vlevo ── */
+body.type-category .products.products-page .product .p-in {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
 body.type-category .products.products-page .product .p-in-in {
   display: flex !important;
   flex-wrap: wrap !important;
-  align-items: center !important;
-  padding: 12px 14px !important;
+  align-items: flex-end !important;
+  flex: 1 !important;
+  padding: 14px 16px 16px !important;
+  gap: 0 !important;
 }
 
-/* Název — celá šířka */
+/* ── Název — tučný, vlevo, dvouřádkový prostor ── */
 body.type-category .products.products-page .product .p-in-in .name {
   width: 100% !important;
   order: 1 !important;
   text-align: left !important;
+  margin: 0 0 8px !important;
+  min-height: 38px !important;
+}
+body.type-category .products.products-page .product .p-in-in .name span,
+body.type-category .products.products-page .product .p-in-in .name {
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  color: #1a1a1a !important;
 }
 
-/* Dostupnost (ratings-wrapper) — celá šířka, vlevo */
+/* ── Dostupnost — celá šířka, vlevo, barevná ── */
 body.type-category .products.products-page .product .ratings-wrapper {
+  display: block !important;
   width: 100% !important;
   order: 2 !important;
   text-align: left !important;
-  margin: 0 !important;
-}
-body.type-category .products.products-page .product .availability {
-  display: block !important;
-  font-size: 13px !important;
-  line-height: 1.4 !important;
-  text-align: left !important;
-  margin: 2px 0 !important;
-}
-
-/* Cena (p-bottom) — vlevo, na řádku s tlačítkem */
-body.type-category .products.products-page .product .p-bottom {
-  order: 3 !important;
-  flex: 1 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  text-align: left !important;
-}
-body.type-category .products.products-page .product .p-bottom .prices {
-  text-align: left !important;
-  margin: 0 !important;
-}
-
-/* Tlačítko (p-tools) — vpravo, na řádku s cenou */
-body.type-category .products.products-page .product .p-tools {
-  order: 4 !important;
-  flex-shrink: 0 !important;
-  margin: 0 !important;
-}
-
-/* ── Skrýt popisky a kód ── */
-body.type-category .products.products-page .product .p-desc,
-body.type-category .products.products-page .product .p-code {
-  display: none !important;
-}
-
-/* ── Dostupnost je uvnitř .ratings-wrapper — NESKRÝVAT wrapper, jen hvězdičky ── */
-body.type-category .products.products-page .product .ratings-wrapper {
-  display: block !important;
+  margin: 0 0 10px !important;
 }
 body.type-category .products.products-page .product .stars-placeholder,
 body.type-category .products.products-page .product .ratings-wrapper .stars,
@@ -778,64 +770,88 @@ body.type-category .products.products-page .product .ratings-wrapper [class*="st
 }
 body.type-category .products.products-page .product .availability {
   display: block !important;
-  font-size: 12px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
   line-height: 1.4 !important;
-  margin-top: 4px !important;
+  text-align: left !important;
+  margin: 0 !important;
 }
 
-/* ── Cena základní ── */
+/* ── Cena (p-bottom) — vlevo, zarovnaná na spodek řádku ── */
+body.type-category .products.products-page .product .p-bottom {
+  order: 3 !important;
+  flex: 1 1 auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  text-align: left !important;
+  display: flex !important;
+  align-items: flex-end !important;
+}
+body.type-category .products.products-page .product .p-bottom .prices {
+  text-align: left !important;
+  margin: 0 !important;
+}
 body.type-category .products.products-page .product .price-final {
-  font-size: 16px !important;
-  font-weight: 700 !important;
-  color: #000 !important;
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  color: #1a1a1a !important;
+  white-space: nowrap !important;
 }
 
-/* ── Sleva — přeškrtnutá šedá + červená akční ── */
+/* ── Sleva — přeškrtnutá šedá nad cenou + červená akční ── */
 body.type-category .products.products-page .product .price-before {
   font-size: 12px !important;
-  color: #999 !important;
+  color: #aaa !important;
   text-decoration: line-through !important;
   display: block !important;
   line-height: 1.2 !important;
+  font-weight: 500 !important;
 }
 body.type-category .products.products-page .product .price-final.price--sale,
 body.type-category .products.products-page .product ins .price {
   color: #9f1400 !important;
 }
 
-/* ── Tlačítko „Do košíku" — zelené, kompaktní, vpravo ── */
+/* ── Tlačítko (p-tools) — vpravo, na řádku s cenou ── */
+body.type-category .products.products-page .product .p-tools {
+  order: 4 !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+}
 body.type-category .products.products-page .product .add-to-cart-button,
 body.type-category .products.products-page .product .to-cart-button,
 body.type-category .products.products-page .product [class*="buy"] {
   background: #79b530 !important;
   color: #fff !important;
   border: none !important;
-  border-radius: 5px !important;
-  padding: 8px 14px !important;
-  font-size: 13px !important;
-  font-weight: 600 !important;
+  border-radius: 8px !important;
+  padding: 10px 18px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
   white-space: nowrap !important;
   width: auto !important;
   flex-shrink: 0 !important;
-  transition: background .3s !important;
+  cursor: pointer !important;
+  box-shadow: 0 2px 6px rgba(121,181,48,.25) !important;
+  transition: background .25s, transform .15s, box-shadow .25s !important;
 }
 body.type-category .products.products-page .product .add-to-cart-button:hover,
 body.type-category .products.products-page .product .to-cart-button:hover {
   background: #000 !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,.20) !important;
+  transform: translateY(-1px) !important;
 }
 
-/* ── Skrýt quantity +/- ── */
-body.type-category .products.products-page .product .quantity {
-  display: none !important;
-}
-
-/* ── Skrýt popisky a kód (ratings-wrapper NE — obsahuje dostupnost) ── */
+/* ── Skrýt popisky, kód, quantity ── */
 body.type-category .products.products-page .product .p-desc,
 body.type-category .products.products-page .product .p-code {
   display: none !important;
 }
+body.type-category .products.products-page .product .quantity {
+  display: none !important;
+}
 
-/* ── Skrýt "Nejprodávanější" blok — jen produkty a tlačítko "Zobrazit více", ne sorting tabs ── */
+/* ── Skrýt "Nejprodávanější" blok — jen produkty, ne sorting tabs ── */
 .products-inline.products-top { display: none !important; }
 .toggle-top-products { display: none !important; }
 h2.products-top-header { display: none !important; }
