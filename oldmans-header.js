@@ -209,7 +209,7 @@
           <a href="/o-nas/" class="om-btn-red">Více o nás</a>
         </div>
         <div class="om-about-img">
-          <img src="https://cdn.myshoptet.com/usr/788253.myshoptet.com/user/logos/oldmans.png" alt="OLD MAN'S">
+          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/about-us-logo.png" alt="OLD MAN'S">
         </div>
       </div>
     </div>`;
