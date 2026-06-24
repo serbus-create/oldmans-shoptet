@@ -711,14 +711,54 @@ body.type-category .products.products-page .product .p-image {
   padding-bottom: 100% !important;
 }
 
-/* ── Cena + tlačítko vedle sebe ── */
-body.type-category .products.products-page .product .p-bottom {
+/* ── Layout karty: název, dostupnost, pak cena vlevo + tlačítko vpravo ── */
+body.type-category .products.products-page .product .p-in-in {
   display: flex !important;
   flex-wrap: wrap !important;
   align-items: center !important;
-  justify-content: space-between !important;
-  gap: 4px 8px !important;
-  padding: 0 10px 12px !important;
+  padding: 12px 14px !important;
+}
+
+/* Název — celá šířka */
+body.type-category .products.products-page .product .p-in-in .name {
+  width: 100% !important;
+  order: 1 !important;
+  text-align: left !important;
+}
+
+/* Dostupnost (ratings-wrapper) — celá šířka, vlevo */
+body.type-category .products.products-page .product .ratings-wrapper {
+  width: 100% !important;
+  order: 2 !important;
+  text-align: left !important;
+  margin: 0 !important;
+}
+body.type-category .products.products-page .product .availability {
+  display: block !important;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+  text-align: left !important;
+  margin: 2px 0 !important;
+}
+
+/* Cena (p-bottom) — vlevo, na řádku s tlačítkem */
+body.type-category .products.products-page .product .p-bottom {
+  order: 3 !important;
+  flex: 1 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  text-align: left !important;
+}
+body.type-category .products.products-page .product .p-bottom .prices {
+  text-align: left !important;
+  margin: 0 !important;
+}
+
+/* Tlačítko (p-tools) — vpravo, na řádku s cenou */
+body.type-category .products.products-page .product .p-tools {
+  order: 4 !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
 }
 
 /* ── Skrýt popisky a kód ── */
