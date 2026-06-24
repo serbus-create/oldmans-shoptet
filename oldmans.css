@@ -791,19 +791,12 @@ body.type-category .products.products-page .product .ratings-wrapper .show-add-r
   padding: 0 !important;
 }
 body.type-category .products.products-page .product .availability {
-  display: flex !important;
-  align-items: center !important;
-  gap: 6px !important;
+  display: block !important;
   font-size: 15px !important;
   font-weight: 500 !important;
   line-height: 1.4 !important;
   text-align: left !important;
   margin: 0 !important;
-}
-body.type-category .products.products-page .product .availability:before {
-  content: attr(data-om-icon) !important;
-  font-size: 15px !important;
-  line-height: 1 !important;
 }
 
 /* ── Spodní lišta: cena vlevo + tlačítko vpravo na jednom řádku ──
