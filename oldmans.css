@@ -789,15 +789,15 @@ body.type-category .products.products-page .product .availability {
   display: flex !important;
   align-items: center !important;
   gap: 6px !important;
-  font-size: 14px !important;
+  font-size: 15px !important;
   font-weight: 500 !important;
   line-height: 1.4 !important;
   text-align: left !important;
   margin: 0 !important;
 }
 body.type-category .products.products-page .product .availability:before {
-  content: "🚚" !important;
-  font-size: 14px !important;
+  content: attr(data-om-icon) !important;
+  font-size: 15px !important;
   line-height: 1 !important;
 }
 
