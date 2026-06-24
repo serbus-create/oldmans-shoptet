@@ -721,21 +721,26 @@ body.type-category .products.products-page .product .p-bottom {
   padding: 0 10px 12px !important;
 }
 
-/* ── Offer wrapper — flex pro cenu a dostupnost ── */
-body.type-category .products.products-page .product [data-micro="offer"] {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 2px !important;
-  flex: 1 !important;
+/* ── Skrýt popisky a kód ── */
+body.type-category .products.products-page .product .p-desc,
+body.type-category .products.products-page .product .p-code {
+  display: none !important;
 }
 
-/* ── Dostupnost — viditelná ── */
+/* ── Dostupnost je uvnitř .ratings-wrapper — NESKRÝVAT wrapper, jen hvězdičky ── */
+body.type-category .products.products-page .product .ratings-wrapper {
+  display: block !important;
+}
+body.type-category .products.products-page .product .stars-placeholder,
+body.type-category .products.products-page .product .ratings-wrapper .stars,
+body.type-category .products.products-page .product .ratings-wrapper [class*="star"] {
+  display: none !important;
+}
 body.type-category .products.products-page .product .availability {
   display: block !important;
   font-size: 12px !important;
-  min-height: auto !important;
-  width: auto !important;
-  height: auto !important;
+  line-height: 1.4 !important;
+  margin-top: 4px !important;
 }
 
 /* ── Cena základní ── */
@@ -784,10 +789,9 @@ body.type-category .products.products-page .product .quantity {
   display: none !important;
 }
 
-/* ── Skrýt popisky a kód ── */
+/* ── Skrýt popisky a kód (ratings-wrapper NE — obsahuje dostupnost) ── */
 body.type-category .products.products-page .product .p-desc,
-body.type-category .products.products-page .product .p-code,
-body.type-category .products.products-page .product .ratings-wrapper {
+body.type-category .products.products-page .product .p-code {
   display: none !important;
 }
 
