@@ -653,3 +653,42 @@
 @media (max-width: 576px) {
   .om-footer-inner { grid-template-columns: 1fr; }
 }
+
+/* ──────────────────────────────────────────────
+   PRODUKTOVÁ STRÁNKA KATEGORIE
+────────────────────────────────────────────── */
+/* 5 produktů v řadě místo 6 */
+.products-list .product,
+.category-products .product {
+  width: 20% !important;
+  max-width: 20% !important;
+  flex: 0 0 20% !important;
+}
+
+/* Větší obrázek */
+.products-list .product .p-image,
+.category-products .product .p-image {
+  padding-bottom: 100% !important;
+}
+
+/* Tlačítko vedle ceny — jako na originálu */
+.products-list .product .p-bottom,
+.category-products .product .p-bottom {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+}
+.products-list .product .add-to-cart-button,
+.category-products .product .add-to-cart-button {
+  width: auto !important;
+  padding: 8px 16px !important;
+  font-size: 13px !important;
+  white-space: nowrap !important;
+}
+
+/* Skrýt quantity +/- na kategoriích */
+.products-list .product .quantity,
+.category-products .product .quantity {
+  display: none !important;
+}
