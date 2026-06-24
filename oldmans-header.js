@@ -483,45 +483,11 @@
     }, 2000);
   }
 
-  /* -------------------------------------------------
-     EMOJI DOSTUPNOSTI na stránce kategorie
-     🚚 Skladem | ❌ Vyprodáno | ❓ Na dotaz
-  ------------------------------------------------- */
-  function setAvailabilityIcons() {
-    if (!document.body.classList.contains('type-category')) return;
-    document.querySelectorAll('.products-page .product .availability').forEach(function (av) {
-      var text = av.textContent.toLowerCase();
-      var icon = '🚚';
-      if (text.indexOf('vyprod') !== -1) icon = '❌';
-      else if (text.indexOf('na dotaz') !== -1) icon = '❓';
-      else if (text.indexOf('sklad') !== -1) icon = '🚚';
-      av.setAttribute('data-om-icon', icon);
-    });
-  }
-
-  /* Sledujeme změny v seznamu produktů (AJAX řazení, filtrování) */
-  function observeProducts() {
-    var target = document.querySelector('.products-page') || document.querySelector('#products') || document.body;
-    if (!target) return;
-    var observer = new MutationObserver(function () {
-      setAvailabilityIcons();
-    });
-    observer.observe(target, { childList: true, subtree: true });
-  }
-
   /* Spustíme po načtení DOM */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', injectAll);
-    document.addEventListener('DOMContentLoaded', function () {
-      setTimeout(setAvailabilityIcons, 300);
-      setTimeout(setAvailabilityIcons, 1500);
-      setTimeout(observeProducts, 1800);
-    });
   } else {
     injectAll();
-    setTimeout(setAvailabilityIcons, 300);
-    setTimeout(setAvailabilityIcons, 1500);
-    setTimeout(observeProducts, 1800);
   }
 
 })();
