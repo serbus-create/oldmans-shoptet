@@ -613,7 +613,7 @@
 ────────────────────────────────────────────── */
 .om-custom-footer {
   background: #f5f5f5 !important;
-  padding: 50px 0 30px;
+  padding: 56px 0 36px;
   width: 100vw !important;
   position: relative !important;
   left: 50% !important;
@@ -624,24 +624,26 @@
 .om-footer-inner {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 40px;
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 40px;
+  grid-template-columns: 2fr 1fr 1.6fr 1fr;
+  gap: 48px;
   box-sizing: border-box;
 }
 .om-custom-footer .om-footer-col h4 {
-  font-size: 16px;
-  font-weight: 700;
-  color: #000 !important;
-  margin-bottom: 20px;
+  font-size: 17px;
+  font-weight: 800;
+  color: #111 !important;
+  margin-bottom: 22px;
+  letter-spacing: 0;
 }
-.om-custom-footer .om-footer-col p { color: #555 !important; font-size: 14px; line-height: 1.7; margin-bottom: 8px; }
-.om-custom-footer .om-footer-col p strong { color: #000 !important; }
-.om-custom-footer .om-footer-col a { color: #555 !important; text-decoration: none; transition: color .3s; }
+.om-custom-footer .om-footer-col p { color: #444 !important; font-size: 15px; line-height: 1.75; margin-bottom: 6px; }
+.om-custom-footer .om-footer-col p strong { color: #111 !important; }
+.om-custom-footer .om-footer-col a { color: #444 !important; text-decoration: none; transition: color .3s; }
 .om-custom-footer .om-footer-col a:hover { color: #9f1400 !important; }
 .om-footer-col ul { list-style: none; padding: 0; margin: 0; }
-.om-footer-col ul li { margin-bottom: 10px; font-size: 14px; }
+.om-footer-col ul li { margin-bottom: 13px; font-size: 15px; color: #444 !important; }
+.om-footer-col ul li a { color: #444 !important; }
 .om-custom-footer .om-footer-ig {
   display: inline-flex !important;
   align-items: center;
@@ -649,15 +651,16 @@
   background: #f7c91b !important;
   color: #000 !important;
   border-radius: 5px;
-  padding: 10px 18px;
+  padding: 11px 20px;
   font-weight: 700;
   font-size: 13px;
   text-decoration: none !important;
   transition: background .3s;
+  margin-top: 6px;
 }
 .om-custom-footer .om-footer-ig:hover { background: #e6b800 !important; color: #000 !important; }
 @media (max-width: 992px) {
-  .om-footer-inner { grid-template-columns: 1fr 1fr; }
+  .om-footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; padding: 0 24px; }
 }
 @media (max-width: 576px) {
   .om-footer-inner { grid-template-columns: 1fr; }
