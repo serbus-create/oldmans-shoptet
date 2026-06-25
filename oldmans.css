@@ -952,12 +952,28 @@ body.type-category .listSorting .listSorting__control--current {
    STRÁNKA RECEPTY — galerie karet (jako originál)
    ══════════════════════════════════════════════ */
 
+/* Zrušit úzký režim a sidebar na stránce s recepty */
+body.type-posts-listing .content.narrow,
+body.in-recepty .content.narrow {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: 0 0 100% !important;
+}
+/* Schovat sidebar na stránce recepty */
+body.type-posts-listing .sidebar,
+body.type-posts-listing .sidebar-left,
+body.in-recepty .sidebar,
+body.in-recepty .sidebar-left {
+  display: none !important;
+}
+
 /* Nadpis stránky */
-body.type-page h1,
-.type-news h1 {
+body.type-posts-listing h1,
+body.in-recepty h1 {
   color: #9f1400 !important;
   font-weight: 800 !important;
   text-transform: uppercase !important;
+  text-align: left !important;
 }
 
 /* Grid 4 sloupce */
@@ -965,8 +981,9 @@ body.type-page h1,
   display: grid !important;
   grid-template-columns: repeat(4, 1fr) !important;
   gap: 24px !important;
-  max-width: 1400px !important;
-  margin: 0 auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
   padding: 10px 0 !important;
 }
 @media (max-width: 1100px) {
