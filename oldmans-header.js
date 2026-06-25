@@ -607,36 +607,27 @@
   }
 
   /* Po přidání do košíku → přesměrovat na košík */
-  /* Sledujeme změnu počtu položek v košíku přes MutationObserver */
   function watchCart() {
-    var cartEl = document.querySelector('#cart-count, .cart-count, [data-cart-count], .header-cart .count, #om-cart-price');
-    if (!cartEl) {
-      /* Zkusíme najít element košíku obecněji */
-      cartEl = document.querySelector('.cart-quantity, .basket-count, #cartQuantity');
-    }
-    if (cartEl) {
+    /* Sledujeme změnu našeho #om-cart-price elementu */
+    var cartPrice = document.getElementById('om-cart-price');
+    if (cartPrice) {
+      var lastVal = cartPrice.textContent;
       var observer = new MutationObserver(function() {
-        window.location.href = '/kosik/';
+        var newVal = cartPrice.textContent;
+        if (newVal !== lastVal && newVal !== 'Košík') {
+          lastVal = newVal;
+          window.location.href = '/kosik/';
+        }
       });
-      observer.observe(cartEl, { childList: true, subtree: true, characterData: true });
+      observer.observe(cartPrice, { childList: true, subtree: true, characterData: true });
     }
 
-    /* Záloha: posloucháme Shoptet AJAX eventy */
+    /* Shoptet AJAX eventy */
     document.addEventListener('cart-changed', function() {
       window.location.href = '/kosik/';
     });
     document.addEventListener('shoptet:cartUpdated', function() {
       window.location.href = '/kosik/';
-    });
-
-    /* Záloha 2: klik na tlačítko + delší timeout */
-    document.addEventListener('click', function(e) {
-      var btn = e.target.closest('[class*="cart"], [class*="Cart"], [class*="add-to"]');
-      if (btn && (btn.tagName === 'BUTTON' || btn.tagName === 'A') && !btn.href) {
-        setTimeout(function() {
-          window.location.href = '/kosik/';
-        }, 1500);
-      }
     });
   }
 
