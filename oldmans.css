@@ -644,19 +644,20 @@
 .om-footer-col ul { list-style: none; padding: 0; margin: 0; }
 .om-footer-col ul li { margin-bottom: 13px; font-size: 15px; color: #444 !important; }
 .om-footer-col ul li a { color: #444 !important; }
+.om-custom-footer .om-footer-ig-label { margin-top: 20px !important; margin-bottom: 10px !important; }
 .om-custom-footer .om-footer-ig {
   display: inline-flex !important;
   align-items: center;
   gap: 8px;
   background: #f7c91b !important;
   color: #000 !important;
-  border-radius: 5px;
+  border-radius: 50px;
   padding: 11px 20px;
   font-weight: 700;
   font-size: 13px;
   text-decoration: none !important;
   transition: background .3s;
-  margin-top: 6px;
+  white-space: nowrap;
 }
 .om-custom-footer .om-footer-ig:hover { background: #e6b800 !important; color: #000 !important; }
 @media (max-width: 992px) {
