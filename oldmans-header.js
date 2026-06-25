@@ -249,7 +249,7 @@
           <li><a href="/velkoobchod/">🤝 B2B</a></li>
         </ul>
         <div class="om-icons">
-          <div class="om-login"><a href="/muj-ucet/">👤</a></div>
+          <div class="om-login"><a href="/registrace/">👤</a></div>
           <div class="om-cart">
             <a href="/kosik/" class="cart-count toggle-window" data-target="cart" data-hover="true" data-redirect="true">
               <span id="om-cart-price" class="cart-price">Košík</span>
