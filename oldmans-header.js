@@ -202,7 +202,7 @@
         <a class="om-logo" href="/">
           <img src="https://cdn.myshoptet.com/usr/788253.myshoptet.com/user/logos/oldmans.png" alt="Old Man's">
         </a>
-        <a href="/kontakt/" class="om-contact">
+        <a href="/kontakty/" class="om-contact">
           <div class="om-contact-icon">
             <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/conversation.png" alt="">
           </div>
