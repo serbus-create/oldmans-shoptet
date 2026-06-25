@@ -195,6 +195,17 @@
       }
     }
 
+    /* Skrýt sekci Diskuze na statických stránkách */
+    document.querySelectorAll('h2, h3').forEach(function(heading) {
+      if (heading.textContent.trim().startsWith('Diskuze')) {
+        var el = heading;
+        while (el) {
+          var next = el.nextElementSibling;
+          el.style.setProperty('display', 'none', 'important');
+          el = next;
+        }
+      }
+    });
 
     var headerTop = document.querySelector('#header .header-top');
     if (headerTop) headerTop.style.display = 'none';
