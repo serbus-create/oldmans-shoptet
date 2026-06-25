@@ -240,7 +240,7 @@
     catMenu.innerHTML = `
       <div class="om-cat-menu-inner">
         <ul class="om-cat-list" id="omCatList">
-          <li class="cat-favorite"><a href="/stitky/top-produkty/"><span class="cat-icon">⭐</span> Bestseller</a></li>
+          <li class="cat-favorite"><a href="/kategorie/bestseller/"><span class="cat-icon">⭐</span> Bestseller</a></li>
           <li class="cat-sale"><a href="/stitky/akcni-cena/"><span class="cat-icon">🏷️</span> V akci</a></li>
           <li><a href="/kategorie/omacky-a-majonezy/">Omáčky a majonézy</a></li>
           <li><a href="/kategorie/salatove-dressingy/">Salátové dresingy</a></li>
