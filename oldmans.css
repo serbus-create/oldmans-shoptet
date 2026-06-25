@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v3.2
+   OLD MAN'S — Shoptet Disco — Custom CSS v3.3
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -1120,4 +1120,21 @@ body.in-o-nas .content.narrow {
 .disqus-wrapper,
 #disqus_thread {
   display: none !important;
+}
+
+/* ──────────────────────────────────────────────
+   MAPA PARTNERŮ
+────────────────────────────────────────────── */
+.om-partners-map {
+  background: #fff;
+  padding-bottom: 0 !important; /* Nalepení mapy úplně dolů k patičce/USP liště */
+}
+#om-map {
+  z-index: 1; /* Brání mapě, aby překrývala hlavičku při scrollování */
+  border-top: 1px solid #eaeaea;
+  border-bottom: 1px solid #eaeaea;
+}
+/* Upravíme ikonu zavření v popupu Leafletu */
+.leaflet-popup-close-button {
+  color: #000 !important;
 }
