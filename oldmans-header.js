@@ -315,7 +315,7 @@
       if (price && price !== '0' && price !== '0 Kč') {
         omPrice.textContent = (count ? count + ' × ' : '') + price;
       } else {
-        omPrice.textContent = 'Prázdný košík';
+        omPrice.textContent = 'Košík';
       }
     }
     setTimeout(syncCart, 800);
