@@ -1,591 +1,1049 @@
-(function () {
+/* ================================================
+   OLD MAN'S — Shoptet Disco — Custom CSS v3.2
+   GitHub: serbus-create/oldmans-shoptet
+   Cil: vizualne sedet na oldmans.cz (WordPress)
+   ================================================ */
 
-  /* =====================================================
-     OLD MAN'S Shoptet – Custom Header + Homepage sekce
-     GitHub: serbus-create/oldmans-shoptet
-     Verze: 3.2 — USP + footer na všech stránkách
-     ===================================================== */
+/* ──────────────────────────────────────────────
+   SKRYTI RUSIVYCH SHOPTET PRVKU
+────────────────────────────────────────────── */
+/* Shoptet horni navigacni lista (Jak nakupovat | CZK | Prihlaseni) */
+.top-navigation-bar { display: none !important; }
 
-  /* --- Vytvoří červenou USP lištu --- */
-  function buildUspBar() {
-    var uspBar = document.createElement('div');
-    uspBar.className = 'om-usp-bar';
-    uspBar.innerHTML = `
-      <div class="om-usp-inner">
-        <div class="om-usp-item">
-          <div class="om-usp-icon">🚚</div>
-          <div class="om-usp-text">
-            <strong>VYROBÍME DO 24H</strong>
-            <span>Produkty expedujeme během 3-5 prac. dní.</span>
-          </div>
-        </div>
-        <div class="om-usp-item">
-          <div class="om-usp-icon">👍</div>
-          <div class="om-usp-text">
-            <strong>350 000 +</strong>
-            <span>Spokojených zákazníků</span>
-          </div>
-        </div>
-        <div class="om-usp-item">
-          <div class="om-usp-icon">📦</div>
-          <div class="om-usp-text">
-            <strong>DOPRAVA ZDARMA</strong>
-            <span>U objednávek nad 1 350 Kč</span>
-          </div>
-        </div>
-        <div class="om-usp-item">
-          <div class="om-usp-icon">✅</div>
-          <div class="om-usp-text">
-            <strong>RUČNÍ VÝROBA</strong>
-            <span>Produkty se vyrábí vždy čerstvě v den Vaší objednávky</span>
-          </div>
-        </div>
-      </div>`;
-    return uspBar;
+/* "Vitejte v nasem obchode" uvitaci text */
+.welcome-wrapper { display: none !important; }
+
+/* Puvodni Shoptet header */
+#header .header-top,
+#header .header-bottom { display: none !important; }
+
+/* ── OBSAH – normalni kontejner (odsazeni po stranach) ── */
+#content-wrapper.container,
+#content-wrapper {
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  box-sizing: border-box !important;
+}
+.content-wrapper-in,
+#content.content.wide,
+#content.content {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* ── BANNER – "prorazi" do plne sirky i uvnitr kontejneru ── */
+.banners-row, .row.banners-row {
+  position: relative !important;
+  left: 50% !important;
+  right: 50% !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-left: -50vw !important;
+  margin-right: -50vw !important;
+  padding: 0 !important;
+}
+.wide-carousel {
+  width: 100% !important; max-width: 100% !important;
+  margin: 0 !important; border-radius: 0 !important;
+}
+.wide-carousel img, #carousel img {
+  width: 100% !important; max-width: 100% !important;
+  height: auto !important; display: block !important;
+  border-radius: 0 !important;
+}
+
+.om-section { max-width: 100%; }
+
+/* Shoptetí benefit lišta SKRYTA — nahrazuje ji červená .om-usp-bar */
+.benefitBanner,
+.benefitBanner.position--benefitHomepage {
+  display: none !important;
+}
+.container { max-width: 1400px !important; padding-left: 20px !important; padding-right: 20px !important; }
+
+/* ──────────────────────────────────────────────
+   TOP BAR
+────────────────────────────────────────────── */
+#om-topbar {
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px;
+  color: #666;
+  padding: 6px 0;
+}
+#om-topbar .om-topbar-inner {
+  max-width: 1400px; margin: 0 auto; padding: 0 20px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+#om-topbar a { color: #666; text-decoration: none; }
+#om-topbar a:hover { color: #000; }
+
+/* ──────────────────────────────────────────────
+   HEADER
+────────────────────────────────────────────── */
+#om-header {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  box-shadow: 0 2px 10px rgba(0,0,0,.06);
+}
+#om-header .om-header-inner {
+  max-width: 1400px; margin: 0 auto; padding: 0 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+}
+#om-header .om-logo img { height: 55px; width: auto; display: block; }
+
+/* Kontakt */
+#om-header .om-contact { display: flex; align-items: center; gap: 16px; color: #000; text-decoration: none; flex-shrink: 0; }
+#om-header .om-contact-icon { width: 44px; height: 44px; }
+#om-header .om-contact-icon img { width: 100%; height: 100%; }
+#om-header .om-contact-numb { font-weight: 600; color: #11c65d; font-size: 16px; line-height: 1.5; margin-bottom: -5px; }
+#om-header .om-contact-text { color: #999; font-size: 13px; }
+#om-header .om-contact:hover .om-contact-numb { text-decoration: underline; }
+
+/* Vyhledavani */
+#om-header .om-search { flex: 1; max-width: 848px; margin: 0 16px; }
+#om-header .om-search form {
+  display: flex; align-items: center; background: #f3f3f4;
+  border-radius: 50px; padding: 4px 4px 4px 0; height: 52px;
+  transition: box-shadow .3s; position: relative;
+}
+#om-header .om-search form:hover { box-shadow: 0 0 0 2px #f7c91b; }
+#om-header .om-search input:focus { outline: none !important; box-shadow: none !important; }
+#om-header .om-search form:focus-within { box-shadow: 0 0 0 2px #f7c91b !important; }
+#om-header .om-search input,
+#om-header .om-search input:focus,
+#om-header .om-search input:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+#om-header .om-search input {
+  flex: 1; border: none; background: transparent;
+  padding: 0 8px 0 50px; font-size: 15px; color: #000;
+  outline: none; height: 100%;
+}
+#om-header .om-search form:before {
+  content: "🔍"; position: absolute; left: 18px;
+  font-size: 16px; pointer-events: none;
+}
+#om-header .om-search button {
+  background: #000; color: #fff; border: none; border-radius: 50px;
+  padding: 0 22px; height: 44px; font-size: 15px;
+  font-weight: 600; cursor: pointer; white-space: nowrap; transition: .3s;
+}
+#om-header .om-search button:hover { background: #9f1400; }
+
+/* Nav */
+#om-header .om-nav { display: flex; gap: 7px; list-style: none; margin: 0; padding: 0; flex-shrink: 0; }
+#om-header .om-nav a {
+  color: #666; font-size: 15px; padding: 17px 13px;
+  display: flex; align-items: center; gap: 7px;
+  text-decoration: none; white-space: nowrap; transition: .3s;
+}
+#om-header .om-nav a:hover { color: #000; background: rgba(247,201,27,.1); border-radius: 5px; }
+
+/* Ikony */
+#om-header .om-icons { display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
+#om-header .om-login a { font-size: 24px; color: #000; text-decoration: none; display: flex; transition: .3s; }
+#om-header .om-login a:hover { color: #f7c91b; }
+
+/* Kosik */
+#om-header .om-cart a {
+  display: flex; align-items: center; column-gap: 12px;
+  background: #f3f3f4; border-radius: 50px;
+  padding: 4px 20px 4px 4px; height: 52px;
+  font-weight: 600; color: #000; font-size: 15px;
+  text-decoration: none; transition: .3s;
+}
+#om-header .om-cart a:before {
+  content: "🛒"; display: flex; width: 44px; height: 44px;
+  background: #f7c91b; border-radius: 50px;
+  align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+#om-header .om-cart a:hover { background: #ebebeb; }
+
+/* ──────────────────────────────────────────────
+   KATEGORIE MENU
+────────────────────────────────────────────── */
+#om-cat-menu {
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  width: 100%;
+}
+#om-cat-menu .om-cat-menu-inner {
+  max-width: 1400px; margin: 0 auto; padding: 0 20px;
+}
+.om-cat-list {
+  display: flex; flex-wrap: nowrap; list-style: none;
+  margin: 0; padding: 0; align-items: center;
+  overflow: hidden; position: relative;
+}
+.om-cat-list > li {
+  display: inline-flex; white-space: nowrap;
+  font-size: 14px; font-weight: 500; border-radius: 5px;
+  transition: .3s; align-items: center;
+}
+.om-cat-list > li > a {
+  color: #000; padding: 14px 13px;
+  display: flex; align-items: center; gap: 5px;
+  text-decoration: none;
+}
+.om-cat-list > li:hover { background: rgba(247,201,27,.1); }
+.om-cat-list .cat-favorite > a { color: #79b530; }
+.om-cat-list .cat-sale > a { color: #E74E1B; }
+.om-cat-list .cat-favorite:hover { background: rgba(121,181,48,.1) !important; }
+.om-cat-list .cat-sale:hover { background: rgba(231,78,27,.1) !important; }
+
+/* Více dropdown */
+.om-more-btn { margin-left: auto; position: relative; cursor: pointer; }
+.om-more-btn > span { padding: 14px 13px; display: flex; align-items: center; color: #000; }
+.om-more-submenu {
+  display: none; position: absolute; right: 0; top: 100%;
+  background: #fff; box-shadow: 0 6px 20px rgba(0,0,0,.08);
+  padding: 10px; border-radius: 0 0 10px 10px;
+  min-width: 200px; z-index: 999; list-style: none;
+}
+.om-more-submenu li { display: flex !important; padding: 8px 12px; }
+.om-more-submenu li a { color: #000; text-decoration: none; }
+
+/* ──────────────────────────────────────────────
+   PRODUKTY
+────────────────────────────────────────────── */
+.product-item {
+  border-radius: 10px !important;
+  border: 1px solid #cbcbcb !important;
+  background: #fff !important;
+  transition: border-color .3s, box-shadow .3s !important;
+}
+.product-item:hover {
+  border-color: #000 !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,.08) !important;
+}
+.product-item [class*="price"] { font-weight: 600 !important; }
+.product-item [class*="price--sale"],
+.product-item ins .price,
+.product-item .price ins { color: #9f1400 !important; font-weight: 700 !important; }
+.product-item [class*="buy"],
+.product-item [class*="add-to-cart"],
+.product-item .to-cart-button {
+  background: #79b530 !important; color: #fff !important;
+  border: none !important; border-radius: 3px !important;
+  transition: .3s !important;
+}
+.product-item [class*="buy"]:hover,
+.product-item .to-cart-button:hover { background: #000 !important; }
+
+/* Stitky */
+.product-item .bool-sale { background: #fb5f2b !important; color: #fff !important; border-radius: 4px !important; }
+.product-item .bool-new { background: #9f1400 !important; color: #fff !important; border-radius: 4px !important; }
+
+/* ──────────────────────────────────────────────
+   HOMEPAGE SEKCE – spolecne
+────────────────────────────────────────────── */
+.om-section {
+  padding: 55px 0;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  box-sizing: border-box;
+}
+.om-section-inner { max-width: 1400px; margin: 0 auto; padding: 0 20px; box-sizing: border-box; }
+.om-section-header {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 12px;
+}
+.om-section-header h2, .om-section > .om-section-inner > h2 {
+  font-size: 22px !important; font-weight: 800 !important;
+  text-transform: uppercase !important; letter-spacing: 1px !important;
+  color: #000 !important; margin: 0 0 20px !important;
+}
+.om-section-header h2 { margin: 0 !important; }
+.om-subtitle { color: #666; font-size: 14px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+
+/* Tlacitka */
+.om-btn-more {
+  color: #000; border: 1px solid #000; border-radius: 5px;
+  padding: 7px 18px; font-size: 13px; text-decoration: none;
+  text-transform: uppercase; transition: .3s; white-space: nowrap;
+}
+.om-btn-more:hover { background: #000; color: #fff; }
+.om-btn-red {
+  display: inline-block; background: #9f1400; color: #fff !important;
+  border-radius: 5px; padding: 12px 28px; font-weight: 600;
+  font-size: 15px; text-decoration: none !important; transition: .3s; margin-top: 15px;
+}
+.om-btn-red:hover { background: #7a0f00; color: #fff !important; }
+.om-btn-primary {
+  display: inline-block; background: #f7c91b; color: #000 !important;
+  border-radius: 5px; padding: 12px 28px; font-weight: 700;
+  text-decoration: none !important; transition: .3s; margin-top: 15px;
+}
+.om-btn-primary:hover { background: #e6b800; }
+
+/* ──────────────────────────────────────────────
+   PARTNEŘI – scrollujici pas
+────────────────────────────────────────────── */
+.om-partners { background: #f9f9f9; overflow: hidden; }
+.om-partners h3 { font-size: 20px; font-weight: 700; margin-bottom: 25px; }
+.om-partners-track { overflow: hidden; }
+.om-partners-list {
+  display: flex; align-items: center; gap: 50px;
+  animation: om-scroll 30s linear infinite; width: max-content;
+}
+.om-partners-list img { height: 55px; width: auto; object-fit: contain; filter: grayscale(20%); transition: .3s; }
+.om-partners-list img:hover { filter: none; }
+@keyframes om-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ──────────────────────────────────────────────
+   O NAS
+────────────────────────────────────────────── */
+.om-about { background: #fff; }
+.om-about-inner { display: flex; align-items: center; gap: 60px; }
+.om-about-text { flex: 1; }
+.om-about-text h2 { font-size: 32px !important; text-transform: none !important; line-height: 1.2 !important; }
+.om-about-text p { color: #444; line-height: 1.8; margin-bottom: 14px; font-size: 16px; }
+.om-about-img { flex-shrink: 0; }
+.om-about-img img { max-width: 280px; width: 280px; }
+@media (max-width: 768px) {
+  .om-about-inner { flex-direction: column; }
+  .om-about-img { display: none; }
+}
+
+/* ──────────────────────────────────────────────
+   KATEGORIE
+────────────────────────────────────────────── */
+.om-categories { background: #f5f5f5; }
+.om-categories h2 span { color: #9f1400; }
+.om-cats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+}
+.om-cat-item {
+  background: #fff; border: 1px solid #e1e1e1; border-radius: 10px;
+  padding: 16px 18px; text-decoration: none; color: #000;
+  font-weight: 500; font-size: 14px; transition: .3s;
+  display: flex; align-items: center; gap: 10px;
+}
+.om-cat-item img { width: 36px; height: 36px; object-fit: contain; flex-shrink: 0; }
+.om-cat-item:hover { border-color: #9f1400; background: #9f1400; color: #fff !important; }
+.om-cat-item:hover img { filter: brightness(10); }
+
+/* ──────────────────────────────────────────────
+   APETIT / NAPSALI O NAS
+────────────────────────────────────────────── */
+.om-apetit { background: #fff; }
+.om-apetit-inner { display: flex; align-items: center; gap: 50px; }
+.om-apetit-img { flex-shrink: 0; }
+.om-apetit-img img { border-radius: 12px; max-width: 280px; width: 100%; }
+.om-apetit-text { flex: 1; }
+.om-apetit-logo { max-width: 70px; margin-bottom: 14px; }
+.om-apetit-text h2 { font-size: 30px !important; font-weight: 700 !important; margin-bottom: 16px !important; text-transform: none !important; }
+.om-apetit-text p { color: #444; line-height: 1.8; margin-bottom: 12px; font-size: 15px; }
+@media (max-width: 768px) {
+  .om-apetit-inner { flex-direction: column; }
+  .om-apetit-img { order: -1; }
+  .om-apetit-img img { max-width: 100%; }
+}
+
+/* ──────────────────────────────────────────────
+   RECEPTY S OBRAZKY
+────────────────────────────────────────────── */
+.om-recipes { background: #f9f9f9; }
+.om-recipes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+.om-recipe-item {
+  background: #fff; border-radius: 12px;
+  border: 1px solid #e7e8ea; overflow: hidden;
+  text-decoration: none; color: #000;
+  transition: border-color .3s, transform .25s;
+  display: block;
+}
+.om-recipe-item:hover { border-color: #000; transform: translateY(-3px); }
+.om-recipe-item img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+.om-recipe-title {
+  padding: 14px; font-size: 14px; font-weight: 600;
+  line-height: 1.5; color: #000;
+}
+
+/* ──────────────────────────────────────────────
+   INSTAGRAM
+────────────────────────────────────────────── */
+.om-instagram { background: #111; }
+.om-insta-inner {
+  display: flex; align-items: center;
+  gap: 50px; justify-content: space-between;
+}
+.om-insta-text { flex: 1; }
+.om-instagram h2 { color: #fff !important; font-size: 38px !important; text-transform: uppercase !important; }
+.om-instagram .om-subtitle { color: #aaa; }
+.om-instagram p { color: #ccc; margin-bottom: 10px; }
+.om-insta-grid {
+  flex-shrink: 0; display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px; max-width: 380px; width: 100%;
+}
+.om-insta-grid a img {
+  width: 100%; aspect-ratio: 1; object-fit: cover;
+  border-radius: 10px; display: block; transition: opacity .3s;
+}
+.om-insta-grid a:hover img { opacity: .75; }
+@media (max-width: 992px) {
+  .om-insta-inner { flex-direction: column; text-align: center; }
+  .om-insta-grid { max-width: 100%; }
+}
+
+/* ──────────────────────────────────────────────
+   PATICKA — světlé pozadí místo černé čáry
+────────────────────────────────────────────── */
+#footer, footer.footer {
+  background: #f0f0f0 !important;
+  background-color: #f0f0f0 !important;
+  color: #555 !important;
+  border-top: 1px solid #ddd !important;
+}
+#footer *, footer.footer * { color: #555 !important; }
+#footer a, footer.footer a { color: #555 !important; text-decoration: none !important; }
+#footer a:hover, footer.footer a:hover { color: #9f1400 !important; }
+
+/* ──────────────────────────────────────────────
+   SWIPER TECKICKY
+────────────────────────────────────────────── */
+.swiper-pagination-bullet { background: #fff !important; opacity: .5 !important; }
+.swiper-pagination-bullet-active {
+  background: #f7c91b !important; opacity: 1 !important;
+  width: 30px !important; border-radius: 5px !important;
+}
+
+/* ──────────────────────────────────────────────
+   RESPONZIVITA
+────────────────────────────────────────────── */
+@media (max-width: 1399px) { #om-header .om-contact { display: none; } }
+@media (max-width: 1199px) { #om-header .om-cart a { font-size: 0; padding-inline: 3px; } }
+@media (max-width: 992px) {
+  #om-header .om-nav { display: none; }
+  #om-header .om-search { margin-inline: 0; max-width: 100%; }
+}
+@media (max-width: 768px) {
+  .om-cats-grid { grid-template-columns: repeat(2, 1fr); }
+  .om-recipes-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .om-recipes-grid { grid-template-columns: 1fr; }
+}
+
+/* ──────────────────────────────────────────────
+   SHOPTET PRODUKTOVÉ SEKCE (Bestsellery, Slevy)
+   Přesné třídy dle DevTools inspekce
+────────────────────────────────────────────── */
+
+/* Wrapper sekce — správné odsazení */
+.homepage-products-heading-1,
+.homepage-products-heading-2,
+.product-slider-holder {
+  max-width: 1400px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  box-sizing: border-box !important;
+}
+
+/* Nadpisy — styl jako na originálu */
+.homepage-group-title {
+  font-size: 22px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  color: #000 !important;
+  padding: 35px 20px 15px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  border-bottom: 2px solid #f0f0f0 !important;
+  margin-bottom: 0 !important;
+  max-width: 1400px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+.homepage-products-heading-1:before { content: "❤️"; }
+.homepage-products-heading-2:before { content: "🏷️"; }
+
+/* Slider — přebij inline width: 428px na kartách */
+.product-slider-holder { overflow: hidden !important; padding-bottom: 40px !important; }
+.products-block .product { width: 220px !important; min-width: 220px !important; max-width: 220px !important; }
+
+/* Karta — styl */
+.products-block .product .p { border-radius: 10px !important; border: 1px solid #e0e0e0 !important; overflow: hidden !important; background: #fff !important; transition: border-color .3s, box-shadow .3s !important; height: 100% !important; }
+.products-block .product .p:hover { border-color: #000 !important; box-shadow: 0 4px 12px rgba(0,0,0,.08) !important; }
+
+/* Skrýt popisky produktů */
+.products-block .p-in .item-description,
+.products-block .p-in [class*="description"],
+.products-block .p-code { display: none !important; }
+
+/* Cena */
+.products-block [class*="price"] { font-weight: 700 !important; font-size: 15px !important; }
+.products-block .price-final { color: #000 !important; }
+.products-block .price-before { color: #999 !important; text-decoration: line-through !important; font-size: 12px !important; }
+
+/* Skrýt popisky, kód, hvězdičky a +/- quantity */
+.products-block .p-desc,
+.products-block .p-code,
+.products-block .ratings-wrapper { display: none !important; }
+
+.products-block .quantity { display: none !important; }
+
+
+/* Šipky — žluté */
+.product-slider-navigation {
+  background: #f7c91b !important;
+  border: none !important;
+  border-radius: 5px !important;
+  color: #000 !important;
+  width: 40px !important;
+  height: 40px !important;
+  opacity: 1 !important;
+}
+.product-slider-navigation:hover { background: #e6b800 !important; }
+
+/* ──────────────────────────────────────────────
+   ČERVENÁ USP LIŠTA
+────────────────────────────────────────────── */
+.om-usp-bar {
+  background: #9f1400;
+  width: 100vw !important;
+  position: relative !important;
+  left: 50% !important;
+  margin-left: -50vw !important;
+  padding: 35px 0;
+  box-sizing: border-box;
+}
+.om-usp-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  box-sizing: border-box;
+}
+.om-usp-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-right: 1px solid rgba(255,255,255,.2);
+  padding-right: 20px;
+}
+.om-usp-item:last-child { border-right: none; }
+.om-usp-icon { font-size: 32px; flex-shrink: 0; }
+.om-usp-text strong {
+  display: block;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.om-usp-text span { color: rgba(255,255,255,.8); font-size: 13px; line-height: 1.4; }
+@media (max-width: 768px) {
+  .om-usp-inner { grid-template-columns: repeat(2, 1fr); }
+  .om-usp-item { border-right: none; }
+}
+
+/* ──────────────────────────────────────────────
+   CUSTOM FOOTER
+────────────────────────────────────────────── */
+.om-custom-footer {
+  background: #f5f5f5 !important;
+  padding: 50px 0 30px;
+  width: 100vw !important;
+  position: relative !important;
+  left: 50% !important;
+  margin-left: -50vw !important;
+  box-sizing: border-box;
+}
+.om-custom-footer * { color: #555 !important; }
+.om-footer-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  box-sizing: border-box;
+}
+.om-custom-footer .om-footer-col h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #000 !important;
+  margin-bottom: 20px;
+}
+.om-custom-footer .om-footer-col p { color: #555 !important; font-size: 14px; line-height: 1.7; margin-bottom: 8px; }
+.om-custom-footer .om-footer-col p strong { color: #000 !important; }
+.om-custom-footer .om-footer-col a { color: #555 !important; text-decoration: none; transition: color .3s; }
+.om-custom-footer .om-footer-col a:hover { color: #9f1400 !important; }
+.om-footer-col ul { list-style: none; padding: 0; margin: 0; }
+.om-footer-col ul li { margin-bottom: 10px; font-size: 14px; }
+.om-custom-footer .om-footer-ig {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  background: #f7c91b !important;
+  color: #000 !important;
+  border-radius: 5px;
+  padding: 10px 18px;
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none !important;
+  transition: background .3s;
+}
+.om-custom-footer .om-footer-ig:hover { background: #e6b800 !important; color: #000 !important; }
+@media (max-width: 992px) {
+  .om-footer-inner { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 576px) {
+  .om-footer-inner { grid-template-columns: 1fr; }
+}
+
+
+/* ══════════════════════════════════════════════
+   STRÁNKA KATEGORIE — designový redesign karet
+   v3.4 — selektory dle skutečného DOM
+   ══════════════════════════════════════════════ */
+
+/* ── Nadpis kategorie — červený, verzálky ── */
+h1.category-title {
+  color: #9f1400 !important;
+  font-size: 26px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+}
+
+/* ── Grid: 5 produktů v řadě, konzistentní mezery ── */
+body.type-category .products.products-page {
+  gap: 0 !important;
+}
+body.type-category .products.products-page .product {
+  width: 20% !important;
+  max-width: 20% !important;
+  flex: 0 0 20% !important;
+  padding: 10px !important;
+  box-sizing: border-box !important;
+}
+@media (max-width: 1199px) {
+  body.type-category .products.products-page .product {
+    width: 25% !important; max-width: 25% !important; flex: 0 0 25% !important;
   }
-
-  /* --- Vytvoří custom footer --- */
-  function buildCustomFooter() {
-    var customFooter = document.createElement('div');
-    customFooter.className = 'om-custom-footer';
-    customFooter.innerHTML = `
-      <div class="om-footer-inner">
-        <div class="om-footer-col">
-          <h4>Kontaktní údaje</h4>
-          <p><strong>Adresa kanceláře</strong> : Areál VRL Praha<br>Ke Kablu 378, 102 00, Praha - Dolní Měcholupy</p>
-          <p><strong>E-mail</strong> : <a href="mailto:podpora@oldmans.cz">podpora@oldmans.cz</a></p>
-          <p><strong>Telefon</strong> : <a href="tel:+420774772405">+420 774 772 405</a></p>
-          <br>
-          <strong>Sledujte nás na instagramu</strong><br><br>
-          <a href="https://www.instagram.com/old_mans_style/" target="_blank" class="om-footer-ig">📷 SLEDOVAT @OLD_MANS_STYLE</a>
-        </div>
-        <div class="om-footer-col">
-          <h4>Menu</h4>
-          <ul>
-            <li><a href="/">Úvod</a></li>
-            <li><a href="/o-nas/">O nás</a></li>
-            <li><a href="/kategorie/">Omáčky a dressingy</a></li>
-            <li><a href="/stitky/top-produkty/">TOP Produkty</a></li>
-            <li><a href="/kontakty/">Kontakt</a></li>
-          </ul>
-        </div>
-        <div class="om-footer-col">
-          <h4>Kategorie</h4>
-          <ul>
-            <li><a href="/kategorie/squeeze-blast/">Squeeze Blast</a></li>
-            <li><a href="/kategorie/omacky-a-majonezy/">Omáčky a majonézy</a></li>
-            <li><a href="/kategorie/salatove-dressingy/">Salátové dressingy</a></li>
-            <li><a href="/kategorie/chilli-mash/">Chilli Mash</a></li>
-            <li><a href="/kategorie/okurkove-relishe/">Okurkové Relishe</a></li>
-            <li><a href="/kategorie/premiove-pomazanky/">Prémiové pomazánky</a></li>
-            <li><a href="/kategorie/snacky-a-orechy/">Snacky a ořechy</a></li>
-            <li><a href="/kategorie/gumovi-medvidci/">Gumoví medvídci</a></li>
-          </ul>
-        </div>
-        <div class="om-footer-col">
-          <h4>Informace</h4>
-          <ul>
-            <li><a href="/doprava-a-platba/">Doprava a platba</a></li>
-            <li><a href="/velkoobchod/">Velkoobchod</a></li>
-            <li><a href="/obchodni-podminky/">Obchodní podmínky</a></li>
-            <li><a href="/reklamace/">Reklamace</a></li>
-            <li><a href="/caste-dotazy/">Časté dotazy</a></li>
-            <li><a href="/podminky-ochrany-osobnich-udaju/">Ochrana osobních údajů</a></li>
-          </ul>
-        </div>
-      </div>`;
-    return customFooter;
+}
+@media (max-width: 768px) {
+  body.type-category .products.products-page .product {
+    width: 50% !important; max-width: 50% !important; flex: 0 0 50% !important;
   }
-
-  /* --- Vloží USP lištu + footer na JAKOUKOLIV stránku ---
-     refNode (volitelný): vloží se ZA tento element (homepage).
-     Jinak se vloží PŘED Shoptetí .footer (copyright), aby copyright
-     zůstal úplně dole. */
-  function injectUspAndFooter(refNode) {
-    /* Pojistka proti dvojímu vložení */
-    if (document.querySelector('.om-usp-bar') || document.querySelector('.om-custom-footer')) return;
-
-    var uspBar = buildUspBar();
-    var customFooter = buildCustomFooter();
-
-    if (refNode && refNode.parentNode) {
-      /* Homepage — za poslední sekci */
-      refNode.parentNode.insertBefore(uspBar, refNode.nextSibling);
-      uspBar.parentNode.insertBefore(customFooter, uspBar.nextSibling);
-      return;
-    }
-
-    /* Ostatní stránky — vložíme PŘED Shoptetí .footer (copyright),
-       aby copyright zůstal jako úplně poslední prvek stránky. */
-    var shoptetFooter = document.querySelector('.footer');
-    if (shoptetFooter && shoptetFooter.parentNode) {
-      shoptetFooter.parentNode.insertBefore(uspBar, shoptetFooter);
-      shoptetFooter.parentNode.insertBefore(customFooter, shoptetFooter);
-      return;
-    }
-
-    /* Fallback — za .benefitBanner nebo na konec */
-    var anchor = document.querySelector('.benefitBanner');
-    if (anchor && anchor.parentNode) {
-      anchor.parentNode.insertBefore(uspBar, anchor.nextSibling);
-      uspBar.parentNode.insertBefore(customFooter, uspBar.nextSibling);
-    } else {
-      var main = document.querySelector('.overall-wrapper') || document.body;
-      main.appendChild(uspBar);
-      main.appendChild(customFooter);
-    }
+}
+@media (max-width: 480px) {
+  body.type-category .products.products-page .product {
+    width: 100% !important; max-width: 100% !important; flex: 0 0 100% !important;
   }
+}
 
-  /* --- Přebuduje stránku Recepty na galerii karet (jako originál) ---
-     Z každého .news-item vytáhne nadpis, odkaz a první obrázek,
-     postaví čistou klikací kartu a schová původní rozbalený obsah. */
-  function buildRecipeGallery() {
-    var wrapper = document.querySelector('.news-wrapper');
-    if (!wrapper) return;
-    if (wrapper.classList.contains('om-recipes-done')) return;
+/* ── Karta — bílá, zaoblená, hover lift ── */
+body.type-category .products.products-page .product .p {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  border-radius: 16px !important;
+  border: 1px solid #ececec !important;
+  background: #fff !important;
+  overflow: hidden !important;
+  transition: border-color .25s, box-shadow .25s, transform .25s !important;
+}
+body.type-category .products.products-page .product .p:hover {
+  border-color: #ddd !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,.10) !important;
+  transform: translateY(-4px) !important;
+}
 
-    var items = wrapper.querySelectorAll('.news-item');
-    if (!items.length) return;
+/* ── Obrázek — čtverec, jednotné šedé pozadí, foto contain ── */
+body.type-category .products.products-page .product .image,
+body.type-category .products.products-page .product a.image {
+  display: block !important;
+  position: relative !important;
+  width: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+  background: #f6f6f6 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+body.type-category .products.products-page .product .p-image {
+  position: absolute !important;
+  inset: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+body.type-category .products.products-page .product .image img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  padding: 0 !important;
+  display: block !important;
+}
 
-    items.forEach(function (item) {
-      var link = item.querySelector('h2 a');
-      var img = item.querySelector('img');
-      if (!link) return;
+/* ── Vnitřní obsah karty — sloupec, jednotný padding ── */
+body.type-category .products.products-page .product .p-in {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+}
+body.type-category .products.products-page .product .p-in-in {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+  padding: 16px !important;
+  gap: 0 !important;
+}
 
-      var href = link.getAttribute('href') || '#';
-      var title = link.textContent.trim();
-      var imgSrc = img ? img.getAttribute('src') : '';
+/* ── Název — tučný, vlevo, místo na 2 řádky ── */
+body.type-category .products.products-page .product .name {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 0 8px !important;
+  padding: 0 !important;
+  min-height: 44px !important;
+  text-align: left !important;
+}
+body.type-category .products.products-page .product .name,
+body.type-category .products.products-page .product .name span,
+body.type-category .products.products-page .product .name a {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  color: #1a1a1a !important;
+  text-align: left !important;
+  justify-content: flex-start !important;
+  display: block !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
 
-      /* Postavíme kartu */
-      var card = document.createElement('a');
-      card.className = 'om-recipe-card';
-      card.setAttribute('href', href);
-      card.innerHTML =
-        '<div class="om-recipe-img"' + (imgSrc ? ' style="background-image:url(\'' + imgSrc + '\')"' : '') + '></div>' +
-        '<div class="om-recipe-title">' + title + '</div>';
+/* ── Dostupnost — vlevo, barevná, prostor pod ── */
+body.type-category .products.products-page .product .ratings-wrapper {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 0 4px !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+body.type-category .products.products-page .product .stars-placeholder,
+body.type-category .products.products-page .product .ratings-wrapper .stars,
+body.type-category .products.products-page .product .ratings-wrapper [class*="star"],
+body.type-category .products.products-page .product .ratings-wrapper .number-ratings,
+body.type-category .products.products-page .product .ratings-wrapper .show-add-review {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+body.type-category .products.products-page .product .availability {
+  display: block !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  text-align: left !important;
+  margin: 0 !important;
+}
 
-      /* Schováme původní obsah a vložíme kartu */
-      item.querySelectorAll(':scope > *').forEach(function (child) {
-        child.style.setProperty('display', 'none', 'important');
-      });
-      item.appendChild(card);
-      item.classList.add('om-recipe-item');
-    });
+/* ── Spodní lišta: cena vlevo + tlačítko vpravo na jednom řádku ──
+   Struktura: .p-bottom > div(bez třídy) > .prices + .p-tools + .p-desc
+────────────────────────────────────────────── */
+body.type-category .products.products-page .product .p-bottom {
+  margin-top: auto !important;
+  padding: 0 !important;
+}
+body.type-category .products.products-page .product .p-bottom > div {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 0 4px 0 0 !important;
+  margin: 0 !important;
+}
+body.type-category .products.products-page .product .p-bottom .prices {
+  margin: 0 !important;
+  text-align: left !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  line-height: 1.1 !important;
+}
+body.type-category .products.products-page .product .price-final {
+  font-size: 17px !important;
+  font-weight: 800 !important;
+  color: #1a1a1a !important;
+  white-space: nowrap !important;
+  line-height: 1.15 !important;
+}
+body.type-category .products.products-page .product .price-before {
+  display: block !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: #aaa !important;
+  text-decoration: line-through !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+}
+body.type-category .products.products-page .product .price-final.price--sale,
+body.type-category .products.products-page .product ins .price {
+  color: #9f1400 !important;
+}
 
-    wrapper.classList.add('om-recipes-done', 'om-recipes-grid');
-  }
+/* ── Tlačítko — vpravo, kompaktní, s ikonou košíku ── */
+body.type-category .products.products-page .product .p-tools {
+  margin: 0 0 0 auto !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  width: auto !important;
+}
+body.type-category .products.products-page .product .pr-action {
+  margin: 0 !important;
+  width: auto !important;
+  display: inline-block !important;
+}
+body.type-category .products.products-page .product .add-to-cart-button,
+body.type-category .products.products-page .product .to-cart-button,
+body.type-category .products.products-page .product [class*="buy"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  background: #79b530 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 9px 16px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+  width: auto !important;
+  min-width: 0 !important;
+  line-height: 1.2 !important;
+  cursor: pointer !important;
+  transition: background .25s, transform .15s, box-shadow .25s !important;
+}
+body.type-category .products.products-page .product .add-to-cart-button:before,
+body.type-category .products.products-page .product .to-cart-button:before {
+  content: "🛒" !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+}
+body.type-category .products.products-page .product .add-to-cart-button:hover,
+body.type-category .products.products-page .product .to-cart-button:hover {
+  background: #6aa028 !important;
+  box-shadow: 0 4px 12px rgba(121,181,48,.30) !important;
+  transform: translateY(-1px) !important;
+}
 
-  function injectAll() {
+/* ── Skrýt popisky, kód, quantity ── */
+body.type-category .products.products-page .product .p-desc,
+body.type-category .products.products-page .product .p-code,
+body.type-category .products.products-page .product .quantity {
+  display: none !important;
+}
 
-    /* -------------------------------------------------
-       1. SKRYJEME PŮVODNÍ SHOPTET HEADER
-    ------------------------------------------------- */
-    var headerTop = document.querySelector('#header .header-top');
-    if (headerTop) headerTop.style.display = 'none';
-    var headerBottom = document.querySelector('#header .header-bottom');
-    if (headerBottom) headerBottom.style.display = 'none';
+/* ── Skrýt "Nejprodávanější" blok — ne sorting tabs ── */
+.products-inline.products-top { display: none !important; }
+.toggle-top-products { display: none !important; }
+h2.products-top-header { display: none !important; }
 
-    /* -------------------------------------------------
-       2. TOP BAR
-    ------------------------------------------------- */
-    var topbar = document.createElement('div');
-    topbar.id = 'om-topbar';
-    topbar.innerHTML = '<div class="om-topbar-inner"><a href="tel:+420774772405">📞 +420 774 772 405</a><div><a href="/jak-nakupovat/">Jak nakupovat</a> | <a href="/obchodni-podminky/">Obchodní podmínky</a></div></div>';
+/* ══════════════════════════════════════════════
+   ŘAZENÍ — dropdown přebudovaný na taby (jako originál)
+   ══════════════════════════════════════════════ */
+body.type-category .listSorting.listSorting--dropdown {
+  display: block !important;
+  position: static !important;
+  width: 100% !important;
+}
+/* Schovat toggle "Řadit podle: ..." */
+body.type-category .listSorting .sortingToggle {
+  display: none !important;
+}
+/* Rozbalit menu s odkazy do vodorovného řádku tabů */
+body.type-category .listSorting #listSortingControls,
+body.type-category .listSorting .listSorting__controls {
+  display: flex !important;
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  bottom: auto !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-start !important;
+  gap: 6px !important;
+  background: #f5f5f5 !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 6px !important;
+  border-radius: 12px !important;
+  margin: 0 !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  pointer-events: auto !important;
+}
+/* Jednotlivé taby */
+body.type-category .listSorting .listSorting__control {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 9px 18px !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: #1a1a1a !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  width: auto !important;
+  text-align: center !important;
+  transition: background .2s, color .2s !important;
+}
+body.type-category .listSorting .listSorting__control:hover {
+  background: rgba(0,0,0,.05) !important;
+}
+/* Aktivní tab — žlutý jako originál */
+body.type-category .listSorting .listSorting__control--current {
+  background: #f7c91b !important;
+  color: #1a1a1a !important;
+  font-weight: 700 !important;
+}
 
-    /* -------------------------------------------------
-       3. HLAVNÍ HEADER
-    ------------------------------------------------- */
-    var header = document.createElement('div');
-    header.id = 'om-header';
-    header.innerHTML = `
-      <div class="om-header-inner">
-        <a class="om-logo" href="/">
-          <img src="https://cdn.myshoptet.com/usr/788253.myshoptet.com/user/logos/oldmans.png" alt="Old Man's">
-        </a>
-        <a href="/kontakt/" class="om-contact">
-          <div class="om-contact-icon">
-            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/conversation.png" alt="">
-          </div>
-          <div>
-            <div class="om-contact-numb">podpora@oldmans.cz</div>
-            <div class="om-contact-text">Napište nám</div>
-          </div>
-        </a>
-        <div class="om-search">
-          <form action="/action/ProductSearch/prepareString/" method="post">
-            <input type="hidden" name="language" value="cs">
-            <input type="search" name="string" placeholder="Napište, co hledáte..">
-            <button type="submit">Hledat</button>
-          </form>
-        </div>
-        <ul class="om-nav">
-          <li><a href="/recepty/">🍴 Recepty</a></li>
-          <li><a href="/velkoobchod/">🤝 B2B</a></li>
-        </ul>
-        <div class="om-icons">
-          <div class="om-login"><a href="/muj-ucet/">👤</a></div>
-          <div class="om-cart">
-            <a href="/kosik/" class="cart-count toggle-window" data-target="cart" data-hover="true" data-redirect="true">
-              <span id="om-cart-price" class="cart-price">Košík</span>
-            </a>
-          </div>
-        </div>
-      </div>`;
+/* ══════════════════════════════════════════════
+   STRÁNKA RECEPTY — galerie karet (jako originál)
+   ══════════════════════════════════════════════ */
 
-    /* -------------------------------------------------
-       4. KATEGORIE MENU
-    ------------------------------------------------- */
-    var catMenu = document.createElement('div');
-    catMenu.id = 'om-cat-menu';
-    catMenu.innerHTML = `
-      <div class="om-cat-menu-inner">
-        <ul class="om-cat-list" id="omCatList">
-          <li class="cat-favorite"><a href="/stitky/top-produkty/"><span class="cat-icon">⭐</span> Bestseller</a></li>
-          <li class="cat-sale"><a href="/stitky/akcni-cena/"><span class="cat-icon">🏷️</span> V akci</a></li>
-          <li><a href="/kategorie/omacky-a-majonezy/">Omáčky a majonézy</a></li>
-          <li><a href="/kategorie/salatove-dressingy/">Salátové dresingy</a></li>
-          <li><a href="/kategorie/chilli-omacky/">Chilli omáčky</a></li>
-          <li><a href="/kategorie/chilli-mash/">Chilli Mash</a></li>
-          <li><a href="/kategorie/okurkove-relishe/">Okurkové Relishe</a></li>
-          <li><a href="/kategorie/premiove-pomazanky/">Prémiové pomazánky</a></li>
-          <li><a href="/kategorie/snacky-a-orechy/">Snacky a ořechy</a></li>
-          <li><a href="/kategorie/gumovi-medvidci/">Gumoví medvídci</a></li>
-          <li class="om-more-btn" id="omMoreBtn" style="display:none">
-            <span>≡ Více</span>
-            <ul class="om-more-submenu" id="omMoreSubmenu"></ul>
-          </li>
-        </ul>
-      </div>`;
+/* Zrušit úzký režim a sidebar na stránce s recepty */
+body.type-posts-listing .content.narrow,
+body.in-recepty .content.narrow {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: 0 0 100% !important;
+}
+/* Schovat sidebar na stránce recepty */
+body.type-posts-listing .sidebar,
+body.type-posts-listing .sidebar-left,
+body.in-recepty .sidebar,
+body.in-recepty .sidebar-left {
+  display: none !important;
+}
 
-    /* Vložíme header před #header */
-    var shoptetHeader = document.querySelector('#header');
-    if (shoptetHeader) {
-      shoptetHeader.parentNode.insertBefore(catMenu, shoptetHeader);
-      shoptetHeader.parentNode.insertBefore(header, catMenu);
-      shoptetHeader.parentNode.insertBefore(topbar, header);
-    }
+/* Nadpis stránky */
+body.type-posts-listing h1,
+body.in-recepty h1 {
+  color: #9f1400 !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  text-align: left !important;
+}
 
-    /* -------------------------------------------------
-       5. RESPONSIVE KATEGORIE MENU – overflow do "Více"
-    ------------------------------------------------- */
-    setTimeout(function () {
-      var list = document.getElementById('omCatList');
-      var moreBtn = document.getElementById('omMoreBtn');
-      var moreSubmenu = document.getElementById('omMoreSubmenu');
-      if (!list || !moreBtn) return;
+/* Grid 4 sloupce */
+.news-wrapper.om-recipes-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 24px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 10px 0 !important;
+}
+@media (max-width: 1100px) {
+  .news-wrapper.om-recipes-grid { grid-template-columns: repeat(3, 1fr) !important; }
+}
+@media (max-width: 768px) {
+  .news-wrapper.om-recipes-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
+}
+@media (max-width: 480px) {
+  .news-wrapper.om-recipes-grid { grid-template-columns: 1fr !important; }
+}
 
-      var items = Array.from(list.children).filter(function (li) { return li !== moreBtn; });
-      var menuWidth = list.offsetWidth;
-      var moreWidth = 90;
-      var total = 0;
-      var overflow = [];
+/* Jednotlivá položka — zruší původní styl Shoptetu */
+.news-wrapper.om-recipes-grid .news-item.om-recipe-item {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  width: auto !important;
+  float: none !important;
+}
 
-      items.forEach(function (li) { li.style.display = 'inline-flex'; });
-      items.forEach(function (li, i) {
-        total += li.offsetWidth + 4;
-        if (total + moreWidth > menuWidth) overflow.push(i);
-      });
+/* Karta receptu */
+.om-recipe-card {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  border-radius: 16px !important;
+  border: 1px solid #ececec !important;
+  background: #fff !important;
+  overflow: hidden !important;
+  text-decoration: none !important;
+  color: inherit !important;
+  transition: border-color .25s, box-shadow .25s, transform .25s !important;
+}
+.om-recipe-card:hover {
+  border-color: #ddd !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,.10) !important;
+  transform: translateY(-4px) !important;
+}
 
-      if (overflow.length > 0) {
-        overflow.forEach(function (i) {
-          items[i].style.display = 'none';
-          var clone = items[i].cloneNode(true);
-          clone.style.display = 'flex';
-          moreSubmenu.appendChild(clone);
-        });
-        moreBtn.style.display = 'inline-flex';
-      }
+/* Foto — čtvercové, cover */
+.om-recipe-img {
+  width: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-color: #f6f6f6 !important;
+}
 
-      moreBtn.addEventListener('mouseenter', function () { moreSubmenu.style.display = 'block'; });
-      moreBtn.addEventListener('mouseleave', function () { moreSubmenu.style.display = 'none'; });
-    }, 250);
-
-    /* -------------------------------------------------
-       6. DYNAMICKÝ KOŠÍK – číst ze Shoptet DOM
-    ------------------------------------------------- */
-    function syncCart() {
-      var priceEl = document.querySelector('.header-cart-total, .cart-total-price, [data-testid="headerCartPrice"]');
-      var countEl = document.querySelector('.header-cart-items-count, .cart-count-value, [data-testid="headerCartCount"]');
-      var omPrice = document.getElementById('om-cart-price');
-      if (!omPrice) return;
-
-      var price = priceEl ? priceEl.textContent.trim() : '';
-      var count = countEl ? countEl.textContent.trim() : '';
-
-      if (price && price !== '0' && price !== '0 Kč') {
-        omPrice.textContent = (count ? count + ' × ' : '') + price;
-      } else {
-        omPrice.textContent = 'Prázdný košík';
-      }
-    }
-    setTimeout(syncCart, 800);
-    setTimeout(syncCart, 2000);
-    document.addEventListener('click', function () { setTimeout(syncCart, 500); });
-
-    /* -------------------------------------------------
-       7. HOMEPAGE SEKCE
-       Vkládáme za .benefitBanner (USP lišta Shoptetu)
-    ------------------------------------------------- */
-    var isHomepage = (window.location.pathname === '/' || window.location.pathname === '');
-
-    /* Na NE-homepage stránkách (kategorie, produkt, košík...) vložíme
-       jen USP lištu + custom footer a skončíme. */
-    if (!isHomepage) {
-      buildRecipeGallery();
-      injectUspAndFooter();
-      return;
-    }
-
-    var benefitBanner = document.querySelector('.benefitBanner');
-    if (!benefitBanner) {
-      injectUspAndFooter();
-      return;
-    }
-    var parent = benefitBanner.parentNode;
-    var ref = benefitBanner.nextSibling;
-
-    /* --- 7a. PARTNEŘI (scrollující pás) --- */
-    var partners = document.createElement('div');
-    partners.className = 'om-section om-partners';
-    partners.innerHTML = `<div class="om-section-inner">
-      <h3>Naše omáčky najdete</h3>
-      <div class="om-partners-track">
-        <div class="om-partners-list">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-shell.png" alt="Shell">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-shell-cafe.png" alt="Shell Cafe">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-bageterie-boulevard-logo.png" alt="Bageterie">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/turbopizza.png" alt="Turbo Pizza">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-faency-fries-logo.png" alt="Fancy Fries">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/bagel-lange.png" alt="Bagel Lounge">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-rohlik-logo.png" alt="Rohlik">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-logo-partner-zvoska.png" alt="Zvoska">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-logo-partner-foodora.png" alt="Foodora">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-logo-partner-fany.png" alt="Fany">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/ruds-pizza-partner-om.jpg" alt="Ruds Pizza">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-logo-partner-jalta.png" alt="Jalta">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-hotel-u-prince-logo.png" alt="Hotel U Prince">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/pizza-raketou-logo-partner.png" alt="Raketou">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-bauer-group-logo.png" alt="Bauer Group">
-          <!-- duplikát pro plynulé scrollování -->
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-shell.png" alt="Shell">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-bageterie-boulevard-logo.png" alt="Bageterie">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-rohlik-logo.png" alt="Rohlik">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/turbopizza.png" alt="Turbo Pizza">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-logo-partner-foodora.png" alt="Foodora">
-        </div>
-      </div>
-    </div>`;
-
-    /* --- 7b. O NÁS --- */
-    var about = document.createElement('div');
-    about.className = 'om-section om-about';
-    about.innerHTML = `<div class="om-section-inner">
-      <div class="om-about-inner">
-        <div class="om-about-text">
-          <h2>OLD MAN's : omáčky na míru</h2>
-          <p><strong>RODINNÁ firma THE SAUCE MAKERS s.r.o a značka OLD MAN's – Prémiové Omáčky a Dressingy PRO LIDI, kteří Milují Chuťové Dobrodružství.</strong></p>
-          <p>Firma zakládaná v roce 2020 je výsledkem vášně zakladatele Tomáše, který sbíral receptury na omáčky z celého světa. Jeho touha propojit různé kuchyně a kultury vedla k vytvoření značky OLD MAN's.</p>
-          <p>OLD MAN's přináší prémiové omáčky a dressingy, které mají potěšit chuťové buňky a obohatit vaše pokrmy.</p>
-          <a href="/o-nas/" class="om-btn-red">Více o nás</a>
-        </div>
-        <div class="om-about-img">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/about-us-logo.png" alt="OLD MAN'S">
-        </div>
-      </div>
-    </div>`;
-
-    /* --- 7c. KATEGORIE OMÁČEK --- */
-    var categories = document.createElement('div');
-    categories.className = 'om-section om-categories';
-    categories.innerHTML = `<div class="om-section-inner">
-      <p class="om-subtitle">Vyberte si dle vaší chuti</p>
-      <h2><span>Kategorie</span> omáček</h2>
-      <div class="om-cats-grid">
-        <a href="/kategorie/salatove-dressingy--squeeze-blast/" class="om-cat-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/squeeze-blast.png" alt=""> Squeeze Blast
-        </a>
-        <a href="/kategorie/omacky-a-majonezy/" class="om-cat-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/specials-oldmans.png" alt=""> Omáčky a majonézy
-        </a>
-        <a href="/kategorie/omacky-a-majonezy--burger-a-steak/" class="om-cat-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/burger.png" alt=""> Burger a steak
-        </a>
-        <a href="/kategorie/chilli-omacky/" class="om-cat-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-icons-chilli.png" alt=""> Chilli omáčky
-        </a>
-        <a href="/kategorie/salatove-dressingy/" class="om-cat-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-icons-salads.png" alt=""> Salátové dresingy
-        </a>
-        <a href="/kategorie/omacky-a-majonezy--ceska-klasika/" class="om-cat-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/czech-republic.png" alt=""> Česká klasika
-        </a>
-        <a href="/kategorie/chilli-mash/" class="om-cat-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/chilli-mash.png" alt=""> Chilli Mash
-        </a>
-        <a href="/kategorie/okurkove-relishe/" class="om-cat-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/cucumber.png" alt=""> Okurkové Relishe
-        </a>
-        <a href="/kategorie/premiove-pomazanky/" class="om-cat-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/sauce-cat.png" alt=""> Prémiové pomazánky
-        </a>
-        <a href="/kategorie/snacky-a-orechy/" class="om-cat-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/nuts.png" alt=""> Snacky a ořechy
-        </a>
-        <a href="/kategorie/gumovi-medvidci/" class="om-cat-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/bears.png" alt=""> Gumoví medvídci
-        </a>
-      </div>
-    </div>`;
-
-    /* --- 7d. NAPSALI O NÁS (Apetit) --- */
-    var apetit = document.createElement('div');
-    apetit.className = 'om-section om-apetit';
-    apetit.innerHTML = `<div class="om-section-inner">
-      <div class="om-apetit-inner">
-        <div class="om-apetit-img">
-          <a href="https://www.apetitonline.cz/old-mans-premiova-kvalita-v-kazde-lahvi" target="_blank">
-            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/foto-clanek.jpg" alt="Apetit clanek">
-          </a>
-        </div>
-        <div class="om-apetit-text">
-          <img src="https://www.gastrotek.cz/assets/img/partners/apetit.jpg" alt="Apetit" class="om-apetit-logo">
-          <h2>Napsali o nás</h2>
-          <p>Značka OLD MAN's se stala známou v gastronomických kruzích díky svým prémiovým omáčkám a dressingům. Společnost byla založena z potřeby nabídnout trhu produkty, které svou chutí a složením vynikají nad běžnými alternativami.</p>
-          <p>Nyní se značka připravuje na vstup na retailový trh, aby i domácí kuchaři mohli ochutnat prémiovost, kterou doposud nabízeli pouze restaurace.</p>
-          <p><em>Apetit (apetitonline.cz)</em></p>
-          <a href="https://www.apetitonline.cz/old-mans-premiova-kvalita-v-kazde-lahvi" target="_blank" class="om-btn-red">Přečíst celý článek</a>
-        </div>
-      </div>
-    </div>`;
-
-    /* --- 7e. RECEPTY S OBRÁZKY --- */
-    var recipes = document.createElement('div');
-    recipes.className = 'om-section om-recipes';
-    recipes.innerHTML = `<div class="om-section-inner">
-      <div class="om-section-header">
-        <h2>🍴 Vybrané recepty</h2>
-        <a href="/recepty/" class="om-btn-more">Ukázat všechny</a>
-      </div>
-      <div class="om-recipes-grid">
-        <a href="/recepty/smashburger-s-karamelizovanou-cibulkou-a-cheddarovym-dipem/" class="om-recipe-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/smashburger-s-karamelizovanou-cibulkou-a-cheddarovym-dipem.jpg" alt="">
-          <div class="om-recipe-title">🧀 Smashburger s karamelizovanou cibulkou a Cheddarovým dipem</div>
-        </a>
-        <a href="/recepty/snidanovy-muffin-se-slaninou-vejcem-a-slaninovou-majonezou/" class="om-recipe-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/snidanovy-muffin-se-slaninou-vejcem-a-slaninovou-majonezou.jpg" alt="">
-          <div class="om-recipe-title">🥓 Snídaňový muffin se slaninou, vejcem a Slaninovou Majonézou</div>
-        </a>
-        <a href="/recepty/caesar-wrap-s-kuretem-a-parmazanem/" class="om-recipe-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/caesar-wrap-s-kuretem-a-parmazanem.jpg" alt="">
-          <div class="om-recipe-title">🥗 Caesar wrap s kuřetem a parmazánem</div>
-        </a>
-        <a href="/recepty/loaded-hranolky-s-jalapeno-majonezou-a-cedarem/" class="om-recipe-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/loaded-hranolky-s-jalapeno-majonezou-a-cedarem.jpg" alt="">
-          <div class="om-recipe-title">🌶️ Loaded hranolky s Jalapeño Majonézou a čedarem</div>
-        </a>
-        <a href="/recepty/pikantni-kureci-tacos-s-habanero-majonezou/" class="om-recipe-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/pikantni-kureci-tacos-s-habanero-majonezou.jpg" alt="">
-          <div class="om-recipe-title">🌶️🔥 Pikantní kuřecí tacos s Habanero Majonézou</div>
-        </a>
-        <a href="/recepty/grilovana-bbq-zebra-s-cesnekovo-bbq-majonezou/" class="om-recipe-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/grilovana-bbq-zebra-s-cesnekovo-bbq-majonezou.jpg" alt="">
-          <div class="om-recipe-title">🧄 Grilovaná BBQ žebra s česnekovo-BBQ majonézou</div>
-        </a>
-        <a href="/recepty/buffalo-kridylka-s-blue-cheese-dipem/" class="om-recipe-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/buffalo-kridylka-s-blue-cheese-dipem.jpg" alt="">
-          <div class="om-recipe-title">🍗 Buffalo křidýlka s blue cheese dipem</div>
-        </a>
-        <a href="/recepty/luxusni-sendvic-s-roastbeefem-a-lanyzovou-majonezou/" class="om-recipe-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/luxusni-sendvic-s-roastbeefem-a-lanyzovou-majonezou.jpg" alt="">
-          <div class="om-recipe-title">🌱 Luxusní sendvič s roastbeefem a lanýžovou majonézou</div>
-        </a>
-      </div>
-    </div>`;
-
-    /* --- 7f. INSTAGRAM --- */
-    var instagram = document.createElement('div');
-    instagram.className = 'om-section om-instagram';
-    instagram.innerHTML = `<div class="om-section-inner">
-      <div class="om-insta-inner">
-        <div class="om-insta-text">
-          <p class="om-subtitle">Sledujte nás</p>
-          <h2>Na INSTAGRAMU</h2>
-          <p>Chcete být v obraze co se u nás děje, nebo jestli náhodou neděláme novou omáčku?</p>
-          <p><strong>Sledujte nás na instagramu a dozvíte se víc!</strong></p>
-          <a href="https://www.instagram.com/old_mans_style/" target="_blank" class="om-btn-primary">📸 Sledovat @OLD_MANS_STYLE</a>
-        </div>
-        <div class="om-insta-grid">
-          <a href="https://www.instagram.com/old_mans_style/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-ig-01.webp" alt=""></a>
-          <a href="https://www.instagram.com/old_mans_style/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-ig-02.webp" alt=""></a>
-          <a href="https://www.instagram.com/old_mans_style/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-ig-03.webp" alt=""></a>
-          <a href="https://www.instagram.com/old_mans_style/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-ig-04.webp" alt=""></a>
-        </div>
-      </div>
-    </div>`;
-
-    /* Shoptet produktové sekce */
-    var bestsellers = document.querySelector('.homepage-products-heading-1');
-    var bestsellersWrapper = bestsellers ? bestsellers.nextElementSibling : null;
-    var sale = document.querySelector('.homepage-products-heading-2');
-    var saleWrapper = sale ? sale.nextElementSibling : null;
-
-    /* Pomocná funkce — vloží element ZA jiný element */
-    function insertAfter(newEl, refEl) {
-      if (refEl && refEl.parentNode) {
-        refEl.parentNode.insertBefore(newEl, refEl.nextSibling);
-      } else {
-        parent.appendChild(newEl);
-      }
-    }
-
-    /* POŘADÍ dle originálu oldmans.cz:
-       USP → Bestsellery → Partneři → O nás → Kategorie → Apetit
-       → Omáčky ve slevě → Recepty → Instagram */
-
-    var anchor = bestsellersWrapper || benefitBanner;
-    insertAfter(partners, anchor);
-    insertAfter(about, partners);
-    insertAfter(categories, about);
-    insertAfter(apetit, categories);
-
-    /* Přesuneme "Omáčky ve slevě" za Apetit */
-    if (sale && saleWrapper) {
-      insertAfter(sale, apetit);
-      insertAfter(saleWrapper, sale);
-    }
-
-    var afterSale = saleWrapper || apetit;
-    insertAfter(recipes, afterSale);
-
-    insertAfter(instagram, recipes);
-
-    /* USP lišta + footer se vkládají globálně (na všech stránkách)
-       přes injectUspAndFooter() — viz níže. Na homepage se vloží
-       za poslední homepage sekci. */
-    injectUspAndFooter(instagram);
-
-    /* Nastavíme 5 sloupců PŘED inicializací Shoptet slideru */
-    document.querySelectorAll('.product-slider[data-columns]').forEach(function(el) {
-      el.setAttribute('data-columns', '5');
-      el.setAttribute('data-columns-mobile', '2');
-    });
-
-    /* Skryjeme popisky po inicializaci slideru */
-    setTimeout(function() {
-      document.querySelectorAll('.products-block .p-desc, .products-block .p-code, .products-block .ratings-wrapper').forEach(function(el) {
-        el.style.setProperty('display', 'none', 'important');
-      });
-      document.querySelectorAll('.products-block .quantity').forEach(function(el) {
-        el.style.setProperty('display', 'none', 'important');
-      });
-    }, 2000);
-  }
-
-  /* Spustíme po načtení DOM */
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', injectAll);
-  } else {
-    injectAll();
-  }
-
-})();
+/* Nadpis */
+.om-recipe-title {
+  padding: 16px 18px 20px !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  color: #1a1a1a !important;
+  text-align: left !important;
+}
+.om-recipe-card:hover .om-recipe-title {
+  color: #9f1400 !important;
+}
