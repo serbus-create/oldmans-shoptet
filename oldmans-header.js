@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 3.2 — USP + footer na všech stránkách
+     Verze: 3.3 — Kompletní soubor se světlou mapou a žlutými špendlíky
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -366,7 +366,6 @@
           <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-hotel-u-prince-logo.png" alt="Hotel U Prince">
           <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/pizza-raketou-logo-partner.png" alt="Raketou">
           <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-bauer-group-logo.png" alt="Bauer Group">
-          <!-- duplikát pro plynulé scrollování -->
           <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-shell.png" alt="Shell">
           <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-bageterie-boulevard-logo.png" alt="Bageterie">
           <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-rohlik-logo.png" alt="Rohlik">
@@ -564,11 +563,11 @@
     partnersMap.className = 'om-section om-partners-map';
     partnersMap.innerHTML = `
       <div class="om-section-inner">
-        <div class="om-section-header">
-          <h2>📍 Pobočky Partnerů</h2>
+        <div class="om-section-header" style="justify-content: center; margin-bottom: 5px;">
+          <h2 style="font-size: 32px !important; text-align: center; width: 100%;"><span style="color: #f7c91b;">POBOČKY</span> <span style="color: #9f1400;">PARTNERŮ</span></h2>
         </div>
-        <p style="text-align:center;color:#555;margin-top:-10px;margin-bottom:20px;">Restaurační provozy, kde můžete ochutnat naše produkty</p>
-        <div id="om-map" style="width:100%;height:480px;border-radius:16px;overflow:hidden;"></div>
+        <p style="text-align:center;color:#555;margin-top:0;margin-bottom:30px;font-weight:500;text-transform:uppercase;font-size:13px;letter-spacing:1px;">Kde nakoupit naše produkty / Kde si na našich peckách pochutnat</p>
+        <div id="om-map" style="width:100%;height:500px;border-radius:0;overflow:hidden;z-index:1;"></div>
       </div>`;
     insertAfter(partnersMap, instagram);
 
@@ -591,16 +590,17 @@
       lScript.onload = function() {
         var map = L.map('om-map', { scrollWheelZoom: false }).setView([50.082, 14.43], 12);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '© OpenStreetMap contributors'
+        /* Světlejší dlaždice mapy (podobnější originálu) */
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+          attribution: '© OpenStreetMap contributors, © CARTO'
         }).addTo(map);
 
-        /* Červený špendlík */
-        var redIcon = L.divIcon({
+        /* Žlutý špendlík */
+        var yellowIcon = L.divIcon({
           className: '',
-          html: '<div style="width:14px;height:14px;background:#9f1400;border:2px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.4);"></div>',
-          iconSize: [14, 14],
-          iconAnchor: [7, 7],
+          html: '<div style="width:18px;height:18px;background:#f7c91b;border:3px solid #fff;border-radius:50%;box-shadow:0 3px 6px rgba(0,0,0,.3);"></div>',
+          iconSize: [18, 18],
+          iconAnchor: [9, 9],
           popupAnchor: [0, -10]
         });
 
@@ -622,7 +622,7 @@
         ];
 
         locations.forEach(function(loc) {
-          L.marker([loc.lat, loc.lng], { icon: redIcon })
+          L.marker([loc.lat, loc.lng], { icon: yellowIcon })
             .addTo(map)
             .bindPopup('<strong>' + loc.name + '</strong><br><span style="font-size:12px;color:#666;">' + loc.addr + '</span>');
         });
