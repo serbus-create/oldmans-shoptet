@@ -559,10 +559,81 @@
 
     insertAfter(instagram, recipes);
 
+    /* --- 7g. MAPA PARTNERŮ --- */
+    var partnersMap = document.createElement('div');
+    partnersMap.className = 'om-section om-partners-map';
+    partnersMap.innerHTML = `
+      <div class="om-section-inner">
+        <div class="om-section-header">
+          <h2>📍 Pobočky Partnerů</h2>
+        </div>
+        <p style="text-align:center;color:#555;margin-top:-10px;margin-bottom:20px;">Restaurační provozy, kde můžete ochutnat naše produkty</p>
+        <div id="om-map" style="width:100%;height:480px;border-radius:16px;overflow:hidden;"></div>
+      </div>`;
+    insertAfter(partnersMap, instagram);
+
+    /* Načteme Leaflet a inicializujeme mapu */
+    setTimeout(function() {
+      if (!document.getElementById('om-map')) return;
+
+      /* Leaflet CSS */
+      if (!document.getElementById('leaflet-css')) {
+        var lCss = document.createElement('link');
+        lCss.id = 'leaflet-css';
+        lCss.rel = 'stylesheet';
+        lCss.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+        document.head.appendChild(lCss);
+      }
+
+      /* Leaflet JS */
+      var lScript = document.createElement('script');
+      lScript.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      lScript.onload = function() {
+        var map = L.map('om-map', { scrollWheelZoom: false }).setView([50.082, 14.43], 12);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        /* Červený špendlík */
+        var redIcon = L.divIcon({
+          className: '',
+          html: '<div style="width:14px;height:14px;background:#9f1400;border:2px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.4);"></div>',
+          iconSize: [14, 14],
+          iconAnchor: [7, 7],
+          popupAnchor: [0, -10]
+        });
+
+        var locations = [
+          { name: 'Hotel Jalta',              addr: 'Václavské náměstí 45, Praha 1',    lat: 50.0814, lng: 14.4278 },
+          { name: 'Hotel U Prince',            addr: 'Staroměstské náměstí 29, Praha 1', lat: 50.0874, lng: 14.4213 },
+          { name: 'Hooters Praha',             addr: 'Na Příkopě 22, Praha 1',           lat: 50.0842, lng: 14.4261 },
+          { name: 'Bageterie Boulevard',       addr: 'Náměstí Republiky, Praha 1',       lat: 50.0876, lng: 14.4296 },
+          { name: 'Bagel Lounge',              addr: 'Mánesova 57, Praha 2',             lat: 50.0766, lng: 14.4405 },
+          { name: 'Fancy Fries',               addr: 'Štěpánská 9, Praha 1',             lat: 50.0780, lng: 14.4277 },
+          { name: 'Turbopizza',                addr: 'Sokolovská 131, Praha 8',          lat: 50.0963, lng: 14.4631 },
+          { name: 'Pizza Raketou',             addr: 'Praha',                            lat: 50.0820, lng: 14.4510 },
+          { name: "Rud's Pizza",               addr: 'Praha',                            lat: 50.0835, lng: 14.4190 },
+          { name: 'Zvoska',                    addr: 'Praha',                            lat: 50.0760, lng: 14.4310 },
+          { name: 'Fany Gastro',               addr: 'Praha',                            lat: 50.0895, lng: 14.4180 },
+          { name: 'Bauer Group',               addr: 'Praha',                            lat: 50.0910, lng: 14.4490 },
+          { name: 'Shell (Spořilov)',          addr: 'Hlavní 1144, Praha 4',             lat: 50.0395, lng: 14.4830 },
+          { name: 'Shell Café (Chodov)',       addr: 'Roztylská, Praha 11',              lat: 50.0334, lng: 14.4948 },
+        ];
+
+        locations.forEach(function(loc) {
+          L.marker([loc.lat, loc.lng], { icon: redIcon })
+            .addTo(map)
+            .bindPopup('<strong>' + loc.name + '</strong><br><span style="font-size:12px;color:#666;">' + loc.addr + '</span>');
+        });
+      };
+      document.head.appendChild(lScript);
+    }, 500);
+
     /* USP lišta + footer se vkládají globálně (na všech stránkách)
        přes injectUspAndFooter() — viz níže. Na homepage se vloží
        za poslední homepage sekci. */
-    injectUspAndFooter(instagram);
+    injectUspAndFooter(partnersMap);
 
     /* Nastavíme 5 sloupců PŘED inicializací Shoptet slideru */
     document.querySelectorAll('.product-slider[data-columns]').forEach(function(el) {
