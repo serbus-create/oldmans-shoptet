@@ -1083,3 +1083,38 @@ body.in-recepty h1 {
 .om-recipe-card:hover .om-recipe-title {
   color: #9f1400 !important;
 }
+
+/* ══════════════════════════════════════════════
+   STRÁNKA KONTAKT + STATICKÉ STRÁNKY
+   ══════════════════════════════════════════════ */
+
+/* Plná šířka — skrýt sidebar na statických stránkách */
+body.in-kontakty .sidebar,
+body.in-kontakty .sidebar-left,
+body.in-reklamace .sidebar,
+body.in-reklamace .sidebar-left,
+body.in-obchodni-podminky .sidebar,
+body.in-obchodni-podminky .sidebar-left,
+body.in-doprava-a-platba .sidebar,
+body.in-doprava-a-platba .sidebar-left {
+  display: none !important;
+}
+body.in-kontakty .content.narrow,
+body.in-reklamace .content.narrow,
+body.in-obchodni-podminky .content.narrow,
+body.in-doprava-a-platba .content.narrow {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: 0 0 100% !important;
+}
+
+/* Skrýt diskuzi / komentáře na všech stránkách */
+.article-discussion,
+.discussion-wrapper,
+.comments-wrapper,
+.article-comments,
+#article-discussion,
+.disqus-wrapper,
+#disqus_thread {
+  display: none !important;
+}
