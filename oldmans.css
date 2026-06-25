@@ -1089,12 +1089,21 @@ body.in-recepty h1 {
    ══════════════════════════════════════════════ */
 
 /* Plná šířka — skrýt sidebar na statických stránkách */
-/* Plná šířka — skrýt sidebar na všech statických stránkách (type-article) */
+/* Plná šířka — skrýt sidebar na všech statických stránkách */
 body.type-article .sidebar,
-body.type-article .sidebar-left {
+body.type-article .sidebar-left,
+body.in-o-nas .sidebar,
+body.in-o-nas .sidebar-left,
+body.in-obchodni-podminky .sidebar,
+body.in-obchodni-podminky .sidebar-left,
+body.in-podminky-ochrany-osobnich-udaju .sidebar,
+body.in-podminky-ochrany-osobnich-udaju .sidebar-left {
   display: none !important;
 }
-body.type-article .content.narrow {
+body.type-article .content.narrow,
+body.in-o-nas .content.narrow,
+body.in-obchodni-podminky .content.narrow,
+body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   width: 100% !important;
   max-width: 100% !important;
   flex: 0 0 100% !important;
