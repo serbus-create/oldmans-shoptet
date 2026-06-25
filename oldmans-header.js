@@ -119,6 +119,45 @@
     }
   }
 
+  /* --- Přebuduje stránku Recepty na galerii karet (jako originál) ---
+     Z každého .news-item vytáhne nadpis, odkaz a první obrázek,
+     postaví čistou klikací kartu a schová původní rozbalený obsah. */
+  function buildRecipeGallery() {
+    var wrapper = document.querySelector('.news-wrapper');
+    if (!wrapper) return;
+    if (wrapper.classList.contains('om-recipes-done')) return;
+
+    var items = wrapper.querySelectorAll('.news-item');
+    if (!items.length) return;
+
+    items.forEach(function (item) {
+      var link = item.querySelector('h2 a');
+      var img = item.querySelector('img');
+      if (!link) return;
+
+      var href = link.getAttribute('href') || '#';
+      var title = link.textContent.trim();
+      var imgSrc = img ? img.getAttribute('src') : '';
+
+      /* Postavíme kartu */
+      var card = document.createElement('a');
+      card.className = 'om-recipe-card';
+      card.setAttribute('href', href);
+      card.innerHTML =
+        '<div class="om-recipe-img"' + (imgSrc ? ' style="background-image:url(\'' + imgSrc + '\')"' : '') + '></div>' +
+        '<div class="om-recipe-title">' + title + '</div>';
+
+      /* Schováme původní obsah a vložíme kartu */
+      item.querySelectorAll(':scope > *').forEach(function (child) {
+        child.style.setProperty('display', 'none', 'important');
+      });
+      item.appendChild(card);
+      item.classList.add('om-recipe-item');
+    });
+
+    wrapper.classList.add('om-recipes-done', 'om-recipes-grid');
+  }
+
   function injectAll() {
 
     /* -------------------------------------------------
@@ -275,6 +314,7 @@
     /* Na NE-homepage stránkách (kategorie, produkt, košík...) vložíme
        jen USP lištu + custom footer a skončíme. */
     if (!isHomepage) {
+      buildRecipeGallery();
       injectUspAndFooter();
       return;
     }
