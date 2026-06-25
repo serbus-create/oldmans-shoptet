@@ -65,7 +65,7 @@
             <li><a href="/">Úvod</a></li>
             <li><a href="/o-nas/">O nás</a></li>
             <li><a href="/kategorie/omacky-a-majonezy/">Omáčky a dressingy</a></li>
-            <li><a href="/stitky/top-produkty/">TOP Produkty</a></li>
+            <li><a href="/kategorie/bestseller/">TOP Produkty</a></li>
             <li><a href="/kontakty/">Kontakt</a></li>
           </ul>
         </div>
