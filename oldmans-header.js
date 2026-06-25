@@ -55,8 +55,7 @@
           <p><strong>Adresa kanceláře</strong> : Areál VRL Praha<br>Ke Kablu 378, 102 00, Praha - Dolní Měcholupy</p>
           <p><strong>E-mail</strong> : <a href="mailto:podpora@oldmans.cz">podpora@oldmans.cz</a></p>
           <p><strong>Telefon</strong> : <a href="tel:+420774772405">+420 774 772 405</a></p>
-          <br>
-          <strong>Sledujte nás na instagramu</strong><br><br>
+          <p class="om-footer-ig-label"><strong>Sledujte nás na instagramu</strong></p>
           <a href="https://www.instagram.com/old_mans_style/" target="_blank" class="om-footer-ig">📷 SLEDOVAT @OLD_MANS_STYLE</a>
         </div>
         <div class="om-footer-col">
