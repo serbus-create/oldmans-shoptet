@@ -99,7 +99,8 @@
 
   /* --- Vloží USP lištu + footer na JAKOUKOLIV stránku ---
      refNode (volitelný): vloží se ZA tento element (homepage).
-     Jinak se vloží za Shoptetí .benefitBanner (ostatní stránky). */
+     Jinak se vloží PŘED Shoptetí .footer (copyright), aby copyright
+     zůstal úplně dole. */
   function injectUspAndFooter(refNode) {
     /* Pojistka proti dvojímu vložení */
     if (document.querySelector('.om-usp-bar') || document.querySelector('.om-custom-footer')) return;
@@ -107,12 +108,28 @@
     var uspBar = buildUspBar();
     var customFooter = buildCustomFooter();
 
-    var anchor = refNode || document.querySelector('.benefitBanner');
+    if (refNode && refNode.parentNode) {
+      /* Homepage — za poslední sekci */
+      refNode.parentNode.insertBefore(uspBar, refNode.nextSibling);
+      uspBar.parentNode.insertBefore(customFooter, uspBar.nextSibling);
+      return;
+    }
+
+    /* Ostatní stránky — vložíme PŘED Shoptetí .footer (copyright),
+       aby copyright zůstal jako úplně poslední prvek stránky. */
+    var shoptetFooter = document.querySelector('.footer');
+    if (shoptetFooter && shoptetFooter.parentNode) {
+      shoptetFooter.parentNode.insertBefore(uspBar, shoptetFooter);
+      shoptetFooter.parentNode.insertBefore(customFooter, shoptetFooter);
+      return;
+    }
+
+    /* Fallback — za .benefitBanner nebo na konec */
+    var anchor = document.querySelector('.benefitBanner');
     if (anchor && anchor.parentNode) {
       anchor.parentNode.insertBefore(uspBar, anchor.nextSibling);
       uspBar.parentNode.insertBefore(customFooter, uspBar.nextSibling);
     } else {
-      /* Fallback — na konec hlavního obsahu */
       var main = document.querySelector('.overall-wrapper') || document.body;
       main.appendChild(uspBar);
       main.appendChild(customFooter);
