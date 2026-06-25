@@ -178,8 +178,24 @@
   function injectAll() {
 
     /* -------------------------------------------------
-       1. SKRYJEME PŮVODNÍ SHOPTET HEADER
+       0. SKRÝT PRÁZDNÝ SIDEBAR NA STATICKÝCH STRÁNKÁCH
     ------------------------------------------------- */
+    var sidebar = document.querySelector('.sidebar-left, aside.sidebar');
+    if (sidebar) {
+      var sidebarText = sidebar.textContent.trim().replace(/\s+/g, ' ');
+      /* Sidebar je prázdný pokud obsahuje jen nadpis "Postranní panel" */
+      if (sidebarText === '' || sidebarText === 'Postranní panel') {
+        sidebar.style.setProperty('display', 'none', 'important');
+        var content = document.querySelector('.content.narrow, .content-body');
+        if (content) {
+          content.style.setProperty('width', '100%', 'important');
+          content.style.setProperty('max-width', '100%', 'important');
+          content.style.setProperty('flex', '0 0 100%', 'important');
+        }
+      }
+    }
+
+
     var headerTop = document.querySelector('#header .header-top');
     if (headerTop) headerTop.style.display = 'none';
     var headerBottom = document.querySelector('#header .header-bottom');
