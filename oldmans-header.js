@@ -633,40 +633,6 @@
 
   setTimeout(watchCart, 1000);
 
-  /* --- Vylepšení detailu produktu (trust badges + price box) --- */
-  function enhanceProductDetail() {
-    if (!document.body.classList.contains('type-product')) return;
-    if (document.getElementById('om-trust-badges')) return; /* pojistka proti dvojímu vložení */
-
-    var priceBox = document.querySelector('.buy-form, .product-detail .price-wrapper, .pr-detail .buy');
-    var titleEl = document.querySelector('h1');
-    var anchor = document.querySelector('.product-detail .perex, .description-wrapper, .short-description');
-
-    /* Trust badges řádek */
-    var badges = document.createElement('div');
-    badges.id = 'om-trust-badges';
-    badges.innerHTML = `
-      <div class="om-badge"><span class="om-badge-icon">📍</span><div><strong>Vyrobeno v ČR</strong><span>Pouze česká značka</span></div></div>
-      <div class="om-badge"><span class="om-badge-icon">🤲</span><div><strong>Ruční výroba</strong><span>Pečlivě zpracováno</span></div></div>
-      <div class="om-badge"><span class="om-badge-icon">🥇</span><div><strong>Vždy čerstvé</strong><span>S důrazem na kvalitu</span></div></div>
-    `;
-
-    if (titleEl && titleEl.parentNode) {
-      titleEl.parentNode.insertBefore(badges, titleEl.nextSibling);
-    }
-
-    /* Obalíme cenu + tlačítko do boxu */
-    var buyWrap = document.querySelector('.buy-form, .pr-detail .buy, .product-detail .price-wrapper');
-    if (buyWrap && !buyWrap.closest('.om-price-box')) {
-      var box = document.createElement('div');
-      box.className = 'om-price-box';
-      buyWrap.parentNode.insertBefore(box, buyWrap);
-      box.appendChild(buyWrap);
-    }
-  }
-
-  setTimeout(enhanceProductDetail, 600);
-
   /* Spustíme po načtení DOM */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', injectAll);
