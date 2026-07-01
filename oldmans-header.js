@@ -606,6 +606,43 @@
     }, 2000);
   }
 
+  /* --- Trust badges na detailu produktu (Vyrobeno v ČR / Ruční výroba / Vždy čerstvé) --- */
+  function enhanceProductDetail() {
+    if (!document.body.classList.contains('type-product')) return;
+    if (document.getElementById('om-trust-badges')) return;
+
+    var h1 = document.querySelector('h1');
+    if (!h1) return;
+
+    /* Najdeme nejbližší společný kontejner za nadpisem — vložíme badges hned za blok s kategoriemi, jinak hned za h1 */
+    var insertAfterEl = h1;
+    var categoryLine = h1.parentNode ? h1.parentNode.querySelector('.category-list, .breadcrumb, .parameters-list') : null;
+    if (categoryLine) insertAfterEl = categoryLine;
+
+    var badges = document.createElement('div');
+    badges.id = 'om-trust-badges';
+    badges.innerHTML = `
+      <div class="om-badge">
+        <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/vyrobeno-cr.png" alt="">
+        <div><strong>Vyrobeno v ČR</strong><span>Pouze česká značka</span></div>
+      </div>
+      <div class="om-badge">
+        <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/rucni-vyroba.svg" alt="">
+        <div><strong>Ruční výroba</strong><span>Pečlivě zpracováno</span></div>
+      </div>
+      <div class="om-badge">
+        <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/cerstvost.svg" alt="">
+        <div><strong>Vždy čerstvé</strong><span>S důrazem na kvalitu</span></div>
+      </div>
+    `;
+
+    if (insertAfterEl && insertAfterEl.parentNode) {
+      insertAfterEl.parentNode.insertBefore(badges, insertAfterEl.nextSibling);
+    }
+  }
+
+  setTimeout(enhanceProductDetail, 700);
+
   /* Po přidání do košíku → přesměrovat na košík */
   function watchCart() {
     /* Sledujeme změnu našeho #om-cart-price elementu */
