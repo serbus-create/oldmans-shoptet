@@ -606,7 +606,7 @@
     }, 2000);
   }
 
-  /* --- Trust badges na detailu produktu (Vyrobeno v ČR / Ruční výroba / Vždy čerstvé) --- */
+  /* --- Trust badges + price box + partner loga na detailu produktu --- */
   function enhanceProductDetail() {
     if (!document.body.classList.contains('type-product')) return;
     if (document.getElementById('om-trust-badges')) return;
@@ -614,7 +614,6 @@
     var h1 = document.querySelector('h1');
     if (!h1) return;
 
-    /* Najdeme nejbližší společný kontejner za nadpisem — vložíme badges hned za blok s kategoriemi, jinak hned za h1 */
     var insertAfterEl = h1;
     var categoryLine = h1.parentNode ? h1.parentNode.querySelector('.category-list, .breadcrumb, .parameters-list') : null;
     if (categoryLine) insertAfterEl = categoryLine;
@@ -638,6 +637,50 @@
 
     if (insertAfterEl && insertAfterEl.parentNode) {
       insertAfterEl.parentNode.insertBefore(badges, insertAfterEl.nextSibling);
+    }
+
+    /* --- Box kolem ceny + tlačítka + odkaz Pro firmy --- */
+    var cartBtn = document.querySelector('.btn.btn-cart.add-to-cart-button, .add-to-cart-button');
+    if (cartBtn) {
+      /* Najdeme společný "řádek" s cenou, množstvím a tlačítkem — jdeme nahoru dokud nenajdeme rodiče obsahujícího i cenu */
+      var row = cartBtn.closest('.buy, .buy-form, .pr-detail-buy, .price-wrapper');
+      if (!row) {
+        /* fallback: vezmeme rodiče tlačítka o úroveň výš */
+        row = cartBtn.parentElement ? cartBtn.parentElement.parentElement : null;
+      }
+      if (row && !row.closest('.om-price-box')) {
+        var box = document.createElement('div');
+        box.className = 'om-price-box';
+        row.parentNode.insertBefore(box, row);
+        box.appendChild(row);
+
+        /* Odkaz Pro firmy hned pod box */
+        var proFirmy = document.createElement('a');
+        proFirmy.href = '/velkoobchod/';
+        proFirmy.className = 'om-pro-firmy';
+        proFirmy.innerHTML = '💼 <strong>Pro firmy – Nabídka na míru</strong>';
+        box.parentNode.insertBefore(proFirmy, box.nextSibling);
+      }
+      cartBtn.classList.add('om-cart-btn-white');
+    }
+
+    /* --- Loga partnerů --- */
+    var partnersWrap = document.createElement('div');
+    partnersWrap.id = 'om-product-partners';
+    partnersWrap.innerHTML = `
+      <div class="om-product-partners-label">NAŠE OMÁČKY NAJDETE:</div>
+      <div class="om-product-partners-logos">
+        <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-shell.png" alt="Shell">
+        <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-shell-cafe.png" alt="Shell Café">
+        <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-bageterie-boulevard-logo.png" alt="Bageterie Boulevard">
+        <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/turbopizza.png" alt="Turbo Pizza">
+        <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-faency-fries-logo.png" alt="Fancy Fries">
+        <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-rohlik-logo.png" alt="Rohlík">
+      </div>
+    `;
+    var mainImgWrap = document.querySelector('.main-image, .detail-image-wrapper, .product-images');
+    if (mainImgWrap && mainImgWrap.parentNode) {
+      mainImgWrap.parentNode.insertBefore(partnersWrap, mainImgWrap.nextSibling);
     }
   }
 
