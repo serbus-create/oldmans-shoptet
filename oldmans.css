@@ -1158,3 +1158,60 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   font-size: 12px;
   color: #777;
 }
+
+/* Zvětšené badges (Vyrobeno v ČR / Ruční výroba / Vždy čerstvé) */
+#om-trust-badges .om-badge strong { font-size: 15px !important; }
+#om-trust-badges .om-badge span { font-size: 13px !important; }
+
+/* Box kolem ceny + tlačítka */
+.om-price-box {
+  background: #f7f7f7;
+  border-radius: 16px;
+  padding: 26px;
+  margin: 22px 0 4px;
+  display: flex !important;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+/* Bílý text na tlačítku Do košíku na detailu produktu */
+.om-cart-btn-white,
+.om-cart-btn-white * {
+  color: #fff !important;
+}
+
+/* Odkaz Pro firmy */
+.om-pro-firmy {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #1a1a1a !important;
+  text-decoration: none !important;
+  font-size: 15px;
+  margin: 4px 0 20px;
+}
+.om-pro-firmy strong { text-decoration: underline; }
+.om-pro-firmy:hover strong { color: #9f1400 !important; }
+
+/* Loga partnerů pod hlavní fotkou produktu */
+#om-product-partners { margin-top: 20px; }
+.om-product-partners-label {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .5px;
+  color: #1a1a1a;
+  margin-bottom: 14px;
+}
+.om-product-partners-logos {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+.om-product-partners-logos img {
+  height: 34px;
+  width: auto;
+  max-width: 90px;
+  object-fit: contain;
+}
