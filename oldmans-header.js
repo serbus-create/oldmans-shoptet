@@ -614,8 +614,13 @@
     var h1 = document.querySelector('h1');
     if (!h1) return;
 
+    /* Scope hledání omezíme na kontejner detailu produktu, aby se
+       nenachytal add-to-cart button z jiného slideru na stránce */
+    var scope = h1.closest('[id*="detail" i], .detail, .product-detail, .pr-detail') || h1.parentElement;
+
+    /* 1. Badges hned za nadpis / kategorie */
     var insertAfterEl = h1;
-    var categoryLine = h1.parentNode ? h1.parentNode.querySelector('.category-list, .breadcrumb, .parameters-list') : null;
+    var categoryLine = scope.querySelector('.category-list, .breadcrumb, .parameters-list');
     if (categoryLine) insertAfterEl = categoryLine;
 
     var badges = document.createElement('div');
@@ -634,24 +639,51 @@
         <div><strong>Vždy čerstvé</strong><span>S důrazem na kvalitu</span></div>
       </div>
     `;
-
     if (insertAfterEl && insertAfterEl.parentNode) {
       insertAfterEl.parentNode.insertBefore(badges, insertAfterEl.nextSibling);
     }
 
-    /* --- Box kolem ceny + tlačítka + odkaz Pro firmy --- */
-    var cartBtn = document.querySelector('.btn.btn-cart.add-to-cart-button, .add-to-cart-button');
-    if (cartBtn) {
-      /* Najdeme společný "řádek" s cenou, množstvím a tlačítkem — jdeme nahoru dokud nenajdeme rodiče obsahujícího i cenu */
-      var row = cartBtn.closest('.buy, .buy-form, .pr-detail-buy, .price-wrapper');
-      if (!row) {
-        /* fallback: vezmeme rodiče tlačítka o úroveň výš */
-        row = cartBtn.parentElement ? cartBtn.parentElement.parentElement : null;
+    /* 2. Skryjeme řádky "Dostupnost" a "Kód" úplně */
+    scope.querySelectorAll('*').forEach(function(el) {
+      if (el.children.length > 0) return; /* jen listové elementy s textem */
+      var txt = el.textContent.trim();
+      if (txt === 'Dostupnost' || txt === 'Kód:' || txt === 'Kód') {
+        var row = el.parentElement;
+        /* jdeme nahoru, dokud nenajdeme řádek, co má rozumnou výšku (label+hodnota) */
+        if (row) row.style.setProperty('display', 'none', 'important');
       }
+    });
+
+    /* 3. Najdeme add-to-cart tlačítko POUZE uvnitř scope */
+    var cartBtn = scope.querySelector('.btn.btn-cart.add-to-cart-button, .add-to-cart-button, .btn-cart');
+    if (cartBtn) {
+      cartBtn.classList.add('om-cart-btn-white');
+
+      var row = cartBtn.closest('.buy, .buy-form, .pr-detail-buy, .price-wrapper') || (cartBtn.parentElement ? cartBtn.parentElement.parentElement : null);
+
       if (row && !row.closest('.om-price-box')) {
         var box = document.createElement('div');
         box.className = 'om-price-box';
         row.parentNode.insertBefore(box, row);
+
+        /* Najdeme "Skladem..." řádek (dostupnost se skladovým textem) a přesuneme ho do boxu jako první */
+        var availEl = null;
+        scope.querySelectorAll('*').forEach(function(el) {
+          if (availEl) return;
+          if (el.children.length > 0) return;
+          var t = el.textContent.trim();
+          if (/^Skladem|^Není skladem|^Na dotaz|^Vyprodáno|^Poslední kus/.test(t)) {
+            availEl = el;
+          }
+        });
+        if (availEl) {
+          var availRow = availEl.closest('div, p, span') || availEl;
+          /* vezmeme rodičovský řádek (o úroveň výš, pokud existuje ikonka vedle) */
+          var availContainer = availRow.parentElement && availRow.parentElement.children.length <= 2 ? availRow.parentElement : availRow;
+          availContainer.classList.add('om-availability-line');
+          box.appendChild(availContainer);
+        }
+
         box.appendChild(row);
 
         /* Odkaz Pro firmy hned pod box */
@@ -661,10 +693,9 @@
         proFirmy.innerHTML = '💼 <strong>Pro firmy – Nabídka na míru</strong>';
         box.parentNode.insertBefore(proFirmy, box.nextSibling);
       }
-      cartBtn.classList.add('om-cart-btn-white');
     }
 
-    /* --- Loga partnerů --- */
+    /* 4. Loga partnerů pod hlavní fotkou */
     var partnersWrap = document.createElement('div');
     partnersWrap.id = 'om-product-partners';
     partnersWrap.innerHTML = `
@@ -684,7 +715,7 @@
     }
   }
 
-  setTimeout(enhanceProductDetail, 700);
+  enhanceProductDetail();
 
   /* Po přidání do košíku → přesměrovat na košík */
   function watchCart() {
