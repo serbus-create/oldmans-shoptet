@@ -1158,21 +1158,32 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   font-size: 12px;
   color: #777;
 }
-
 /* Zvětšené badges (Vyrobeno v ČR / Ruční výroba / Vždy čerstvé) */
-#om-trust-badges .om-badge strong { font-size: 15px !important; }
-#om-trust-badges .om-badge span { font-size: 13px !important; }
+#om-trust-badges .om-badge strong { font-size: 16px !important; }
+#om-trust-badges .om-badge span { font-size: 14px !important; }
+#om-trust-badges .om-badge img { width: 36px !important; height: 36px !important; }
 
-/* Box kolem ceny + tlačítka */
+/* Box kolem dostupnosti + ceny + tlačítka */
 .om-price-box {
   background: #f7f7f7;
   border-radius: 16px;
-  padding: 26px;
+  padding: 28px;
   margin: 22px 0 4px;
   display: flex !important;
+  flex-direction: column;
+  gap: 16px;
+}
+.om-price-box .om-availability-line {
+  display: flex !important;
   align-items: center;
-  gap: 18px;
-  flex-wrap: wrap;
+  gap: 8px;
+  color: #4a9b3f !important;
+  font-weight: 600;
+  font-size: 15px;
+}
+.om-price-box .om-availability-line:before {
+  content: '🚚';
+  font-size: 16px;
 }
 
 /* Bílý text na tlačítku Do košíku na detailu produktu */
