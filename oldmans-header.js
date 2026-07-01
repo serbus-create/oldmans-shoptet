@@ -614,13 +614,10 @@
     var h1 = document.querySelector('h1');
     if (!h1) return;
 
-    /* Scope hledání omezíme na kontejner detailu produktu, aby se
-       nenachytal add-to-cart button z jiného slideru na stránce */
-    var scope = h1.closest('[id*="detail" i], .detail, .product-detail, .pr-detail') || h1.parentElement;
-
     /* 1. Badges hned za nadpis / kategorie */
+    var header = document.querySelector('.p-detail-inner-header') || h1.parentElement;
     var insertAfterEl = h1;
-    var categoryLine = scope.querySelector('.category-list, .breadcrumb, .parameters-list');
+    var categoryLine = header.querySelector('.category-list, .breadcrumb, .parameters-list');
     if (categoryLine) insertAfterEl = categoryLine;
 
     var badges = document.createElement('div');
@@ -643,75 +640,68 @@
       insertAfterEl.parentNode.insertBefore(badges, insertAfterEl.nextSibling);
     }
 
-    /* 2. Skryjeme řádky "Dostupnost" a "Kód" úplně */
-    scope.querySelectorAll('*').forEach(function(el) {
-      if (el.children.length > 0) return; /* jen listové elementy s textem */
-      var txt = el.textContent.trim();
-      if (txt === 'Dostupnost' || txt === 'Kód:' || txt === 'Kód') {
-        var row = el.parentElement;
-        /* jdeme nahoru, dokud nenajdeme řádek, co má rozumnou výšku (label+hodnota) */
-        if (row) row.style.setProperty('display', 'none', 'important');
-      }
-    });
-
-    /* 3. Najdeme add-to-cart tlačítko POUZE uvnitř scope */
-    var cartBtn = scope.querySelector('.btn.btn-cart.add-to-cart-button, .add-to-cart-button, .btn-cart');
-    if (cartBtn) {
-      cartBtn.classList.add('om-cart-btn-white');
-
-      var row = cartBtn.closest('.buy, .buy-form, .pr-detail-buy, .price-wrapper') || (cartBtn.parentElement ? cartBtn.parentElement.parentElement : null);
-
-      if (row && !row.closest('.om-price-box')) {
-        var box = document.createElement('div');
-        box.className = 'om-price-box';
-        row.parentNode.insertBefore(box, row);
-
-        /* Najdeme "Skladem..." řádek (dostupnost se skladovým textem) a přesuneme ho do boxu jako první */
-        var availEl = null;
-        scope.querySelectorAll('*').forEach(function(el) {
-          if (availEl) return;
-          if (el.children.length > 0) return;
-          var t = el.textContent.trim();
-          if (/^Skladem|^Není skladem|^Na dotaz|^Vyprodáno|^Poslední kus/.test(t)) {
-            availEl = el;
-          }
-        });
-        if (availEl) {
-          var availRow = availEl.closest('div, p, span') || availEl;
-          /* vezmeme rodičovský řádek (o úroveň výš, pokud existuje ikonka vedle) */
-          var availContainer = availRow.parentElement && availRow.parentElement.children.length <= 2 ? availRow.parentElement : availRow;
-          availContainer.classList.add('om-availability-line');
-          box.appendChild(availContainer);
+    /* 2. Tabulka Dostupnost/Kód — vytáhneme text dostupnosti a celou tabulku schováme */
+    var table = document.querySelector('table.detail-parameters');
+    var availHtml = null;
+    if (table) {
+      var rows = table.querySelectorAll('tr');
+      rows.forEach(function(tr) {
+        var th = tr.querySelector('th');
+        if (th && th.textContent.trim().replace(':', '') === 'Dostupnost') {
+          var td = tr.querySelector('td');
+          if (td) availHtml = td.innerHTML;
         }
-
-        box.appendChild(row);
-
-        /* Odkaz Pro firmy hned pod box */
-        var proFirmy = document.createElement('a');
-        proFirmy.href = '/velkoobchod/';
-        proFirmy.className = 'om-pro-firmy';
-        proFirmy.innerHTML = '💼 <strong>Pro firmy – Nabídka na míru</strong>';
-        box.parentNode.insertBefore(proFirmy, box.nextSibling);
-      }
+      });
+      table.style.setProperty('display', 'none', 'important');
     }
 
-    /* 4. Loga partnerů pod hlavní fotkou */
-    var partnersWrap = document.createElement('div');
-    partnersWrap.id = 'om-product-partners';
-    partnersWrap.innerHTML = `
-      <div class="om-product-partners-label">NAŠE OMÁČKY NAJDETE:</div>
-      <div class="om-product-partners-logos">
-        <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-shell.png" alt="Shell">
-        <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-shell-cafe.png" alt="Shell Café">
-        <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-bageterie-boulevard-logo.png" alt="Bageterie Boulevard">
-        <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/turbopizza.png" alt="Turbo Pizza">
-        <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-faency-fries-logo.png" alt="Fancy Fries">
-        <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-rohlik-logo.png" alt="Rohlík">
-      </div>
-    `;
-    var mainImgWrap = document.querySelector('.main-image, .detail-image-wrapper, .product-images');
-    if (mainImgWrap && mainImgWrap.parentNode) {
-      mainImgWrap.parentNode.insertBefore(partnersWrap, mainImgWrap.nextSibling);
+    /* 3. Box kolem ceny + množství + tlačítka (.p-to-cart-block) */
+    var priceBlock = document.querySelector('.p-to-cart-block');
+    if (priceBlock) {
+      priceBlock.classList.add('om-price-box');
+
+      if (availHtml) {
+        var availWrap = document.createElement('div');
+        availWrap.className = 'om-availability-line';
+        availWrap.innerHTML = availHtml;
+        priceBlock.insertBefore(availWrap, priceBlock.firstChild);
+      }
+
+      var cartBtn = priceBlock.querySelector('.add-to-cart-button, .btn-conversion');
+      if (cartBtn) cartBtn.classList.add('om-cart-btn-white');
+
+      /* Odkaz Pro firmy hned pod box */
+      var proFirmy = document.createElement('a');
+      proFirmy.href = '/velkoobchod/';
+      proFirmy.className = 'om-pro-firmy';
+      proFirmy.innerHTML = '💼 <strong>Pro firmy – Nabídka na míru</strong>';
+      priceBlock.parentNode.insertBefore(proFirmy, priceBlock.nextSibling);
+    }
+
+    /* 4. Loga partnerů — vložíme na konec galerie (levý sloupec s fotkami) */
+    var detailInner = document.querySelector('.p-detail-inner');
+    if (detailInner) {
+      var galleryImg = detailInner.querySelector('img');
+      var galleryBlock = galleryImg;
+      while (galleryBlock && galleryBlock.parentElement && galleryBlock.parentElement !== detailInner) {
+        galleryBlock = galleryBlock.parentElement;
+      }
+      if (galleryBlock && galleryBlock !== detailInner) {
+        var partnersWrap = document.createElement('div');
+        partnersWrap.id = 'om-product-partners';
+        partnersWrap.innerHTML = `
+          <div class="om-product-partners-label">NAŠE OMÁČKY NAJDETE:</div>
+          <div class="om-product-partners-logos">
+            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-shell.png" alt="Shell">
+            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-shell-cafe.png" alt="Shell Café">
+            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-bageterie-boulevard-logo.png" alt="Bageterie Boulevard">
+            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/turbopizza.png" alt="Turbo Pizza">
+            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-faency-fries-logo.png" alt="Fancy Fries">
+            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-rohlik-logo.png" alt="Rohlík">
+          </div>
+        `;
+        galleryBlock.appendChild(partnersWrap);
+      }
     }
   }
 
