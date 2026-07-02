@@ -678,9 +678,9 @@
       priceBlock.parentNode.insertBefore(proFirmy, priceBlock.nextSibling);
     }
 
-    /* 4. Loga partnerů — celá šířka pod oběma sloupci (fotka + text) */
+    /* 4. Loga partnerů — vložíme JAKO SOUROZENCE za .p-detail-inner (mimo grid), aby se nerozhodil layout */
     var detailInner = document.querySelector('.p-detail-inner');
-    if (detailInner) {
+    if (detailInner && detailInner.parentNode) {
       var partnersWrap = document.createElement('div');
       partnersWrap.id = 'om-product-partners';
       partnersWrap.innerHTML = `
@@ -694,7 +694,7 @@
           <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-rohlik-logo.png" alt="Rohlík">
         </div>
       `;
-      detailInner.appendChild(partnersWrap);
+      detailInner.parentNode.insertBefore(partnersWrap, detailInner.nextSibling);
     }
   }
 
