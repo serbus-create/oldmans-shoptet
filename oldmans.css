@@ -1185,6 +1185,8 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .om-price-box .om-availability-line * { color: #4a9b3f !important; }
 
 /* Bílý text na tlačítku Do košíku na detailu produktu */
+.btn.btn-conversion.add-to-cart-button.om-cart-btn-white,
+.btn.btn-conversion.add-to-cart-button.om-cart-btn-white *,
 .om-cart-btn-white,
 .om-cart-btn-white * {
   color: #fff !important;
