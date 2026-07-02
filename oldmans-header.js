@@ -640,16 +640,16 @@
       insertAfterEl.parentNode.insertBefore(badges, insertAfterEl.nextSibling);
     }
 
-    /* 2. Tabulka Dostupnost/Kód — vytáhneme text dostupnosti a celou tabulku schováme */
+    /* 2. Tabulka Dostupnost/Kód — PŘESUNEME (nezkopírujeme) živý element dostupnosti,
+       aby fungovalo i pozdější dopočítání data doručení Shoptetem */
     var table = document.querySelector('table.detail-parameters');
-    var availHtml = null;
+    var availTd = null;
     if (table) {
       var rows = table.querySelectorAll('tr');
       rows.forEach(function(tr) {
         var th = tr.querySelector('th');
         if (th && th.textContent.trim().replace(':', '') === 'Dostupnost') {
-          var td = tr.querySelector('td');
-          if (td) availHtml = td.innerHTML;
+          availTd = tr.querySelector('td');
         }
       });
       table.style.setProperty('display', 'none', 'important');
@@ -660,10 +660,10 @@
     if (priceBlock) {
       priceBlock.classList.add('om-price-box');
 
-      if (availHtml) {
+      if (availTd) {
         var availWrap = document.createElement('div');
         availWrap.className = 'om-availability-line';
-        availWrap.innerHTML = availHtml;
+        availWrap.appendChild(availTd); /* přesun živého uzlu, ne kopie */
         priceBlock.insertBefore(availWrap, priceBlock.firstChild);
       }
 
@@ -678,30 +678,23 @@
       priceBlock.parentNode.insertBefore(proFirmy, priceBlock.nextSibling);
     }
 
-    /* 4. Loga partnerů — vložíme na konec galerie (levý sloupec s fotkami) */
+    /* 4. Loga partnerů — celá šířka pod oběma sloupci (fotka + text) */
     var detailInner = document.querySelector('.p-detail-inner');
     if (detailInner) {
-      var galleryImg = detailInner.querySelector('img');
-      var galleryBlock = galleryImg;
-      while (galleryBlock && galleryBlock.parentElement && galleryBlock.parentElement !== detailInner) {
-        galleryBlock = galleryBlock.parentElement;
-      }
-      if (galleryBlock && galleryBlock !== detailInner) {
-        var partnersWrap = document.createElement('div');
-        partnersWrap.id = 'om-product-partners';
-        partnersWrap.innerHTML = `
-          <div class="om-product-partners-label">NAŠE OMÁČKY NAJDETE:</div>
-          <div class="om-product-partners-logos">
-            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-shell.png" alt="Shell">
-            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-shell-cafe.png" alt="Shell Café">
-            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-bageterie-boulevard-logo.png" alt="Bageterie Boulevard">
-            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/turbopizza.png" alt="Turbo Pizza">
-            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-faency-fries-logo.png" alt="Fancy Fries">
-            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-rohlik-logo.png" alt="Rohlík">
-          </div>
-        `;
-        galleryBlock.appendChild(partnersWrap);
-      }
+      var partnersWrap = document.createElement('div');
+      partnersWrap.id = 'om-product-partners';
+      partnersWrap.innerHTML = `
+        <div class="om-product-partners-label">NAŠE OMÁČKY NAJDETE:</div>
+        <div class="om-product-partners-logos">
+          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-shell.png" alt="Shell">
+          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-shell-cafe.png" alt="Shell Café">
+          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-bageterie-boulevard-logo.png" alt="Bageterie Boulevard">
+          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/turbopizza.png" alt="Turbo Pizza">
+          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-faency-fries-logo.png" alt="Fancy Fries">
+          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-rohlik-logo.png" alt="Rohlík">
+        </div>
+      `;
+      detailInner.appendChild(partnersWrap);
     }
   }
 
