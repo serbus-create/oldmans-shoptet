@@ -1157,17 +1157,33 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 #om-trust-badges .om-badge span {
   font-size: 12px;
   color: #777;
-}/* Zvětšené badges (Vyrobeno v ČR / Ruční výroba / Vždy čerstvé) */
-#om-trust-badges .om-badge strong { font-size: 16px !important; }
-#om-trust-badges .om-badge span { font-size: 14px !important; }
-#om-trust-badges .om-badge img { width: 36px !important; height: 36px !important; }
+}/* Zvětšené badges (Vyrobeno v ČR / Ruční výroba / Vždy čerstvé) — +30% */
+#om-trust-badges .om-badge strong { font-size: 21px !important; }
+#om-trust-badges .om-badge span { font-size: 18px !important; }
+#om-trust-badges .om-badge img { width: 47px !important; height: 47px !important; }
 
-/* Box kolem dostupnosti + ceny + tlačítka (aplikováno přímo na .p-to-cart-block) */
+/* Box kolem dostupnosti + ceny + tlačítka — vertikální layout jako originál */
 .p-to-cart-block.om-price-box {
   background: #f7f7f7 !important;
   border-radius: 16px !important;
-  padding: 26px !important;
+  padding: 32px !important;
   margin: 22px 0 4px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 14px !important;
+}
+.om-price-box .price-final,
+.om-price-box strong.price-final {
+  font-size: 36px !important;
+  font-weight: 800 !important;
+  color: #1a1a1a !important;
+}
+.om-buy-row {
+  display: flex !important;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 .om-price-box .om-availability-line {
   display: flex !important;
@@ -1175,14 +1191,11 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   gap: 8px;
   color: #4a9b3f !important;
   font-weight: 600;
-  font-size: 15px;
-  margin-bottom: 16px;
-}
-.om-price-box .om-availability-line:before {
-  content: '🚚';
   font-size: 16px;
 }
 .om-price-box .om-availability-line * { color: #4a9b3f !important; }
+.om-price-box .om-availability-line.om-sold-out,
+.om-price-box .om-availability-line.om-sold-out * { color: #c0392b !important; }
 
 /* Bílý text na tlačítku Do košíku na detailu produktu */
 .btn.btn-conversion.add-to-cart-button.om-cart-btn-white,
@@ -1192,16 +1205,17 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   color: #fff !important;
 }
 
-/* Odkaz Pro firmy */
+/* Odkaz Pro firmy (uvnitř boxu) */
 .om-pro-firmy {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   color: #1a1a1a !important;
   text-decoration: none !important;
-  font-size: 15px;
-  margin: 4px 0 20px;
+  font-size: 16px;
+  margin-top: 4px;
 }
+.om-pro-firmy img { width: 28px; height: 28px; object-fit: contain; }
 .om-pro-firmy strong { text-decoration: underline; }
 .om-pro-firmy:hover strong { color: #9f1400 !important; }
 
