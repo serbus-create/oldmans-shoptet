@@ -621,11 +621,33 @@
     var h1 = detailInner.querySelector('h1') || document.querySelector('h1');
     if (!h1) return;
 
-    /* 1. Badges hned za nadpis / kategorie */
+    /* 0. Hodnocení (hvězdičky) přesuneme hned pod nadpis */
+    var ratingLink = Array.from(detailInner.querySelectorAll('a')).find(function(a) {
+      return a.textContent.trim() === 'Podrobnosti hodnocení';
+    });
+    var ratingRow = null;
+    if (ratingLink) {
+      ratingRow = ratingLink.parentElement;
+      while (ratingRow && ratingRow.parentElement && !ratingRow.parentElement.contains(h1)) {
+        ratingRow = ratingRow.parentElement;
+      }
+      if (ratingRow && h1.parentNode) {
+        h1.parentNode.insertBefore(ratingRow, h1.nextSibling);
+      }
+    }
+
+    /* 0b. Skryjeme Tisk / Zeptat se / Sdílet */
+    Array.from(detailInner.querySelectorAll('a')).forEach(function(a) {
+      var t = a.textContent.trim();
+      if (t === 'Tisk' || t === 'Zeptat se' || t === 'Sdílet') {
+        a.style.setProperty('display', 'none', 'important');
+      }
+    });
+
+    /* 1. Badges hned za hodnocení / kategorie */
     var header = h1.closest('.p-detail-inner-header') || h1.parentElement;
-    var insertAfterEl = h1;
     var categoryLine = header.querySelector('.category-list, .breadcrumb, .parameters-list');
-    if (categoryLine) insertAfterEl = categoryLine;
+    var insertAfterEl = categoryLine || ratingRow || h1;
 
     var badges = document.createElement('div');
     badges.id = 'om-trust-badges';
@@ -670,17 +692,32 @@
         var availWrap = document.createElement('div');
         availWrap.className = 'om-availability-line';
         availWrap.appendChild(availTd);
+        if (/Vyprodáno|Není skladem|Na dotaz/i.test(availWrap.textContent)) {
+          availWrap.classList.add('om-sold-out');
+        }
         priceBlock.insertBefore(availWrap, priceBlock.firstChild);
       }
 
       var cartBtn = priceBlock.querySelector('.add-to-cart-button, .btn-conversion');
       if (cartBtn) cartBtn.classList.add('om-cart-btn-white');
 
+      /* Množství + tlačítko vedle sebe v jednom řádku */
+      var qtyInput = priceBlock.querySelector('input[name="amount"], input[type="number"]');
+      var qtyWrap = qtyInput ? qtyInput.closest('div') : null;
+      if (qtyWrap && cartBtn && !priceBlock.querySelector('.om-buy-row')) {
+        var buyRow = document.createElement('div');
+        buyRow.className = 'om-buy-row';
+        qtyWrap.parentNode.insertBefore(buyRow, qtyWrap);
+        buyRow.appendChild(qtyWrap);
+        buyRow.appendChild(cartBtn);
+      }
+
+      /* Odkaz Pro firmy — UVNITŘ boxu, s ikonkou z GitHubu */
       var proFirmy = document.createElement('a');
       proFirmy.href = '/velkoobchod/';
       proFirmy.className = 'om-pro-firmy';
-      proFirmy.innerHTML = '💼 <strong>Pro firmy – Nabídka na míru</strong>';
-      priceBlock.parentNode.insertBefore(proFirmy, priceBlock.nextSibling);
+      proFirmy.innerHTML = '<img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/pro-firmy.svg" alt=""> <strong>Pro firmy – Nabídka na míru</strong>';
+      priceBlock.appendChild(proFirmy);
     }
 
     /* 4. Loga partnerů — sourozenec detailInner (mimo grid), detailInner je zaručeně ten pravý */
