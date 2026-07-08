@@ -611,11 +611,18 @@
     if (!document.body.classList.contains('type-product')) return;
     if (document.getElementById('om-trust-badges')) return;
 
-    var h1 = document.querySelector('h1');
+    /* Kotva: unikátní formulář, který existuje jen jednou na stránce */
+    var form = document.getElementById('product-detail-form');
+    if (!form) return;
+
+    var detailInner = form.closest('.p-detail-inner');
+    if (!detailInner) return;
+
+    var h1 = detailInner.querySelector('h1') || document.querySelector('h1');
     if (!h1) return;
 
     /* 1. Badges hned za nadpis / kategorie */
-    var header = document.querySelector('.p-detail-inner-header') || h1.parentElement;
+    var header = h1.closest('.p-detail-inner-header') || h1.parentElement;
     var insertAfterEl = h1;
     var categoryLine = header.querySelector('.category-list, .breadcrumb, .parameters-list');
     if (categoryLine) insertAfterEl = categoryLine;
@@ -640,9 +647,8 @@
       insertAfterEl.parentNode.insertBefore(badges, insertAfterEl.nextSibling);
     }
 
-    /* 2. Tabulka Dostupnost/Kód — PŘESUNEME (nezkopírujeme) živý element dostupnosti,
-       aby fungovalo i pozdější dopočítání data doručení Shoptetem */
-    var table = document.querySelector('table.detail-parameters');
+    /* 2. Tabulka Dostupnost/Kód — hledáme JEN uvnitř formuláře, přesuneme živý element dostupnosti */
+    var table = form.querySelector('table.detail-parameters');
     var availTd = null;
     if (table) {
       var rows = table.querySelectorAll('tr');
@@ -655,22 +661,21 @@
       table.style.setProperty('display', 'none', 'important');
     }
 
-    /* 3. Box kolem ceny + množství + tlačítka (.p-to-cart-block) */
-    var priceBlock = document.querySelector('.p-to-cart-block');
+    /* 3. Box kolem ceny + množství + tlačítka (.p-to-cart-block) — hledáme JEN uvnitř formuláře */
+    var priceBlock = form.querySelector('.p-to-cart-block');
     if (priceBlock) {
       priceBlock.classList.add('om-price-box');
 
       if (availTd) {
         var availWrap = document.createElement('div');
         availWrap.className = 'om-availability-line';
-        availWrap.appendChild(availTd); /* přesun živého uzlu, ne kopie */
+        availWrap.appendChild(availTd);
         priceBlock.insertBefore(availWrap, priceBlock.firstChild);
       }
 
       var cartBtn = priceBlock.querySelector('.add-to-cart-button, .btn-conversion');
       if (cartBtn) cartBtn.classList.add('om-cart-btn-white');
 
-      /* Odkaz Pro firmy hned pod box */
       var proFirmy = document.createElement('a');
       proFirmy.href = '/velkoobchod/';
       proFirmy.className = 'om-pro-firmy';
@@ -678,9 +683,8 @@
       priceBlock.parentNode.insertBefore(proFirmy, priceBlock.nextSibling);
     }
 
-    /* 4. Loga partnerů — vložíme JAKO SOUROZENCE za .p-detail-inner (mimo grid), aby se nerozhodil layout */
-    var detailInner = document.querySelector('.p-detail-inner');
-    if (detailInner && detailInner.parentNode) {
+    /* 4. Loga partnerů — sourozenec detailInner (mimo grid), detailInner je zaručeně ten pravý */
+    if (detailInner.parentNode) {
       var partnersWrap = document.createElement('div');
       partnersWrap.id = 'om-product-partners';
       partnersWrap.innerHTML = `
