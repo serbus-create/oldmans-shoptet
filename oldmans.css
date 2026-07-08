@@ -1206,7 +1206,12 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .om-pro-firmy:hover strong { color: #9f1400 !important; }
 
 /* Loga partnerů pod hlavní fotkou produktu */
-#om-product-partners { margin-top: 20px; }
+#om-product-partners {
+  margin-top: 20px;
+  width: 100%;
+  grid-column: 1 / -1;
+  display: block;
+}
 .om-product-partners-label {
   font-size: 13px;
   font-weight: 800;
