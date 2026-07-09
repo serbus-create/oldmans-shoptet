@@ -1255,3 +1255,14 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   max-width: 132px;
   object-fit: contain;
 }
+
+/* Drobečková navigace (breadcrumb) na detailu produktu — zarovnat doleva nad fotku */
+.breadcrumbs.navigation-home-icon-wrapper {
+  justify-content: flex-start !important;
+  text-align: left !important;
+  display: flex !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 0 16px 0 !important;
+  padding-left: 0 !important;
+}
