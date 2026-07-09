@@ -1157,10 +1157,14 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 #om-trust-badges .om-badge span {
   font-size: 12px;
   color: #777;
-}/* Zvětšené badges (Vyrobeno v ČR / Ruční výroba / Vždy čerstvé) — +30% */
-#om-trust-badges .om-badge strong { font-size: 21px !important; }
-#om-trust-badges .om-badge span { font-size: 18px !important; }
-#om-trust-badges .om-badge img { width: 47px !important; height: 47px !important; }
+}/* Zvětšené badges (Vyrobeno v ČR / Ruční výroba / Vždy čerstvé) */
+#om-trust-badges {
+  flex-wrap: nowrap !important;
+  gap: 22px !important;
+}
+#om-trust-badges .om-badge strong { font-size: 18px !important; }
+#om-trust-badges .om-badge span { font-size: 15px !important; white-space: nowrap; }
+#om-trust-badges .om-badge img { width: 40px !important; height: 40px !important; }
 
 /* Box kolem dostupnosti + ceny + tlačítka — vertikální layout jako originál */
 .p-to-cart-block.om-price-box {
@@ -1189,13 +1193,19 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   display: flex !important;
   align-items: center;
   gap: 8px;
-  color: #4a9b3f !important;
   font-weight: 600;
   font-size: 16px;
 }
-.om-price-box .om-availability-line * { color: #4a9b3f !important; }
+.om-price-box .om-availability-line,
+.om-price-box .om-availability-line span,
+.om-price-box .om-availability-line * {
+  color: #4a9b3f !important;
+}
 .om-price-box .om-availability-line.om-sold-out,
-.om-price-box .om-availability-line.om-sold-out * { color: #c0392b !important; }
+.om-price-box .om-availability-line.om-sold-out span,
+.om-price-box .om-availability-line.om-sold-out * {
+  color: #c0392b !important;
+}
 
 /* Bílý text na tlačítku Do košíku na detailu produktu */
 .btn.btn-conversion.add-to-cart-button.om-cart-btn-white,
