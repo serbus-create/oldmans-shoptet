@@ -1231,7 +1231,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 
 /* Loga partnerů pod hlavní fotkou produktu */
 #om-product-partners {
-  margin-top: 20px;
+  margin-top: 6px;
   width: 100%;
   grid-column: 1 / -1;
   display: block;
@@ -1250,8 +1250,8 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   flex-wrap: wrap;
 }
 .om-product-partners-logos img {
-  height: 34px;
+  height: 46px;
   width: auto;
-  max-width: 90px;
+  max-width: 122px;
   object-fit: contain;
 }
