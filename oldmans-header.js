@@ -621,10 +621,12 @@
     var h1 = detailInner.querySelector('h1') || document.querySelector('h1');
     if (!h1) return;
 
-    /* 0. Hodnocení (hvězdičky + Značka) přesuneme hned pod nadpis — hledáme robustně přes text "Značka:" */
-    var brandEl = Array.from(detailInner.querySelectorAll('*')).find(function(el) {
-      return el.children.length === 0 && /Značka\s*:/i.test(el.textContent);
+    /* 0. Hodnocení (hvězdičky + Značka) přesuneme hned pod nadpis — hledáme nejmenší element obsahující "Značka:" */
+    var brandCandidates = Array.from(detailInner.querySelectorAll('*')).filter(function(el) {
+      return /Značka\s*:/i.test(el.textContent);
     });
+    brandCandidates.sort(function(a, b) { return a.textContent.length - b.textContent.length; });
+    var brandEl = brandCandidates[0];
     var ratingRow = null;
     if (brandEl) {
       ratingRow = brandEl;
