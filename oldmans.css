@@ -4,6 +4,8 @@
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
 /* ──────────────────────────────────────────────
    SKRYTI RUSIVYCH SHOPTET PRVKU
 ────────────────────────────────────────────── */
@@ -1261,8 +1263,28 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   justify-content: flex-start !important;
   text-align: left !important;
   display: flex !important;
+  align-items: center !important;
   width: 100% !important;
   max-width: none !important;
   margin: 0 0 16px 0 !important;
   padding-left: 0 !important;
+}
+.breadcrumbs.navigation-home-icon-wrapper,
+.breadcrumbs.navigation-home-icon-wrapper * {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 500 !important;
+  color: #1a1a1a !important;
+}
+.breadcrumbs.navigation-home-icon-wrapper a {
+  text-decoration: none !important;
+}
+.breadcrumbs.navigation-home-icon-wrapper a:hover {
+  text-decoration: underline !important;
+}
+.breadcrumbs.navigation-home-icon-wrapper svg,
+.breadcrumbs.navigation-home-icon-wrapper .separator,
+.breadcrumbs.navigation-home-icon-wrapper .icon-arrow-right {
+  color: #9a9a9a !important;
+  fill: #9a9a9a !important;
 }
