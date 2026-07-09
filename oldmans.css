@@ -1231,13 +1231,13 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 
 /* Loga partnerů pod hlavní fotkou produktu */
 #om-product-partners {
-  margin-top: 6px;
+  margin-top: -14px;
   width: 100%;
   grid-column: 1 / -1;
   display: block;
 }
 .om-product-partners-label {
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 800;
   letter-spacing: .5px;
   color: #1a1a1a;
@@ -1250,8 +1250,8 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   flex-wrap: wrap;
 }
 .om-product-partners-logos img {
-  height: 46px;
+  height: 50px;
   width: auto;
-  max-width: 122px;
+  max-width: 132px;
   object-fit: contain;
 }
