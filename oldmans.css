@@ -4,7 +4,6 @@
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
 /* ──────────────────────────────────────────────
    SKRYTI RUSIVYCH SHOPTET PRVKU
@@ -1266,13 +1265,12 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   align-items: center !important;
   width: 100% !important;
   max-width: none !important;
-  margin: 0 0 16px 0 !important;
+  margin: 24px 0 16px 0 !important;
   padding-left: 0 !important;
 }
 .breadcrumbs.navigation-home-icon-wrapper,
 .breadcrumbs.navigation-home-icon-wrapper * {
-  font-family: 'Poppins', sans-serif !important;
-  font-size: 20px !important;
+  font-size: 15px !important;
   font-weight: 500 !important;
   color: #1a1a1a !important;
 }
