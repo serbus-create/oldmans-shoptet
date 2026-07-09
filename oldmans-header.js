@@ -621,17 +621,17 @@
     var h1 = detailInner.querySelector('h1') || document.querySelector('h1');
     if (!h1) return;
 
-    /* 0. Hodnocení (hvězdičky) přesuneme hned pod nadpis */
-    var ratingLink = Array.from(detailInner.querySelectorAll('a')).find(function(a) {
-      return a.textContent.trim() === 'Podrobnosti hodnocení';
+    /* 0. Hodnocení (hvězdičky + Značka) přesuneme hned pod nadpis — hledáme robustně přes text "Značka:" */
+    var brandEl = Array.from(detailInner.querySelectorAll('*')).find(function(el) {
+      return el.children.length === 0 && /Značka\s*:/i.test(el.textContent);
     });
     var ratingRow = null;
-    if (ratingLink) {
-      ratingRow = ratingLink.parentElement;
+    if (brandEl) {
+      ratingRow = brandEl;
       while (ratingRow && ratingRow.parentElement && !ratingRow.parentElement.contains(h1)) {
         ratingRow = ratingRow.parentElement;
       }
-      if (ratingRow && h1.parentNode) {
+      if (ratingRow && ratingRow !== h1 && h1.parentNode) {
         h1.parentNode.insertBefore(ratingRow, h1.nextSibling);
       }
     }
@@ -644,10 +644,8 @@
       }
     });
 
-    /* 1. Badges hned za hodnocení / kategorie */
-    var header = h1.closest('.p-detail-inner-header') || h1.parentElement;
-    var categoryLine = header.querySelector('.category-list, .breadcrumb, .parameters-list');
-    var insertAfterEl = categoryLine || ratingRow || h1;
+    /* 1. Badges AŽ ZA hodnocením (nebo za nadpisem, pokud hodnocení nenajdeme) */
+    var insertAfterEl = ratingRow || h1;
 
     var badges = document.createElement('div');
     badges.id = 'om-trust-badges';
@@ -716,12 +714,13 @@
       var proFirmy = document.createElement('a');
       proFirmy.href = '/velkoobchod/';
       proFirmy.className = 'om-pro-firmy';
-      proFirmy.innerHTML = '<img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/pro-firmy.svg" alt=""> <strong>Pro firmy – Nabídka na míru</strong>';
+      proFirmy.innerHTML = '<img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/pro%20firmy.svg" alt=""> <strong>Pro firmy – Nabídka na míru</strong>';
       priceBlock.appendChild(proFirmy);
     }
 
-    /* 4. Loga partnerů — sourozenec detailInner (mimo grid), detailInner je zaručeně ten pravý */
-    if (detailInner.parentNode) {
+    /* 4. Loga partnerů — do PRAVÉHO sloupce (.p-data-wrapper), hned pod box s cenou */
+    var dataWrapper = form.closest('.p-data-wrapper');
+    if (dataWrapper) {
       var partnersWrap = document.createElement('div');
       partnersWrap.id = 'om-product-partners';
       partnersWrap.innerHTML = `
@@ -735,7 +734,7 @@
           <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-partner-rohlik-logo.png" alt="Rohlík">
         </div>
       `;
-      detailInner.parentNode.insertBefore(partnersWrap, detailInner.nextSibling);
+      dataWrapper.appendChild(partnersWrap);
     }
   }
 
