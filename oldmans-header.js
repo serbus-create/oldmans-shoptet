@@ -748,6 +748,18 @@
 
     /* 5. Nová záložka "Specifikace" — přesuneme tabulku Kategorie/Záruka/Hmotnost z popisu */
     var descriptionPane = document.getElementById('description');
+
+    /* 5a. Odstranit osamocený nadpis "Doplňkové parametry" (samostatný <p><strong>) ze záložky Popis */
+    if (descriptionPane) {
+      var specsHeading = Array.from(descriptionPane.querySelectorAll('strong')).find(function(el) {
+        return el.textContent.trim() === 'Doplňkové parametry';
+      });
+      if (specsHeading) {
+        var headingP = specsHeading.closest('p') || specsHeading;
+        headingP.remove();
+      }
+    }
+
     var specsTable = descriptionPane ? descriptionPane.querySelector('table.detail-parameters') : null;
     var tabsList = document.getElementById('p-detail-tabs');
     var tabContent = document.getElementById('tab-content');
