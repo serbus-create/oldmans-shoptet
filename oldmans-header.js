@@ -738,6 +738,38 @@
       `;
       dataWrapper.appendChild(partnersWrap);
     }
+
+    /* 5. Nová záložka "Specifikace" — přesuneme tabulku Kategorie/Záruka/Hmotnost z popisu */
+    var descriptionPane = document.getElementById('description');
+    var specsTable = descriptionPane ? descriptionPane.querySelector('table.detail-parameters') : null;
+    var tabsList = document.getElementById('p-detail-tabs');
+    var tabContent = document.getElementById('tab-content');
+    if (specsTable && tabsList && tabContent && !document.getElementById('specifications')) {
+      /* Tab tlačítko */
+      var specsTabLi = document.createElement('li');
+      specsTabLi.className = 'shp-tab';
+      specsTabLi.setAttribute('data-testid', 'tabSpecifications');
+      specsTabLi.innerHTML = '<a href="#specifications" class="shp-tab-link" role="tab" data-toggle="tab">Specifikace</a>';
+      var descTabLi = tabsList.querySelector('.shp-tab[data-testid="tabDescription"]');
+      if (descTabLi && descTabLi.parentNode) {
+        descTabLi.parentNode.insertBefore(specsTabLi, descTabLi.nextSibling);
+      } else {
+        tabsList.appendChild(specsTabLi);
+      }
+
+      /* Obsah záložky */
+      var specsPane = document.createElement('div');
+      specsPane.id = 'specifications';
+      specsPane.className = 'tab-pane fade wide-tab';
+      specsPane.setAttribute('role', 'tabpanel');
+      var specsWrap = document.createElement('div');
+      specsWrap.className = 'om-specs-wrap';
+      specsWrap.appendChild(specsTable);
+      specsPane.appendChild(specsWrap);
+      tabContent.appendChild(specsPane);
+      specsTable.style.removeProperty('display');
+      specsTable.classList.add('om-specs-table');
+    }
   }
 
   enhanceProductDetail();
