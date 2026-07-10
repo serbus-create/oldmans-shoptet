@@ -459,6 +459,12 @@
         <a href="/kategorie/gumovi-medvidci/" class="om-cat-item">
           <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/bears.png" alt=""> Gumoví medvídci
         </a>
+        <a href="/kategorie/marinady/" class="om-cat-item">
+          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/marinades.png" alt=""> Marinády
+        </a>
+        <a href="/kategorie/puff/" class="om-cat-item">
+          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/puff.png" alt=""> Puff
+        </a>
       </div>
     </div>`;
 
