@@ -1287,6 +1287,24 @@ table.om-specs-table th {
 table.om-specs-table .row-header-label-colon {
   display: none !important;
 }
+table.om-specs-table th,
+table.om-specs-table td,
+table.om-specs-table .row-header-label {
+  background: none !important;
+  background-image: none !important;
+  border-bottom: none !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+}
+table.om-specs-table th:before,
+table.om-specs-table th:after,
+table.om-specs-table td:before,
+table.om-specs-table td:after,
+table.om-specs-table .row-header-label:before,
+table.om-specs-table .row-header-label:after {
+  display: none !important;
+  content: none !important;
+}
 table.om-specs-table a {
   color: #1a1a1a !important;
   text-decoration: none !important;
@@ -1330,6 +1348,10 @@ table.om-specs-table a {
 /* Diskuze — úplně skrýt tab i obsah */
 li[data-testid="tabDiscussion"],
 #productDiscussion {
+  display: none !important;
+}
+/* Duplicitní hodnocení (hvězdičky) uvnitř záložky Popis — má teď vlastní tab "Hodnocení" */
+.rate-wrapper-in-description {
   display: none !important;
 }
 .breadcrumbs.navigation-home-icon-wrapper {
