@@ -1257,7 +1257,66 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   object-fit: contain;
 }
 
-/* Drobečková navigace (breadcrumb) na detailu produktu — zarovnat doleva nad fotku */
+/* Tabulka Specifikace na detailu produktu — styl podle oldmans.cz */
+.om-specs-wrap {
+  padding: 20px 0 !important;
+}
+table.om-specs-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+}
+table.om-specs-table tr:nth-child(odd) {
+  background: #f2f2f2 !important;
+}
+table.om-specs-table tr:nth-child(even) {
+  background: #ffffff !important;
+}
+table.om-specs-table th,
+table.om-specs-table td {
+  padding: 14px 16px !important;
+  text-align: left !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  color: #1a1a1a !important;
+  border: none !important;
+}
+table.om-specs-table th {
+  width: 30% !important;
+  white-space: nowrap !important;
+}
+table.om-specs-table .row-header-label-colon {
+  display: none !important;
+}
+table.om-specs-table a {
+  color: #1a1a1a !important;
+  text-decoration: none !important;
+}
+.shp-tabs-row {
+  border-bottom: 1px solid #e2e2e2 !important;
+}
+.shp-tabs #p-detail-tabs,
+#p-detail-tabs.shp-tabs {
+  border-bottom: none !important;
+}
+.shp-tab-link {
+  padding: 10px 18px !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  color: #1a1a1a !important;
+  text-decoration: none !important;
+  border: 1px solid transparent !important;
+  border-radius: 6px 6px 0 0 !important;
+  display: inline-block !important;
+  background: transparent !important;
+}
+.shp-tab.active .shp-tab-link {
+  border-color: #c7d7f5 !important;
+  border-bottom-color: #fff !important;
+  position: relative !important;
+  z-index: 2 !important;
+  margin-bottom: -1px !important;
+  background: #fff !important;
+}
 .breadcrumbs.navigation-home-icon-wrapper {
   justify-content: flex-start !important;
   text-align: left !important;
