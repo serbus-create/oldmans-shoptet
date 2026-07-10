@@ -739,6 +739,13 @@
       dataWrapper.appendChild(partnersWrap);
     }
 
+    /* 5b. Diskuze — úplně odstranit tab (i verzi v hidden-links pro mobil) */
+    Array.from(document.querySelectorAll('li[data-testid="tabDiscussion"]')).forEach(function(li) {
+      li.remove();
+    });
+    var discussionPane = document.getElementById('productDiscussion');
+    if (discussionPane) discussionPane.remove();
+
     /* 5. Nová záložka "Specifikace" — přesuneme tabulku Kategorie/Záruka/Hmotnost z popisu */
     var descriptionPane = document.getElementById('description');
     var specsTable = descriptionPane ? descriptionPane.querySelector('table.detail-parameters') : null;
