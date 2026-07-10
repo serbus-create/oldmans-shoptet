@@ -1116,6 +1116,13 @@ body.type-category .products.products-page .product .quantity {
   display: none !important;
 }
 
+/* Nadpis "Produkty, které by vás mohli zajímat" — doleva, blíž ke kartám */
+h2.products-alternative-header {
+  text-align: left !important;
+  margin: 0 0 12px 0 !important;
+  padding: 0 !important;
+}
+
 /* ── Skrýt "Nejprodávanější" blok — ne sorting tabs ── */
 .products-inline.products-top { display: none !important; }
 .toggle-top-products { display: none !important; }
