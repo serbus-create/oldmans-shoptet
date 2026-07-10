@@ -789,6 +789,13 @@
       specsTable.style.removeProperty('display');
       specsTable.classList.add('om-specs-table');
     }
+
+    /* 6. Přejmenovat nadpis "Podobné produkty" */
+    Array.from(document.querySelectorAll('h2, h3, h4')).forEach(function(h) {
+      if (h.textContent.trim() === 'Podobné produkty') {
+        h.textContent = 'Produkty, které by vás mohli zajímat';
+      }
+    });
   }
 
   enhanceProductDetail();
