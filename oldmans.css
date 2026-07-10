@@ -1293,10 +1293,17 @@ table.om-specs-table a {
 }
 .shp-tabs-row {
   border-bottom: 1px solid #e2e2e2 !important;
+  padding-left: 0 !important;
 }
 .shp-tabs #p-detail-tabs,
 #p-detail-tabs.shp-tabs {
   border-bottom: none !important;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+.shp-tabs-holder {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
 }
 .shp-tab-link {
   padding: 10px 18px !important;
@@ -1309,6 +1316,9 @@ table.om-specs-table a {
   display: inline-block !important;
   background: transparent !important;
 }
+#p-detail-tabs > li:first-child .shp-tab-link {
+  padding-left: 4px !important;
+}
 .shp-tab.active .shp-tab-link {
   border-color: #c7d7f5 !important;
   border-bottom-color: #fff !important;
@@ -1316,6 +1326,11 @@ table.om-specs-table a {
   z-index: 2 !important;
   margin-bottom: -1px !important;
   background: #fff !important;
+}
+/* Diskuze — úplně skrýt tab i obsah */
+li[data-testid="tabDiscussion"],
+#productDiscussion {
+  display: none !important;
 }
 .breadcrumbs.navigation-home-icon-wrapper {
   justify-content: flex-start !important;
