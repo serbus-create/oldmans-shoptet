@@ -426,6 +426,12 @@
       <p class="om-subtitle">Vyberte si dle vaší chuti</p>
       <h2><span>Kategorie</span> omáček</h2>
       <div class="om-cats-grid">
+        <a href="/kategorie/marinady/" class="om-cat-item">
+          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/marinades.png" alt=""> Marinády
+        </a>
+        <a href="/kategorie/puff/" class="om-cat-item">
+          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/puff.png" alt=""> Puff
+        </a>
         <a href="/kategorie/salatove-dressingy--squeeze-blast/" class="om-cat-item">
           <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/squeeze-blast.png" alt=""> Squeeze Blast
         </a>
@@ -458,12 +464,6 @@
         </a>
         <a href="/kategorie/gumovi-medvidci/" class="om-cat-item">
           <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/bears.png" alt=""> Gumoví medvídci
-        </a>
-        <a href="/kategorie/marinady/" class="om-cat-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/marinades.png" alt=""> Marinády
-        </a>
-        <a href="/kategorie/puff/" class="om-cat-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/puff.png" alt=""> Puff
         </a>
       </div>
     </div>`;
