@@ -1755,7 +1755,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   background: transparent !important;
   border-radius: 0 !important;
   padding: 0 !important;
-  margin: 18px 0 4px !important;
+  margin: 14px 0 4px !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: flex-start !important;
@@ -1767,6 +1767,13 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   font-weight: 800 !important;
   color: #1a1a1a !important;
 }
+/* Řádek ceny — cena, přeškrtnutá původní cena a "Ušetříte" pohromadě */
+.om-price-row {
+  display: flex !important;
+  align-items: baseline !important;
+  flex-wrap: wrap !important;
+  gap: 6px 12px !important;
+}
 /* Původní (přeškrtnutá) cena při množstevní slevě — viz JS enhanceQuantityPriceSync */
 .om-price-orig {
   display: none;
@@ -1774,7 +1781,6 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   color: #999 !important;
   text-decoration: line-through !important;
   font-weight: 500 !important;
-  margin-right: 8px !important;
 }
 .om-buy-row {
   display: flex !important;
@@ -1809,7 +1815,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   background: transparent !important;
   border-radius: 0 !important;
   padding: 0 !important;
-  margin: 22px 0 !important;
+  margin: 22px 0 0 !important;
   box-sizing: border-box !important;
 }
 .quantity-discounts__headline {
@@ -1880,14 +1886,21 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .quantity-discounts__item--highlighted .qd-body {
   background: #eef8e4 !important;
 }
+/* "Ušetříte X Kč" — přesunuto JS vedle ceny (viz .om-price-row), zelený štítek */
 .quantity-discounts__save {
-  margin-top: 16px !important;
-  text-align: right !important;
-  font-size: 15px !important;
-  color: #444 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 4px 10px !important;
+  background: #eef8e4 !important;
+  border-radius: 20px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #4a8f22 !important;
+  white-space: nowrap !important;
 }
 .quantity-discounts__saved-amount {
-  color: #9f1400 !important;
+  color: #4a8f22 !important;
   font-weight: 800 !important;
 }
 
