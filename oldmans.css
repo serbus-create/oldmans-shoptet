@@ -468,6 +468,7 @@ body.type-category .benefitBanner.position--benefitHomepage {
   transition: background .2s;
 }
 .om-recipe-nav:hover { background: #e6b800 !important; }
+.om-recipe-nav:focus { outline: none !important; box-shadow: none !important; }
 .om-recipe-nav-prev { left: -20px; }
 .om-recipe-nav-next { right: -20px; }
 @media (max-width: 600px) {
@@ -595,8 +596,11 @@ body.type-category .benefitBanner.position--benefitHomepage {
 .homepage-products-heading-2:before { content: "🏷️"; }
 
 /* KLÍČOVÁ OPRAVA — Shoptet slider track se lámal do 2 řádků (flex-wrap:wrap),
-   proto vznikala obrovská mezera a špatná výška kontejneru */
-.products-block {
+   proto vznikala obrovská mezera a špatná výška kontejneru.
+   POZOR: musí být scoped jen na slidery (product-slider-holder / products-alternative),
+   NE globálně — jinak to rozbije mřížku produktů na stránce kategorie! */
+.product-slider-holder .products-block,
+.products-alternative .products-block {
   flex-wrap: nowrap !important;
 }
 
