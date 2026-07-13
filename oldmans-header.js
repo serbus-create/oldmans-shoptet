@@ -527,7 +527,7 @@
         <a href="/recepty/" class="om-btn-more">Ukázat všechny</a>
       </div>
       <div class="om-recipes-wrapper">
-        <button type="button" class="om-recipe-nav om-recipe-nav-prev" aria-label="Předchozí">‹</button>
+        <button type="button" class="om-recipe-nav om-recipe-nav-prev" aria-label="Předchozí"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 6l-6 6 6 6" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <div class="om-recipes-grid">
           <a href="/recepty/---smashburger-s-karamelizovanou-cibulkou-a-cheddarovym-dipem/" class="om-recipe-item">
             <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/smashburger-s-karamelizovanou-cibulkou-a-cheddarovym-dipem.jpg" alt="">
@@ -562,7 +562,7 @@
             <div class="om-recipe-title">🌱 Luxusní sendvič s roastbeefem a lanýžovou majonézou</div>
           </a>
         </div>
-        <button type="button" class="om-recipe-nav om-recipe-nav-next" aria-label="Další">›</button>
+        <button type="button" class="om-recipe-nav om-recipe-nav-next" aria-label="Další"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6l6 6-6 6" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>
     </div>`;
 
