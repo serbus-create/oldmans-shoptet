@@ -790,8 +790,9 @@ body.type-category .benefitBanner.position--benefitHomepage {
 .om-footer-col ul { list-style: none; padding: 0; margin: 0; }
 .om-footer-col ul li { margin-bottom: 13px; font-size: 15px; color: #444 !important; }
 .om-footer-col ul li a { color: #444 !important; }
-/* Pokračování sloupce Kategorie (bez vlastní h4) — zarovnat pod hlavičku sousedního sloupce */
-.om-footer-cat-cont { margin-top: 43px; }
+/* Pokračování sloupce Kategorie (bez vlastní h4) — neviditelný nadpis stejné výšky
+   zajistí přesné zarovnání s "Marinády" na jakékoliv šířce obrazovky */
+.om-footer-cat-spacer { visibility: hidden; }
 .om-custom-footer .om-footer-ig-label { margin-top: 20px !important; margin-bottom: 10px !important; }
 .om-custom-footer .om-footer-ig {
   display: inline-flex !important;
@@ -810,11 +811,9 @@ body.type-category .benefitBanner.position--benefitHomepage {
 .om-custom-footer .om-footer-ig:hover { background: #e6b800 !important; color: #000 !important; }
 @media (max-width: 1200px) {
   .om-footer-inner { grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
-  .om-footer-cat-cont { margin-top: 0; }
 }
 @media (max-width: 768px) {
   .om-footer-inner { grid-template-columns: 1fr 1fr; gap: 28px; padding: 0 24px; }
-  .om-footer-cat-cont { margin-top: 0; }
 }
 @media (max-width: 480px) {
   .om-footer-inner { grid-template-columns: 1fr; }
