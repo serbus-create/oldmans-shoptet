@@ -231,7 +231,7 @@ body.type-category .benefitBanner.position--benefitHomepage {
 .om-cat-list {
   display: flex; flex-wrap: nowrap; list-style: none;
   margin: 0; padding: 0; align-items: center;
-  overflow: hidden; position: relative;
+  overflow: visible; position: relative;
 }
 .om-cat-list > li {
   display: inline-flex; white-space: nowrap;
