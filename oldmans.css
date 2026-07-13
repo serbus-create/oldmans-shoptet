@@ -434,9 +434,25 @@
   gap: 50px; justify-content: space-between;
 }
 .om-insta-text { flex: 1; }
-.om-instagram h2 { color: #1a1a1a !important; font-size: 38px !important; text-transform: uppercase !important; }
-.om-instagram .om-subtitle { color: #666; }
-.om-instagram p { color: #555; margin-bottom: 10px; }
+.om-instagram h2 { font-size: 56px !important; font-weight: 800 !important; text-transform: uppercase !important; margin: 4px 0 16px !important; line-height: 1.05 !important; }
+.om-insta-na { color: #9f1400 !important; }
+.om-insta-word { color: #f0c344 !important; }
+.om-instagram .om-subtitle { color: #1a1a1a; font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0; }
+.om-instagram p { color: #333; margin-bottom: 10px; font-size: 17px; }
+.om-instagram .om-btn-primary {
+  display: inline-block !important;
+  background: #9f1400 !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  padding: 18px 32px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  margin-top: 10px !important;
+}
+.om-instagram .om-btn-primary:hover { background: #7d1000 !important; }
 .om-insta-grid {
   flex-shrink: 0; display: grid;
   grid-template-columns: 1fr 1fr;
