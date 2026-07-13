@@ -932,6 +932,71 @@
       });
       qdTable.dataset.omDone = 'true';
     }
+
+    /* 8. Hlavní cena se má měnit podle zadaného počtu kusů (dle množstevní slevy).
+       Vychází z data-orig-price na .quantity-discounts__table a data-amount/
+       data-price-ratio na jednotlivých .quantity-discounts__item (zůstávají
+       zachovány i po přestavbě v kroku 7, protože jsme mazali jen jejich obsah). */
+    if (qdTable) {
+      var origPrice = parseFloat(qdTable.getAttribute('data-orig-price'));
+      var priceFinalEl = document.querySelector('.om-price-box .price-final');
+      var qdItems = Array.prototype.slice.call(qdTable.querySelectorAll('.quantity-discounts__item[data-amount]'));
+
+      if (!isNaN(origPrice) && priceFinalEl && qdItems.length) {
+        var tiers = qdItems.map(function(item) {
+          return {
+            amount: parseInt(item.getAttribute('data-amount'), 10),
+            ratio: parseFloat(item.getAttribute('data-price-ratio'))
+          };
+        }).sort(function(a, b) { return a.amount - b.amount; });
+
+        var origPriceEl = document.querySelector('.om-price-box .om-price-orig');
+        if (!origPriceEl && priceFinalEl.parentNode) {
+          origPriceEl = document.createElement('span');
+          origPriceEl.className = 'om-price-orig';
+          priceFinalEl.parentNode.insertBefore(origPriceEl, priceFinalEl);
+        }
+
+        var formatPrice = function(value) {
+          var rounded = Math.round(value * 100) / 100;
+          var text = (rounded % 1 === 0) ? String(rounded) : rounded.toFixed(2).replace('.', ',');
+          return text + ' Kč';
+        };
+
+        var updateMainPrice = function() {
+          var qtyInput = document.querySelector('#product-detail-form input[name="amount"], #product-detail-form input[type="number"]');
+          var qty = qtyInput ? parseInt(qtyInput.value, 10) : 1;
+          if (!qty || qty < 1) qty = 1;
+
+          var applicable = { amount: 0, ratio: 1 };
+          tiers.forEach(function(t) {
+            if (qty >= t.amount && t.amount >= applicable.amount) applicable = t;
+          });
+
+          priceFinalEl.textContent = formatPrice(origPrice * applicable.ratio);
+          if (origPriceEl) {
+            if (applicable.ratio < 1) {
+              origPriceEl.textContent = formatPrice(origPrice);
+              origPriceEl.style.display = 'inline';
+            } else {
+              origPriceEl.style.display = 'none';
+            }
+          }
+        };
+
+        updateMainPrice();
+        document.addEventListener('input', function(e) {
+          if (e.target.matches('#product-detail-form input[name="amount"], #product-detail-form input[type="number"]')) {
+            updateMainPrice();
+          }
+        });
+        document.addEventListener('click', function(e) {
+          if (e.target.closest('#product-detail-form')) {
+            setTimeout(updateMainPrice, 50);
+          }
+        });
+      }
+    }
   }
 
   enhanceProductDetail();
