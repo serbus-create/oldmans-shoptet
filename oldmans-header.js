@@ -71,23 +71,21 @@
         <div class="om-footer-col">
           <h4>Kategorie</h4>
           <ul>
-            <li><a href="/kategorie/marinady/">Marinády</a></li>
-            <li><a href="/kategorie/puff/">Puff</a></li>
-            <li><a href="/kategorie/squeeze-blast/">Squeeze Blast</a></li>
-            <li><a href="/kategorie/omacky-a-majonezy/">Omáčky a majonézy</a></li>
-            <li><a href="/kategorie/burger-a-steak/">Burger a steak</a></li>
-            <li><a href="/kategorie/chilli-omacky/">Chilli omáčky</a></li>
-            <li><a href="/kategorie/salatove-dressingy/">Salátové dresingy</a></li>
+            <li><a href="https://oldmans.cz/kategorie/marinady/">Marinády</a></li>
+            <li><a href="https://oldmans.cz/kategorie/puff/">PUFF</a></li>
+            <li><a href="https://oldmans.cz/kategorie/squeeze-blast/">Squeeze</a></li>
+            <li><a href="https://oldmans.cz/kategorie/omacky-a-majonezy/">Omáčky a majonézy</a></li>
+            <li><a href="https://oldmans.cz/kategorie/salatove-dressingy/">Salátové dressingy</a></li>
           </ul>
         </div>
         <div class="om-footer-col">
+          <h4 class="om-footer-cat-spacer" aria-hidden="true">Kategorie</h4>
           <ul class="om-footer-cat-cont">
-            <li><a href="/kategorie/ceska-klasika/">Česká klasika</a></li>
-            <li><a href="/kategorie/chilli-mash/">Chilli Mash</a></li>
-            <li><a href="/kategorie/okurkove-relishe/">Okurkové Relishe</a></li>
-            <li><a href="/kategorie/premiove-pomazanky/">Prémiové pomazánky</a></li>
-            <li><a href="/kategorie/snacky-a-orechy/">Snacky a ořechy</a></li>
-            <li><a href="/kategorie/gumovi-medvidci/">Gumoví medvídci</a></li>
+            <li><a href="https://oldmans.cz/kategorie/chilli-mash/">Chilli Mash</a></li>
+            <li><a href="https://oldmans.cz/kategorie/okurkove-relishe/">Okurkové Relishe</a></li>
+            <li><a href="https://oldmans.cz/kategorie/premiove-pomazanky/">Prémiové pomazánky</a></li>
+            <li><a href="https://oldmans.cz/kategorie/snacky-a-orechy/">Snacky a ořechy</a></li>
+            <li><a href="https://oldmans.cz/kategorie/gumovi-medvidci/">Gumoví medvídci</a></li>
           </ul>
         </div>
         <div class="om-footer-col">
