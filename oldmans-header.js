@@ -432,7 +432,7 @@
         <a href="/kategorie/puff/" class="om-cat-item">
           <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/puff.png" alt=""> Puff
         </a>
-        <a href="/kategorie/salatove-dressingy--squeeze-blast/" class="om-cat-item">
+        <a href="https://788253.myshoptet.com/kategorie/squeeze-blast/" class="om-cat-item">
           <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/squeeze-blast.png" alt=""> Squeeze Blast
         </a>
         <a href="/kategorie/omacky-a-majonezy/" class="om-cat-item">
