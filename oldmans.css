@@ -530,6 +530,12 @@
 .homepage-products-heading-1:before { content: "❤️"; }
 .homepage-products-heading-2:before { content: "🏷️"; }
 
+/* KLÍČOVÁ OPRAVA — Shoptet slider track se lámal do 2 řádků (flex-wrap:wrap),
+   proto vznikala obrovská mezera a špatná výška kontejneru */
+.products-block {
+  flex-wrap: nowrap !important;
+}
+
 /* Tlačítko "Ukázat všechny" vpravo v nadpisu sekce */
 .homepage-group-title {
   position: relative !important;
