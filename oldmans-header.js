@@ -494,39 +494,43 @@
         <h2>🍴 Vybrané recepty</h2>
         <a href="/recepty/" class="om-btn-more">Ukázat všechny</a>
       </div>
-      <div class="om-recipes-grid">
-        <a href="/recepty/---smashburger-s-karamelizovanou-cibulkou-a-cheddarovym-dipem/" class="om-recipe-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/smashburger-s-karamelizovanou-cibulkou-a-cheddarovym-dipem.jpg" alt="">
-          <div class="om-recipe-title">🧀 Smashburger s karamelizovanou cibulkou a Cheddarovým dipem</div>
-        </a>
-        <a href="/recepty/---snidanovy-muffin-se-slaninou--vejcem-a-slaninovou-majonezou/" class="om-recipe-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/snidanovy-muffin-se-slaninou-vejcem-a-slaninovou-majonezou.jpg" alt="">
-          <div class="om-recipe-title">🥓 Snídaňový muffin se slaninou, vejcem a Slaninovou Majonézou</div>
-        </a>
-        <a href="/recepty/---caesar-wrap-s-kuretem-a-parmazanem/" class="om-recipe-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/caesar-wrap-s-kuretem-a-parmazanem.jpg" alt="">
-          <div class="om-recipe-title">🥗 Caesar wrap s kuřetem a parmazánem</div>
-        </a>
-        <a href="/recepty/----loaded-hranolky-s-jalape--o-majonezou-a-cedarem/" class="om-recipe-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/loaded-hranolky-s-jalapeno-majonezou-a-cedarem.jpg" alt="">
-          <div class="om-recipe-title">🌶️ Loaded hranolky s Jalapeño Majonézou a čedarem</div>
-        </a>
-        <a href="/recepty/----pikantni-kureci-tacos-s-habanero-majonezou/" class="om-recipe-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/pikantni-kureci-tacos-s-habanero-majonezou.jpg" alt="">
-          <div class="om-recipe-title">🌶️🔥 Pikantní kuřecí tacos s Habanero Majonézou</div>
-        </a>
-        <a href="/recepty/---grilovana-bbq-zebra-s-cesnekovo-bbq-majonezou/" class="om-recipe-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/grilovana-bbq-zebra-s-cesnekovo-bbq-majonezou.jpg" alt="">
-          <div class="om-recipe-title">🧄 Grilovaná BBQ žebra s česnekovo-BBQ majonézou</div>
-        </a>
-        <a href="/recepty/---buffalo-kridylka-s-blue-cheese-dipem/" class="om-recipe-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/buffalo-kridylka-s-blue-cheese-dipem.jpg" alt="">
-          <div class="om-recipe-title">🍗 Buffalo křidýlka s blue cheese dipem</div>
-        </a>
-        <a href="/recepty/---luxusni-sendvic-s-roastbeefem-a-lanyzovou-majonezou/" class="om-recipe-item">
-          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/luxusni-sendvic-s-roastbeefem-a-lanyzovou-majonezou.jpg" alt="">
-          <div class="om-recipe-title">🌱 Luxusní sendvič s roastbeefem a lanýžovou majonézou</div>
-        </a>
+      <div class="om-recipes-wrapper">
+        <button type="button" class="om-recipe-nav om-recipe-nav-prev" aria-label="Předchozí">‹</button>
+        <div class="om-recipes-grid">
+          <a href="/recepty/---smashburger-s-karamelizovanou-cibulkou-a-cheddarovym-dipem/" class="om-recipe-item">
+            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/smashburger-s-karamelizovanou-cibulkou-a-cheddarovym-dipem.jpg" alt="">
+            <div class="om-recipe-title">🧀 Smashburger s karamelizovanou cibulkou a Cheddarovým dipem</div>
+          </a>
+          <a href="/recepty/---snidanovy-muffin-se-slaninou--vejcem-a-slaninovou-majonezou/" class="om-recipe-item">
+            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/snidanovy-muffin-se-slaninou-vejcem-a-slaninovou-majonezou.jpg" alt="">
+            <div class="om-recipe-title">🥓 Snídaňový muffin se slaninou, vejcem a Slaninovou Majonézou</div>
+          </a>
+          <a href="/recepty/---caesar-wrap-s-kuretem-a-parmazanem/" class="om-recipe-item">
+            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/caesar-wrap-s-kuretem-a-parmazanem.jpg" alt="">
+            <div class="om-recipe-title">🥗 Caesar wrap s kuřetem a parmazánem</div>
+          </a>
+          <a href="/recepty/----loaded-hranolky-s-jalape--o-majonezou-a-cedarem/" class="om-recipe-item">
+            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/loaded-hranolky-s-jalapeno-majonezou-a-cedarem.jpg" alt="">
+            <div class="om-recipe-title">🌶️ Loaded hranolky s Jalapeño Majonézou a čedarem</div>
+          </a>
+          <a href="/recepty/----pikantni-kureci-tacos-s-habanero-majonezou/" class="om-recipe-item">
+            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/pikantni-kureci-tacos-s-habanero-majonezou.jpg" alt="">
+            <div class="om-recipe-title">🌶️🔥 Pikantní kuřecí tacos s Habanero Majonézou</div>
+          </a>
+          <a href="/recepty/---grilovana-bbq-zebra-s-cesnekovo-bbq-majonezou/" class="om-recipe-item">
+            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/grilovana-bbq-zebra-s-cesnekovo-bbq-majonezou.jpg" alt="">
+            <div class="om-recipe-title">🧄 Grilovaná BBQ žebra s česnekovo-BBQ majonézou</div>
+          </a>
+          <a href="/recepty/---buffalo-kridylka-s-blue-cheese-dipem/" class="om-recipe-item">
+            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/buffalo-kridylka-s-blue-cheese-dipem.jpg" alt="">
+            <div class="om-recipe-title">🍗 Buffalo křidýlka s blue cheese dipem</div>
+          </a>
+          <a href="/recepty/---luxusni-sendvic-s-roastbeefem-a-lanyzovou-majonezou/" class="om-recipe-item">
+            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/luxusni-sendvic-s-roastbeefem-a-lanyzovou-majonezou.jpg" alt="">
+            <div class="om-recipe-title">🌱 Luxusní sendvič s roastbeefem a lanýžovou majonézou</div>
+          </a>
+        </div>
+        <button type="button" class="om-recipe-nav om-recipe-nav-next" aria-label="Další">›</button>
       </div>
     </div>`;
 
@@ -596,6 +600,20 @@
 
     var afterSale = saleWrapper || apetit;
     insertAfter(recipes, afterSale);
+
+    /* Šipky "Vybrané recepty" — vlastní scroll slider (nezávislý na Shoptet slideru) */
+    var recipesTrack = recipes.querySelector('.om-recipes-grid');
+    var recipesPrev = recipes.querySelector('.om-recipe-nav-prev');
+    var recipesNext = recipes.querySelector('.om-recipe-nav-next');
+    if (recipesTrack && recipesPrev && recipesNext) {
+      var scrollByCard = function(dir) {
+        var card = recipesTrack.querySelector('.om-recipe-item');
+        var step = card ? (card.getBoundingClientRect().width + 20) * 2 : 300;
+        recipesTrack.scrollBy({ left: dir * step, behavior: 'smooth' });
+      };
+      recipesPrev.addEventListener('click', function() { scrollByCard(-1); });
+      recipesNext.addEventListener('click', function() { scrollByCard(1); });
+    }
 
     insertAfter(instagram, recipes);
 
