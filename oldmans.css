@@ -1750,22 +1750,31 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 #om-trust-badges .om-badge span { font-size: 15px !important; white-space: nowrap; }
 #om-trust-badges .om-badge img { width: 40px !important; height: 40px !important; }
 
-/* Box kolem dostupnosti + ceny + tlačítka — vertikální layout jako originál */
+/* Kompaktní layout (bez velkého šedého boxu) — dostupnost, cena, počítadlo a tlačítko */
 .p-to-cart-block.om-price-box {
-  background: #f7f7f7 !important;
-  border-radius: 16px !important;
-  padding: 32px !important;
-  margin: 22px 0 4px !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 18px 0 4px !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: flex-start !important;
-  gap: 14px !important;
+  gap: 10px !important;
 }
 .om-price-box .price-final,
 .om-price-box strong.price-final {
-  font-size: 36px !important;
+  font-size: 30px !important;
   font-weight: 800 !important;
   color: #1a1a1a !important;
+}
+/* Původní (přeškrtnutá) cena při množstevní slevě — viz JS enhanceQuantityPriceSync */
+.om-price-orig {
+  display: none;
+  font-size: 17px !important;
+  color: #999 !important;
+  text-decoration: line-through !important;
+  font-weight: 500 !important;
+  margin-right: 8px !important;
 }
 .om-buy-row {
   display: flex !important;
