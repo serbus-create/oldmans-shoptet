@@ -609,7 +609,17 @@
       var scrollByCard = function(dir) {
         var card = recipesTrack.querySelector('.om-recipe-item');
         var step = card ? (card.getBoundingClientRect().width + 20) * 2 : 300;
-        recipesTrack.scrollBy({ left: dir * step, behavior: 'smooth' });
+        var maxScroll = recipesTrack.scrollWidth - recipesTrack.clientWidth;
+
+        if (dir > 0 && recipesTrack.scrollLeft >= maxScroll - 5) {
+          /* Na konci — skoč zpátky na začátek (nekonečná smyčka) */
+          recipesTrack.scrollTo({ left: 0, behavior: 'smooth' });
+        } else if (dir < 0 && recipesTrack.scrollLeft <= 5) {
+          /* Na začátku — skoč na konec (nekonečná smyčka) */
+          recipesTrack.scrollTo({ left: maxScroll, behavior: 'smooth' });
+        } else {
+          recipesTrack.scrollBy({ left: dir * step, behavior: 'smooth' });
+        }
       };
       recipesPrev.addEventListener('click', function() { scrollByCard(-1); });
       recipesNext.addEventListener('click', function() { scrollByCard(1); });
