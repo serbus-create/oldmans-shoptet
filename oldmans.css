@@ -455,7 +455,7 @@ body.type-category .benefitBanner.position--benefitHomepage {
   background: #f0c944 !important;
   border: none !important;
   border-radius: 16px !important;
-  box-shadow: 0 10px 24px rgba(0,0,0,.18) !important;
+  box-shadow: none !important;
   color: #fff !important;
   width: 52px !important;
   height: 52px !important;
@@ -470,7 +470,7 @@ body.type-category .benefitBanner.position--benefitHomepage {
 }
 .om-recipe-nav svg { width: 20px; height: 20px; display: block; }
 .om-recipe-nav:hover { background: #e6b800 !important; transform: translateY(-50%) scale(1.05); }
-.om-recipe-nav:focus { outline: none !important; box-shadow: 0 10px 24px rgba(0,0,0,.18) !important; }
+.om-recipe-nav:focus { outline: none !important; box-shadow: none !important; }
 .om-recipe-nav-prev { left: -20px; }
 .om-recipe-nav-next { right: -20px; }
 @media (max-width: 600px) {
@@ -695,7 +695,7 @@ body.type-category .benefitBanner.position--benefitHomepage {
   background: #f0c944 !important;
   border: none !important;
   border-radius: 16px !important;
-  box-shadow: 0 10px 24px rgba(0,0,0,.18) !important;
+  box-shadow: none !important;
   color: #fff !important;
   width: 52px !important;
   height: 52px !important;
