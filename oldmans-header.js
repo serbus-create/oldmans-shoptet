@@ -481,10 +481,9 @@
         <div class="om-apetit-text">
           <img src="https://www.gastrotek.cz/assets/img/partners/apetit.jpg" alt="Apetit" class="om-apetit-logo">
           <h2>Napsali o nás</h2>
-          <p>Značka OLD MAN's se stala známou v gastronomických kruzích díky svým prémiovým omáčkám a dressingům. Společnost byla založena z potřeby nabídnout trhu produkty, které svou chutí a složením vynikají nad běžnými alternativami.</p>
-          <p>Nyní se značka připravuje na vstup na retailový trh, aby i domácí kuchaři mohli ochutnat prémiovost, kterou doposud nabízeli pouze restaurace.</p>
+          <p>Značka OLD MAN's se stala známou v gastronomických kruzích díky svým prémiovým omáčkám a dressingům, které jsou vyrobeny s pečlivostí a důrazem na kvalitu. Společnost byla založena z potřeby nabídnout trhu produkty, které svou chutí a složením vynikají nad běžnými alternativami. Nedostatek prémiových omáček a dressingů v gastronomických provozech inspiroval zakladatele OLD MAN's k vytvoření značky, která by tuto mezeru na trhu vyplnila.</p>
+          <p>Nyní, v roce 2024, se značka připravuje na vstup na retailový trh, aby i domácí kuchaři mohli ochutnat prémiovost, kterou doposud nabízeli pouze restaurace.</p>
           <p><em>Apetit (apetitonline.cz)</em></p>
-          <a href="https://www.apetitonline.cz/old-mans-premiova-kvalita-v-kazde-lahvi" target="_blank" class="om-btn-red">Přečíst celý článek</a>
         </div>
       </div>
     </div>`;
