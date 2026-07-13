@@ -701,15 +701,39 @@ body.type-category .benefitBanner.position--benefitHomepage {
   height: 52px !important;
   opacity: 1 !important;
   transition: background .2s, transform .2s !important;
+  /* Skrýt původní textový obsah "prev"/"next" */
+  font-size: 0 !important;
+  line-height: 0 !important;
+  text-indent: -9999px !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
 }
 .product-slider-navigation:hover { background: #e6b800 !important; transform: scale(1.05) !important; }
 .product-slider-navigation { margin-top: -92px !important; }
-.product-slider-navigation svg,
-.product-slider-navigation svg path,
+
+/* Vlastní tučná šipka (border-chevron) — stejný vzhled jako u "Vybrané recepty" */
 .product-slider-navigation:before {
-  color: #fff !important;
-  fill: #fff !important;
-  stroke: #fff !important;
+  content: "" !important;
+  display: block !important;
+  width: 12px !important;
+  height: 12px !important;
+  border-top: 3px solid #fff !important;
+  border-right: 3px solid #fff !important;
+  border-radius: 2px !important;
+  text-indent: 0 !important;
+  box-sizing: border-box !important;
+}
+.product-slider-navigation.navigation-next:before {
+  transform: rotate(45deg);
+  margin-left: -4px;
+}
+.product-slider-navigation.navigation-prev:before {
+  transform: rotate(-135deg);
+  margin-left: 4px;
 }
 
 /* ──────────────────────────────────────────────
