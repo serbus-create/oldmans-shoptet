@@ -717,7 +717,7 @@ body.type-category .benefitBanner.position--benefitHomepage {
   position: relative !important;
   left: 50% !important;
   margin-left: -50vw !important;
-  padding: 35px 0 6.72px !important;
+  padding: 30px 0 !important;
   box-sizing: border-box;
 }
 .om-usp-inner {
@@ -726,12 +726,14 @@ body.type-category .benefitBanner.position--benefitHomepage {
   padding: 0 20px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  align-items: center;
   gap: 20px;
   box-sizing: border-box;
 }
 .om-usp-item {
   display: flex;
   align-items: center;
+  height: 100%;
   gap: 16px;
   border-right: 1px solid rgba(255,255,255,.2);
   padding-right: 20px;
@@ -770,8 +772,8 @@ body.type-category .benefitBanner.position--benefitHomepage {
   margin: 0 auto;
   padding: 0 40px;
   display: grid;
-  grid-template-columns: 2fr 1fr 1.6fr 1fr;
-  gap: 48px;
+  grid-template-columns: 1.8fr 1fr 1fr 1fr 1.2fr;
+  gap: 40px;
   box-sizing: border-box;
 }
 .om-custom-footer .om-footer-col h4 {
@@ -788,6 +790,8 @@ body.type-category .benefitBanner.position--benefitHomepage {
 .om-footer-col ul { list-style: none; padding: 0; margin: 0; }
 .om-footer-col ul li { margin-bottom: 13px; font-size: 15px; color: #444 !important; }
 .om-footer-col ul li a { color: #444 !important; }
+/* Pokračování sloupce Kategorie (bez vlastní h4) — zarovnat pod hlavičku sousedního sloupce */
+.om-footer-cat-cont { margin-top: 43px; }
 .om-custom-footer .om-footer-ig-label { margin-top: 20px !important; margin-bottom: 10px !important; }
 .om-custom-footer .om-footer-ig {
   display: inline-flex !important;
@@ -804,10 +808,15 @@ body.type-category .benefitBanner.position--benefitHomepage {
   white-space: nowrap;
 }
 .om-custom-footer .om-footer-ig:hover { background: #e6b800 !important; color: #000 !important; }
-@media (max-width: 992px) {
-  .om-footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; padding: 0 24px; }
+@media (max-width: 1200px) {
+  .om-footer-inner { grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+  .om-footer-cat-cont { margin-top: 0; }
 }
-@media (max-width: 576px) {
+@media (max-width: 768px) {
+  .om-footer-inner { grid-template-columns: 1fr 1fr; gap: 28px; padding: 0 24px; }
+  .om-footer-cat-cont { margin-top: 0; }
+}
+@media (max-width: 480px) {
   .om-footer-inner { grid-template-columns: 1fr; }
 }
 
