@@ -537,10 +537,10 @@
       <div class="om-insta-inner">
         <div class="om-insta-text">
           <p class="om-subtitle">Sledujte nás</p>
-          <h2>Na INSTAGRAMU</h2>
+          <h2><span class="om-insta-na">Na</span> <span class="om-insta-word">INSTAGRAMU</span></h2>
           <p>Chcete být v obraze co se u nás děje, nebo jestli náhodou neděláme novou omáčku?</p>
           <p><strong>Sledujte nás na instagramu a dozvíte se víc!</strong></p>
-          <a href="https://www.instagram.com/old_mans_style/" target="_blank" class="om-btn-primary">📸 Sledovat @OLD_MANS_STYLE</a>
+          <a href="https://www.instagram.com/old_mans_style/" target="_blank" class="om-btn-primary">Sledovat @OLD_MANS_STYLE</a>
         </div>
         <div class="om-insta-grid">
           <a href="https://www.instagram.com/old_mans_style/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-ig-01.webp" alt=""></a>
