@@ -1791,6 +1791,75 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   color: #c0392b !important;
 }
 
+/* ──────────────────────────────────────────────
+   MNOŽSTEVNÍ SLEVA — nativní Shoptet widget
+────────────────────────────────────────────── */
+.quantity-discounts {
+  background: #f7f7f7 !important;
+  border-radius: 16px !important;
+  padding: 28px !important;
+  margin: 22px 0 !important;
+  box-sizing: border-box !important;
+}
+.quantity-discounts__headline {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  color: #1a1a1a !important;
+  margin-bottom: 16px !important;
+}
+.quantity-discounts__table {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+.quantity-discounts__item {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  background: #fff !important;
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 10px !important;
+  padding: 14px 18px !important;
+  transition: border-color .2s, background .2s !important;
+}
+.quantity-discounts__title {
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  color: #1a1a1a !important;
+}
+.quantity-discounts__price-wrapper {
+  font-size: 15px !important;
+  color: #1a1a1a !important;
+  white-space: nowrap !important;
+}
+.quantity-discounts__price {
+  font-weight: 700 !important;
+}
+/* Aktuálně platná hladina slevy — zvýrazněná zelenou (jako "Skladem"/"Do košíku") */
+.quantity-discounts__item--highlighted {
+  background: #f4faf0 !important;
+  border: 2px solid #79b530 !important;
+  padding: 13px 17px !important;
+}
+.quantity-discounts__item--highlighted .quantity-discounts__title {
+  font-weight: 700 !important;
+  color: #4a8f22 !important;
+}
+.quantity-discounts__item--highlighted .quantity-discounts__price {
+  color: #4a8f22 !important;
+}
+.quantity-discounts__save {
+  margin-top: 16px !important;
+  text-align: right !important;
+  font-size: 15px !important;
+  color: #444 !important;
+}
+.quantity-discounts__saved-amount {
+  color: #9f1400 !important;
+  font-weight: 800 !important;
+}
+
 /* Bílý text na tlačítku Do košíku na detailu produktu */
 .btn.btn-conversion.add-to-cart-button.om-cart-btn-white,
 .btn.btn-conversion.add-to-cart-button.om-cart-btn-white *,
