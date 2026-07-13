@@ -284,7 +284,7 @@
           <div class="om-login"><a href="/registrace/">👤</a></div>
           <div class="om-cart">
             <a href="/kosik/" class="cart-count toggle-window" data-target="cart" data-hover="true" data-redirect="true">
-              <span id="om-cart-price" class="cart-price">Košík</span>
+              <span id="om-cart-price" class="cart-price">Prázdný košík</span>
             </a>
           </div>
         </div>
@@ -373,7 +373,7 @@
       if (price && price !== '0' && price !== '0 Kč') {
         omPrice.textContent = (count ? count + ' × ' : '') + price;
       } else {
-        omPrice.textContent = 'Košík';
+        omPrice.textContent = 'Prázdný košík';
       }
     }
     setTimeout(syncCart, 800);
@@ -906,7 +906,7 @@
       var lastVal = cartPrice.textContent;
       var observer = new MutationObserver(function() {
         var newVal = cartPrice.textContent;
-        if (newVal !== lastVal && newVal !== 'Košík') {
+        if (newVal !== lastVal && newVal !== 'Prázdný košík') {
           lastVal = newVal;
           window.location.href = '/kosik/';
         }
