@@ -454,21 +454,23 @@ body.type-category .benefitBanner.position--benefitHomepage {
   transform: translateY(-50%);
   background: #f0c944 !important;
   border: none !important;
-  border-radius: 14px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,.18) !important;
   color: #fff !important;
   width: 52px !important;
   height: 52px !important;
-  font-size: 24px;
+  padding: 0 !important;
   line-height: 1;
   cursor: pointer;
   z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background .2s;
+  transition: background .2s, transform .2s;
 }
-.om-recipe-nav:hover { background: #e6b800 !important; }
-.om-recipe-nav:focus { outline: none !important; box-shadow: none !important; }
+.om-recipe-nav svg { width: 20px; height: 20px; display: block; }
+.om-recipe-nav:hover { background: #e6b800 !important; transform: translateY(-50%) scale(1.05); }
+.om-recipe-nav:focus { outline: none !important; box-shadow: 0 10px 24px rgba(0,0,0,.18) !important; }
 .om-recipe-nav-prev { left: -20px; }
 .om-recipe-nav-next { right: -20px; }
 @media (max-width: 600px) {
@@ -692,13 +694,15 @@ body.type-category .benefitBanner.position--benefitHomepage {
 .product-slider-navigation {
   background: #f0c944 !important;
   border: none !important;
-  border-radius: 14px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,.18) !important;
   color: #fff !important;
   width: 52px !important;
   height: 52px !important;
   opacity: 1 !important;
+  transition: background .2s, transform .2s !important;
 }
-.product-slider-navigation:hover { background: #e6b800 !important; }
+.product-slider-navigation:hover { background: #e6b800 !important; transform: scale(1.05) !important; }
 .product-slider-navigation { margin-top: -92px !important; }
 .product-slider-navigation svg,
 .product-slider-navigation svg path,
