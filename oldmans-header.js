@@ -474,9 +474,7 @@
     apetit.innerHTML = `<div class="om-section-inner">
       <div class="om-apetit-inner">
         <div class="om-apetit-img">
-          <a href="https://www.apetitonline.cz/old-mans-premiova-kvalita-v-kazde-lahvi" target="_blank">
-            <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/foto-clanek.jpg" alt="Apetit clanek">
-          </a>
+          <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/foto-clanek.jpg" alt="Apetit clanek">
         </div>
         <div class="om-apetit-text">
           <img src="https://www.gastrotek.cz/assets/img/partners/apetit.jpg" alt="Apetit" class="om-apetit-logo">
@@ -558,6 +556,18 @@
     var bestsellersWrapper = bestsellers ? bestsellers.nextElementSibling : null;
     var sale = document.querySelector('.homepage-products-heading-2');
     var saleWrapper = sale ? sale.nextElementSibling : null;
+
+    /* Tlačítka "Ukázat všechny" u nadpisů Bestsellery / Omáčky ve slevě */
+    function addShowAllButton(heading, url) {
+      if (!heading || heading.querySelector('.om-show-all-btn')) return;
+      var btn = document.createElement('a');
+      btn.href = url;
+      btn.className = 'om-show-all-btn';
+      btn.textContent = 'Ukázat všechny';
+      heading.appendChild(btn);
+    }
+    addShowAllButton(bestsellers, '/kategorie/bestseller/');
+    addShowAllButton(sale, '/kategorie/v-akci/');
 
     /* Pomocná funkce — vloží element ZA jiný element */
     function insertAfter(newEl, refEl) {
