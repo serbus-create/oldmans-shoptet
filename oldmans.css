@@ -1927,6 +1927,14 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .om-pro-firmy strong { text-decoration: underline; }
 .om-pro-firmy:hover strong { color: #9f1400 !important; }
 
+/* Fotka produktu — "sticky", ať sjíždí s obsahem místo prázdného místa pod sebou
+   (nabídka je delší než fotka kvůli kartám množstevní slevy) */
+.p-image-wrapper {
+  position: sticky !important;
+  top: 96px !important;
+  align-self: start !important;
+}
+
 /* Loga partnerů pod hlavní fotkou produktu */
 #om-product-partners {
   margin-top: -14px;
