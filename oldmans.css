@@ -357,7 +357,7 @@
 .om-apetit-text { flex: 1; }
 .om-apetit-logo { max-width: 70px; margin-bottom: 14px; }
 .om-apetit-text h2 { font-size: 30px !important; font-weight: 700 !important; margin-bottom: 16px !important; text-transform: none !important; }
-.om-apetit-text p { color: #444; line-height: 1.8; margin-bottom: 12px; font-size: 15px; }
+.om-apetit-text p { color: #444; line-height: 1.8; margin-bottom: 12px; font-size: 18px; }
 @media (max-width: 768px) {
   .om-apetit-inner { flex-direction: column; }
   .om-apetit-img { order: -1; }
