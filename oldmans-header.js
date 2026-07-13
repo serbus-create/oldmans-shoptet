@@ -438,7 +438,7 @@
         <a href="/kategorie/omacky-a-majonezy/" class="om-cat-item">
           <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/specials-oldmans.png" alt=""> Omáčky a majonézy
         </a>
-        <a href="/kategorie/omacky-a-majonezy--burger-a-steak/" class="om-cat-item">
+        <a href="/kategorie/burger-a-steak/" class="om-cat-item">
           <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/burger.png" alt=""> Burger a steak
         </a>
         <a href="/kategorie/chilli-omacky/" class="om-cat-item">
@@ -447,7 +447,7 @@
         <a href="/kategorie/salatove-dressingy/" class="om-cat-item">
           <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-icons-salads.png" alt=""> Salátové dresingy
         </a>
-        <a href="/kategorie/omacky-a-majonezy--ceska-klasika/" class="om-cat-item">
+        <a href="/kategorie/ceska-klasika/" class="om-cat-item">
           <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/czech-republic.png" alt=""> Česká klasika
         </a>
         <a href="/kategorie/chilli-mash/" class="om-cat-item">
