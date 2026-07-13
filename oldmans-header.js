@@ -71,9 +71,18 @@
         <div class="om-footer-col">
           <h4>Kategorie</h4>
           <ul>
+            <li><a href="/kategorie/marinady/">Marinády</a></li>
+            <li><a href="/kategorie/puff/">Puff</a></li>
             <li><a href="/kategorie/squeeze-blast/">Squeeze Blast</a></li>
             <li><a href="/kategorie/omacky-a-majonezy/">Omáčky a majonézy</a></li>
-            <li><a href="/kategorie/salatove-dressingy/">Salátové dressingy</a></li>
+            <li><a href="/kategorie/burger-a-steak/">Burger a steak</a></li>
+            <li><a href="/kategorie/chilli-omacky/">Chilli omáčky</a></li>
+            <li><a href="/kategorie/salatove-dressingy/">Salátové dresingy</a></li>
+          </ul>
+        </div>
+        <div class="om-footer-col">
+          <ul class="om-footer-cat-cont">
+            <li><a href="/kategorie/ceska-klasika/">Česká klasika</a></li>
             <li><a href="/kategorie/chilli-mash/">Chilli Mash</a></li>
             <li><a href="/kategorie/okurkove-relishe/">Okurkové Relishe</a></li>
             <li><a href="/kategorie/premiove-pomazanky/">Prémiové pomazánky</a></li>
@@ -174,7 +183,32 @@
     wrapper.classList.add('om-recipes-done', 'om-recipes-grid');
   }
 
+  /* --- Přestaví nativní Shoptet copyright lištu (dole pod patičkou) ---
+     Původní markup:
+     <span id="signature"><a class="image">...</a><a class="title">Vytvořil Shoptet</a></span>
+     <span class="copyright" data-testid="textCopyright">Copyright 2026 <strong>Oldmans.cz</strong>. Všechna práva vyhrazena. <a class="js-cookies-settings">Upravit nastavení cookies</a></span>
+     Skryjeme Shoptet "signature" badge a přepíšeme text copyrightu, cookie odkaz
+     zachováme (jinak přijdeme o funkční nastavení souhlasu cookies). */
+  function customizeFooterCopyright() {
+    var footerBottom = document.querySelector('#footer .footer-bottom, .footer .footer-bottom');
+    if (!footerBottom || footerBottom.dataset.omDone) return;
+
+    var signature = footerBottom.querySelector('#signature');
+    if (signature) signature.style.setProperty('display', 'none', 'important');
+
+    var copyright = footerBottom.querySelector('.copyright[data-testid="textCopyright"], .copyright');
+    if (copyright) {
+      var cookiesLink = copyright.querySelector('.js-cookies-settings');
+      var cookiesHtml = cookiesLink ? cookiesLink.outerHTML : '';
+      copyright.innerHTML = '© Copyright 2026 <strong>Old Man\'s</strong>. Všechna práva vyhrazena. Vytvořil <a href="https://www.v-h-s.cz/" target="_blank" rel="noopener">vhs.</a> ' + cookiesHtml;
+    }
+
+    footerBottom.dataset.omDone = 'true';
+  }
+
   function injectAll() {
+
+    customizeFooterCopyright();
 
     /* -------------------------------------------------
        0. SKRÝT PRÁZDNÝ SIDEBAR NA STATICKÝCH STRÁNKÁCH
