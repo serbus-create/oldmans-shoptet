@@ -638,19 +638,35 @@
     var recipesPrev = recipes.querySelector('.om-recipe-nav-prev');
     var recipesNext = recipes.querySelector('.om-recipe-nav-next');
     if (recipesTrack && recipesPrev && recipesNext) {
+      /* Zdvojíme karty (kopie skryté pro čtečky obrazovky), aby šlo posouvat
+         nekonečně dokola bez viditelného "skoku" zpátky na začátek. */
+      var originalRecipeItems = Array.prototype.slice.call(recipesTrack.querySelectorAll('.om-recipe-item'));
+      originalRecipeItems.forEach(function(item) {
+        var clone = item.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        clone.setAttribute('tabindex', '-1');
+        recipesTrack.appendChild(clone);
+      });
+
       var scrollByCard = function(dir) {
         var card = recipesTrack.querySelector('.om-recipe-item');
         var step = card ? (card.getBoundingClientRect().width + 20) * 2 : 300;
-        var maxScroll = recipesTrack.scrollWidth - recipesTrack.clientWidth;
+        /* Karty jsou zdvojené, takže polovina celé šířky = jedna sada originálů */
+        var half = recipesTrack.scrollWidth / 2;
 
-        if (dir > 0 && recipesTrack.scrollLeft >= maxScroll - 5) {
-          /* Na konci — skoč zpátky na začátek (nekonečná smyčka) */
-          recipesTrack.scrollTo({ left: 0, behavior: 'smooth' });
-        } else if (dir < 0 && recipesTrack.scrollLeft <= 5) {
-          /* Na začátku — skoč na konec (nekonečná smyčka) */
-          recipesTrack.scrollTo({ left: maxScroll, behavior: 'smooth' });
+        if (dir > 0) {
+          /* Na konci druhé (klonované) sady se potichu, bez animace, přepneme
+             zpátky na odpovídající místo v první sadě — vizuálně identické,
+             takže uživatel žádný skok nevidí. */
+          if (recipesTrack.scrollLeft >= half - 5) {
+            recipesTrack.scrollLeft -= half;
+          }
+          recipesTrack.scrollBy({ left: step, behavior: 'smooth' });
         } else {
-          recipesTrack.scrollBy({ left: dir * step, behavior: 'smooth' });
+          if (recipesTrack.scrollLeft <= 5) {
+            recipesTrack.scrollLeft += half;
+          }
+          recipesTrack.scrollBy({ left: -step, behavior: 'smooth' });
         }
       };
       recipesPrev.addEventListener('click', function() { scrollByCard(-1); });
