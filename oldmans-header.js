@@ -300,14 +300,6 @@
         <ul class="om-cat-list" id="omCatList">
           <li class="cat-favorite"><a href="/kategorie/bestseller/"><span class="cat-icon">⭐</span> Bestseller</a></li>
           <li class="cat-sale"><a href="/kategorie/v-akci/"><span class="cat-icon">🏷️</span> V akci</a></li>
-          <li><a href="/kategorie/omacky-a-majonezy/">Omáčky a majonézy</a></li>
-          <li><a href="/kategorie/salatove-dressingy/">Salátové dresingy</a></li>
-          <li><a href="/kategorie/chilli-omacky/">Chilli omáčky</a></li>
-          <li><a href="/kategorie/chilli-mash/">Chilli Mash</a></li>
-          <li><a href="/kategorie/okurkove-relishe/">Okurkové Relishe</a></li>
-          <li><a href="/kategorie/premiove-pomazanky/">Prémiové pomazánky</a></li>
-          <li><a href="/kategorie/snacky-a-orechy/">Snacky a ořechy</a></li>
-          <li><a href="/kategorie/gumovi-medvidci/">Gumoví medvídci</a></li>
           <li class="om-more-btn" id="omMoreBtn" style="display:none">
             <span>≡ Více</span>
             <ul class="om-more-submenu" id="omMoreSubmenu"></ul>
@@ -322,6 +314,61 @@
       shoptetHeader.parentNode.insertBefore(header, catMenu);
       shoptetHeader.parentNode.insertBefore(topbar, header);
     }
+
+    /* -------------------------------------------------
+       4b. DYNAMICKÉ NAČTENÍ KATEGORIÍ ZE SHOPTETU
+       Shoptet vykresluje vlastní kompletní menu kategorií do skryté
+       nativní navigace (ul.menu-level-1, data-testid="headerMenuItems").
+       Přečteme si z ní hlavní (top-level) kategorie a postavíme podle
+       nich naše viditelné menu — když přibude nová kategorie ve Shoptetu,
+       objeví se automaticky i tady, bez zásahu do kódu.
+       Bestseller a V akci necháváme napevno kvůli vlastním ikonkám.
+    ------------------------------------------------- */
+    (function buildDynamicCategoryMenu() {
+      var list = document.getElementById('omCatList');
+      var moreBtn = document.getElementById('omMoreBtn');
+      if (!list || !moreBtn) return;
+
+      var sourceMenu = document.querySelector('.menu-level-1');
+      /* Záložní seznam pro nepravděpodobný případ, že by se nativní menu nenašlo */
+      var fallback = [
+        { name: 'Omáčky a majonézy', href: '/kategorie/omacky-a-majonezy/' },
+        { name: 'Salátové dresingy', href: '/kategorie/salatove-dressingy/' },
+        { name: 'Chilli omáčky', href: '/kategorie/chilli-omacky/' },
+        { name: 'Chilli Mash', href: '/kategorie/chilli-mash/' },
+        { name: 'Okurkové Relishe', href: '/kategorie/okurkove-relishe/' },
+        { name: 'Prémiové pomazánky', href: '/kategorie/premiove-pomazanky/' },
+        { name: 'Snacky a ořechy', href: '/kategorie/snacky-a-orechy/' },
+        { name: 'Gumoví medvídci', href: '/kategorie/gumovi-medvidci/' }
+      ];
+
+      var cats = [];
+      if (sourceMenu) {
+        Array.prototype.slice.call(sourceMenu.querySelectorAll(':scope > li')).forEach(function (li) {
+          var a = li.querySelector(':scope > a');
+          if (!a) return;
+          var href = a.getAttribute('href') || '';
+          /* Jen skutečné kategorie, ne Obchodní podmínky / Kontakty / Značky apod. */
+          if (href.indexOf('/kategorie/') === -1) return;
+          /* Bestseller a V akci už máme napevno se speciální ikonkou */
+          if (href.indexOf('/kategorie/bestseller/') !== -1) return;
+          if (href.indexOf('/kategorie/v-akci/') !== -1) return;
+          var name = a.textContent.trim();
+          if (!name) return;
+          cats.push({ name: name, href: href });
+        });
+      }
+      if (!cats.length) cats = fallback;
+
+      cats.forEach(function (cat) {
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = cat.href;
+        a.textContent = cat.name;
+        li.appendChild(a);
+        list.insertBefore(li, moreBtn);
+      });
+    })();
 
     /* -------------------------------------------------
        5. RESPONSIVE KATEGORIE MENU – overflow do "Více"
