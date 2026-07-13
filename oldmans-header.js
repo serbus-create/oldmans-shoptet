@@ -300,14 +300,6 @@
         <ul class="om-cat-list" id="omCatList">
           <li class="cat-favorite"><a href="/kategorie/bestseller/"><span class="cat-icon">⭐</span> Bestseller</a></li>
           <li class="cat-sale"><a href="/kategorie/v-akci/"><span class="cat-icon">🏷️</span> V akci</a></li>
-          <li><a href="/kategorie/omacky-a-majonezy/">Omáčky a majonézy</a></li>
-          <li><a href="/kategorie/salatove-dressingy/">Salátové dresingy</a></li>
-          <li><a href="/kategorie/chilli-omacky/">Chilli omáčky</a></li>
-          <li><a href="/kategorie/chilli-mash/">Chilli Mash</a></li>
-          <li><a href="/kategorie/okurkove-relishe/">Okurkové Relishe</a></li>
-          <li><a href="/kategorie/premiove-pomazanky/">Prémiové pomazánky</a></li>
-          <li><a href="/kategorie/snacky-a-orechy/">Snacky a ořechy</a></li>
-          <li><a href="/kategorie/gumovi-medvidci/">Gumoví medvídci</a></li>
           <li class="om-more-btn" id="omMoreBtn" style="display:none">
             <span>≡ Více</span>
             <ul class="om-more-submenu" id="omMoreSubmenu"></ul>
@@ -324,9 +316,116 @@
     }
 
     /* -------------------------------------------------
-       5. RESPONSIVE KATEGORIE MENU – overflow do "Více"
+       4b. DYNAMICKÉ NAČTENÍ KATEGORIÍ ZE SHOPTETU
+       Shoptet vykresluje vlastní kompletní menu kategorií do skryté
+       nativní navigace (ul.menu-level-1, data-testid="headerMenuItems").
+       Přečteme si z ní hlavní (top-level) kategorie a postavíme podle
+       nich naše viditelné menu — když přibude nová kategorie ve Shoptetu,
+       objeví se automaticky i tady, bez zásahu do kódu.
+       Bestseller a V akci necháváme napevno kvůli vlastním ikonkám.
+
+       DŮLEŽITÉ: .menu-level-1 se u Shoptetu může vykreslit/naplnit AŽ PO
+       naší prvotní kontrole (asynchronně), proto to zkoušíme opakovaně
+       (polling), ne jen jednou — a teprve po úspěšném naplnění spustíme
+       přepočet responzivního "Více" menu (krok 5), aby počítal se
+       správným, finálním seznamem položek.
     ------------------------------------------------- */
-    setTimeout(function () {
+    function buildDynamicCategoryMenu() {
+      var list = document.getElementById('omCatList');
+      var moreBtn = document.getElementById('omMoreBtn');
+      if (!list || !moreBtn) return false;
+
+      var sourceMenu = document.querySelector('.menu-level-1');
+      var sourceItems = sourceMenu ? sourceMenu.querySelectorAll(':scope > li') : [];
+      if (!sourceItems.length) return false; /* nativní menu ještě není hotové */
+
+      var cats = [];
+      Array.prototype.slice.call(sourceItems).forEach(function (li) {
+        var a = li.querySelector(':scope > a');
+        if (!a) return;
+        var href = a.getAttribute('href') || '';
+        /* Jen skutečné kategorie, ne Obchodní podmínky / Kontakty / Značky apod. */
+        if (href.indexOf('/kategorie/') === -1) return;
+        /* Bestseller a V akci už máme napevno se speciální ikonkou */
+        if (href.indexOf('/kategorie/bestseller/') !== -1) return;
+        if (href.indexOf('/kategorie/v-akci/') !== -1) return;
+        var name = a.textContent.trim();
+        if (!name) return;
+        cats.push({ name: name, href: href });
+      });
+      if (!cats.length) return false;
+
+      /* Pojistka proti zdvojení při opakovaném volání */
+      Array.prototype.slice.call(list.querySelectorAll('.om-cat-dynamic')).forEach(function (li) { li.remove(); });
+
+      cats.forEach(function (cat) {
+        var li = document.createElement('li');
+        li.className = 'om-cat-dynamic';
+        var a = document.createElement('a');
+        a.href = cat.href;
+        a.textContent = cat.name;
+        li.appendChild(a);
+        list.insertBefore(li, moreBtn);
+      });
+      return true;
+    }
+
+    /* Záložní pevný seznam — použije se jen když se ani po opakovaných
+       pokusech nepodaří nativní menu Shoptetu najít (krajní případ). */
+    function buildFallbackCategoryMenu() {
+      var list = document.getElementById('omCatList');
+      var moreBtn = document.getElementById('omMoreBtn');
+      if (!list || !moreBtn || list.querySelector('.om-cat-dynamic')) return;
+      var fallback = [
+        { name: 'Omáčky a majonézy', href: '/kategorie/omacky-a-majonezy/' },
+        { name: 'Salátové dresingy', href: '/kategorie/salatove-dressingy/' },
+        { name: 'Chilli omáčky', href: '/kategorie/chilli-omacky/' },
+        { name: 'Chilli Mash', href: '/kategorie/chilli-mash/' },
+        { name: 'Okurkové Relishe', href: '/kategorie/okurkove-relishe/' },
+        { name: 'Prémiové pomazánky', href: '/kategorie/premiove-pomazanky/' },
+        { name: 'Snacky a ořechy', href: '/kategorie/snacky-a-orechy/' },
+        { name: 'Gumoví medvídci', href: '/kategorie/gumovi-medvidci/' }
+      ];
+      fallback.forEach(function (cat) {
+        var li = document.createElement('li');
+        li.className = 'om-cat-dynamic';
+        var a = document.createElement('a');
+        a.href = cat.href;
+        a.textContent = cat.name;
+        li.appendChild(a);
+        list.insertBefore(li, moreBtn);
+      });
+    }
+
+    /* Zkusíme hned, a pokud nativní menu ještě není naplněné, zkusíme to
+       ještě několikrát v krátkých intervalech. Teprve po úspěchu (nebo
+       vyčerpání pokusů + použití zálohy) spustíme přepočet "Více". */
+    (function initCategoryMenu() {
+      var attempts = 0;
+      var maxAttempts = 8;
+      var delay = 200;
+
+      function attempt() {
+        attempts++;
+        if (buildDynamicCategoryMenu()) {
+          setupResponsiveCatMenu();
+          return;
+        }
+        if (attempts >= maxAttempts) {
+          buildFallbackCategoryMenu();
+          setupResponsiveCatMenu();
+          return;
+        }
+        setTimeout(attempt, delay);
+      }
+      attempt();
+    })();
+
+    /* -------------------------------------------------
+       5. RESPONSIVE KATEGORIE MENU – overflow do "Více"
+       Voláno z initCategoryMenu() výše, až je seznam kategorií finální.
+    ------------------------------------------------- */
+    function setupResponsiveCatMenu() {
       var list = document.getElementById('omCatList');
       var moreBtn = document.getElementById('omMoreBtn');
       var moreSubmenu = document.getElementById('omMoreSubmenu');
@@ -339,6 +438,7 @@
       var overflow = [];
 
       items.forEach(function (li) { li.style.display = 'inline-flex'; });
+      moreSubmenu.innerHTML = '';
       items.forEach(function (li, i) {
         total += li.offsetWidth + 4;
         if (total + moreWidth > menuWidth) overflow.push(i);
@@ -352,17 +452,22 @@
           moreSubmenu.appendChild(clone);
         });
         moreBtn.style.display = 'inline-flex';
+      } else {
+        moreBtn.style.display = 'none';
       }
 
-      moreBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var isOpen = moreSubmenu.style.display === 'block';
-        moreSubmenu.style.display = isOpen ? 'none' : 'block';
-      });
-      document.addEventListener('click', function () {
-        moreSubmenu.style.display = 'none';
-      });
-    }, 250);
+      if (!moreBtn.dataset.omClickBound) {
+        moreBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var isOpen = moreSubmenu.style.display === 'block';
+          moreSubmenu.style.display = isOpen ? 'none' : 'block';
+        });
+        document.addEventListener('click', function () {
+          moreSubmenu.style.display = 'none';
+        });
+        moreBtn.dataset.omClickBound = 'true';
+      }
+    }
 
     /* -------------------------------------------------
        6. DYNAMICKÝ KOŠÍK – číst ze Shoptet DOM
