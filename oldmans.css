@@ -256,7 +256,7 @@ body.type-category .benefitBanner.position--benefitHomepage {
   display: none; position: absolute; right: 0; top: 100%;
   background: #fff; box-shadow: 0 6px 20px rgba(0,0,0,.08);
   padding: 10px; border-radius: 0 0 10px 10px;
-  min-width: 200px; z-index: 999; list-style: none;
+  min-width: 200px; z-index: 1001; list-style: none;
 }
 .om-more-submenu li { display: flex !important; padding: 8px 12px; }
 .om-more-submenu li a { color: #000; text-decoration: none; }
