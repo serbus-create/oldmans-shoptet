@@ -610,14 +610,21 @@
       el.setAttribute('data-columns-mobile', '2');
     });
 
-    /* Skryjeme popisky po inicializaci slideru */
+    /* Donutíme slider přepočítat rozměry vícekrát, ať to chytne i po pozdějším CSS/font loadu */
+    [300, 800, 1500].forEach(function(delay) {
+      setTimeout(function() { window.dispatchEvent(new Event('resize')); }, delay);
+    });
+
+    /* Skryjeme popisky po inicializaci slideru (dostupnost necháváme viditelnou) */
     setTimeout(function() {
-      document.querySelectorAll('.products-block .p-desc, .products-block .p-code, .products-block .ratings-wrapper').forEach(function(el) {
+      document.querySelectorAll('.products-block .p-desc, .products-block .p-code').forEach(function(el) {
         el.style.setProperty('display', 'none', 'important');
       });
       document.querySelectorAll('.products-block .quantity').forEach(function(el) {
         el.style.setProperty('display', 'none', 'important');
       });
+      /* Donutíme Shoptet slider přepočítat výšku/pozice po naší úpravě velikosti karet */
+      window.dispatchEvent(new Event('resize'));
     }, 2000);
   }
 
