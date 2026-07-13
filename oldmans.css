@@ -388,7 +388,7 @@
 /* ──────────────────────────────────────────────
    APETIT / NAPSALI O NAS
 ────────────────────────────────────────────── */
-.om-apetit { background: #fff; }
+.om-apetit { background: #fff; padding-bottom: 12px !important; }
 .om-apetit-inner { display: flex; align-items: center; gap: 50px; }
 .om-apetit-img { flex-shrink: 0; }
 .om-apetit-img img { border-radius: 12px; max-width: 280px; width: 100%; }
@@ -515,7 +515,7 @@
   text-transform: uppercase !important;
   letter-spacing: 1px !important;
   color: #000 !important;
-  padding: 12px 20px 15px !important;
+  padding: 9.6px 20px 15px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: flex-start !important;
@@ -642,7 +642,7 @@
   position: relative !important;
   left: 50% !important;
   margin-left: -50vw !important;
-  padding: 35px 0;
+  padding: 35px 0 9.6px !important;
   box-sizing: border-box;
 }
 .om-usp-inner {
