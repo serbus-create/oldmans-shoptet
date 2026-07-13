@@ -894,6 +894,44 @@
         h.textContent = 'Produkty, které by vás mohli zajímat';
       }
     });
+
+    /* 7. Množstevní sleva — rozdělit každý řádek na barevný štítek (Bez slevy /
+       Sleva -X %) + počet kusů + cenu, aby šlo zobrazit jako karty vedle sebe.
+       Vychází ze skutečné struktury: .quantity-discounts__item[data-price-ratio]
+       > .quantity-discounts__title (text "2 ks = sleva 5 %") + .quantity-discounts__price-wrapper */
+    var qdTable = document.querySelector('.quantity-discounts__table');
+    if (qdTable && !qdTable.dataset.omDone) {
+      Array.prototype.slice.call(qdTable.querySelectorAll('.quantity-discounts__item')).forEach(function(item) {
+        var titleEl = item.querySelector('.quantity-discounts__title');
+        var priceWrapper = item.querySelector('.quantity-discounts__price-wrapper');
+        if (!titleEl || !priceWrapper) return;
+
+        /* Text typu "2 ks = sleva 5 %" nebo jen "1 ks" — vezmeme jen část před "=" */
+        var rawText = titleEl.textContent.replace(/\s+/g, ' ').trim();
+        var qtyText = rawText.split('=')[0].trim();
+
+        var ratio = parseFloat(item.getAttribute('data-price-ratio'));
+        var percent = isNaN(ratio) ? 0 : Math.round((1 - ratio) * 100);
+
+        var badge = document.createElement('div');
+        badge.className = 'qd-badge ' + (percent > 0 ? 'qd-badge--discount' : 'qd-badge--none');
+        badge.textContent = percent > 0 ? ('Sleva -' + percent + '%') : 'Bez slevy';
+
+        var body = document.createElement('div');
+        body.className = 'qd-body';
+        var qty = document.createElement('div');
+        qty.className = 'qd-qty';
+        qty.textContent = qtyText;
+
+        body.appendChild(qty);
+        body.appendChild(priceWrapper);
+
+        item.innerHTML = '';
+        item.appendChild(badge);
+        item.appendChild(body);
+      });
+      qdTable.dataset.omDone = 'true';
+    }
   }
 
   enhanceProductDetail();
