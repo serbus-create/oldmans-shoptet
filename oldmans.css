@@ -1902,6 +1902,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .quantity-discounts__saved-amount {
   color: #4a8f22 !important;
   font-weight: 800 !important;
+  margin-left: 4px !important;
 }
 
 /* Bílý text na tlačítku Do košíku na detailu produktu */
