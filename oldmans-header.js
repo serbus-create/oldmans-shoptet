@@ -900,6 +900,10 @@
        Vychází ze skutečné struktury: .quantity-discounts__item[data-price-ratio]
        > .quantity-discounts__title (text "2 ks = sleva 5 %") + .quantity-discounts__price-wrapper */
     var qdTable = document.querySelector('.quantity-discounts__table');
+    var qdHeadline = document.querySelector('.quantity-discounts__headline');
+    if (qdHeadline && qdHeadline.textContent.trim() === 'Množstevní sleva') {
+      qdHeadline.textContent = 'Množství';
+    }
     if (qdTable && !qdTable.dataset.omDone) {
       Array.prototype.slice.call(qdTable.querySelectorAll('.quantity-discounts__item')).forEach(function(item) {
         var titleEl = item.querySelector('.quantity-discounts__title');
@@ -956,6 +960,16 @@
           origPriceEl.className = 'om-price-orig';
           priceFinalEl.parentNode.insertBefore(origPriceEl, priceFinalEl);
         }
+        if (priceFinalEl.parentNode) {
+          priceFinalEl.parentNode.classList.add('om-price-row');
+        }
+
+        /* Přesuneme nativní "Ušetříte X Kč" k ceně, ať je to jeden ucelený řádek
+           místo samostatného odděleného bloku pod kartami slev. */
+        var saveEl = document.querySelector('.quantity-discounts__save');
+        if (saveEl && priceFinalEl.parentNode && saveEl.parentNode !== priceFinalEl.parentNode) {
+          priceFinalEl.parentNode.appendChild(saveEl);
+        }
 
         var formatPrice = function(value) {
           var rounded = Math.round(value * 100) / 100;
@@ -981,6 +995,9 @@
             } else {
               origPriceEl.style.display = 'none';
             }
+          }
+          if (saveEl) {
+            saveEl.style.display = (applicable.ratio < 1) ? '' : 'none';
           }
         };
 
