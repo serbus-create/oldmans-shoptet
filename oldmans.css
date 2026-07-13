@@ -1793,11 +1793,13 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 
 /* ──────────────────────────────────────────────
    MNOŽSTEVNÍ SLEVA — nativní Shoptet widget
+   (JS enhanceQuantityDiscounts rozdělí každý řádek na
+   .qd-badge + .qd-body > .qd-qty + .quantity-discounts__price-wrapper)
 ────────────────────────────────────────────── */
 .quantity-discounts {
-  background: #f7f7f7 !important;
-  border-radius: 16px !important;
-  padding: 28px !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
   margin: 22px 0 !important;
   box-sizing: border-box !important;
 }
@@ -1805,49 +1807,69 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   font-size: 18px !important;
   font-weight: 800 !important;
   color: #1a1a1a !important;
-  margin-bottom: 16px !important;
+  margin-bottom: 14px !important;
 }
 .quantity-discounts__table {
   display: flex !important;
-  flex-direction: column !important;
-  gap: 10px !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
 }
 .quantity-discounts__item {
+  flex: 1 1 130px !important;
   display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 12px !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
   background: #fff !important;
   border: 1px solid #e0e0e0 !important;
-  border-radius: 10px !important;
-  padding: 14px 18px !important;
-  transition: border-color .2s, background .2s !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  transition: border-color .2s !important;
 }
-.quantity-discounts__title {
-  font-size: 15px !important;
-  font-weight: 500 !important;
-  color: #1a1a1a !important;
+.qd-badge {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
+  color: #fff !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+  letter-spacing: .4px !important;
+  text-transform: uppercase !important;
+  padding: 10px 6px !important;
 }
-.quantity-discounts__price-wrapper {
-  font-size: 15px !important;
+.qd-badge--none { background: #a3a3a3 !important; }
+.qd-badge--discount { background: #79b530 !important; }
+.qd-body {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 18px 10px !important;
+}
+.qd-qty {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: #79b530 !important;
+  text-align: center !important;
+}
+.qd-body .quantity-discounts__price-wrapper {
+  font-size: 18px !important;
+  font-weight: 800 !important;
   color: #1a1a1a !important;
   white-space: nowrap !important;
 }
-.quantity-discounts__price {
-  font-weight: 700 !important;
+.qd-body .quantity-discounts__price {
+  font-weight: 800 !important;
 }
 /* Aktuálně platná hladina slevy — zvýrazněná zelenou (jako "Skladem"/"Do košíku") */
 .quantity-discounts__item--highlighted {
-  background: #f4faf0 !important;
   border: 2px solid #79b530 !important;
-  padding: 13px 17px !important;
 }
-.quantity-discounts__item--highlighted .quantity-discounts__title {
-  font-weight: 700 !important;
-  color: #4a8f22 !important;
-}
-.quantity-discounts__item--highlighted .quantity-discounts__price {
-  color: #4a8f22 !important;
+.quantity-discounts__item--highlighted .qd-body {
+  background: #eef8e4 !important;
 }
 .quantity-discounts__save {
   margin-top: 16px !important;
