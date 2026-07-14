@@ -901,7 +901,7 @@
     /* Nastavíme 5 sloupců PŘED inicializací Shoptet slideru */
     document.querySelectorAll('.product-slider[data-columns]').forEach(function(el) {
       el.setAttribute('data-columns', '5');
-      el.setAttribute('data-columns-mobile', '2');
+      el.setAttribute('data-columns-mobile', '1');
     });
 
     /* Donutíme slider přepočítat rozměry vícekrát, ať to chytne i po pozdějším CSS/font loadu */
