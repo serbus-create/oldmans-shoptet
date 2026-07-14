@@ -340,35 +340,35 @@
     mobileDrawer.id = 'om-mobile-drawer';
     mobileDrawer.className = 'om-mobile-drawer';
     mobileDrawer.innerHTML = `
+      <button type="button" class="om-mobile-close" aria-label="Zavřít menu">✕</button>
       <form class="om-mobile-search" action="/action/ProductSearch/prepareString/" method="post">
         <input type="hidden" name="language" value="cs">
         <input type="search" name="string" placeholder="Napište, co hledáte..">
         <button type="submit">Hledat</button>
       </form>
-      <ul class="om-mobile-nav">
-        <li><a href="/recepty/">🍴 Recepty</a></li>
-        <li><a href="/velkoobchod/">🤝 B2B</a></li>
-      </ul>
-      <div class="om-mobile-cats">
-        <div class="om-mobile-cats-title">Kategorie</div>
-        <ul id="omMobileCatList"></ul>
-      </div>`;
+      <ul class="om-mobile-cats" id="omMobileCatList"></ul>
+      <div class="om-mobile-quicklinks">
+        <a href="/recepty/" class="om-mobile-quicklink">🍴 Recepty</a>
+        <a href="/velkoobchod/" class="om-mobile-quicklink">🤝 B2B</a>
+      </div>
+      <a href="/kontakty/" class="om-mobile-contact">
+        <span class="om-mobile-contact-icon">💬</span>
+        <span class="om-mobile-contact-text">
+          <span class="om-mobile-contact-email">podpora@oldmans.cz</span>
+          <span class="om-mobile-contact-sub">Napište nám</span>
+        </span>
+      </a>`;
 
     document.body.appendChild(mobileBackdrop);
     document.body.appendChild(mobileDrawer);
 
-    /* Přepíná otevření/zavření menu, dopočítá pozici panelu podle
-       skutečné výšky headeru (ta se liší dle zařízení/fontů) */
+    /* Přepíná otevření/zavření menu */
     (function initMobileMenu() {
       var btn = document.getElementById('om-mobile-menu-btn');
+      var closeBtn = mobileDrawer.querySelector('.om-mobile-close');
       if (!btn) return;
 
-      function positionDrawer() {
-        var rect = header.getBoundingClientRect();
-        mobileDrawer.style.top = rect.bottom + 'px';
-      }
       function openMenu() {
-        positionDrawer();
         document.body.classList.add('om-mobile-menu-open');
         document.body.style.overflow = 'hidden';
         btn.setAttribute('aria-expanded', 'true');
@@ -386,12 +386,10 @@
           openMenu();
         }
       });
+      if (closeBtn) closeBtn.addEventListener('click', closeMenu);
       mobileBackdrop.addEventListener('click', closeMenu);
       mobileDrawer.addEventListener('click', function (e) {
         if (e.target.closest('a')) closeMenu();
-      });
-      window.addEventListener('resize', function () {
-        if (document.body.classList.contains('om-mobile-menu-open')) positionDrawer();
       });
     })();
 
