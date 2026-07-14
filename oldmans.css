@@ -67,6 +67,27 @@
 
 .om-section { max-width: 100%; }
 
+/* Hero banner na mobilu — mírné odsazení od okrajů + zaoblené rohy
+   (bez čtverce, přirozený poměr stran zůstává) */
+@media (max-width: 768px) {
+  .banners-row, .row.banners-row {
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding: 0 12px !important;
+    box-sizing: border-box !important;
+  }
+  .wide-carousel,
+  .wide-carousel img,
+  #carousel img {
+    border-radius: 16px !important;
+  }
+}
+
 /* Shoptetí benefit lišta (Jsme 100% česká značka / Vyrobíme do 24h / ...) — viditelná pod hero bannerem na homepage, na detailu produktu schovaná */
 .benefitBanner,
 .benefitBanner.position--benefitHomepage {
@@ -621,7 +642,28 @@ body.type-category .benefitBanner.position--benefitHomepage {
   flex-wrap: nowrap !important;
 }
 
-/* Tlačítko "Ukázat všechny" — POD sliderem, vycentrované (podle originálu) */
+/* Tlačítko "Ukázat všechny" — DESKTOP: v nadpisu vpravo (jako dřív),
+   MOBIL: pod sliderem vycentrované (podle originálu oldmans.cz).
+   Obě varianty existují v DOM zároveň, přepínají se přes media query. */
+.om-show-all-btn {
+  margin-left: auto !important;
+  border: 1px solid #ddd !important;
+  border-radius: 8px !important;
+  padding: 10px 18px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  color: #1a1a1a !important;
+  text-decoration: none !important;
+  background: #fff !important;
+  white-space: nowrap !important;
+  transition: background .2s, border-color .2s !important;
+}
+.om-show-all-btn:hover {
+  background: #f5f5f5 !important;
+  border-color: #bbb !important;
+}
 .om-show-all-wrap {
   max-width: 1400px;
   margin: 0 auto;
@@ -637,6 +679,16 @@ body.type-category .benefitBanner.position--benefitHomepage {
 .om-section-inner .om-show-all-wrap {
   max-width: none;
   padding: 0 0 10px;
+}
+/* Nad 768px (desktop/tablet) — tlačítko pod sliderem schované,
+   platí jen to v nadpisu */
+@media (min-width: 769px) {
+  .om-show-all-wrap { display: none !important; }
+}
+/* Do 768px (mobil) — tlačítko v nadpisu schované, platí jen to pod
+   sliderem */
+@media (max-width: 768px) {
+  .om-show-all-btn { display: none !important; }
 }
 
 /* Slider — přebij inline width: 428px na kartách */
