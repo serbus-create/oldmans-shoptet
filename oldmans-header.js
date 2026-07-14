@@ -188,20 +188,22 @@
      Skryjeme Shoptet "signature" badge a přepíšeme text copyrightu, cookie odkaz
      zachováme (jinak přijdeme o funkční nastavení souhlasu cookies). */
   function customizeFooterCopyright() {
-    var footerBottom = document.querySelector('#footer .footer-bottom, .footer .footer-bottom');
-    if (!footerBottom || footerBottom.dataset.omDone) return;
+    var footerBottoms = document.querySelectorAll('#footer .footer-bottom, .footer .footer-bottom');
+    footerBottoms.forEach(function (footerBottom) {
+      if (footerBottom.dataset.omDone) return;
 
-    var signature = footerBottom.querySelector('#signature');
-    if (signature) signature.style.setProperty('display', 'none', 'important');
+      var signature = footerBottom.querySelector('#signature');
+      if (signature) signature.style.setProperty('display', 'none', 'important');
 
-    var copyright = footerBottom.querySelector('.copyright[data-testid="textCopyright"], .copyright');
-    if (copyright) {
-      var cookiesLink = copyright.querySelector('.js-cookies-settings');
-      var cookiesHtml = cookiesLink ? cookiesLink.outerHTML : '';
-      copyright.innerHTML = '© Copyright 2026 <strong>Old Man\'s</strong>. Všechna práva vyhrazena. Vytvořil <a href="https://www.v-h-s.cz/" target="_blank" rel="noopener">vhs.</a> ' + cookiesHtml;
-    }
+      var copyright = footerBottom.querySelector('.copyright[data-testid="textCopyright"], .copyright');
+      if (copyright) {
+        var cookiesLink = copyright.querySelector('.js-cookies-settings');
+        var cookiesHtml = cookiesLink ? cookiesLink.outerHTML : '';
+        copyright.innerHTML = '© Copyright 2026 <strong>Old Man\'s</strong>. Všechna práva vyhrazena. Vytvořil <a href="https://www.v-h-s.cz/" target="_blank" rel="noopener">vhs.</a> ' + cookiesHtml;
+      }
 
-    footerBottom.dataset.omDone = 'true';
+      footerBottom.dataset.omDone = 'true';
+    });
   }
 
   function injectAll() {
