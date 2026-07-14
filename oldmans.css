@@ -871,9 +871,6 @@ body.type-category .benefitBanner.position--benefitHomepage {
   }
 }
 
-@media (max-width: 480px) {
-  .om-footer-inner { grid-template-columns: 1fr; }
-}
 
 
 /* ══════════════════════════════════════════════
