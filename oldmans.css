@@ -14,9 +14,11 @@
 /* "Vitejte v nasem obchode" uvitaci text */
 .welcome-wrapper { display: none !important; }
 
-/* Puvodni Shoptet header */
-#header .header-top,
-#header .header-bottom { display: none !important; }
+/* Puvodni Shoptet header — cely wrapper, ne jen jeho podcasti (i s
+   prazdnymi .header-top/.header-bottom zustaval wrapper #header
+   zabirat misto vlastnim paddingem/vyskou, na mobilu to delalo
+   velkou prazdnou mezeru na zacatku stranky) */
+#header { display: none !important; }
 
 /* ── OBSAH – normalni kontejner (odsazeni po stranach) ── */
 #content-wrapper.container,
