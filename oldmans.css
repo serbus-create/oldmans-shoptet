@@ -2319,12 +2319,37 @@ html, body {
   .om-about-text h2, .om-apetit-text h2 { font-size: 30px !important; }
   .om-instagram h2 { font-size: 38px !important; }
 
-  /* ── Skrýt žluté posuvné šipky u sliderů — na mobilu se posouvá
-     prstem (swipe), šipky jsou navíc zbytečné a překrývaly karty
-     produktů (viz screenshot). Týká se Bestsellery/Omáčky ve slevě
-     (nativní Shoptet slider) i Vybraných receptů (vlastní slider). ── */
-  .product-slider-navigation,
-  .om-recipe-nav {
-    display: none !important;
+  /* ── Produktové slidery (Bestsellery/Omáčky ve slevě) a Vybrané
+     recepty — na mobilu podle vzoru originálu oldmans.cz: jedna karta
+     přes většinu šířky obrazovky (s kouskem další karty jako náznak,
+     že se dá klikat/posouvat dál) + viditelné žluté šipky přes fotku. ── */
+  .products-block .product {
+    width: 84vw !important;
+    min-width: 84vw !important;
+    max-width: 84vw !important;
   }
+  .product-slider-navigation {
+    width: 44px !important;
+    height: 44px !important;
+    /* Poměr odvozený z desktopu (92px offset / 270px karta ≈ 0.34),
+       přepočítaný na aktuální šířku karty v vw, ať šipka zůstane
+       vertikálně na středu čtvercové fotky i při jiné šířce obrazovky */
+    margin-top: calc(84vw * -0.34) !important;
+  }
+  .product-slider-navigation:before {
+    width: 10px !important;
+    height: 10px !important;
+    border-width: 2px !important;
+  }
+
+  .om-recipes .om-recipe-item { width: 84vw !important; }
+  .om-recipe-nav {
+    width: 44px !important;
+    height: 44px !important;
+    /* Fotka receptu je čtvercová = výška rovná šířce karty, střed fotky
+       je tedy v polovině šířky karty */
+    top: calc(84vw / 2) !important;
+  }
+  .om-recipe-nav-prev { left: 4px; }
+  .om-recipe-nav-next { right: 4px; }
 }
