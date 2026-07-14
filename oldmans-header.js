@@ -742,7 +742,6 @@
     recipes.innerHTML = `<div class="om-section-inner">
       <div class="om-section-header">
         <h2>🍴 Vybrané recepty</h2>
-        <a href="/recepty/" class="om-btn-more">Ukázat všechny</a>
       </div>
       <div class="om-recipes-wrapper">
         <button type="button" class="om-recipe-nav om-recipe-nav-prev" aria-label="Předchozí"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 6l-6 6 6 6" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -782,6 +781,7 @@
         </div>
         <button type="button" class="om-recipe-nav om-recipe-nav-next" aria-label="Další"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6l6 6-6 6" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>
+      <div class="om-show-all-wrap"><a href="/recepty/" class="om-btn-more">Ukázat všechny</a></div>
     </div>`;
 
     /* --- 7f. INSTAGRAM --- */
@@ -811,17 +811,17 @@
     var sale = document.querySelector('.homepage-products-heading-2');
     var saleWrapper = sale ? sale.nextElementSibling : null;
 
-    /* Tlačítka "Ukázat všechny" u nadpisů Bestsellery / Omáčky ve slevě */
-    function addShowAllButton(heading, url) {
-      if (!heading || heading.querySelector('.om-show-all-btn')) return;
+    /* Tlačítko "Ukázat všechny" — POD sliderem (ne v nadpisu), podle originálu */
+    function buildShowAllButton(url) {
+      var wrap = document.createElement('div');
+      wrap.className = 'om-show-all-wrap';
       var btn = document.createElement('a');
       btn.href = url;
-      btn.className = 'om-show-all-btn';
+      btn.className = 'om-btn-more';
       btn.textContent = 'Ukázat všechny';
-      heading.appendChild(btn);
+      wrap.appendChild(btn);
+      return wrap;
     }
-    addShowAllButton(bestsellers, '/kategorie/bestseller/');
-    addShowAllButton(sale, '/kategorie/v-akci/');
 
     /* Pomocná funkce — vloží element ZA jiný element */
     function insertAfter(newEl, refEl) {
@@ -833,22 +833,30 @@
     }
 
     /* POŘADÍ dle originálu oldmans.cz:
-       USP → Bestsellery → Partneři → O nás → Kategorie → Apetit
-       → Omáčky ve slevě → Recepty → Instagram */
+       USP → Bestsellery → Ukázat všechny → Partneři → O nás → Kategorie
+       → Apetit → Omáčky ve slevě → Ukázat všechny → Recepty → Instagram */
 
     var anchor = bestsellersWrapper || benefitBanner;
+    if (bestsellersWrapper) {
+      var bestsellersShowAll = buildShowAllButton('/kategorie/bestseller/');
+      insertAfter(bestsellersShowAll, bestsellersWrapper);
+      anchor = bestsellersShowAll;
+    }
     insertAfter(partners, anchor);
     insertAfter(about, partners);
     insertAfter(categories, about);
     insertAfter(apetit, categories);
 
     /* Přesuneme "Omáčky ve slevě" za Apetit */
+    var afterSale = apetit;
     if (sale && saleWrapper) {
       insertAfter(sale, apetit);
       insertAfter(saleWrapper, sale);
+      var saleShowAll = buildShowAllButton('/kategorie/v-akci/');
+      insertAfter(saleShowAll, saleWrapper);
+      afterSale = saleShowAll;
     }
 
-    var afterSale = saleWrapper || apetit;
     insertAfter(recipes, afterSale);
 
     /* Šipky "Vybrané recepty" — vlastní scroll slider (nezávislý na Shoptet slideru) */
