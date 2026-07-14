@@ -139,15 +139,22 @@ body.type-category .benefitBanner.position--benefitHomepage {
 }
 @media (max-width: 480px) {
   .benefitBanner,
-  .benefitBanner.position--benefitHomepage { gap: 6px !important; }
+  .benefitBanner.position--benefitHomepage { gap: 5px !important; }
   .benefitBanner__item {
     flex: 1 1 100% !important;
     align-items: flex-start !important;
-    gap: 18px !important;
+    gap: 15px !important;
   }
-  .benefitBanner__img { width: 57px !important; }
-  .benefitBanner__title { font-size: 20px !important; }
-  .benefitBanner__data { font-size: 17px !important; }
+  .benefitBanner__img { width: 48px !important; }
+  .benefitBanner__title { font-size: 17px !important; }
+  .benefitBanner__data { font-size: 14px !important; }
+}
+/* Nativní Shoptet wrapper kolem USP (section.usp) má vlastní velký
+   padding-bottom, který dělal velkou mezeru před nadpisem Bestsellery */
+@media (max-width: 768px) {
+  section.usp { padding-bottom: 10px !important; }
+  .benefitBanner,
+  .benefitBanner.position--benefitHomepage { padding-bottom: 4px !important; }
 }
 .container { max-width: 1400px !important; padding-left: 20px !important; padding-right: 20px !important; }
 
