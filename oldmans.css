@@ -65,6 +65,66 @@
   border-radius: 0 !important;
 }
 
+/* Šipky hlavního hero banneru (nativní Shoptet .carousel-control) —
+   stejný žlutý zaoblený styl jako u produktových sliderů. Skryjeme
+   veškerý nativní obsah (ikona/text uvnitř, ať je to cokoliv) a
+   nahradíme vlastní CSS šipkou. */
+.carousel-control.left,
+.carousel-control.right {
+  background: #f0c944 !important;
+  background-image: none !important;
+  opacity: 1 !important;
+  border: none !important;
+  border-radius: 16px !important;
+  width: 52px !important;
+  height: 52px !important;
+  top: 50% !important;
+  bottom: auto !important;
+  transform: translateY(-50%) !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  z-index: 5 !important;
+  transition: background .2s !important;
+}
+.carousel-control.left { left: 20px !important; right: auto !important; }
+.carousel-control.right { right: 20px !important; left: auto !important; }
+.carousel-control.left > *,
+.carousel-control.right > * { display: none !important; }
+.carousel-control.left:before,
+.carousel-control.right:before {
+  content: "" !important;
+  display: block !important;
+  width: 12px !important;
+  height: 12px !important;
+  border-top: 3px solid #fff !important;
+  border-right: 3px solid #fff !important;
+  border-radius: 2px !important;
+  box-sizing: border-box !important;
+}
+.carousel-control.left:before { transform: rotate(-135deg); margin-left: 4px; }
+.carousel-control.right:before { transform: rotate(45deg); margin-left: -4px; }
+.carousel-control.left:hover,
+.carousel-control.right:hover { background: #e6b800 !important; }
+@media (max-width: 768px) {
+  .carousel-control.left,
+  .carousel-control.right {
+    width: 44px !important;
+    height: 44px !important;
+  }
+  .carousel-control.left { left: 10px !important; }
+  .carousel-control.right { right: 10px !important; }
+  .carousel-control.left:before,
+  .carousel-control.right:before {
+    width: 10px !important;
+    height: 10px !important;
+    border-width: 2px !important;
+  }
+}
+
 .om-section { max-width: 100%; }
 
 /* Shoptetí benefit lišta (Jsme 100% česká značka / Vyrobíme do 24h / ...) — viditelná pod hero bannerem na homepage, na detailu produktu schovaná */
