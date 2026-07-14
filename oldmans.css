@@ -2139,7 +2139,7 @@ html, body {
   /* Košík — kulaté žluté tlačítko jen s ikonou + odznak s počtem kusů,
      stejně jako na originálu (text ceny se na mobilu neukazuje).
      POZOR: základní (desktopové) pravidlo má overflow:hidden — na mobilu
-     ho musíme přebít na visible, jinak se odznak i halo kruh useknou. */
+     ho musíme přebít na visible, jinak se odznak useknou. */
   #om-header .om-cart a {
     position: relative !important;
     min-width: 0 !important;
@@ -2153,19 +2153,6 @@ html, body {
     justify-content: center !important;
     overflow: visible !important;
     z-index: 1;
-  }
-  /* Jemný světlejší žlutý "halo" kruh za tlačítkem */
-  #om-header .om-cart a:before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 62px;
-    height: 62px;
-    transform: translate(-50%, -50%);
-    background: rgba(247, 201, 27, .3);
-    border-radius: 50%;
-    z-index: -1;
   }
   #om-header .om-cart-icon {
     background: transparent !important;
