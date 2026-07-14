@@ -1054,6 +1054,38 @@
       proFirmy.className = 'om-pro-firmy';
       proFirmy.innerHTML = '<img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/pro%20firmy.svg" alt=""> <strong>Pro firmy – Nabídka na míru</strong>';
       priceBlock.appendChild(proFirmy);
+
+      /* Box hodnocení + box spokojených zákazníků — pod tlačítkem
+         Do košíku (podle návrhu klienta). Hodnoty pro hvězdičky/počet
+         hodnocení čteme z nativního widgetu (.stars-wrapper), který je
+         v kroku 0 přesunutý hned pod nadpis — čteme z NĚJ (klonujeme
+         hodnoty, ne uzel), ať nezasahujeme do nativního chování odkazu
+         "Podrobnosti hodnocení". */
+      var starsWrapper = document.querySelector('.stars-wrapper');
+      if (starsWrapper) {
+        var starsOnCount = starsWrapper.querySelectorAll('.star.star-on').length;
+        var starsLabelEl = starsWrapper.querySelector('.stars-label');
+        var reviewCountText = starsLabelEl ? starsLabelEl.textContent.trim() : '';
+        var ariaText = starsWrapper.getAttribute('aria-label') || starsWrapper.textContent || '';
+        var ratingMatch = ariaText.match(/(\d+[,.]\d+)\s*z\s*5/i);
+        var ratingValue = ratingMatch ? ratingMatch[1].replace(',', '.') : (starsOnCount ? starsOnCount + '.0' : '');
+
+        var summaryRow = document.createElement('div');
+        summaryRow.className = 'om-summary-row';
+        summaryRow.innerHTML =
+          '<div class="om-rating-box">' +
+            '<div class="om-rating-top">' +
+              '<span class="om-rating-stars">' + '★'.repeat(starsOnCount) + '☆'.repeat(5 - starsOnCount) + '</span>' +
+              '<span class="om-rating-value">' + ratingValue + '</span>' +
+            '</div>' +
+            '<div class="om-rating-count">' + reviewCountText + '</div>' +
+          '</div>' +
+          '<div class="om-customers-box">' +
+            '<span class="om-customers-icon">👥</span>' +
+            '<span class="om-customers-text"><strong>350 000+</strong><span>spokojených zákazníků</span></span>' +
+          '</div>';
+        priceBlock.appendChild(summaryRow);
+      }
     }
 
     /* 4. Loga partnerů — do PRAVÉHO sloupce (.p-data-wrapper), hned pod box s cenou */
