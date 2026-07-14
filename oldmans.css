@@ -2169,4 +2169,13 @@ html, body {
   .om-section { padding: 35px 0; }
   .om-about-text h2, .om-apetit-text h2 { font-size: 30px !important; }
   .om-instagram h2 { font-size: 38px !important; }
+
+  /* ── Skrýt žluté posuvné šipky u sliderů — na mobilu se posouvá
+     prstem (swipe), šipky jsou navíc zbytečné a překrývaly karty
+     produktů (viz screenshot). Týká se Bestsellery/Omáčky ve slevě
+     (nativní Shoptet slider) i Vybraných receptů (vlastní slider). ── */
+  .product-slider-navigation,
+  .om-recipe-nav {
+    display: none !important;
+  }
 }
