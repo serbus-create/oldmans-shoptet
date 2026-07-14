@@ -846,7 +846,31 @@ body.type-category .benefitBanner.position--benefitHomepage {
 }
 @media (max-width: 768px) {
   .om-footer-inner { grid-template-columns: 1fr 1fr; gap: 28px; padding: 0 24px; }
+
+  /* ── Sloupec "Kontaktní údaje" — na mobilu vycentrovaný, podle
+     originálu. Zbytek patičky (Menu/Kategorie/Informace) beze změny. ── */
+  .om-footer-inner > .om-footer-col:first-child {
+    grid-column: 1 / -1;
+    text-align: center;
+  }
+  .om-footer-inner > .om-footer-col:first-child .om-footer-ig-label {
+    font-size: 24px !important;
+    font-weight: 800 !important;
+    color: #111 !important;
+    margin-top: 24px !important;
+  }
+  .om-footer-inner > .om-footer-col:first-child .om-footer-ig {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    max-width: 380px !important;
+    margin: 14px auto 0 !important;
+    padding: 17px 24px !important;
+    font-size: 15px !important;
+    letter-spacing: .5px !important;
+  }
 }
+
 @media (max-width: 480px) {
   .om-footer-inner { grid-template-columns: 1fr; }
 }
