@@ -740,6 +740,7 @@
     recipes.innerHTML = `<div class="om-section-inner">
       <div class="om-section-header">
         <h2>🍴 Vybrané recepty</h2>
+        <a href="/recepty/" class="om-btn-more om-show-all-btn">Ukázat všechny</a>
       </div>
       <div class="om-recipes-wrapper">
         <button type="button" class="om-recipe-nav om-recipe-nav-prev" aria-label="Předchozí"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 6l-6 6 6 6" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -809,7 +810,16 @@
     var sale = document.querySelector('.homepage-products-heading-2');
     var saleWrapper = sale ? sale.nextElementSibling : null;
 
-    /* Tlačítko "Ukázat všechny" — POD sliderem (ne v nadpisu), podle originálu */
+    /* Tlačítko "Ukázat všechny" — DESKTOP: v nadpisu, MOBIL: pod sliderem
+       (obě varianty existují v DOM, přepínají se přes CSS media query) */
+    function addShowAllButtonToHeading(heading, url) {
+      if (!heading || heading.querySelector('.om-show-all-btn')) return;
+      var btn = document.createElement('a');
+      btn.href = url;
+      btn.className = 'om-show-all-btn';
+      btn.textContent = 'Ukázat všechny';
+      heading.appendChild(btn);
+    }
     function buildShowAllButton(url) {
       var wrap = document.createElement('div');
       wrap.className = 'om-show-all-wrap';
@@ -820,6 +830,8 @@
       wrap.appendChild(btn);
       return wrap;
     }
+    addShowAllButtonToHeading(bestsellers, '/kategorie/bestseller/');
+    addShowAllButtonToHeading(sale, '/kategorie/v-akci/');
 
     /* Pomocná funkce — vloží element ZA jiný element */
     function insertAfter(newEl, refEl) {
