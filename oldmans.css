@@ -2100,3 +2100,73 @@ li[data-testid="tabDiscussion"],
   color: #9a9a9a !important;
   fill: #9a9a9a !important;
 }
+
+/* ══════════════════════════════════════════════
+   MOBILNÍ RESPONZIVITA — souhrnné opravy
+   ══════════════════════════════════════════════ */
+
+/* Stránka se nesmí posouvat do stran (100vw sekce + přetékající prvky
+   způsobovaly vodorovný scroll a "rozházený" vzhled celého mobilu) */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+}
+
+@media (max-width: 768px) {
+
+  /* ── Top bar — menší písmo, zalomení na střed ── */
+  #om-topbar .om-topbar-inner {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px 10px;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  /* ── Hlavní header — dva řádky: logo + ikony nahoře, hledání pod tím ── */
+  #om-header .om-header-inner {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  #om-header .om-logo { order: 1; }
+  #om-header .om-logo img { height: 40px; }
+  #om-header .om-icons { order: 2; margin-left: auto; gap: 12px; }
+  #om-header .om-search {
+    order: 3;
+    flex: 1 1 100%;
+    margin: 0;
+    max-width: 100%;
+  }
+  #om-header .om-search form { height: 46px; }
+  #om-header .om-search button { height: 38px; padding: 0 16px; font-size: 14px; }
+  /* Košík — jen ikona, žádná pevná šířka (přetékal přes okraj obrazovky) */
+  #om-header .om-cart a {
+    min-width: 0 !important;
+    width: auto !important;
+    font-size: 0 !important;
+    padding: 4px !important;
+    column-gap: 0 !important;
+  }
+
+  /* ── Detail produktu ── */
+  /* Trust badges (Vyrobeno v ČR / Ruční výroba / Vždy čerstvé) — povolit
+     zalomení; nowrap + nowrap texty přetékaly přes okraj */
+  #om-trust-badges {
+    flex-wrap: wrap !important;
+    gap: 14px 20px !important;
+  }
+  #om-trust-badges .om-badge span { white-space: normal !important; }
+
+  /* Sticky fotka produktu na mobilu nedává smysl (sloupce jsou pod sebou) */
+  .p-image-wrapper {
+    position: static !important;
+  }
+
+  /* Loga partnerů na detailu — menší, ať se vejdou */
+  .om-product-partners-logos img { height: 38px !important; max-width: 100px !important; }
+
+  /* ── Homepage sekce — menší nadpisy, menší odsazení ── */
+  .om-section { padding: 35px 0; }
+  .om-about-text h2, .om-apetit-text h2 { font-size: 30px !important; }
+  .om-instagram h2 { font-size: 38px !important; }
+}
