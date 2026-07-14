@@ -138,7 +138,12 @@ body.type-category .benefitBanner.position--benefitHomepage {
   .benefitBanner__item { flex: 1 1 45% !important; }
 }
 @media (max-width: 480px) {
-  .benefitBanner__item { flex: 1 1 100% !important; }
+  .benefitBanner,
+  .benefitBanner.position--benefitHomepage { gap: 6px !important; }
+  .benefitBanner__item {
+    flex: 1 1 100% !important;
+    align-items: flex-start !important;
+  }
   .benefitBanner__img { width: 44px !important; }
   .benefitBanner__title { font-size: 15px !important; }
   .benefitBanner__data { font-size: 13px !important; }
@@ -412,6 +417,7 @@ body.type-category .benefitBanner.position--benefitHomepage {
 ────────────────────────────────────────────── */
 .om-categories { background: #f5f5f5; }
 .om-categories h2 span { color: #9f1400; }
+.om-categories h2 { color: #f0c944; }
 .om-cats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
@@ -2432,6 +2438,23 @@ html, body {
   .om-section { padding: 35px 0; }
   .om-about-text h2, .om-apetit-text h2 { font-size: 30px !important; }
   .om-instagram h2 { font-size: 38px !important; }
+
+  /* ── Nadpisy sekcí na mobilu vycentrované (Bestsellery, Omáčky ve
+     slevě, Recepty, Naše omáčky najdete, Old Man's: omáčky na míru,
+     Vyberte si dle vaší chuti / Kategorie omáček, ...) ── */
+  .homepage-group-title,
+  .om-section-header {
+    justify-content: center !important;
+  }
+  .homepage-group-title,
+  .om-section-header h2,
+  .om-partners h3,
+  .om-about-text h2,
+  .om-apetit-text h2,
+  .om-categories h2,
+  .om-categories .om-subtitle {
+    text-align: center !important;
+  }
 
   /* ── Produktové slidery (Bestsellery/Omáčky ve slevě) a Vybrané
      recepty — na mobilu podle vzoru originálu oldmans.cz: jedna karta
