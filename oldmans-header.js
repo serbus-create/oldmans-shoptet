@@ -285,8 +285,12 @@
           <div class="om-cart">
             <a href="/kosik/" class="cart-count toggle-window" data-target="cart" data-hover="true" data-redirect="true">
               <span id="om-cart-price" class="cart-price">Prázdný košík</span>
+              <span id="om-cart-badge" class="om-cart-badge">0</span>
             </a>
           </div>
+          <button type="button" id="om-mobile-menu-btn" class="om-mobile-menu-btn" aria-label="Menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+          </button>
         </div>
       </div>`;
 
@@ -314,6 +318,75 @@
       shoptetHeader.parentNode.insertBefore(header, catMenu);
       shoptetHeader.parentNode.insertBefore(topbar, header);
     }
+
+    /* -------------------------------------------------
+       4a. MOBILNÍ ROZBALOVACÍ MENU (hamburger)
+       Na mobilu jsou hledání, Recepty/B2B a lišta kategorií schované
+       (viz CSS) a přesunuté sem, do rozbalovacího panelu pod headerem —
+       podle vzoru oldmans.cz (jen logo + ikony + hamburger v headeru).
+    ------------------------------------------------- */
+    var mobileBackdrop = document.createElement('div');
+    mobileBackdrop.id = 'om-mobile-backdrop';
+    mobileBackdrop.className = 'om-mobile-backdrop';
+
+    var mobileDrawer = document.createElement('div');
+    mobileDrawer.id = 'om-mobile-drawer';
+    mobileDrawer.className = 'om-mobile-drawer';
+    mobileDrawer.innerHTML = `
+      <form class="om-mobile-search" action="/action/ProductSearch/prepareString/" method="post">
+        <input type="hidden" name="language" value="cs">
+        <input type="search" name="string" placeholder="Napište, co hledáte..">
+        <button type="submit">Hledat</button>
+      </form>
+      <ul class="om-mobile-nav">
+        <li><a href="/recepty/">🍴 Recepty</a></li>
+        <li><a href="/velkoobchod/">🤝 B2B</a></li>
+      </ul>
+      <div class="om-mobile-cats">
+        <div class="om-mobile-cats-title">Kategorie</div>
+        <ul id="omMobileCatList"></ul>
+      </div>`;
+
+    document.body.appendChild(mobileBackdrop);
+    document.body.appendChild(mobileDrawer);
+
+    /* Přepíná otevření/zavření menu, dopočítá pozici panelu podle
+       skutečné výšky headeru (ta se liší dle zařízení/fontů) */
+    (function initMobileMenu() {
+      var btn = document.getElementById('om-mobile-menu-btn');
+      if (!btn) return;
+
+      function positionDrawer() {
+        var rect = header.getBoundingClientRect();
+        mobileDrawer.style.top = rect.bottom + 'px';
+      }
+      function openMenu() {
+        positionDrawer();
+        document.body.classList.add('om-mobile-menu-open');
+        document.body.style.overflow = 'hidden';
+        btn.setAttribute('aria-expanded', 'true');
+      }
+      function closeMenu() {
+        document.body.classList.remove('om-mobile-menu-open');
+        document.body.style.overflow = '';
+        btn.setAttribute('aria-expanded', 'false');
+      }
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (document.body.classList.contains('om-mobile-menu-open')) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      });
+      mobileBackdrop.addEventListener('click', closeMenu);
+      mobileDrawer.addEventListener('click', function (e) {
+        if (e.target.closest('a')) closeMenu();
+      });
+      window.addEventListener('resize', function () {
+        if (document.body.classList.contains('om-mobile-menu-open')) positionDrawer();
+      });
+    })();
 
     /* -------------------------------------------------
        4b. DYNAMICKÉ NAČTENÍ KATEGORIÍ ZE SHOPTETU
@@ -397,6 +470,23 @@
       });
     }
 
+    /* Zrcadlí kompletní seznam kategorií (Bestseller, V akci, dynamické
+       i fallback) do mobilního rozbalovacího menu — voláno hned po
+       sestavení #omCatList, PŘED setupResponsiveCatMenu(), aby se
+       nezkopírovaly položky už schované kvůli "Více" na desktopu. */
+    function syncMobileCategoryMenu() {
+      var list = document.getElementById('omCatList');
+      var mobileList = document.getElementById('omMobileCatList');
+      if (!list || !mobileList) return;
+      mobileList.innerHTML = '';
+      Array.prototype.slice.call(list.children).forEach(function (li) {
+        if (li.id === 'omMoreBtn') return;
+        var clone = li.cloneNode(true);
+        clone.style.display = '';
+        mobileList.appendChild(clone);
+      });
+    }
+
     /* Zkusíme hned, a pokud nativní menu ještě není naplněné, zkusíme to
        ještě několikrát v krátkých intervalech. Teprve po úspěchu (nebo
        vyčerpání pokusů + použití zálohy) spustíme přepočet "Více". */
@@ -408,11 +498,13 @@
       function attempt() {
         attempts++;
         if (buildDynamicCategoryMenu()) {
+          syncMobileCategoryMenu();
           setupResponsiveCatMenu();
           return;
         }
         if (attempts >= maxAttempts) {
           buildFallbackCategoryMenu();
+          syncMobileCategoryMenu();
           setupResponsiveCatMenu();
           return;
         }
@@ -476,6 +568,7 @@
       var priceEl = document.querySelector('.header-cart-total, .cart-total-price, [data-testid="headerCartPrice"]');
       var countEl = document.querySelector('.header-cart-items-count, .cart-count-value, [data-testid="headerCartCount"]');
       var omPrice = document.getElementById('om-cart-price');
+      var omBadge = document.getElementById('om-cart-badge');
       if (!omPrice) return;
 
       var price = priceEl ? priceEl.textContent.trim() : '';
@@ -485,6 +578,13 @@
         omPrice.textContent = (count ? count + ' × ' : '') + price;
       } else {
         omPrice.textContent = 'Prázdný košík';
+      }
+
+      /* Odznak s počtem kusů — mobilní kulaté tlačítko košíku (viz vzor
+         oldmans.cz), zobrazuje se vždy, i s hodnotou 0 při prázdném košíku */
+      if (omBadge) {
+        var countNum = parseInt(count, 10);
+        omBadge.textContent = isNaN(countNum) ? '0' : String(countNum);
       }
     }
     setTimeout(syncCart, 800);
