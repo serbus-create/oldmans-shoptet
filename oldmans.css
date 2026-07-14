@@ -20,6 +20,12 @@
    velkou prazdnou mezeru na zacatku stranky) */
 #header { display: none !important; }
 
+/* .overall-wrapper mel padding-top:50px — rezerva mista pro puvodni
+   nativni (fixed) header Shoptetu, ktery uz nepouzivame (mame vlastni
+   sticky header). Bez tohohle zruseni zustavala na zacatku stranky
+   velka prazdna mezera. */
+.overall-wrapper { padding-top: 0 !important; }
+
 /* ── OBSAH – normalni kontejner (odsazeni po stranach) ── */
 #content-wrapper.container,
 #content-wrapper {
@@ -2122,6 +2128,16 @@ li[data-testid="tabDiscussion"],
 /* ══════════════════════════════════════════════
    MOBILNÍ RESPONZIVITA — souhrnné opravy
    ══════════════════════════════════════════════ */
+
+/* Hamburger menu / drawer / backdrop jsou určené jen pro mobil — bez
+   téhle výchozí hodnoty (mimo @media) se na desktopu vykreslovaly jako
+   nestylovaný obsah úplně dole na stránce (žádné pravidlo pro ně mimo
+   mobilní media query neplatilo, prohlížeč je bral jako obyčejné divy) */
+.om-mobile-menu-btn,
+.om-mobile-backdrop,
+.om-mobile-drawer {
+  display: none;
+}
 
 /* Stránka se nesmí posouvat do stran (100vw sekce + přetékající prvky
    způsobovaly vodorovný scroll a "rozházený" vzhled celého mobilu) */
