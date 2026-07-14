@@ -1910,14 +1910,42 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .om-price-box .om-availability-line {
   display: flex !important;
   align-items: center;
-  gap: 8px;
-  font-weight: 600;
-  font-size: 16px;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  background: #eef8e4;
+  border-radius: 12px;
+  padding: 16px 18px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.om-price-box .om-availability-line:before {
+  content: "✓";
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #4a9b3f;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .om-price-box .om-availability-line,
 .om-price-box .om-availability-line span,
 .om-price-box .om-availability-line * {
   color: #4a9b3f !important;
+}
+.om-price-box .om-availability-line.om-sold-out {
+  background: #fdecea;
+}
+.om-price-box .om-availability-line.om-sold-out:before {
+  content: "✕";
+  background: #c0392b;
 }
 .om-price-box .om-availability-line.om-sold-out,
 .om-price-box .om-availability-line.om-sold-out span,
@@ -1944,23 +1972,28 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   margin-bottom: 14px !important;
 }
 .quantity-discounts__table {
-  display: flex !important;
-  flex-direction: row !important;
-  flex-wrap: wrap !important;
-  gap: 12px !important;
-}
-.quantity-discounts__item {
-  flex: 1 1 130px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: stretch !important;
-  background: #fff !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 0 !important;
   border: 1px solid #e0e0e0 !important;
   border-radius: 12px !important;
   overflow: hidden !important;
-  padding: 0 !important;
-  transition: border-color .2s !important;
+  background: #fff !important;
 }
+.quantity-discounts__item {
+  flex: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  background: transparent !important;
+  border: none !important;
+  border-right: 1px solid #e0e0e0 !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  transition: background .2s !important;
+}
+.quantity-discounts__item:last-child { border-right: none !important; }
 .qd-badge {
   width: 100% !important;
   box-sizing: border-box !important;
@@ -1998,9 +2031,12 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .qd-body .quantity-discounts__price {
   font-weight: 800 !important;
 }
-/* Aktuálně platná hladina slevy — zvýrazněná zelenou (jako "Skladem"/"Do košíku") */
+/* Aktuálně platná hladina slevy — zvýrazněná zeleným pozadím (inset
+   stín místo border, ať nenarušuje sdílené hranice mřížky) */
 .quantity-discounts__item--highlighted {
-  border: 2px solid #79b530 !important;
+  box-shadow: inset 0 0 0 2px #79b530 !important;
+  z-index: 1;
+  position: relative;
 }
 .quantity-discounts__item--highlighted .qd-body {
   background: #eef8e4 !important;
@@ -2024,7 +2060,17 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   margin-left: 4px !important;
 }
 
-/* Bílý text na tlačítku Do košíku na detailu produktu */
+/* Tlačítko Do košíku na detailu produktu — červená (podle návrhu klienta) */
+.btn.btn-conversion.add-to-cart-button.om-cart-btn-white,
+.om-cart-btn-white {
+  background: #9f1400 !important;
+  border-color: #9f1400 !important;
+}
+.btn.btn-conversion.add-to-cart-button.om-cart-btn-white:hover,
+.om-cart-btn-white:hover {
+  background: #7a0f00 !important;
+  border-color: #7a0f00 !important;
+}
 .btn.btn-conversion.add-to-cart-button.om-cart-btn-white,
 .btn.btn-conversion.add-to-cart-button.om-cart-btn-white *,
 .om-cart-btn-white,
@@ -2045,6 +2091,91 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .om-pro-firmy img { width: 28px; height: 28px; object-fit: contain; }
 .om-pro-firmy strong { text-decoration: underline; }
 .om-pro-firmy:hover strong { color: #9f1400 !important; }
+
+/* Box hodnocení + box spokojených zákazníků — pod tlačítkem Do košíku */
+.om-summary-row {
+  display: flex !important;
+  gap: 14px !important;
+  margin-top: 18px !important;
+  width: 100%;
+}
+.om-rating-box,
+.om-customers-box {
+  flex: 1 !important;
+  background: #f7f7f7 !important;
+  border-radius: 12px !important;
+  padding: 14px 16px !important;
+  box-sizing: border-box !important;
+}
+.om-rating-box {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+.om-rating-top {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+.om-rating-stars {
+  color: #f0c944 !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  letter-spacing: 1px !important;
+}
+.om-rating-value {
+  font-weight: 800 !important;
+  font-size: 18px !important;
+  color: #1a1a1a !important;
+}
+.om-rating-count {
+  font-size: 13px !important;
+  color: #777 !important;
+}
+.om-customers-box {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+.om-customers-icon { font-size: 26px !important; flex-shrink: 0 !important; }
+.om-customers-text {
+  display: flex !important;
+  flex-direction: column !important;
+  font-size: 13px !important;
+  color: #555 !important;
+  line-height: 1.4 !important;
+}
+.om-customers-text strong {
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  color: #1a1a1a !important;
+}
+
+/* Příznaky produktu (Novinka / Tip / Více za méně) na detailu produktu —
+   pilulky nad nadpisem. Barvu pro "Více za méně" (flag-quantity-discount)
+   máme ověřenou; ostatní typy zatím obecný šedý styl (dolaď podle potřeby,
+   až uvidíme skutečné třídy pro Novinka/Tip). */
+.flags.flags-default {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin: 0 0 14px !important;
+}
+.flags.flags-default .flag {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 6px 14px !important;
+  border-radius: 20px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  background: #f0f0f0 !important;
+  color: #1a1a1a !important;
+  white-space: nowrap !important;
+}
+.flags.flags-default .flag-quantity-discount {
+  background: #fdecea !important;
+  color: #c0392b !important;
+}
 
 /* Fotka produktu — "sticky", ať sjíždí s obsahem místo prázdného místa pod sebou
    (nabídka je delší než fotka kvůli kartám množstevní slevy) */
