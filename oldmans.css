@@ -143,10 +143,11 @@ body.type-category .benefitBanner.position--benefitHomepage {
   .benefitBanner__item {
     flex: 1 1 100% !important;
     align-items: flex-start !important;
+    gap: 18px !important;
   }
-  .benefitBanner__img { width: 44px !important; }
-  .benefitBanner__title { font-size: 15px !important; }
-  .benefitBanner__data { font-size: 13px !important; }
+  .benefitBanner__img { width: 57px !important; }
+  .benefitBanner__title { font-size: 20px !important; }
+  .benefitBanner__data { font-size: 17px !important; }
 }
 .container { max-width: 1400px !important; padding-left: 20px !important; padding-right: 20px !important; }
 
