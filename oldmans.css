@@ -2137,7 +2137,9 @@ html, body {
   }
 
   /* Košík — kulaté žluté tlačítko jen s ikonou + odznak s počtem kusů,
-     stejně jako na originálu (text ceny se na mobilu neukazuje) */
+     stejně jako na originálu (text ceny se na mobilu neukazuje).
+     POZOR: základní (desktopové) pravidlo má overflow:hidden — na mobilu
+     ho musíme přebít na visible, jinak se odznak i halo kruh useknou. */
   #om-header .om-cart a {
     position: relative !important;
     min-width: 0 !important;
@@ -2146,17 +2148,37 @@ html, body {
     padding: 0 !important;
     column-gap: 0 !important;
     background: #f7c91b !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: visible !important;
+    z-index: 1;
+  }
+  /* Jemný světlejší žlutý "halo" kruh za tlačítkem */
+  #om-header .om-cart a:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 62px;
+    height: 62px;
+    transform: translate(-50%, -50%);
+    background: rgba(247, 201, 27, .3);
+    border-radius: 50%;
+    z-index: -1;
   }
   #om-header .om-cart-icon {
     background: transparent !important;
     width: auto !important;
     height: auto !important;
+    color: #1a1a1a;
   }
+  #om-header .om-cart-icon svg { width: 20px !important; height: 20px !important; }
   #om-header .om-cart .cart-price { display: none !important; }
   .om-cart-badge {
     position: absolute;
-    top: -3px;
-    right: -3px;
+    top: -4px;
+    right: -4px;
     min-width: 18px;
     height: 18px;
     padding: 0 4px;
@@ -2169,6 +2191,7 @@ html, body {
     align-items: center;
     justify-content: center;
     line-height: 1;
+    z-index: 2;
   }
 
   /* Hamburger tlačítko — vidět jen na mobilu */
