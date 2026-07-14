@@ -1675,6 +1675,22 @@ body.type-category .listSorting .listSorting__control--current {
   font-weight: 700 !important;
 }
 
+/* Na mobilu — 2sloupcová mřížka místo flex-wrap, ať taby vyplní celou
+   šířku rovnoměrně a nezůstává prázdné místo vpravo (delší popisky
+   jako "Nejprodávanější" dřív vynucovaly zalomení jen po dvou kusech
+   do řádku, ale zbytek řádku zůstával prázdný) */
+@media (max-width: 768px) {
+  body.type-category .listSorting #listSortingControls,
+  body.type-category .listSorting .listSorting__controls {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+  body.type-category .listSorting .listSorting__control {
+    width: 100% !important;
+  }
+}
+
 /* ══════════════════════════════════════════════
    STRÁNKA RECEPTY — galerie karet (jako originál)
    ══════════════════════════════════════════════ */
