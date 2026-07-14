@@ -67,28 +67,6 @@
 
 .om-section { max-width: 100%; }
 
-/* Hero banner na mobilu — čtvercový obrázek se zaoblenými rohy, vsazený
-   s odsazením od okrajů (ne přes celou šířku obrazovky jako na desktopu) */
-@media (max-width: 768px) {
-  .banners-row, .row.banners-row {
-    position: static !important;
-    left: auto !important;
-    right: auto !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    padding: 0 20px !important;
-    box-sizing: border-box !important;
-  }
-  .wide-carousel img, #carousel img {
-    aspect-ratio: 1 / 1 !important;
-    height: auto !important;
-    object-fit: cover !important;
-    border-radius: 16px !important;
-  }
-}
-
 /* Shoptetí benefit lišta (Jsme 100% česká značka / Vyrobíme do 24h / ...) — viditelná pod hero bannerem na homepage, na detailu produktu schovaná */
 .benefitBanner,
 .benefitBanner.position--benefitHomepage {
