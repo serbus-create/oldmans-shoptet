@@ -2331,10 +2331,11 @@ html, body {
   .product-slider-navigation {
     width: 44px !important;
     height: 44px !important;
-    /* Poměr odvozený z desktopu (92px offset / 270px karta ≈ 0.34),
-       přepočítaný na aktuální šířku karty v vw, ať šipka zůstane
-       vertikálně na středu čtvercové fotky i při jiné šířce obrazovky */
-    margin-top: calc(84vw * -0.34) !important;
+    /* Opraveno podle reálného screenshotu (šipky seděly moc vysoko,
+       přes štítky místo přes fotku) — přepočítáno z naměřených pixelů,
+       ne odvozeno z desktopového poměru (nativní startovní pozice
+       Shoptet slideru se neškáluje stejně jako šířka karty) */
+    margin-top: 58px !important;
   }
   .product-slider-navigation:before {
     width: 10px !important;
