@@ -2154,14 +2154,16 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 /* Příznaky produktu (Novinka / Tip / Více za méně) na detailu produktu —
    pilulky nad nadpisem. Barvu pro "Více za méně" (flag-quantity-discount)
    máme ověřenou; ostatní typy zatím obecný šedý styl (dolaď podle potřeby,
-   až uvidíme skutečné třídy pro Novinka/Tip). */
-.flags.flags-default {
+   až uvidíme skutečné třídy pro Novinka/Tip).
+   POZOR: musí být scoped jen na body.type-product — stejnou strukturu
+   (.flags.flags-default) používají i kartičky produktů v kategorii! */
+body.type-product .flags.flags-default {
   display: flex !important;
   flex-wrap: wrap !important;
   gap: 8px !important;
   margin: 0 0 14px !important;
 }
-.flags.flags-default .flag {
+body.type-product .flags.flags-default .flag {
   display: inline-flex !important;
   align-items: center !important;
   padding: 6px 14px !important;
@@ -2172,7 +2174,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   color: #1a1a1a !important;
   white-space: nowrap !important;
 }
-.flags.flags-default .flag-quantity-discount {
+body.type-product .flags.flags-default .flag-quantity-discount {
   background: #fdecea !important;
   color: #c0392b !important;
 }
