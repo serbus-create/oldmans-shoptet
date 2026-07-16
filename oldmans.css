@@ -1874,15 +1874,15 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   background: transparent !important;
   border-radius: 0 !important;
   padding: 0 !important;
-  margin: 14px 0 4px !important;
+  margin: 10px 0 4px !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: flex-start !important;
-  gap: 10px !important;
+  gap: 8px !important;
 }
 .om-price-box .price-final,
 .om-price-box strong.price-final {
-  font-size: 30px !important;
+  font-size: 24px !important;
   font-weight: 800 !important;
   color: #1a1a1a !important;
 }
@@ -1891,12 +1891,12 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   display: flex !important;
   align-items: baseline !important;
   flex-wrap: wrap !important;
-  gap: 6px 12px !important;
+  gap: 6px 10px !important;
 }
 /* Původní (přeškrtnutá) cena při množstevní slevě — viz JS enhanceQuantityPriceSync */
 .om-price-orig {
   display: none;
-  font-size: 17px !important;
+  font-size: 14px !important;
   color: #999 !important;
   text-decoration: line-through !important;
   font-weight: 500 !important;
@@ -1904,32 +1904,32 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .om-buy-row {
   display: flex !important;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 .om-price-box .om-availability-line {
   display: flex !important;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 13px;
   text-transform: uppercase;
   letter-spacing: .3px;
   background: #eef8e4;
-  border-radius: 12px;
-  padding: 16px 18px;
+  border-radius: 10px;
+  padding: 10px 14px;
   width: 100%;
   box-sizing: border-box;
 }
 .om-price-box .om-availability-line:before {
   content: "✓";
   flex-shrink: 0;
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: #4a9b3f;
   color: #fff;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 800;
   display: flex;
   align-items: center;
@@ -1962,21 +1962,21 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   background: transparent !important;
   border-radius: 0 !important;
   padding: 0 !important;
-  margin: 22px 0 0 !important;
+  margin: 14px 0 0 !important;
   box-sizing: border-box !important;
 }
 .quantity-discounts__headline {
-  font-size: 18px !important;
+  font-size: 15px !important;
   font-weight: 800 !important;
   color: #1a1a1a !important;
-  margin-bottom: 14px !important;
+  margin-bottom: 8px !important;
 }
 .quantity-discounts__table {
   display: grid !important;
   grid-template-columns: repeat(4, 1fr) !important;
   gap: 0 !important;
   border: 1px solid #e0e0e0 !important;
-  border-radius: 12px !important;
+  border-radius: 10px !important;
   overflow: hidden !important;
   background: #fff !important;
 }
@@ -2000,10 +2000,10 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   text-align: center !important;
   color: #fff !important;
   font-weight: 800 !important;
-  font-size: 13px !important;
-  letter-spacing: .4px !important;
+  font-size: 10.5px !important;
+  letter-spacing: .3px !important;
   text-transform: uppercase !important;
-  padding: 10px 6px !important;
+  padding: 6px 5px !important;
 }
 .qd-badge--none { background: #a3a3a3 !important; }
 .qd-badge--discount { background: #79b530 !important; }
@@ -2013,17 +2013,17 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  gap: 8px !important;
-  padding: 18px 10px !important;
+  gap: 4px !important;
+  padding: 10px 8px !important;
 }
 .qd-qty {
-  font-size: 17px !important;
+  font-size: 14px !important;
   font-weight: 700 !important;
   color: #79b530 !important;
   text-align: center !important;
 }
 .qd-body .quantity-discounts__price-wrapper {
-  font-size: 18px !important;
+  font-size: 14px !important;
   font-weight: 800 !important;
   color: #1a1a1a !important;
   white-space: nowrap !important;
@@ -2095,58 +2095,58 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 /* Box hodnocení + box spokojených zákazníků — pod tlačítkem Do košíku */
 .om-summary-row {
   display: flex !important;
-  gap: 14px !important;
-  margin-top: 18px !important;
+  gap: 10px !important;
+  margin-top: 12px !important;
   width: 100%;
 }
 .om-rating-box,
 .om-customers-box {
   flex: 1 !important;
   background: #f7f7f7 !important;
-  border-radius: 12px !important;
-  padding: 14px 16px !important;
+  border-radius: 10px !important;
+  padding: 10px 12px !important;
   box-sizing: border-box !important;
 }
 .om-rating-box {
   display: flex !important;
   flex-direction: column !important;
-  gap: 4px !important;
+  gap: 3px !important;
 }
 .om-rating-top {
   display: flex !important;
   align-items: center !important;
-  gap: 8px !important;
+  gap: 6px !important;
 }
 .om-rating-stars {
   color: #f0c944 !important;
-  font-size: 18px !important;
+  font-size: 15px !important;
   line-height: 1 !important;
   letter-spacing: 1px !important;
 }
 .om-rating-value {
   font-weight: 800 !important;
-  font-size: 18px !important;
+  font-size: 15px !important;
   color: #1a1a1a !important;
 }
 .om-rating-count {
-  font-size: 13px !important;
+  font-size: 12px !important;
   color: #777 !important;
 }
 .om-customers-box {
   display: flex !important;
   align-items: center !important;
-  gap: 12px !important;
+  gap: 10px !important;
 }
-.om-customers-icon { font-size: 26px !important; flex-shrink: 0 !important; }
+.om-customers-icon { font-size: 20px !important; flex-shrink: 0 !important; }
 .om-customers-text {
   display: flex !important;
   flex-direction: column !important;
-  font-size: 13px !important;
+  font-size: 12px !important;
   color: #555 !important;
-  line-height: 1.4 !important;
+  line-height: 1.35 !important;
 }
 .om-customers-text strong {
-  font-size: 16px !important;
+  font-size: 14px !important;
   font-weight: 800 !important;
   color: #1a1a1a !important;
 }
