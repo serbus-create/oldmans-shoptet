@@ -2151,34 +2151,23 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   color: #1a1a1a !important;
 }
 
-/* Příznaky produktu (Novinka / Tip / Více za méně) na detailu produktu —
-   pilulky nad nadpisem. Barvu pro "Více za méně" (flag-quantity-discount)
-   máme ověřenou; ostatní typy zatím obecný šedý styl (dolaď podle potřeby,
-   až uvidíme skutečné třídy pro Novinka/Tip).
-   POZOR: musí být scoped jen na body.type-product — stejnou strukturu
-   (.flags.flags-default) používají i kartičky produktů v kategorii! */
-body.type-product .flags.flags-default {
+/* Příznaky produktu (Novinka / Tip / Akce / Chlazené / Více za méně) na
+   detailu produktu — kompaktní pilulky NAD nadpisem, v jednom řádku
+   (podle klientova návrhu — rozložení, barvy zůstávají naše).
+   Barvu pro "Více za méně" (flag-quantity-discount) máme ověřenou;
+   ostatní typy mají obecný šedý styl.
+   POZOR: cíleno JEN na .om-flags-relocated (třída, kterou JS přidá
+   POUZE hlavnímu přesunutému elementu) — NE obecně na
+   body.type-product .flags.flags-default, protože tahle třída se na
+   stejné stránce (body.type-product) objevuje i u kartiček ve slideru
+   "Produkty, které by vás mohli zajímat" (.products-alternative) —
+   ty musí zůstat v původním nativním stylu Shoptetu, nedotčené. */
+.flags.flags-default.om-flags-relocated {
   display: flex !important;
   flex-wrap: wrap !important;
-  gap: 8px !important;
-  margin: 0 0 14px !important;
-}
-body.type-product .flags.flags-default .flag {
-  display: inline-flex !important;
   align-items: center !important;
-  padding: 6px 14px !important;
-  border-radius: 20px !important;
-  font-size: 13px !important;
-  font-weight: 700 !important;
-  background: #f0f0f0 !important;
-  color: #1a1a1a !important;
-  white-space: nowrap !important;
-}
-body.type-product .flags.flags-default .flag-quantity-discount {
-  background: #fdecea !important;
-  color: #c0392b !important;
-}
-body.type-product .flags.flags-default.om-flags-relocated {
+  gap: 6px !important;
+  margin: 0 0 10px !important;
   position: static !important;
   top: auto !important;
   left: auto !important;
@@ -2186,6 +2175,22 @@ body.type-product .flags.flags-default.om-flags-relocated {
   bottom: auto !important;
   transform: none !important;
   z-index: auto !important;
+}
+.flags.flags-default.om-flags-relocated .flag {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 4px 12px !important;
+  border-radius: 20px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  background: #f0f0f0 !important;
+  color: #1a1a1a !important;
+  white-space: nowrap !important;
+  line-height: 1.4 !important;
+}
+.flags.flags-default.om-flags-relocated .flag-quantity-discount {
+  background: #fdecea !important;
+  color: #c0392b !important;
 }
 
 /* Fotka produktu — "sticky", ať sjíždí s obsahem místo prázdného místa pod sebou
