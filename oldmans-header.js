@@ -957,6 +957,13 @@
     var h1 = detailInner.querySelector('h1') || document.querySelector('h1');
     if (!h1) return;
 
+    /* -1. Příznaky (Novinka/Tip/Bestseller/Více za méně) — přesunout
+       PŘED nadpis (nativně se vykreslují nad fotkou produktu, ale podle
+       návrhu klienta mají být v pravém sloupci nad názvem produktu). */
+    detailInner.querySelectorAll('.flags.flags-default').forEach(function (flagsEl) {
+      h1.parentNode.insertBefore(flagsEl, h1);
+    });
+
     /* 0. Hodnocení (hvězdičky + Značka) přesuneme hned pod nadpis — hledáme nejmenší element obsahující "Značka:" */
     var brandCandidates = Array.from(detailInner.querySelectorAll('*')).filter(function(el) {
       return /Značka\s*:/i.test(el.textContent);
