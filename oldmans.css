@@ -1992,6 +1992,9 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   overflow: visible !important;
   padding: 0 !important;
   transition: background .2s !important;
+  /* Skutečný čtverec (šířka = výška), ne odhadovaný padding — funguje
+     bez ohledu na šířku kontejneru/obrazovky. */
+  aspect-ratio: 1 / 1 !important;
 }
 .quantity-discounts__item:last-child { border-right: none !important; }
 .qd-badge {
@@ -2003,9 +2006,10 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   font-size: 11px !important;
   letter-spacing: .1px !important;
   text-transform: uppercase !important;
-  padding: 12px 3px !important;
+  padding: 10px 3px !important;
   line-height: 1.2 !important;
   white-space: nowrap !important;
+  flex: 0 0 auto !important;
 }
 .qd-badge--none { background: #a3a3a3 !important; }
 .qd-badge--discount { background: #e6b800 !important; }
@@ -2015,8 +2019,11 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
+  justify-content: center !important;
   gap: 6px !important;
-  padding: 20px 4px !important;
+  padding: 8px 4px !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
 }
 .qd-qty {
   font-size: 15px !important;
