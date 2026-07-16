@@ -958,11 +958,15 @@
     if (!h1) return;
 
     /* -1. Příznaky (Novinka/Tip/Bestseller/Více za méně) — přesunout
-       PŘED nadpis (nativně se vykreslují nad fotkou produktu, ale podle
-       návrhu klienta mají být v pravém sloupci nad názvem produktu). */
-    detailInner.querySelectorAll('.flags.flags-default').forEach(function (flagsEl) {
+       PŘED nadpis. Nativně jsou v .p-detail-inner-header, který je
+       pravděpodobně position:absolute (aby seděly přes fotku) — po
+       přesunu do jiného rodiče proto MUSÍME vynutit position:static,
+       jinak zůstanou "pozicované" mimo viditelnou oblast (zmizí). */
+    var flagsEl = detailInner.querySelector('.p-detail-inner-header > .flags.flags-default');
+    if (flagsEl) {
+      flagsEl.classList.add('om-flags-relocated');
       h1.parentNode.insertBefore(flagsEl, h1);
-    });
+    }
 
     /* 0. Hodnocení (hvězdičky + Značka) přesuneme hned pod nadpis — hledáme nejmenší element obsahující "Značka:" */
     var brandCandidates = Array.from(detailInner.querySelectorAll('*')).filter(function(el) {
