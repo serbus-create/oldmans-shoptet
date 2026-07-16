@@ -2000,32 +2000,32 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   text-align: center !important;
   color: #fff !important;
   font-weight: 800 !important;
-  font-size: 9px !important;
+  font-size: 11px !important;
   letter-spacing: .2px !important;
   text-transform: uppercase !important;
-  padding: 4px 4px !important;
+  padding: 8px 4px !important;
   line-height: 1.2 !important;
 }
 .qd-badge--none { background: #a3a3a3 !important; }
-.qd-badge--discount { background: #79b530 !important; }
+.qd-badge--discount { background: #e6b800 !important; }
 .qd-body {
   width: 100% !important;
   box-sizing: border-box !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  gap: 2px !important;
-  padding: 6px 6px !important;
+  gap: 4px !important;
+  padding: 14px 6px !important;
 }
 .qd-qty {
-  font-size: 12px !important;
+  font-size: 15px !important;
   font-weight: 700 !important;
-  color: #79b530 !important;
+  color: #e6b800 !important;
   text-align: center !important;
   line-height: 1.2 !important;
 }
 .qd-body .quantity-discounts__price-wrapper {
-  font-size: 12px !important;
+  font-size: 15px !important;
   font-weight: 800 !important;
   color: #1a1a1a !important;
   white-space: nowrap !important;
@@ -2034,15 +2034,15 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .qd-body .quantity-discounts__price {
   font-weight: 800 !important;
 }
-/* Aktuálně platná hladina slevy — zvýrazněná zeleným pozadím (inset
+/* Aktuálně platná hladina slevy — zvýrazněná žlutým pozadím (inset
    stín místo border, ať nenarušuje sdílené hranice mřížky) */
 .quantity-discounts__item--highlighted {
-  box-shadow: inset 0 0 0 2px #79b530 !important;
+  box-shadow: inset 0 0 0 2px #e6b800 !important;
   z-index: 1;
   position: relative;
 }
 .quantity-discounts__item--highlighted .qd-body {
-  background: #eef8e4 !important;
+  background: #fdf6d9 !important;
 }
 /* "Ušetříte X Kč" — přesunuto JS vedle ceny (viz .om-price-row), zelený štítek */
 .quantity-discounts__save {
