@@ -957,12 +957,16 @@
     var h1 = detailInner.querySelector('h1') || document.querySelector('h1');
     if (!h1) return;
 
-    /* -1. Příznaky (Novinka/Tip/Bestseller/Více za méně) — přesunout
-       PŘED nadpis. Nativně jsou v .p-detail-inner-header, který je
-       pravděpodobně position:absolute (aby seděly přes fotku) — po
-       přesunu do jiného rodiče proto MUSÍME vynutit position:static,
-       jinak zůstanou "pozicované" mimo viditelnou oblast (zmizí). */
-    var flagsEl = detailInner.querySelector('.p-detail-inner-header > .flags.flags-default');
+    /* -1. Příznaky (Novinka/Tip/Akce/Chlazené/Více za méně) — přesunout
+       PŘED nadpis. Nativně jsou v .p-image-wrapper .p-image (position:
+       absolute, aby seděly přes fotku) — po přesunu do jiného rodiče
+       proto MUSÍME vynutit position:static, jinak zůstanou
+       "pozicované" mimo viditelnou oblast (zmizí).
+       POZOR: stejná třída .flags.flags-default se používá i u kartiček
+       ve slideru "Produkty, které by vás mohli zajímat" — ale ten
+       slider je MIMO .p-detail-inner, takže querySelector scoped na
+       detailInner ho nezasáhne (ověřeno přes debug skript v konzoli). */
+    var flagsEl = detailInner.querySelector('.p-image-wrapper .p-image > .flags.flags-default');
     if (flagsEl) {
       flagsEl.classList.add('om-flags-relocated');
       h1.parentNode.insertBefore(flagsEl, h1);
