@@ -2208,6 +2208,17 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   color: #fff !important;
 }
 
+/* Stejné barvy příznaků VŠUDE na e-shopu (kartičky v kategorii, sliderech
+   na homepage i "Produkty, které by vás mohli zajímat") — cíleno jen na
+   barvu pozadí/textu, NE na pozici/tvar/padding, aby se nerozbilo nativní
+   pozicování příznaků na kartách (viz lekce o position/transform u
+   nativních Shoptet prvků). Vyšší specificita než inline styl Shoptetu
+   díky !important. */
+.flag-action { background: #e6b800 !important; color: #fff !important; }
+.flag-bestseller { background: #9f1400 !important; color: #fff !important; }
+.flag-custom2 { background: #3b5bdb !important; color: #fff !important; }
+.flag-quantity-discount { background: #79b530 !important; color: #fff !important; }
+
 /* Fotka produktu — "sticky", ať sjíždí s obsahem místo prázdného místa pod sebou
    (nabídka je delší než fotka kvůli kartám množstevní slevy) */
 .p-image-wrapper {
