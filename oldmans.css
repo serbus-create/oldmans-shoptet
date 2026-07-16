@@ -2000,11 +2000,12 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   text-align: center !important;
   color: #fff !important;
   font-weight: 800 !important;
-  font-size: 11px !important;
-  letter-spacing: .2px !important;
+  font-size: 10px !important;
+  letter-spacing: .1px !important;
   text-transform: uppercase !important;
-  padding: 8px 4px !important;
+  padding: 8px 3px !important;
   line-height: 1.2 !important;
+  white-space: nowrap !important;
 }
 .qd-badge--none { background: #a3a3a3 !important; }
 .qd-badge--discount { background: #e6b800 !important; }
@@ -2015,17 +2016,18 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   flex-direction: column !important;
   align-items: center !important;
   gap: 4px !important;
-  padding: 14px 6px !important;
+  padding: 14px 4px !important;
 }
 .qd-qty {
-  font-size: 15px !important;
+  font-size: 13px !important;
   font-weight: 700 !important;
   color: #e6b800 !important;
   text-align: center !important;
   line-height: 1.2 !important;
+  white-space: nowrap !important;
 }
 .qd-body .quantity-discounts__price-wrapper {
-  font-size: 15px !important;
+  font-size: 13px !important;
   font-weight: 800 !important;
   color: #1a1a1a !important;
   white-space: nowrap !important;
@@ -2034,9 +2036,15 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .qd-body .quantity-discounts__price {
   font-weight: 800 !important;
 }
-/* Aktuálně platná hladina slevy — zvýrazněná žlutým pozadím (inset
-   stín místo border, ať nenarušuje sdílené hranice mřížky) */
-.quantity-discounts__item--highlighted {
+/* Aktuálně platná hladina slevy — zvýrazněná žlutým pozadím.
+   POZOR: Shoptet má na .quantity-discounts__item--highlighted VLASTNÍ
+   nativní zelený border, který se načítá PO našem CSS a má stejnou
+   specificitu jako prostý box-shadow zápis — proto samotný box-shadow
+   nestačí přebít viditelný zelený rámeček. Řešení: zvýšená specificita
+   (spojené selektory .quantity-discounts__item.quantity-discounts__item--highlighted)
+   + explicitní přepsání border na none. */
+.quantity-discounts__item.quantity-discounts__item--highlighted {
+  border: none !important;
   box-shadow: inset 0 0 0 2px #e6b800 !important;
   z-index: 1;
   position: relative;
