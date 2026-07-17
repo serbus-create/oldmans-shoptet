@@ -2043,16 +2043,16 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .qd-body .quantity-discounts__price {
   font-weight: 800 !important;
 }
-/* Aktuálně platná hladina slevy — žlutý rámeček + jemné žluté pozadí.
+/* Aktuálně platná hladina slevy — POUZE jemné žluté pozadí, BEZ
+   barevného rámečku (podle fermato.cz — vybraná úroveň se liší jen
+   odstínem pozadí, ne obrysem).
    POZOR: Shoptet má na .quantity-discounts__item--highlighted VLASTNÍ
    nativní zelený vzhled (border a/nebo outline a/nebo box-shadow) —
-   proto nejdřív VŠECHNY tyhle vlastnosti vynulujeme na none a AŽ
-   POTÉ přidáme vlastní žlutý box-shadow (ověřeno funkční — po
-   vynulování už žádná zelená neprosvítá, viz předchozí ověření). */
+   proto vynucujeme "žádný rámeček" ze všech možných úhlů najednou. */
 .quantity-discounts__item.quantity-discounts__item--highlighted {
   border: none !important;
   outline: none !important;
-  box-shadow: inset 0 0 0 2px #e6b800 !important;
+  box-shadow: none !important;
   z-index: 1;
   position: relative;
 }
