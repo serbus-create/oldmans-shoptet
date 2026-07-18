@@ -1882,7 +1882,8 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   flex-direction: column !important;
   align-items: flex-start !important;
   gap: 8px !important;
-  max-width: 460px !important;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 .om-price-box .price-final,
 .om-price-box strong.price-final {
@@ -1930,7 +1931,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   border-radius: 10px;
   padding: 10px 14px;
   width: 100%;
-  max-width: 460px;
+  max-width: 100%;
   box-sizing: border-box;
 }
 .om-price-box .om-availability-line:before {
@@ -1976,7 +1977,8 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   padding: 0 !important;
   margin: 10px 0 0 !important;
   box-sizing: border-box !important;
-  max-width: 460px !important;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 .quantity-discounts__headline {
   font-size: 16px !important;
@@ -2258,15 +2260,21 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .flag-custom2 { background: #3b5bdb !important; color: #fff !important; }
 .flag-quantity-discount { background: #79b530 !important; color: #fff !important; }
 
-/* Kompaktní zarovnání na stejnou šířku jako tabulka Množství — název,
-   USP badges (.p-detail-inner-header), popisek (.p-short-description),
-   cenový box a zelený pruh Skladem, viz max-width: 460px u příslušných
-   pravidel. */
+/* ZMĚNA (18. 7. 2026, na žádost klienta) — dřív byly kompaktní prvky
+   (tabulka Množství, zelený pruh Skladem, cenový box, název+USP badges,
+   popisek, loga partnerů) omezené na max-width: 460px, což na širších
+   obrazovkách nechávalo velkou prázdnou bílou plochu vpravo od nich
+   (mezi obsahem a pravým okrajem kontejneru). Klient chtěl tuhle mezeru
+   eliminovat posunutím/rozšířením sloupce do ní — proto teď VŠECHNY tyto
+   prvky mají max-width: 100% a vyplňují celou reálnou šířku pravého
+   sloupce (.p-info-wrapper, viz 55/45 poměr + gap: 60px níže). Tabulka
+   Množství zůstává čtvercová (aspect-ratio: 1/1 na buňkách je dynamický),
+   jen jsou buňky větší. */
 body.type-product .p-detail-inner-header {
-  max-width: 460px !important;
+  max-width: 100% !important;
 }
 body.type-product .p-short-description {
-  max-width: 460px !important;
+  max-width: 100% !important;
 }
 
 /* Fotka produktu VĚTŠÍ + celý pravý sloupec posunutý víc doprava —
@@ -2308,7 +2316,7 @@ body.type-product .p-info-wrapper.col-lg-6 {
 #om-product-partners {
   margin-top: -14px;
   width: 100%;
-  max-width: 460px;
+  max-width: 100%;
   grid-column: 1 / -1;
   display: block;
 }
