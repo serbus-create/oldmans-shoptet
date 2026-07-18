@@ -1919,7 +1919,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   border-radius: 10px;
   padding: 10px 14px;
   width: 100%;
-  max-width: 420px;
+  max-width: 460px;
   box-sizing: border-box;
 }
 .om-price-box .om-availability-line:before {
@@ -1965,7 +1965,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   padding: 0 !important;
   margin: 10px 0 0 !important;
   box-sizing: border-box !important;
-  max-width: 420px !important;
+  max-width: 460px !important;
 }
 .quantity-discounts__headline {
   font-size: 13px !important;
@@ -1997,6 +1997,12 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   /* Skutečný čtverec (šířka = výška), ne odhadovaný padding — funguje
      bez ohledu na šířku kontejneru/obrazovky. */
   aspect-ratio: 1 / 1 !important;
+  /* KRITICKÉ: bez tohohle grid sloupce s "1fr" nejsou opravdu stejně
+     velké, pokud obsahují text s white-space:nowrap — prohlížeč defaultně
+     nedovolí grid buňce zmenšit se pod šířku jejího obsahu (min-width:auto),
+     takže nejdelší text (např. "181,09 Kč / ks") roztáhne JEN svůj sloupec
+     a rozhodí zarovnání i zvýraznění. min-width:0 tohle vynutí zrušit. */
+  min-width: 0 !important;
 }
 .quantity-discounts__item:last-child { border-right: none !important; }
 .qd-badge {
