@@ -1910,10 +1910,15 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+  width: 100% !important;
 }
 /* Tlačítko Do košíku vyplní zbytek šířky vedle počítadla kusů, ať
    nezůstává bílá mezera do konce 460px sloupce (počítadlo má pevnou
-   velikost, tlačítko se roztáhne přes zbytek prostoru). */
+   velikost, tlačítko se roztáhne přes zbytek prostoru).
+   POZOR: .om-buy-row samo o sobě potřebovalo width:100% výše — rodič
+   .om-price-box má align-items:flex-start, takže bez explicitní šířky
+   se řádek nenatáhne na celý sloupec a flex-grow tlačítka nemá co
+   vyplňovat (18. 7. 2026 — tlačítko bylo pořád úzké). */
 .om-buy-row .add-to-cart-button,
 .om-buy-row .om-cart-btn-white {
   flex: 1 1 auto !important;
