@@ -1911,6 +1911,13 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   gap: 12px;
   flex-wrap: wrap;
 }
+/* Tlačítko Do košíku vyplní zbytek šířky vedle počítadla kusů, ať
+   nezůstává bílá mezera do konce 460px sloupce (počítadlo má pevnou
+   velikost, tlačítko se roztáhne přes zbytek prostoru). */
+.om-buy-row .add-to-cart-button,
+.om-buy-row .om-cart-btn-white {
+  flex: 1 1 auto !important;
+}
 .om-price-box .om-availability-line {
   display: flex !important;
   align-items: center;
