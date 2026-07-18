@@ -1879,6 +1879,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   flex-direction: column !important;
   align-items: flex-start !important;
   gap: 8px !important;
+  max-width: 460px !important;
 }
 .om-price-box .price-final,
 .om-price-box strong.price-final {
@@ -2246,6 +2247,18 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .flag-bestseller { background: #9f1400 !important; color: #fff !important; }
 .flag-custom2 { background: #3b5bdb !important; color: #fff !important; }
 .flag-quantity-discount { background: #79b530 !important; color: #fff !important; }
+
+/* Zarovnání celého pravého sloupce na stejnou šířku jako tabulka
+   Množství (460px) — název, USP badges, hodnocení (vše uvnitř
+   .p-detail-inner-header) a krátký popisek (.p-short-description),
+   ať netáhnou přes celou šířku sloupce, zatímco tabulka je užší
+   (podle fermato.cz — celý sloupec je opticky zarovnaný na jednu šířku). */
+body.type-product .p-detail-inner-header {
+  max-width: 460px !important;
+}
+body.type-product .p-short-description {
+  max-width: 460px !important;
+}
 
 /* Fotka produktu — "sticky", ať sjíždí s obsahem místo prázdného místa pod sebou
    (nabídka je delší než fotka kvůli kartám množstevní slevy) */
