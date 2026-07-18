@@ -1919,6 +1919,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   border-radius: 10px;
   padding: 10px 14px;
   width: 100%;
+  max-width: 420px;
   box-sizing: border-box;
 }
 .om-price-box .om-availability-line:before {
@@ -2020,9 +2021,9 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  justify-content: center !important;
+  justify-content: flex-start !important;
   gap: 6px !important;
-  padding: 8px 4px !important;
+  padding: 12px 4px !important;
   flex: 1 1 auto !important;
   min-height: 0 !important;
 }
