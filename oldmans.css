@@ -1964,6 +1964,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   padding: 0 !important;
   margin: 10px 0 0 !important;
   box-sizing: border-box !important;
+  max-width: 420px !important;
 }
 .quantity-discounts__headline {
   font-size: 13px !important;
