@@ -1882,6 +1882,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   flex-direction: column !important;
   align-items: flex-start !important;
   gap: 8px !important;
+  max-width: 460px !important;
 }
 .om-price-box .price-final,
 .om-price-box strong.price-final {
@@ -1922,6 +1923,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   border-radius: 10px;
   padding: 10px 14px;
   width: 100%;
+  max-width: 460px;
   box-sizing: border-box;
 }
 .om-price-box .om-availability-line:before {
@@ -2249,12 +2251,36 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .flag-custom2 { background: #3b5bdb !important; color: #fff !important; }
 .flag-quantity-discount { background: #79b530 !important; color: #fff !important; }
 
-/* Kompaktní jen samotná tabulka Množství (viz max-width na .quantity-discounts
-   níže) — název, USP badges (.p-detail-inner-header) a popisek
-   (.p-short-description) NEjsou omezené, využívají plnou šířku sloupce
-   (podle fermato.cz — jen samotný box s tabulkou slev je úzký/čtvercový,
-   zbytek obsahu sloupce je široký). */
+/* Kompaktní zarovnání na stejnou šířku jako tabulka Množství — název,
+   USP badges (.p-detail-inner-header), popisek (.p-short-description),
+   cenový box a zelený pruh Skladem, viz max-width: 460px u příslušných
+   pravidel. */
+body.type-product .p-detail-inner-header {
+  max-width: 460px !important;
+}
+body.type-product .p-short-description {
+  max-width: 460px !important;
+}
 
+/* Fotka produktu VĚTŠÍ + celý pravý sloupec posunutý víc doprava —
+   řeší prázdné bílé místo vpravo od kompaktního (460px) obsahu tím, že
+   obrázek vyplní víc prostoru, místo aby se roztahoval text.
+   Nativní sloupce mají poměr 50/50 (Bootstrap col-lg-6) — přepsáno na
+   58/42, ať je fotka větší a pravý sloupec začíná dál doprava. */
+body.type-product .row.product-top {
+  display: flex !important;
+  flex-wrap: wrap !important;
+}
+body.type-product .p-image-wrapper.col-lg-6 {
+  width: 58% !important;
+  max-width: 58% !important;
+  flex: 0 0 58% !important;
+}
+body.type-product .p-info-wrapper.col-lg-6 {
+  width: 42% !important;
+  max-width: 42% !important;
+  flex: 0 0 42% !important;
+}
 /* Fotka produktu — "sticky", ať sjíždí s obsahem místo prázdného místa pod sebou
    (nabídka je delší než fotka kvůli kartám množstevní slevy) */
 .p-image-wrapper {
@@ -2267,6 +2293,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 #om-product-partners {
   margin-top: -14px;
   width: 100%;
+  max-width: 460px;
   grid-column: 1 / -1;
   display: block;
 }
