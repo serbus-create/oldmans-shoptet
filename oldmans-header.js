@@ -1052,6 +1052,20 @@
       var cartBtn = priceBlock.querySelector('.add-to-cart-button, .btn-conversion');
       if (cartBtn) cartBtn.classList.add('om-cart-btn-white');
 
+      /* Přejmenovat text tlačítka "Do košíku" -> "Přidat do košíku".
+         Procházíme jen textové uzly uvnitř TOHOTO konkrétního tlačítka
+         (cartBtn), ne globálně přes celou stránku — jiná tlačítka
+         Do košíku (kartičky v kategorii, slidery) zůstávají beze změny. */
+      if (cartBtn) {
+        var walker = document.createTreeWalker(cartBtn, NodeFilter.SHOW_TEXT, null);
+        var textNode;
+        while ((textNode = walker.nextNode())) {
+          if (textNode.textContent.trim() === 'Do košíku') {
+            textNode.textContent = textNode.textContent.replace('Do košíku', 'Přidat do košíku');
+          }
+        }
+      }
+
       /* Množství + tlačítko vedle sebe v jednom řádku */
       var qtyInput = priceBlock.querySelector('input[name="amount"], input[type="number"]');
       var qtyWrap = qtyInput ? qtyInput.closest('div') : null;
