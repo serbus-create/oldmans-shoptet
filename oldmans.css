@@ -2023,7 +2023,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   align-items: center !important;
   justify-content: flex-start !important;
   gap: 6px !important;
-  padding: 12px 4px !important;
+  padding: 20px 4px 12px !important;
   flex: 1 1 auto !important;
   min-height: 0 !important;
 }
