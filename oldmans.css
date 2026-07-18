@@ -1860,17 +1860,18 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 #om-trust-badges .om-badge span {
   font-size: 12px;
   color: #777;
-}/* Zvětšené badges (Vyrobeno v ČR / Ruční výroba / Vždy čerstvé) — povoleno
-   zalomení, ať se vejdou do zúženého 460px sloupce (viz zarovnání sloupce
-   na stejnou šířku jako tabulka Množství), místo přetékání mimo container. */
+}/* Zmenšené badges (Vyrobeno v ČR / Ruční výroba / Vždy čerstvé) — menší
+   ikony/písmo, ať se vejdou vedle sebe v jednom řádku do zúženého
+   460px sloupce, bez zalamování. */
 #om-trust-badges {
-  flex-wrap: wrap !important;
-  gap: 16px 22px !important;
-  justify-content: center !important;
+  flex-wrap: nowrap !important;
+  gap: 12px !important;
+  justify-content: space-between !important;
 }
-#om-trust-badges .om-badge strong { font-size: 18px !important; }
-#om-trust-badges .om-badge span { font-size: 15px !important; white-space: nowrap; }
-#om-trust-badges .om-badge img { width: 40px !important; height: 40px !important; }
+#om-trust-badges .om-badge { gap: 6px !important; }
+#om-trust-badges .om-badge strong { font-size: 12px !important; }
+#om-trust-badges .om-badge span { font-size: 10px !important; white-space: nowrap; }
+#om-trust-badges .om-badge img { width: 24px !important; height: 24px !important; }
 
 /* Kompaktní layout (bez velkého šedého boxu) — dostupnost, cena, počítadlo a tlačítko */
 .p-to-cart-block.om-price-box {
