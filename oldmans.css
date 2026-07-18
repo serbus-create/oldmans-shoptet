@@ -2274,19 +2274,27 @@ body.type-product .p-short-description {
    obrázek vyplní víc prostoru, místo aby se roztahoval text.
    Nativní sloupce mají poměr 50/50 (Bootstrap col-lg-6) — přepsáno na
    58/42, ať je fotka větší a pravý sloupec začíná dál doprava. */
+/* Fotka produktu VĚTŠÍ + celý pravý sloupec posunutý víc doprava —
+   řeší prázdné bílé místo vpravo od kompaktního (460px) obsahu tím, že
+   obrázek vyplní víc prostoru, místo aby se roztahoval text.
+   Nativní sloupce mají poměr 50/50 (Bootstrap col-lg-6) — přepsáno na
+   55/45, ať je fotka větší a pravý sloupec začíná dál doprava.
+   PLUS výrazná mezera (gap) mezi sloupci, ať je posun doprava jasně
+   vidět, ne jen mírný rozdíl v procentech šířky. */
 body.type-product .row.product-top {
   display: flex !important;
   flex-wrap: wrap !important;
+  gap: 60px !important;
 }
 body.type-product .p-image-wrapper.col-lg-6 {
-  width: 58% !important;
-  max-width: 58% !important;
-  flex: 0 0 58% !important;
+  width: 55% !important;
+  max-width: 55% !important;
+  flex: 0 0 55% !important;
 }
 body.type-product .p-info-wrapper.col-lg-6 {
-  width: 42% !important;
-  max-width: 42% !important;
-  flex: 0 0 42% !important;
+  width: calc(45% - 60px) !important;
+  max-width: calc(45% - 60px) !important;
+  flex: 0 0 calc(45% - 60px) !important;
 }
 /* Fotka produktu — "sticky", ať sjíždí s obsahem místo prázdného místa pod sebou
    (nabídka je delší než fotka kvůli kartám množstevní slevy) */
