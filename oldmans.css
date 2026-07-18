@@ -1866,6 +1866,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 #om-trust-badges {
   flex-wrap: wrap !important;
   gap: 16px 22px !important;
+  justify-content: center !important;
 }
 #om-trust-badges .om-badge strong { font-size: 18px !important; }
 #om-trust-badges .om-badge span { font-size: 15px !important; white-space: nowrap; }
@@ -2274,6 +2275,7 @@ body.type-product .p-short-description {
 #om-product-partners {
   margin-top: -14px;
   width: 100%;
+  max-width: 460px;
   grid-column: 1 / -1;
   display: block;
 }
