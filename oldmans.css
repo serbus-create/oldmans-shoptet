@@ -1882,8 +1882,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   flex-direction: column !important;
   align-items: flex-start !important;
   gap: 8px !important;
-  width: 100% !important;
-  max-width: 100% !important;
+  max-width: 460px !important;
 }
 .om-price-box .price-final,
 .om-price-box strong.price-final {
@@ -1931,7 +1930,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   border-radius: 10px;
   padding: 10px 14px;
   width: 100%;
-  max-width: 100%;
+  max-width: 460px;
   box-sizing: border-box;
 }
 .om-price-box .om-availability-line:before {
@@ -1977,8 +1976,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   padding: 0 !important;
   margin: 10px 0 0 !important;
   box-sizing: border-box !important;
-  width: 100% !important;
-  max-width: 100% !important;
+  max-width: 460px !important;
 }
 .quantity-discounts__headline {
   font-size: 16px !important;
@@ -2260,21 +2258,15 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .flag-custom2 { background: #3b5bdb !important; color: #fff !important; }
 .flag-quantity-discount { background: #79b530 !important; color: #fff !important; }
 
-/* ZMĚNA (18. 7. 2026, na žádost klienta) — dřív byly kompaktní prvky
-   (tabulka Množství, zelený pruh Skladem, cenový box, název+USP badges,
-   popisek, loga partnerů) omezené na max-width: 460px, což na širších
-   obrazovkách nechávalo velkou prázdnou bílou plochu vpravo od nich
-   (mezi obsahem a pravým okrajem kontejneru). Klient chtěl tuhle mezeru
-   eliminovat posunutím/rozšířením sloupce do ní — proto teď VŠECHNY tyto
-   prvky mají max-width: 100% a vyplňují celou reálnou šířku pravého
-   sloupce (.p-info-wrapper, viz 55/45 poměr + gap: 60px níže). Tabulka
-   Množství zůstává čtvercová (aspect-ratio: 1/1 na buňkách je dynamický),
-   jen jsou buňky větší. */
+/* Kompaktní zarovnání na stejnou šířku jako tabulka Množství — název,
+   USP badges (.p-detail-inner-header), popisek (.p-short-description),
+   cenový box a zelený pruh Skladem, viz max-width: 460px u příslušných
+   pravidel. */
 body.type-product .p-detail-inner-header {
-  max-width: 100% !important;
+  max-width: 460px !important;
 }
 body.type-product .p-short-description {
-  max-width: 100% !important;
+  max-width: 460px !important;
 }
 
 /* Fotka produktu VĚTŠÍ + celý pravý sloupec posunutý víc doprava —
@@ -2282,27 +2274,38 @@ body.type-product .p-short-description {
    obrázek vyplní víc prostoru, místo aby se roztahoval text.
    Nativní sloupce mají poměr 50/50 (Bootstrap col-lg-6) — přepsáno na
    58/42, ať je fotka větší a pravý sloupec začíná dál doprava. */
-/* Fotka produktu VĚTŠÍ + celý pravý sloupec posunutý víc doprava —
-   řeší prázdné bílé místo vpravo od kompaktního (460px) obsahu tím, že
-   obrázek vyplní víc prostoru, místo aby se roztahoval text.
-   Nativní sloupce mají poměr 50/50 (Bootstrap col-lg-6) — přepsáno na
-   55/45, ať je fotka větší a pravý sloupec začíná dál doprava.
-   PLUS výrazná mezera (gap) mezi sloupci, ať je posun doprava jasně
-   vidět, ne jen mírný rozdíl v procentech šířky. */
-body.type-product .row.product-top {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 60px !important;
-}
-body.type-product .p-image-wrapper.col-lg-6 {
-  width: 55% !important;
-  max-width: 55% !important;
-  flex: 0 0 55% !important;
-}
-body.type-product .p-info-wrapper.col-lg-6 {
-  width: calc(45% - 60px) !important;
-  max-width: calc(45% - 60px) !important;
-  flex: 0 0 calc(45% - 60px) !important;
+/* ZMĚNA LOGIKY SLOUPCŮ (18. 7. 2026, na žádost klienta) — dřív procentní
+   poměr 55/45 + gap, ale to nechávalo velkou prázdnou bílou plochu vpravo
+   od kompaktního 460px obsahu (obsah byl zarovnaný vlevo uvnitř širšího
+   sloupce). Klient chtěl mezeru vpravo ÚPLNĚ eliminovat a 460px kompaktní
+   šířku obsahu ZACHOVAT. Řešení: pravý sloupec má PEVNOU šířku 460px
+   (přesně na míru obsahu, žádné volné místo uvnitř) a fotka vlevo pružně
+   (flex: 1) vyplní celý zbytek řádku — flexbox tak pravý sloupec přirozeně
+   dotlačí až k pravému okraji kontejneru. Padding Bootstrap sloupce vynulován,
+   aby 460px byla čistá šířka obsahu, ne obsah + padding.
+   POZOR: scoped na min-width: 992px — pevných 460px by na mobilu (obrazovka
+   užší než sloupec, flex-shrink: 0) přeteklo mimo viewport; pod 992px se
+   nechává nativní Shoptet chování (sloupce pod sebou). */
+@media (min-width: 992px) {
+  body.type-product .row.product-top {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 60px !important;
+  }
+  body.type-product .p-image-wrapper.col-lg-6 {
+    width: auto !important;
+    max-width: none !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+  body.type-product .p-info-wrapper.col-lg-6 {
+    width: 460px !important;
+    max-width: 460px !important;
+    flex: 0 0 460px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    box-sizing: border-box !important;
+  }
 }
 /* Fotka produktu — "sticky", ať sjíždí s obsahem místo prázdného místa pod sebou
    (nabídka je delší než fotka kvůli kartám množstevní slevy) */
@@ -2316,7 +2319,7 @@ body.type-product .p-info-wrapper.col-lg-6 {
 #om-product-partners {
   margin-top: -14px;
   width: 100%;
-  max-width: 100%;
+  max-width: 460px;
   grid-column: 1 / -1;
   display: block;
 }
