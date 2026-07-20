@@ -972,21 +972,20 @@
       h1.parentNode.insertBefore(flagsEl, h1);
     }
 
-    /* 0. Hodnocení (hvězdičky + Značka) přesuneme hned pod nadpis — hledáme nejmenší element obsahující "Značka:" */
-    var brandCandidates = Array.from(detailInner.querySelectorAll('*')).filter(function(el) {
-      return /Značka\s*:/i.test(el.textContent);
-    });
-    brandCandidates.sort(function(a, b) { return a.textContent.length - b.textContent.length; });
-    var brandEl = brandCandidates[0];
-    var ratingRow = null;
-    if (brandEl) {
-      ratingRow = brandEl;
-      while (ratingRow && ratingRow.parentElement && !ratingRow.parentElement.contains(h1)) {
-        ratingRow = ratingRow.parentElement;
-      }
-      if (ratingRow && ratingRow !== h1 && h1.parentNode) {
-        h1.parentNode.insertBefore(ratingRow, h1.nextSibling);
-      }
+    /* 0. Hodnocení přesuneme hned pod nadpis. Cílíme přímo na
+       .ratings-and-brand uvnitř .p-detail-inner-header (desktopová
+       verze) — NE .p-detail-inner-header-mobile, což je skrytá
+       duplicitní kopie téhož widgetu, kterou Shoptet renderuje pro
+       mobilní zobrazení (ověřeno přes konzoli, obě mají identický
+       text, jen jiného rodiče).
+       PŮVODNÍ ŘEŠENÍ (hledání elementu obsahujícího text "Značka:")
+       bylo nespolehlivé — pokud produkt značku nezobrazuje, hledání
+       selhalo, hvězdičky se nepřesunuly a zůstaly na původním místě
+       (proto se stávalo, že badges skončily NAD hvězdičkami místo
+       pod nimi). */
+    var ratingRow = detailInner.querySelector('.p-detail-inner-header .ratings-and-brand');
+    if (ratingRow && ratingRow !== h1 && h1.parentNode) {
+      h1.parentNode.insertBefore(ratingRow, h1.nextSibling);
     }
 
     /* 0b. Skryjeme Tisk / Zeptat se / Sdílet */
