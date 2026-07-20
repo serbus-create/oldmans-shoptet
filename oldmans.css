@@ -2077,6 +2077,33 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .qd-body .quantity-discounts__price {
   font-weight: 800 !important;
 }
+/* Mobil — 2×2 mřížka místo 4 kartiček v řadě (na úzké obrazovce by se
+   text ceny jinak usekával). Podle klientova vzoru kartičky NEJSOU
+   čtvercové jako na desktopu — jsou širší/obdélníkové, s velkorysejším
+   odsazením a větším písmem, ať vyniknou na velké dotykové ploše. */
+@media (max-width: 640px) {
+  .quantity-discounts__table {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+  .quantity-discounts__item {
+    aspect-ratio: auto !important;
+  }
+  .qd-badge {
+    font-size: 14px !important;
+    padding: 12px 6px !important;
+  }
+  .qd-body {
+    padding: 20px 8px !important;
+    gap: 10px !important;
+  }
+  .qd-qty {
+    font-size: 18px !important;
+  }
+  .qd-body .quantity-discounts__price-wrapper {
+    font-size: 17px !important;
+  }
+}
 /* Aktuálně platná hladina slevy — jemné žluté pozadí + barevný akcentní
    rámeček (teď když má KAŽDÁ kartička vlastní rámeček — viz přestavba
    na samostatné kartičky výše — "žádný rámeček" by vypadalo divně,
