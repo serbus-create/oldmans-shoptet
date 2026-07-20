@@ -2217,6 +2217,42 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   color: #1a1a1a !important;
 }
 
+/* Drobná poznámka pod boxy hodnocení/zákazníků (DPH, výpočet slevy) */
+.om-pricing-note {
+  font-size: 13px !important;
+  color: #888 !important;
+  line-height: 1.5 !important;
+  margin-top: 12px !important;
+}
+
+/* Mobil — rozvržení podle klientova vzoru: boxy Hodnocení a Zákazníci
+   pod sebou přes celou šířku (místo vedle sebe na půl), box hodnocení
+   vodorovně v jedné řadě (hvězdy + číslo + pomlčka + počet recenzí)
+   místo dvou řádků nad sebou. */
+@media (max-width: 768px) {
+  .om-summary-row {
+    flex-direction: column !important;
+  }
+  .om-rating-box {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    padding: 16px 12px !important;
+  }
+  .om-rating-count {
+    margin: 0 !important;
+  }
+  .om-rating-count:before {
+    content: "-  ";
+  }
+  .om-customers-box {
+    justify-content: center !important;
+    padding: 16px 12px !important;
+  }
+}
+
 /* Příznaky produktu (Novinka / Tip / Akce / Chlazené / Více za méně) na
    detailu produktu — kompaktní pilulky NAD nadpisem, v jednom řádku
    (podle klientova návrhu — rozložení, barvy zůstávají naše).
