@@ -224,6 +224,16 @@
   function enhanceCartPage() {
     if (!document.getElementById('cart-wrapper')) return;
 
+    /* 0. Přesunout pruh "Objednejte ještě za X Kč..." (nativně vnořený
+       hluboko v .col-md-8 vedle slevového kupónu) nad tabulku produktů
+       — podle klientova mockupu má být úplně nahoře, hned pod kroky
+       1/2/3, ne dole u kupónu. */
+    var shippingBox = document.querySelector('.box.box-md.box-bg-default');
+    var cartInner = document.querySelector('.cart-inner[data-testid="tableCart"]');
+    if (shippingBox && cartInner && cartInner.parentNode) {
+      cartInner.parentNode.insertBefore(shippingBox, cartInner);
+    }
+
     /* 1. Ikona náklaďáku před text "Objednejte ještě za X Kč..." */
     var deliveryEl = document.querySelector('.extra.delivery');
     if (deliveryEl && !deliveryEl.querySelector('.om-cart-truck-icon')) {
