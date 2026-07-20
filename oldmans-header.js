@@ -217,9 +217,52 @@
     });
   }
 
+  /* --- Vylepší stránku košíku (/kosik/) — přidá prvky, které v
+     nativním Shoptet DOM chybí (viz konzole, 20. 7. 2026): nadpis
+     "Souhrn objednávky", ikonu k pruhu dopravy zdarma, bezpečnostní
+     text a loga plateb pod tlačítkem "Pokračovat". --- */
+  function enhanceCartPage() {
+    if (!document.getElementById('cart-wrapper')) return;
+
+    /* 1. Ikona náklaďáku před text "Objednejte ještě za X Kč..." */
+    var deliveryEl = document.querySelector('.extra.delivery');
+    if (deliveryEl && !deliveryEl.querySelector('.om-cart-truck-icon')) {
+      var truckIcon = document.createElement('img');
+      truckIcon.className = 'om-cart-truck-icon';
+      truckIcon.src = 'https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/free%20doprava.svg';
+      truckIcon.alt = '';
+      deliveryEl.insertBefore(truckIcon, deliveryEl.firstChild);
+    }
+
+    /* 2. Nadpis "Souhrn objednávky" před box s cenami */
+    var priceWrapper = document.querySelector('.price-wrapper');
+    if (priceWrapper && !priceWrapper.querySelector('.om-cart-summary-title')) {
+      var summaryTitle = document.createElement('h2');
+      summaryTitle.className = 'om-cart-summary-title';
+      summaryTitle.textContent = 'Souhrn objednávky';
+      priceWrapper.insertBefore(summaryTitle, priceWrapper.firstChild);
+    }
+
+    /* 3. Bezpečnostní text + loga plateb pod tlačítkem "Pokračovat" */
+    var nextStep = document.querySelector('.next-step.next-step--cart');
+    if (nextStep && !nextStep.querySelector('.om-cart-security-text')) {
+      var securityText = document.createElement('p');
+      securityText.className = 'om-cart-security-text';
+      securityText.textContent = 'Garantujeme bezpečnou a zabezpečenou pokladnu';
+      nextStep.appendChild(securityText);
+
+      var paymentLogos = document.createElement('img');
+      paymentLogos.className = 'om-cart-payment-logos';
+      paymentLogos.src = 'https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/comgate-footer-logos.png';
+      paymentLogos.alt = 'Způsoby platby';
+      nextStep.appendChild(paymentLogos);
+    }
+  }
+
   function injectAll() {
 
     customizeFooterCopyright();
+    enhanceCartPage();
 
     /* -------------------------------------------------
        0. SKRÝT PRÁZDNÝ SIDEBAR NA STATICKÝCH STRÁNKÁCH
