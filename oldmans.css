@@ -963,6 +963,18 @@ body.type-category .benefitBanner.position--benefitHomepage {
   padding: 20px 40px !important;
   box-sizing: border-box !important;
 }
+/* Uvnitř .footer-bottom je nativní Shoptetí .container div (obaluje
+   text copyrightu) — koliduje s naším OBECNÝM pravidlem `.container`
+   (max-width:1400px + padding) definovaným výše v souboru pro běžný
+   obsah stránky. Tenhle vnitřní container tak zabíral skoro celou
+   šířku řádku sám o sobě, a logům plateb nezbylo místo vedle textu —
+   zalomily se na nový řádek. Reset na "jen tak široký, jak potřebuje
+   obsah", ať sdílí řádek s obrázkem log. */
+.footer-bottom .container {
+  max-width: none !important;
+  width: auto !important;
+  padding: 0 !important;
+}
 .om-footer-payments {
   height: 32px !important;
   width: auto !important;
