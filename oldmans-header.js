@@ -267,6 +267,56 @@
       paymentLogos.alt = 'Způsoby platby';
       nextStep.appendChild(paymentLogos);
     }
+
+    /* 4. Slidery "Nakupte produkty, které jsou ve slevě" (kategorie
+       V akci) a "Mohlo by vás zajímat" (kategorie Bestseller) — pod
+       celým souhrnem objednávky. Nativní Shoptet cart-upsell widget
+       tohle dělá jen NÁHODNĚ (jen hned po přidání produktu do košíku,
+       ne při běžné návštěvě/refreshi), takže místo spoléhání na něj
+       natahujeme produkty vlastní cestou přes fetch z reálných
+       kategorií — spolehlivě pokaždé, když má košík alespoň 1 produkt.
+       Prázdný košík slidery nemá (podle vzoru). */
+    var hasCartItems = document.querySelector('.cart-table tr.removeable');
+    if (hasCartItems && !document.querySelector('.om-cart-upsell')) {
+      function buildCartUpsellSection(url, heading, extraClass) {
+        return fetch(url)
+          .then(function (res) { return res.text(); })
+          .then(function (html) {
+            var doc = new DOMParser().parseFromString(html, 'text/html');
+            var products = doc.querySelectorAll('.products.products-page .product');
+            if (!products.length) return null;
+
+            var section = document.createElement('div');
+            section.className = 'om-cart-upsell ' + extraClass;
+
+            var headingEl = document.createElement('h2');
+            headingEl.className = 'om-cart-upsell-heading';
+            headingEl.textContent = heading;
+            section.appendChild(headingEl);
+
+            var grid = document.createElement('div');
+            grid.className = 'om-cart-upsell-grid';
+            Array.prototype.slice.call(products, 0, 5).forEach(function (p) {
+              grid.appendChild(p.cloneNode(true));
+            });
+            section.appendChild(grid);
+            return section;
+          })
+          .catch(function () { return null; });
+      }
+
+      Promise.all([
+        buildCartUpsellSection('/kategorie/v-akci/', 'Nakupte produkty, které jsou ve slevě', 'om-cart-upsell-sale'),
+        buildCartUpsellSection('/kategorie/bestseller/', 'Mohlo by vás zajímat', 'om-cart-upsell-best')
+      ]).then(function (sections) {
+        var cartWrapper = document.getElementById('cart-wrapper');
+        if (!cartWrapper || !cartWrapper.parentNode) return;
+        var insertPoint = cartWrapper.nextSibling;
+        sections.forEach(function (sec) {
+          if (sec) cartWrapper.parentNode.insertBefore(sec, insertPoint);
+        });
+      });
+    }
   }
 
   function injectAll() {
