@@ -2162,6 +2162,12 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   display: flex !important;
   flex-direction: column !important;
   gap: 3px !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  transition: background .2s !important;
+}
+.om-rating-box:hover {
+  background: #efefef !important;
 }
 .om-rating-top {
   display: flex !important;
