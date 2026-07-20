@@ -202,6 +202,17 @@
         copyright.innerHTML = '© Copyright 2026 <strong>Old Man\'s</strong>. Všechna práva vyhrazena. Vytvořil <a href="https://www.v-h-s.cz/" target="_blank" rel="noopener">vhs.</a> ' + cookiesHtml;
       }
 
+      /* Loga platebních metod (Comgate, Visa, Mastercard, GPay, ApplePay)
+         — jeden obrázek nahraný na GitHubu, zobrazený v KAŽDÉ patičce
+         na webu (na všech typech stránek), stejně jako na oldmans.cz. */
+      if (!footerBottom.querySelector('.om-footer-payments')) {
+        var paymentsImg = document.createElement('img');
+        paymentsImg.className = 'om-footer-payments';
+        paymentsImg.src = 'https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/comgate-footer-logos.png';
+        paymentsImg.alt = 'Způsoby platby';
+        footerBottom.appendChild(paymentsImg);
+      }
+
       footerBottom.dataset.omDone = 'true';
     });
   }
