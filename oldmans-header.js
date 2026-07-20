@@ -1102,13 +1102,13 @@
         var summaryRow = document.createElement('div');
         summaryRow.className = 'om-summary-row';
         summaryRow.innerHTML =
-          '<div class="om-rating-box">' +
+          '<a class="om-rating-box" href="#ratingTab" data-toggle="tab" data-external="1" data-force-scroll="1">' +
             '<div class="om-rating-top">' +
               '<span class="om-rating-stars">' + '★'.repeat(starsOnCount) + '☆'.repeat(5 - starsOnCount) + '</span>' +
               '<span class="om-rating-value">' + ratingValue + '</span>' +
             '</div>' +
             '<div class="om-rating-count">' + reviewCountText + '</div>' +
-          '</div>' +
+          '</a>' +
           '<div class="om-customers-box">' +
             '<span class="om-customers-icon">👥</span>' +
             '<span class="om-customers-text"><strong>350 000+</strong><span>spokojených zákazníků</span></span>' +
