@@ -2312,7 +2312,15 @@ body.type-product .p-short-description {
   body.type-product .p-image-wrapper {
     width: auto !important;
     max-width: none !important;
-    flex: 1 1 auto !important;
+    /* flex-basis 0 (ne "auto") — jinak prohlížeč pro rozhodnutí "vejde
+       se to vedle sebe?" počítal s PŘIROZENOU (plnou) šířkou fotky, a
+       protože ta + 460px sloupec + gap přesahovaly šířku řádku, sloupce
+       se zalomily na dva řádky, i když měla fotka flex-shrink:1 a mohla
+       se zmenšit (19. 7. 2026 — objeveno po prvním nasazení opravy
+       selektorů, kdy se konečně poprvé reálně vykreslila). S basis:0
+       fotka nemá žádnou vlastní "požadovanou" šířku, takže se vždy jen
+       zmenší na dostupné místo, nikdy nezpůsobí zalomení. */
+    flex: 1 1 0 !important;
     min-width: 0 !important;
   }
   body.type-product .p-data-wrapper {
