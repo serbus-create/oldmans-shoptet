@@ -2085,9 +2085,17 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   .quantity-discounts__table {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px !important;
+    /* Explicitní stretch — bez aspect-ratio (zrušeno výše, viz
+       .quantity-discounts__item) se kartičky ve stejné řadě mřížky
+       normálně mají srovnat na výšku nejvyšší z nich samy, ale
+       spoléhat na výchozí chování se neosvědčilo (20. 7. 2026 —
+       "6 a více ks" a "3 - 5 ks" vyšly různě vysoké). Vynucujeme to
+       explicitně. */
+    align-items: stretch !important;
   }
   .quantity-discounts__item {
     aspect-ratio: auto !important;
+    height: 100% !important;
   }
   .qd-badge {
     font-size: 14px !important;
