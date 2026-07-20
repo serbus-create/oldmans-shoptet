@@ -2020,7 +2020,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
    vůbec, ať je karta stejně minimalistická jako ve vzoru. */
 #cart-wrapper td.p-name form.delete-cart-item,
 #cart-wrapper td.p-name .product-table-name-footer,
-#cart-wrapper td.p-availability {
+#cart-wrapper .cart-table tr.removeable td.p-availability {
   display: none !important;
 }
 #cart-wrapper td.p-quantity { flex: 0 0 auto !important; margin-top: 8px !important; }
