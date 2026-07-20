@@ -1996,24 +1996,31 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .quantity-discounts__table {
   display: grid !important;
   grid-template-columns: repeat(4, 1fr) !important;
-  gap: 0 !important;
-  border: 1px solid #e0e0e0 !important;
-  border-radius: 8px !important;
-  overflow: hidden !important;
-  background: #fff !important;
+  /* Samostatné kartičky s mezerou mezi nimi místo jedné spojené
+     tabulky (na žádost klienta, podle vzoru s odděleným "buttony").
+     Container už nenese vlastní rámeček/zaoblení — to teď má každá
+     kartička (.quantity-discounts__item) zvlášť. */
+  gap: 10px !important;
+  border: none !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
 }
 .quantity-discounts__item {
   flex: none !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: stretch !important;
-  background: transparent !important;
-  border: none !important;
-  border-right: 1px solid #e0e0e0 !important;
-  border-radius: 0 !important;
-  overflow: visible !important;
+  background: #fff !important;
+  /* Vlastní rámeček + zaoblení na KAŽDÉ kartičce (dřív jen border-right
+     dělítko mezi buňkami uvnitř jedné spojené tabulky). overflow:hidden
+     ořízne horní barevný štítek (qd-badge) do stejného zaoblení jako
+     zbytek kartičky. */
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
   padding: 0 !important;
-  transition: background .2s !important;
+  transition: background .2s, border-color .2s !important;
   /* Skutečný čtverec (šířka = výška), ne odhadovaný padding — funguje
      bez ohledu na šířku kontejneru/obrazovky. */
   aspect-ratio: 1 / 1 !important;
@@ -2024,7 +2031,6 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
      a rozhodí zarovnání i zvýraznění. min-width:0 tohle vynutí zrušit. */
   min-width: 0 !important;
 }
-.quantity-discounts__item:last-child { border-right: none !important; }
 .qd-badge {
   width: 100% !important;
   box-sizing: border-box !important;
@@ -2071,14 +2077,16 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .qd-body .quantity-discounts__price {
   font-weight: 800 !important;
 }
-/* Aktuálně platná hladina slevy — POUZE jemné žluté pozadí, BEZ
-   barevného rámečku (podle fermato.cz — vybraná úroveň se liší jen
-   odstínem pozadí, ne obrysem).
+/* Aktuálně platná hladina slevy — jemné žluté pozadí + barevný akcentní
+   rámeček (teď když má KAŽDÁ kartička vlastní rámeček — viz přestavba
+   na samostatné kartičky výše — "žádný rámeček" by vypadalo divně,
+   proto zvýrazněná kartička dostává rámeček v akcentní barvě místo
+   výchozí šedé).
    POZOR: Shoptet má na .quantity-discounts__item--highlighted VLASTNÍ
-   nativní zelený vzhled (border a/nebo outline a/nebo box-shadow) —
-   proto vynucujeme "žádný rámeček" ze všech možných úhlů najednou. */
+   nativní zelený vzhled (outline a/nebo box-shadow) — proto vynucujeme
+   "žádný outline/stín" ze všech úhlů, jen border necháváme naše. */
 .quantity-discounts__item.quantity-discounts__item--highlighted {
-  border: none !important;
+  border: 2px solid #e6b800 !important;
   outline: none !important;
   box-shadow: none !important;
   z-index: 1;
