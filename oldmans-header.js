@@ -1113,6 +1113,12 @@
             '<span class="om-customers-text"><strong>350 000+</strong><span>spokojených zákazníků</span></span>' +
           '</div>';
         priceBlock.appendChild(summaryRow);
+
+        /* Poznámka pod boxy hodnocení/zákazníků (podle klientova vzoru) */
+        var pricingNote = document.createElement('div');
+        pricingNote.className = 'om-pricing-note';
+        pricingNote.textContent = 'Uvedené ceny jsou včetně DPH | Uvedená sleva se počítá z běžné ceny';
+        priceBlock.appendChild(pricingNote);
       }
     }
 
