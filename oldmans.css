@@ -2124,6 +2124,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .om-cart-btn-white {
   background: #9f1400 !important;
   border-color: #9f1400 !important;
+  border-radius: 8px !important;
 }
 .btn.btn-conversion.add-to-cart-button.om-cart-btn-white:hover,
 .om-cart-btn-white:hover {
