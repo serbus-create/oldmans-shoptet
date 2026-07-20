@@ -2294,20 +2294,28 @@ body.type-product .p-short-description {
    aby 460px byla čistá šířka obsahu, ne obsah + padding.
    POZOR: scoped na min-width: 992px — pevných 460px by na mobilu (obrazovka
    užší než sloupec, flex-shrink: 0) přeteklo mimo viewport; pod 992px se
-   nechává nativní Shoptet chování (sloupce pod sebou). */
+   nechává nativní Shoptet chování (sloupce pod sebou).
+   OPRAVA (19. 7. 2026) — tenhle blok se od 18. 7. NIKDY NEAPLIKOVAL!
+   Selektory `.row.product-top` a `.p-info-wrapper` na stránce vůbec
+   neexistují (ověřeno přes konzoli) — skutečný flex rodič obou sloupců
+   má třídu `.p-detail-inner` a pravý sloupec `.p-data-wrapper` (ne
+   `.p-info-wrapper`), ani jeden z nich navíc nemá `.col-lg-6`. Proto byl
+   celou dobu živý nativní Shoptet poměr 50/50 (680px/680px), i když
+   diff proti nahranému souboru vždy vycházel čistě — CSS bylo v pořádku
+   nasazené, jen mířilo na neexistující elementy. */
 @media (min-width: 992px) {
-  body.type-product .row.product-top {
+  body.type-product .p-detail-inner {
     display: flex !important;
     flex-wrap: wrap !important;
     gap: 60px !important;
   }
-  body.type-product .p-image-wrapper.col-lg-6 {
+  body.type-product .p-image-wrapper {
     width: auto !important;
     max-width: none !important;
     flex: 1 1 auto !important;
     min-width: 0 !important;
   }
-  body.type-product .p-info-wrapper.col-lg-6 {
+  body.type-product .p-data-wrapper {
     width: 460px !important;
     max-width: 460px !important;
     flex: 0 0 460px !important;
