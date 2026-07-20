@@ -1880,6 +1880,281 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 }
 
 /* ══════════════════════════════════════════════
+   STRÁNKA KOŠÍK (/kosik/)
+   Skutečná struktura ověřená přes konzoli (20. 7. 2026) — Shoptet
+   nativní košík, NE WooCommerce (klientův vzor byl z jiné platformy,
+   posloužil jen jako vizuální inspirace, ne přímo cílené selektory).
+   Vše scoped pod #cart-wrapper, ať se nedotkne ničeho jinde na webu.
+   ══════════════════════════════════════════════ */
+
+/* Kroky (Nákupní košík / Doprava & platba / Informace o vás) */
+#cart-wrapper .cart-header {
+  display: flex !important;
+  list-style: none !important;
+  flex-wrap: wrap !important;
+  gap: 28px !important;
+  padding: 0 !important;
+  margin: 6px 0 28px !important;
+  font-size: 14px !important;
+  color: #999 !important;
+}
+#cart-wrapper .cart-header .step a {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+#cart-wrapper .cart-header .step.active {
+  color: #9f1400 !important;
+  font-weight: 700 !important;
+}
+
+/* Tabulka produktů -> kartičky (tabulku "rozbalíme" na flex řádky,
+   funkčnost formulářů/tlačítek uvnitř necháváme nativní, měníme jen
+   vzhled/rozložení) */
+#cart-wrapper .cart-table {
+  display: block !important;
+  width: 100% !important;
+  border-collapse: collapse !important;
+}
+#cart-wrapper .cart-table tbody { display: block !important; }
+#cart-wrapper .cart-table-header { display: none !important; }
+#cart-wrapper .cart-table tr.removeable {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 16px !important;
+  background: #fff !important;
+  border: 1px solid #ececec !important;
+  border-radius: 16px !important;
+  padding: 16px !important;
+  margin-bottom: 14px !important;
+}
+#cart-wrapper .cart-table tr.removeable td {
+  display: block !important;
+  padding: 0 !important;
+  border: none !important;
+}
+#cart-wrapper td.cart-p-image { flex: 0 0 auto !important; }
+#cart-wrapper td.cart-p-image img {
+  width: 72px !important;
+  height: 72px !important;
+  object-fit: cover !important;
+  border-radius: 10px !important;
+  background: #f6f6f6 !important;
+  display: block !important;
+}
+#cart-wrapper td.p-name { flex: 1 1 200px !important; min-width: 160px !important; }
+#cart-wrapper td.p-name .main-link {
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  color: #1a1a1a !important;
+  text-decoration: none !important;
+}
+#cart-wrapper td.p-name .main-link:hover { color: #9f1400 !important; }
+/* Duplicitní mobilní verze dostupnosti + duplicitní tlačítko smazat
+   uvnitř jména — Shoptet je renderuje 2× (jednou tady, jednou v
+   p-total), necháváme viditelnou jen tu v p-total (viz níže). */
+#cart-wrapper td.p-name form.delete-cart-item,
+#cart-wrapper td.p-name .product-table-name-footer {
+  display: none !important;
+}
+#cart-wrapper td.p-availability { flex: 0 0 auto !important; font-size: 13px !important; }
+#cart-wrapper td.p-availability .p-label { display: none !important; }
+#cart-wrapper td.p-quantity { flex: 0 0 auto !important; }
+#cart-wrapper td.p-quantity .p-label { display: none !important; }
+#cart-wrapper .quantity {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+#cart-wrapper .quantity input.amount {
+  width: 44px !important;
+  height: 36px !important;
+  text-align: center !important;
+  border: 1px solid #ddd !important;
+  border-radius: 8px !important;
+  font-size: 15px !important;
+}
+#cart-wrapper .quantity button.increase,
+#cart-wrapper .quantity button.decrease {
+  width: 32px !important;
+  height: 32px !important;
+  border: 1px solid #ddd !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+  transition: background .2s !important;
+}
+#cart-wrapper .quantity button.increase:hover,
+#cart-wrapper .quantity button.decrease:hover { background: #f5f5f5 !important; }
+#cart-wrapper td.p-price {
+  flex: 0 0 auto !important;
+  text-align: right !important;
+  font-size: 13px !important;
+  color: #888 !important;
+}
+#cart-wrapper td.p-price .p-label { display: none !important; }
+#cart-wrapper td.p-price strong.price-final { color: #555 !important; font-weight: 600 !important; }
+#cart-wrapper td.p-total {
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+#cart-wrapper td.p-total .p-label { display: none !important; }
+#cart-wrapper td.p-total strong.price-final {
+  font-size: 17px !important;
+  font-weight: 800 !important;
+  color: #1a1a1a !important;
+}
+/* Tlačítko smazat -> kulaté "X" */
+#cart-wrapper td.p-total form.inline button.remove-item {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
+  border: 1px solid #eee !important;
+  background: #fafafa !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  position: relative !important;
+  padding: 0 !important;
+}
+#cart-wrapper td.p-total form.inline button.remove-item:before,
+#cart-wrapper td.p-total form.inline button.remove-item:after {
+  content: "" !important;
+  position: absolute !important;
+  width: 12px !important;
+  height: 2px !important;
+  background: #999 !important;
+}
+#cart-wrapper td.p-total form.inline button.remove-item:before { transform: rotate(45deg) !important; }
+#cart-wrapper td.p-total form.inline button.remove-item:after { transform: rotate(-45deg) !important; }
+#cart-wrapper td.p-total form.inline button.remove-item:hover:before,
+#cart-wrapper td.p-total form.inline button.remove-item:hover:after { background: #9f1400 !important; }
+
+/* Slevový kupón (rozbalovací — necháváme nativní JS toggle, jen
+   stylujeme vzhled tlačítka a rozbaleného formuláře) */
+#cart-wrapper .toggle-coupon-input-button {
+  display: inline-block !important;
+  color: #9f1400 !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  text-decoration: underline !important;
+  margin-bottom: 10px !important;
+  font-size: 14px !important;
+}
+#cart-wrapper .discount-coupon .input-group {
+  display: flex !important;
+  gap: 10px !important;
+  max-width: 460px !important;
+}
+#cart-wrapper .discount-coupon input#discountCouponCode {
+  flex: 1 !important;
+  border: 1px solid #ddd !important;
+  border-radius: 10px !important;
+  padding: 12px 16px !important;
+  font-size: 15px !important;
+}
+#cart-wrapper .discount-coupon button[type="submit"] {
+  background: #9f1400 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 0 20px !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
+  transition: background .2s !important;
+}
+#cart-wrapper .discount-coupon button[type="submit"]:hover { background: #7a0f00 !important; }
+
+/* Pruh "Objednejte ještě za X Kč a budete mít dopravu ZDARMA" +
+   skutečný progress bar (.price-range > div se šířkou v % z inline
+   stylu, který posílá Shoptet — neměníme, jen obarvujeme) */
+#cart-wrapper .box.box-bg-default {
+  background: #eef8e4 !important;
+  border-radius: 14px !important;
+  padding: 16px 20px !important;
+  margin-top: 16px !important;
+  border: none !important;
+}
+#cart-wrapper .extra.delivery {
+  font-size: 14px !important;
+  color: #4a8f22 !important;
+}
+#cart-wrapper .extra.delivery strong { color: #2f6b12 !important; }
+#cart-wrapper .price-range {
+  margin-top: 10px !important;
+  height: 8px !important;
+  background: #d7ecc4 !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+}
+#cart-wrapper .price-range > div {
+  height: 100% !important;
+  background: #79b530 !important;
+  border-radius: 10px !important;
+}
+
+/* Souhrn (pravý sloupec) — světle šedý box, ceny + tlačítka */
+#cart-wrapper .col-md-4[data-testid="tableCart"] {
+  background: #fbfbfb !important;
+  border-radius: 16px !important;
+  padding: 24px !important;
+  box-sizing: border-box !important;
+}
+#cart-wrapper .price-wrapper { margin-bottom: 20px !important; }
+#cart-wrapper .price-label.price-primary { font-size: 15px !important; color: #555 !important; }
+#cart-wrapper strong.price.price-primary {
+  display: block !important;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  color: #1a1a1a !important;
+  margin: 4px 0 8px !important;
+}
+#cart-wrapper .price-label.price-secondary,
+#cart-wrapper strong.price.price-secondary {
+  font-size: 13px !important;
+  color: #999 !important;
+}
+#cart-wrapper .next-step.next-step--cart {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  margin-top: 10px !important;
+}
+#cart-wrapper .next-step-forward {
+  background: #9f1400 !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  padding: 14px 20px !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  border: none !important;
+}
+#cart-wrapper .next-step-forward:hover { background: #7a0f00 !important; }
+#cart-wrapper .next-step-back {
+  background: transparent !important;
+  color: #1a1a1a !important;
+  border: 1px solid #ddd !important;
+  border-radius: 10px !important;
+  padding: 14px 20px !important;
+  text-align: center !important;
+  text-decoration: none !important;
+}
+#cart-wrapper .next-step-back:hover { background: #f5f5f5 !important; }
+
+/* Mobil — jméno produktu na vlastním řádku, zbytek pod ním */
+@media (max-width: 600px) {
+  #cart-wrapper td.p-name { flex: 1 1 100% !important; }
+  #cart-wrapper td.p-total { margin-left: 0 !important; }
+}
+
+/* ══════════════════════════════════════════════
    DETAIL PRODUKTU — trust badges
    ══════════════════════════════════════════════ */
 #om-trust-badges {
