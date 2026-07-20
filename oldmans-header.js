@@ -294,12 +294,45 @@
             headingEl.textContent = heading;
             section.appendChild(headingEl);
 
-            var grid = document.createElement('div');
-            grid.className = 'om-cart-upsell-grid';
-            Array.prototype.slice.call(products, 0, 5).forEach(function (p) {
-              grid.appendChild(p.cloneNode(true));
+            /* Kartičky recyklují stejnou CSS třídu (.products-block .product)
+               jako Bestsellery/Omáčky ve slevě na homepage — díky tomu mají
+               úplně stejný vzhled bez psaní nového CSS. Nativní Shoptet
+               "drag" slider mechanika (cursor:grab, JS transform) ale běží
+               jen na elementech přítomných při načtení stránky, takže na
+               nově vložený obsah nenaběhne — místo ní vlastní jednoduchý
+               scroll (stejný princip jako "Vybrané recepty" na homepage). */
+            var wrapper = document.createElement('div');
+            wrapper.className = 'om-cart-upsell-wrapper';
+
+            var prevBtn = document.createElement('button');
+            prevBtn.type = 'button';
+            prevBtn.className = 'om-cart-upsell-nav om-cart-upsell-nav-prev';
+            prevBtn.setAttribute('aria-label', 'Předchozí');
+
+            var track = document.createElement('div');
+            track.className = 'products-block om-cart-upsell-track';
+            Array.prototype.slice.call(products, 0, 10).forEach(function (p) {
+              track.appendChild(p.cloneNode(true));
             });
-            section.appendChild(grid);
+
+            var nextBtn = document.createElement('button');
+            nextBtn.type = 'button';
+            nextBtn.className = 'om-cart-upsell-nav om-cart-upsell-nav-next';
+            nextBtn.setAttribute('aria-label', 'Další');
+
+            wrapper.appendChild(prevBtn);
+            wrapper.appendChild(track);
+            wrapper.appendChild(nextBtn);
+            section.appendChild(wrapper);
+
+            var scrollByCard = function (dir) {
+              var card = track.querySelector('.product');
+              var step = card ? (card.getBoundingClientRect().width + 20) * 2 : 300;
+              track.scrollBy({ left: dir * step, behavior: 'smooth' });
+            };
+            prevBtn.addEventListener('click', function () { scrollByCard(-1); });
+            nextBtn.addEventListener('click', function () { scrollByCard(1); });
+
             return section;
           })
           .catch(function () { return null; });
