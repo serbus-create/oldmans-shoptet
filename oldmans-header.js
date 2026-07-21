@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 4.0 — Košík: vráceno na nativní Shoptet vzhled (odstraněny všechny custom úpravy)
+     Verze: 4.1 — Košík: znovu postaven přesně podle klientova mockupu
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -217,9 +217,126 @@
     });
   }
 
+  /* --- Vylepší stránku košíku (/kosik/) — v2, podle klientova mockupu
+     (21. 7. 2026). Přidá prvky, které v nativním Shoptet DOM chybí:
+     nadpis "Souhrn objednávky", ikonu k pruhu dopravy zdarma, řádek
+     "Doprava od X Kč", bezpečnostní text a loga plateb. --- */
+  function enhanceCartPage() {
+    if (!document.getElementById('cart-wrapper')) return;
+
+    /* 0. PŘESUN produktové tabulky + pruhu dopravy DOVNITŘ .col-md-8 —
+       nativně jsou SOUROZENCI .row.summary, ne uvnitř něj. Bez tohohle
+       přesunu by CSS flex na .row.summary vytvořilo dvousloupec jen
+       z kupónu a souhrnu, produkty by zůstaly samostatný blok nahoře. */
+    var colLeft = document.querySelector('.row.summary > .col-md-8');
+    var shippingBox = document.querySelector('.box.box-md.box-bg-default');
+    var cartInner = document.querySelector('.cart-inner[data-testid="tableCart"]');
+    if (colLeft && cartInner && !colLeft.contains(cartInner)) {
+      colLeft.insertBefore(cartInner, colLeft.firstChild);
+      if (shippingBox) colLeft.insertBefore(shippingBox, cartInner);
+    }
+
+    /* 1. Ikona náklaďáku — připnuto na konkrétní commit hash (ne @main),
+       ať se stejná zacachovaná stará verze neukáže znovu (viz lekce
+       z 21. 7. 2026). */
+    var deliveryEl = document.querySelector('.extra.delivery');
+    if (deliveryEl && !deliveryEl.querySelector('.om-cart-truck-icon')) {
+      var truckIcon = document.createElement('img');
+      truckIcon.className = 'om-cart-truck-icon';
+      truckIcon.src = 'https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@b855436dedce61f1a58a77d95dd1128a1c36b75b/free%20doprava.svg';
+      truckIcon.alt = '';
+      deliveryEl.insertBefore(truckIcon, deliveryEl.firstChild);
+    }
+
+    /* 1b. Přepis textu — nativní Shoptet říká "Objednejte ještě za X Kč
+       a budete mít dopravu ZDARMA", mockup chce "Nakupte ještě za X Kč
+       pro dopravu ZDARMA." Jen textové uzly (TreeWalker), idempotentní. */
+    if (deliveryEl) {
+      var dw = document.createTreeWalker(deliveryEl, NodeFilter.SHOW_TEXT, null);
+      var dn;
+      while ((dn = dw.nextNode())) {
+        if (dn.nodeValue.indexOf('Objednejte ještě za') !== -1) {
+          dn.nodeValue = dn.nodeValue.replace('Objednejte ještě za', 'Nakupte ještě za');
+        }
+        if (dn.nodeValue.indexOf('a budete mít dopravu') !== -1) {
+          dn.nodeValue = dn.nodeValue.replace('a budete mít dopravu', 'pro dopravu');
+        }
+      }
+    }
+
+    /* 2. Nadpis "Souhrn objednávky" */
+    var priceWrapper = document.querySelector('.price-wrapper');
+    if (priceWrapper && !priceWrapper.querySelector('.om-cart-summary-title')) {
+      var summaryTitle = document.createElement('h2');
+      summaryTitle.className = 'om-cart-summary-title';
+      summaryTitle.textContent = 'Souhrn objednávky';
+      priceWrapper.insertBefore(summaryTitle, priceWrapper.firstChild);
+    }
+
+    /* 2b. Řádky souhrnu podle mockupu:
+       - "Celkem za zboží:" -> "Celkem s DPH" (zvýrazněný řádek)
+       - nový řádek "Doprava — od 119 Kč" (hodnota z mockupu 21. 7. 2026;
+         POZOR — dřívější zdroj (WP referenční screenshot) uváděl
+         149 Kč, zkontroluj po nasazení, která částka je správná)
+       "Cenu bez DPH" schovává CSS. */
+    if (priceWrapper && !priceWrapper.querySelector('.om-summary-line')) {
+      var sumLabel = priceWrapper.querySelector('.price-label.price-primary');
+      var sumPrice = priceWrapper.querySelector('strong.price.price-primary');
+      if (sumLabel && sumPrice) {
+        sumLabel.textContent = 'Celkem s DPH';
+        var sumLine = document.createElement('div');
+        sumLine.className = 'om-summary-line om-summary-total';
+        sumLabel.parentNode.insertBefore(sumLine, sumLabel);
+        sumLine.appendChild(sumLabel);
+        sumLine.appendChild(sumPrice);
+
+        var shipLine = document.createElement('div');
+        shipLine.className = 'om-summary-line om-summary-shipping';
+        var shipLabel = document.createElement('span');
+        shipLabel.className = 'price-label';
+        shipLabel.textContent = 'Doprava';
+        var shipVal = document.createElement('strong');
+        shipVal.textContent = 'od 119 Kč';
+        shipLine.appendChild(shipLabel);
+        shipLine.appendChild(shipVal);
+        sumLine.parentNode.insertBefore(shipLine, sumLine.nextSibling);
+      }
+    }
+
+    /* 2c. Slevový kód — placeholder + text tlačítka podle mockupu */
+    var couponInput = document.querySelector('#cart-wrapper input#discountCouponCode');
+    if (couponInput) couponInput.setAttribute('placeholder', 'Zadejte slevový kód');
+    var couponBtn = document.querySelector('#cart-wrapper .discount-coupon button[type="submit"]');
+    if (couponBtn && couponBtn.textContent.indexOf('Uplatnit') === -1) {
+      couponBtn.textContent = 'Uplatnit';
+    }
+
+    /* 2d. Tlačítko pokračovat */
+    var fwdBtn = document.querySelector('#cart-wrapper .next-step-forward');
+    if (fwdBtn && fwdBtn.textContent.indexOf('dopravu a platbu') === -1) {
+      fwdBtn.textContent = 'Pokračovat na dopravu a platbu';
+    }
+
+    /* 3. Bezpečnostní text + loga plateb pod tlačítkem */
+    var nextStep = document.querySelector('.next-step.next-step--cart');
+    if (nextStep && !nextStep.querySelector('.om-cart-security-text')) {
+      var securityText = document.createElement('p');
+      securityText.className = 'om-cart-security-text';
+      securityText.textContent = 'Garantujeme bezpečnou a zabezpečenou pokladnu';
+      nextStep.appendChild(securityText);
+
+      var paymentLogos = document.createElement('img');
+      paymentLogos.className = 'om-cart-payment-logos';
+      paymentLogos.src = 'https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/comgate-footer-logos.png';
+      paymentLogos.alt = 'Způsoby platby';
+      nextStep.appendChild(paymentLogos);
+    }
+  }
+
   function injectAll() {
 
     customizeFooterCopyright();
+    enhanceCartPage();
 
     /* -------------------------------------------------
        0. SKRÝT PRÁZDNÝ SIDEBAR NA STATICKÝCH STRÁNKÁCH
