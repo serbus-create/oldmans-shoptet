@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 4.1 — Košík: znovu postaven přesně podle klientova mockupu
+     Verze: 4.2 — OPRAVA HierarchyRequestError: přesouvá se jen table.cart-table, ne celý cart-inner
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -224,16 +224,27 @@
   function enhanceCartPage() {
     if (!document.getElementById('cart-wrapper')) return;
 
-    /* 0. PŘESUN produktové tabulky + pruhu dopravy DOVNITŘ .col-md-8 —
-       nativně jsou SOUROZENCI .row.summary, ne uvnitř něj. Bez tohohle
-       přesunu by CSS flex na .row.summary vytvořilo dvousloupec jen
-       z kupónu a souhrnu, produkty by zůstaly samostatný blok nahoře. */
+    /* 0. PŘESUN produktové tabulky DOVNITŘ .col-md-8 (21. 7. 2026,
+       OPRAVENO po chybě "HierarchyRequestError" — skutečná struktura
+       ověřená přes konzoli je JINÁ, než jsme si mysleli:
+         .cart-inner
+           ├─ table.cart-table         (sourozenec .row.summary)
+           └─ .row.summary
+                ├─ .col-md-8 → .coupon-input + .box.box-bg-default
+                └─ .col-md-4 → .price-wrapper + .next-step
+       Pruh dopravy (.box.box-bg-default) je NATIVNĚ už uvnitř
+       .col-md-8 — NEPŘESOUVÁME ho (dřívější pokus o přesun celého
+       .cart-inner do .col-md-8 selhal, protože .col-md-8 je jeho
+       potomek — DOM nedovolí vložit rodiče do vlastního potomka).
+       Přesouváme JEN <table class="cart-table">, a to PŘED nativně
+       existující pruh dopravy, ať je pořadí: doprava → produkty →
+       kupón (koupon-input je nativně první, box-bg-default druhý). */
     var colLeft = document.querySelector('.row.summary > .col-md-8');
-    var shippingBox = document.querySelector('.box.box-md.box-bg-default');
-    var cartInner = document.querySelector('.cart-inner[data-testid="tableCart"]');
-    if (colLeft && cartInner && !colLeft.contains(cartInner)) {
-      colLeft.insertBefore(cartInner, colLeft.firstChild);
-      if (shippingBox) colLeft.insertBefore(shippingBox, cartInner);
+    var cartTable = document.querySelector('.cart-inner[data-testid="tableCart"] > table.cart-table');
+    var shippingBox = colLeft ? colLeft.querySelector('.box.box-bg-default') : null;
+    if (colLeft && cartTable && !colLeft.contains(cartTable)) {
+      colLeft.insertBefore(cartTable, colLeft.firstChild);
+      if (shippingBox) colLeft.insertBefore(shippingBox, cartTable);
     }
 
     /* 1. Ikona náklaďáku — připnuto na konkrétní commit hash (ne @main),
