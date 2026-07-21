@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 4.5 — Košík: polling retry (enhanceCartPage i observer čekají na asynchronní vykreslení)
+     Verze: 4.6 — Košík: observer sleduje rodiče #cart-wrapper (AJAX GetCartContent vyměňuje celý uzel)
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -341,11 +341,21 @@
      kusů pošle AJAX přepočet a Shoptet si přitom PŘEPÍŠE vlastní
      nativní DOM uvnitř #cart-wrapper — naše úpravy (přesunutá tabulka,
      texty, souhrn) tím zmizí, protože běžely jen jednou při načtení
-     stránky. MutationObserver sleduje #cart-wrapper a po každé změně
-     (childList/subtree) enhanceCartPage() zavolá znovu — funkce je
-     idempotentní (každý krok si hlídá "už jsem to udělal" přes vlastní
-     třídy jako .om-cart-summary-title), takže opakované volání je
-     bezpečné a nic nezdvojí.
+     stránky. MutationObserver sleduje... NE #cart-wrapper samotný,
+     ale jeho RODIČE (viz oprava níže).
+     OPRAVA (21. 7. 2026, druhé kolo): observování #cart-wrapper
+     samotného nefungovalo — zelený toast "Množství bylo úspěšně
+     změněno" naznačuje AJAX, který pravděpodobně nahrazuje CELÝ
+     #cart-wrapper element (outerHTML), ne jen jeho vnitřní obsah.
+     Když se sledovaný uzel takhle nahradí úplně novým (i se stejným
+     id), MutationObserver navázaný na ten PŮVODNÍ (teď osiřelý,
+     odpojený) uzel už nové změny nezachytí — sleduje mrtvý objekt.
+     Řešení: sledovat STABILNÍHO RODIČE #cart-wrapper (ten zůstává
+     v DOM, i když se #cart-wrapper uvnitř kompletně vymění), a při
+     každé změně si #cart-wrapper znovu vyhledat přes ID (živě).
+     funkce je idempotentní (každý krok si hlídá "už jsem to udělal"
+     přes vlastní třídy jako .om-cart-summary-title), takže opakované
+     volání je bezpečné a nic nezdvojí.
      POZOR na nekonečnou smyčku: enhanceCartPage() sama mutuje DOM
      (přesouvá tabulku, vkládá elementy), což by observer znovu
      zachytil. Řešeno příznakem `applying` — po dobu vlastního zásahu
@@ -363,6 +373,12 @@
         return;
       }
 
+      /* Sledujeme RODIČE #cart-wrapper (přežije i outerHTML swap
+         samotného #cart-wrapper). Když by rodič náhodou neexistoval
+         (nemělo by nastat), padneme zpět na document.body — širší
+         záběr, ale pořád funkční pojistka. */
+      var observeTarget = wrapper.parentElement || document.body;
+
       var applying = false;
       var debounceTimer = null;
 
@@ -379,7 +395,7 @@
         }, 150);
       });
 
-      observer.observe(wrapper, { childList: true, subtree: true });
+      observer.observe(observeTarget, { childList: true, subtree: true });
     }
 
     trySetup();
