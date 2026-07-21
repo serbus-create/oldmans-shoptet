@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 3.4 — Odstraněna mapa poboček (bude řešeno doplňkem)
+     Verze: 3.5 — Košík 1:1 podle WP reference + nekonečné cart-upsell slidery
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -244,6 +244,34 @@
       deliveryEl.insertBefore(truckIcon, deliveryEl.firstChild);
     }
 
+    /* 1b. Přepis textu podle WP reference (20. 7. 2026): nativní
+       Shoptet říká "Objednejte ještě za X Kč a budete mít dopravu
+       ZDARMA", vzor říká "Nakupte ještě za X Kč pro dopravu ZDARMA".
+       Přepisujeme JEN textové uzly (TreeWalker), strong elementy
+       s částkou/ZDARMA zůstávají nedotčené — jen částka (první strong
+       obsahující "Kč") dostane třídu .om-delivery-amount pro zelenou
+       barvu (viz CSS). Idempotentní — po přepisu už fráze v textu
+       nejsou, druhé volání nic nezmění. */
+    if (deliveryEl) {
+      var dw = document.createTreeWalker(deliveryEl, NodeFilter.SHOW_TEXT, null);
+      var dn;
+      while ((dn = dw.nextNode())) {
+        if (dn.nodeValue.indexOf('Objednejte ještě za') !== -1) {
+          dn.nodeValue = dn.nodeValue.replace('Objednejte ještě za', 'Nakupte ještě za');
+        }
+        if (dn.nodeValue.indexOf('a budete mít dopravu') !== -1) {
+          dn.nodeValue = dn.nodeValue.replace('a budete mít dopravu', 'pro dopravu');
+        }
+      }
+      var dStrongs = deliveryEl.querySelectorAll('strong');
+      for (var di = 0; di < dStrongs.length; di++) {
+        if (dStrongs[di].textContent.indexOf('Kč') !== -1) {
+          dStrongs[di].classList.add('om-delivery-amount');
+          break;
+        }
+      }
+    }
+
     /* 2. Nadpis "Souhrn objednávky" před box s cenami */
     var priceWrapper = document.querySelector('.price-wrapper');
     if (priceWrapper && !priceWrapper.querySelector('.om-cart-summary-title')) {
@@ -251,6 +279,56 @@
       summaryTitle.className = 'om-cart-summary-title';
       summaryTitle.textContent = 'Souhrn objednávky';
       priceWrapper.insertBefore(summaryTitle, priceWrapper.firstChild);
+    }
+
+    /* 2b. Řádky souhrnu podle WP reference (20. 7. 2026):
+       - label "Celkem za zboží:" přejmenovat na "Celkem s DPH"
+       - label + cenu OBALIT do div.om-summary-line (flex řádek — label
+         vlevo, cena vpravo; robustní vůči tomu, co je v DOM mezi nimi,
+         protože oba existující elementy jen PŘESOUVÁME dovnitř)
+       - přidat vlastní řádek "Doprava — od 149 Kč" (hodnota potvrzená
+         z referenčního screenshotu WP košíku, 20. 7. 2026)
+       "Cenu bez DPH" schovává CSS. */
+    if (priceWrapper && !priceWrapper.querySelector('.om-summary-line')) {
+      var sumLabel = priceWrapper.querySelector('.price-label.price-primary');
+      var sumPrice = priceWrapper.querySelector('strong.price.price-primary');
+      if (sumLabel && sumPrice) {
+        sumLabel.textContent = 'Celkem s DPH';
+        var sumLine = document.createElement('div');
+        sumLine.className = 'om-summary-line';
+        sumLabel.parentNode.insertBefore(sumLine, sumLabel);
+        sumLine.appendChild(sumLabel);
+        sumLine.appendChild(sumPrice);
+
+        var shipLine = document.createElement('div');
+        shipLine.className = 'om-summary-line om-summary-shipping';
+        var shipLabel = document.createElement('span');
+        shipLabel.className = 'price-label';
+        shipLabel.textContent = 'Doprava';
+        var shipVal = document.createElement('strong');
+        shipVal.textContent = 'od 149 Kč';
+        shipLine.appendChild(shipLabel);
+        shipLine.appendChild(shipVal);
+        sumLine.parentNode.insertBefore(shipLine, sumLine.nextSibling);
+      }
+    }
+
+    /* 2c. Slevový kupón podle WP reference: placeholder "Zadejte
+       slevový kód", tlačítko jen "Uplatnit" (textContent přepis smaže
+       i případnou vnitřní ikonu — záměrně, vzor ikonu nemá). */
+    var couponInput = document.querySelector('#cart-wrapper input#discountCouponCode');
+    if (couponInput) couponInput.setAttribute('placeholder', 'Zadejte slevový kód');
+    var couponBtn = document.querySelector('#cart-wrapper .discount-coupon button[type="submit"]');
+    if (couponBtn && couponBtn.textContent.indexOf('Uplatnit') === -1) {
+      couponBtn.textContent = 'Uplatnit';
+    }
+
+    /* 2d. Tlačítko "POKRAČOVAT" → "Pokračovat na dopravu a platbu"
+       (WP reference; šipku › za textem přidává CSS :after, zelenou
+       barvu taky CSS). */
+    var fwdBtn = document.querySelector('#cart-wrapper .next-step-forward');
+    if (fwdBtn && fwdBtn.textContent.indexOf('dopravu a platbu') === -1) {
+      fwdBtn.textContent = 'Pokračovat na dopravu a platbu';
     }
 
     /* 3. Bezpečnostní text + loga plateb pod tlačítkem "Pokračovat" */
@@ -311,9 +389,50 @@
 
             var track = document.createElement('div');
             track.className = 'products-block om-cart-upsell-track';
-            Array.prototype.slice.call(products, 0, 10).forEach(function (p) {
-              track.appendChild(p.cloneNode(true));
-            });
+
+            /* Oprava chybějících obrázků (20. 7. 2026): fetchnuté HTML
+               je "surové" — lazy-load JS na něm nikdy neproběhl, takže
+               obrázky mají skutečnou URL jen v data-src/data-srcset
+               a src je prázdné/placeholder. Při klonování data-*
+               atributy překlopíme do src/srcset. Defenzivní — pokud
+               data-* atributy nejsou (obrázek má normální src), nic
+               se nemění. */
+            function fixLazyImages(root) {
+              var imgs = root.querySelectorAll('img');
+              for (var ii = 0; ii < imgs.length; ii++) {
+                var im = imgs[ii];
+                var dsrc = im.getAttribute('data-src') || im.getAttribute('data-lazy-src');
+                var dset = im.getAttribute('data-srcset') || im.getAttribute('data-lazy-srcset');
+                if (dsrc) im.setAttribute('src', dsrc);
+                if (dset) im.setAttribute('srcset', dset);
+                im.classList.remove('lazyload', 'lazyloading', 'lazy');
+                im.removeAttribute('loading');
+              }
+              var sources = root.querySelectorAll('source');
+              for (var si = 0; si < sources.length; si++) {
+                var sset = sources[si].getAttribute('data-srcset');
+                if (sset) sources[si].setAttribute('srcset', sset);
+              }
+            }
+
+            /* Nekonečný (cyklický) posuvník (20. 7. 2026, na žádost
+               klienta): obsah vložíme 3× za sebou [A|B|C] (A=C=B =
+               stejná sada produktů), startovní scroll pozice na
+               začátku prostřední sady B. Když se scroll přiblíží ke
+               kraji, TIŠE (bez animace) přeskočíme o šířku jedné sady
+               — obsah je identický, uživatel skok nevidí a může
+               scrollovat donekonečna oběma směry. Šipky/scroll dál
+               fungují nativně (scrollBy smooth). */
+            var sourceCards = Array.prototype.slice.call(products, 0, 10);
+            var setCount = sourceCards.length;
+            var copies = setCount >= 4 ? 3 : 1; /* pro <4 produkty loop nedává smysl */
+            for (var c = 0; c < copies; c++) {
+              sourceCards.forEach(function (p) {
+                var clone = p.cloneNode(true);
+                fixLazyImages(clone);
+                track.appendChild(clone);
+              });
+            }
 
             var nextBtn = document.createElement('button');
             nextBtn.type = 'button';
@@ -333,6 +452,47 @@
             prevBtn.addEventListener('click', function () { scrollByCard(-1); });
             nextBtn.addEventListener('click', function () { scrollByCard(1); });
 
+            /* Inicializace nekonečné smyčky — MUSÍ proběhnout až PO
+               vložení sekce do DOMu (offsetLeft je před layoutem 0),
+               proto je zabalená do funkce, kterou volá vkládací kód
+               níže přes requestAnimationFrame. setWidth = vzdálenost
+               mezi prvním prvkem sady B a prvním prvkem sady A
+               (= přesný násobek kroku karty vč. gapů, takže tichý
+               přeskok sedí i se scroll-snap zarovnáním). */
+            section.__omInitLoop = function () {
+              if (copies < 3) return;
+              var setWidth = 0;
+              /* POZOR: CSS má na tracku scroll-behavior: smooth
+                 !important — obyčejný inline styl ho NEPŘEBIJE
+                 (inline bez !important prohrává s !important v CSS),
+                 skok by se viditelně animoval. Nutné setProperty
+                 s příznakem 'important'. */
+              var silentScroll = function (fn) {
+                track.style.setProperty('scroll-behavior', 'auto', 'important');
+                fn();
+                track.style.removeProperty('scroll-behavior');
+              };
+              var apply = function () {
+                if (track.children.length < setCount * 2) return;
+                setWidth = track.children[setCount].offsetLeft - track.children[0].offsetLeft;
+                if (!setWidth) return;
+                silentScroll(function () { track.scrollLeft = setWidth; });
+              };
+              apply();
+              track.addEventListener('scroll', function () {
+                if (!setWidth) { apply(); return; }
+                /* Tiché přeskoky u krajů — thresholdy daleko od místa,
+                   kde běží plynulá animace šipek (viz scrollByCard,
+                   krok 2 karty), aby skok nikdy nenastal uprostřed
+                   probíhajícího smooth scrollu. */
+                if (track.scrollLeft < setWidth * 0.25) {
+                  silentScroll(function () { track.scrollLeft += setWidth; });
+                } else if (track.scrollLeft > setWidth * 1.75) {
+                  silentScroll(function () { track.scrollLeft -= setWidth; });
+                }
+              }, { passive: true });
+            };
+
             return section;
           })
           .catch(function () { return null; });
@@ -347,6 +507,13 @@
         var insertPoint = cartWrapper.nextSibling;
         sections.forEach(function (sec) {
           if (sec) cartWrapper.parentNode.insertBefore(sec, insertPoint);
+        });
+        /* Až po vložení do DOMu (a jednom frame na layout) nastavit
+           startovní pozici smyčky doprostřed ztrojeného obsahu. */
+        requestAnimationFrame(function () {
+          sections.forEach(function (sec) {
+            if (sec && sec.__omInitLoop) sec.__omInitLoop();
+          });
         });
       });
     }
