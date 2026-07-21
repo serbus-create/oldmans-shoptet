@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v4.6
+   OLD MAN'S — Shoptet Disco — Custom CSS v4.7
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -1907,6 +1907,19 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
         akci "dárek nad X Kč"), CSS níže disabled tlačítka podbarví
         do šeda automaticky — nic dalšího navíc nedělám, dokud
         neuvidíme, jak to Shoptet skutečně vykresluje. */
+
+/* Ztlumení během AJAX přepočtu košíku (21. 7. 2026) — schová krátké
+   "probliknutí" nativního Shoptet vzhledu mezi tím, co AJAX
+   (setCartItemAmount/GetCartContent) vymění #cart-wrapper, a tím, co
+   náš JS (enhanceCartPage) stihne znovu doběhnout. Třídu přidává/
+   odebírá JS (watchCartAjaxUpdates) na RODIČI #cart-wrapper — proto
+   cílíme obecně na .om-cart-transitioning, ne na #cart-wrapper samotný
+   (ten se při AJAXu může kompletně vyměnit za nový uzel). */
+.om-cart-transitioning {
+  opacity: .25 !important;
+  transition: opacity .15s ease !important;
+  pointer-events: none !important;
+}
 
 /* Kroky — kruh + text vedle sebe, vycentrované, MEZERA místo čáry
    (mockup nemá spojovací linku mezi kruhy). Number/barvu kruhu kreslí
