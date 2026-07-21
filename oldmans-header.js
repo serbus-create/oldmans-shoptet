@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 3.5 — Košík 1:1 podle WP reference + nekonečné cart-upsell slidery
+     Verze: 3.6 — Košík: vráceny kroky, opravený počítadlo, užší blok, recyklační nekonečný slider
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -415,24 +415,17 @@
               }
             }
 
-            /* Nekonečný (cyklický) posuvník (20. 7. 2026, na žádost
-               klienta): obsah vložíme 3× za sebou [A|B|C] (A=C=B =
-               stejná sada produktů), startovní scroll pozice na
-               začátku prostřední sady B. Když se scroll přiblíží ke
-               kraji, TIŠE (bez animace) přeskočíme o šířku jedné sady
-               — obsah je identický, uživatel skok nevidí a může
-               scrollovat donekonečna oběma směry. Šipky/scroll dál
-               fungují nativně (scrollBy smooth). */
+            /* Recyklační smyčka (viz níže) přesouvá karty mezi konci
+               tracku, takže STAČÍ jediná sada — obsah se netriplikuje.
+               Potřebujeme jen dost karet, aby jich před i za viewportem
+               vždycky pár zbylo (10 produktů bohatě stačí). */
             var sourceCards = Array.prototype.slice.call(products, 0, 10);
             var setCount = sourceCards.length;
-            var copies = setCount >= 4 ? 3 : 1; /* pro <4 produkty loop nedává smysl */
-            for (var c = 0; c < copies; c++) {
-              sourceCards.forEach(function (p) {
-                var clone = p.cloneNode(true);
-                fixLazyImages(clone);
-                track.appendChild(clone);
-              });
-            }
+            sourceCards.forEach(function (p) {
+              var clone = p.cloneNode(true);
+              fixLazyImages(clone);
+              track.appendChild(clone);
+            });
 
             var nextBtn = document.createElement('button');
             nextBtn.type = 'button';
@@ -444,54 +437,65 @@
             wrapper.appendChild(nextBtn);
             section.appendChild(wrapper);
 
-            var scrollByCard = function (dir) {
-              var card = track.querySelector('.product');
-              var step = card ? (card.getBoundingClientRect().width + 20) * 2 : 300;
-              track.scrollBy({ left: dir * step, behavior: 'smooth' });
-            };
-            prevBtn.addEventListener('click', function () { scrollByCard(-1); });
-            nextBtn.addEventListener('click', function () { scrollByCard(1); });
+            /* ── Nekonečná smyčka (klik-only, robustní) ──────────────
+               Předchozí přístup (ztrojený obsah + tiché skoky přes
+               scroll thresholdy) měl viditelný skok: smooth animace
+               ze šipky pořád generuje scroll eventy a scroll-snap se
+               s ručním nastavením scrollLeft pere → skok "problikne".
 
-            /* Inicializace nekonečné smyčky — MUSÍ proběhnout až PO
-               vložení sekce do DOMu (offsetLeft je před layoutem 0),
-               proto je zabalená do funkce, kterou volá vkládací kód
-               níže přes requestAnimationFrame. setWidth = vzdálenost
-               mezi prvním prvkem sady B a prvním prvkem sady A
-               (= přesný násobek kroku karty vč. gapů, takže tichý
-               přeskok sedí i se scroll-snap zarovnáním). */
-            section.__omInitLoop = function () {
-              if (copies < 3) return;
-              var setWidth = 0;
-              /* POZOR: CSS má na tracku scroll-behavior: smooth
-                 !important — obyčejný inline styl ho NEPŘEBIJE
-                 (inline bez !important prohrává s !important v CSS),
-                 skok by se viditelně animoval. Nutné setProperty
-                 s příznakem 'important'. */
-              var silentScroll = function (fn) {
-                track.style.setProperty('scroll-behavior', 'auto', 'important');
-                fn();
-                track.style.removeProperty('scroll-behavior');
-              };
-              var apply = function () {
-                if (track.children.length < setCount * 2) return;
-                setWidth = track.children[setCount].offsetLeft - track.children[0].offsetLeft;
-                if (!setWidth) return;
-                silentScroll(function () { track.scrollLeft = setWidth; });
-              };
-              apply();
-              track.addEventListener('scroll', function () {
-                if (!setWidth) { apply(); return; }
-                /* Tiché přeskoky u krajů — thresholdy daleko od místa,
-                   kde běží plynulá animace šipek (viz scrollByCard,
-                   krok 2 karty), aby skok nikdy nenastal uprostřed
-                   probíhajícího smooth scrollu. */
-                if (track.scrollLeft < setWidth * 0.25) {
-                  silentScroll(function () { track.scrollLeft += setWidth; });
-                } else if (track.scrollLeft > setWidth * 1.75) {
-                  silentScroll(function () { track.scrollLeft -= setWidth; });
-                }
-              }, { passive: true });
+               Spolehlivější je klasický recyklační carousel: NEspoléhat
+               na krajní thresholdy vůbec. Při každém kliku:
+                 1) fyzicky přesuneme N karet z jednoho konce na druhý
+                    (DOM appendChild/insertBefore — přesun, ne klon),
+                 2) o jejich šířku hned (tiše) upravíme scrollLeft, aby
+                    se viditelně nic nehnulo (obsah pod viewportem se
+                    posune, ale pozice toho, co je vidět, zůstane),
+                 3) teprve pak spustíme smooth scrollBy o krok.
+               Track tak nikdy nedojede na skutečný konec — vždy je
+               před i za viewportem dost karet. Žádný scroll listener,
+               žádné thresholdy, žádný problik. */
+            var STEP_CARDS = 2; /* kolik karet posune jeden klik */
+
+            var cardMetrics = function () {
+              var card = track.querySelector('.product');
+              if (!card) return { w: 300, gap: 20 };
+              var style = window.getComputedStyle(track);
+              var gap = parseFloat(style.columnGap || style.gap || '20') || 20;
+              return { w: card.getBoundingClientRect().width, gap: gap };
             };
+
+            var silentAdjust = function (delta) {
+              track.style.setProperty('scroll-behavior', 'auto', 'important');
+              track.scrollLeft += delta;
+              track.style.removeProperty('scroll-behavior');
+            };
+
+            var loopNext = function () {
+              var m = cardMetrics();
+              var unit = m.w + m.gap;
+              for (var i = 0; i < STEP_CARDS; i++) {
+                var first = track.firstElementChild;
+                if (!first) break;
+                track.appendChild(first);        /* první kartu dozadu */
+                silentAdjust(-unit);             /* kompenzace, ať se nic nehne */
+              }
+              track.scrollBy({ left: unit * STEP_CARDS, behavior: 'smooth' });
+            };
+
+            var loopPrev = function () {
+              var m = cardMetrics();
+              var unit = m.w + m.gap;
+              for (var i = 0; i < STEP_CARDS; i++) {
+                var last = track.lastElementChild;
+                if (!last) break;
+                track.insertBefore(last, track.firstElementChild); /* poslední dopředu */
+                silentAdjust(unit);              /* kompenzace */
+              }
+              track.scrollBy({ left: -unit * STEP_CARDS, behavior: 'smooth' });
+            };
+
+            prevBtn.addEventListener('click', loopPrev);
+            nextBtn.addEventListener('click', loopNext);
 
             return section;
           })
@@ -507,13 +511,6 @@
         var insertPoint = cartWrapper.nextSibling;
         sections.forEach(function (sec) {
           if (sec) cartWrapper.parentNode.insertBefore(sec, insertPoint);
-        });
-        /* Až po vložení do DOMu (a jednom frame na layout) nastavit
-           startovní pozici smyčky doprostřed ztrojeného obsahu. */
-        requestAnimationFrame(function () {
-          sections.forEach(function (sec) {
-            if (sec && sec.__omInitLoop) sec.__omInitLoop();
-          });
         });
       });
     }
