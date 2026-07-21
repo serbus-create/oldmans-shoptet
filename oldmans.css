@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v3.6
+   OLD MAN'S — Shoptet Disco — Custom CSS v3.7
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -1940,17 +1940,25 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 }
 #cart-wrapper .extra.delivery {
   display: flex !important;
-  align-items: center !important;
+  /* OPRAVA (21. 7. 2026): align-items:center centrovalo ikonu NAPŘÍČ
+     celým dvouřádkovým obsahem (text + price-range pod ním). Ikona
+     (náklaďák s bedýnkou "FREE" na korbě) tak měla horní půlku u textu
+     a spodní půlku (kola/rám) u progress baru — vypadalo to jako dvě
+     samostatné ikonky, byla to ale jedna špatně zarovnaná. flex-start
+     ji drží celou vedle prvního řádku (textu), progress bar zůstává
+     čistě pod tím. */
+  align-items: flex-start !important;
   gap: 14px !important;
   font-size: 15px !important;
   color: #1a1a1a !important;
 }
-/* Ikona podle WP reference — větší, vedle textu */
+/* Ikona podle WP reference — větší, vedle textu; malý margin-top ji
+   opticky srovná se středem první řádky textu (baseline korekce). */
 #cart-wrapper .om-cart-truck-icon {
   width: 40px !important;
   height: 40px !important;
   flex-shrink: 0 !important;
-  margin-top: 0 !important;
+  margin-top: -2px !important;
 }
 #cart-wrapper .extra.delivery strong { color: #1a1a1a !important; }
 /* Částka ("1091 Kč") zeleně — třídu .om-delivery-amount přidává JS
