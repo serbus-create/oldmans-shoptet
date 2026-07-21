@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v4.4
+   OLD MAN'S — Shoptet Disco — Custom CSS v4.5
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -2034,12 +2034,12 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 #cart-wrapper .cart-table-header { display: none !important; }
 #cart-wrapper .cart-table tr.removeable {
   display: grid !important;
-  grid-template-columns: auto 1fr auto !important;
+  grid-template-columns: auto auto auto 1fr auto !important;
   grid-template-areas:
-    "img name total"
-    "img qtyprice total" !important;
+    "img name name  name  total"
+    "img qty  price .     total" !important;
   align-items: center !important;
-  column-gap: 16px !important;
+  column-gap: 12px !important;
   row-gap: 6px !important;
   border: 1px solid #ececec !important;
   border-radius: 14px !important;
@@ -2079,11 +2079,18 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 #cart-wrapper .cart-table tr.removeable td.p-availability {
   display: none !important;
 }
-/* Počítadlo + cena/ks vedle sebe v jednom řádku pod názvem */
-#cart-wrapper td.p-quantity,
-#cart-wrapper td.p-price {
-  grid-area: qtyprice !important;
-}
+/* Počítadlo a cena/ks — VLASTNÍ sloupce vedle sebe (dřív sdílely
+   jednu grid-area "qtyprice", což je v CSS Gridu NEplatné řešení "vedle
+   sebe" — znamená to, že se prvky VIZUÁLNĚ PŘEKRÝVAJÍ na stejném místě,
+   ne že sedí v řadě. Přesně tohle způsobovalo zpřeházený text při
+   vyšším počtu kusů — čím delší text ceny, tím víc to bylo vidět). */
+#cart-wrapper td.p-quantity { grid-area: qty !important; }
+#cart-wrapper td.p-price { grid-area: price !important; }
+/* Sloupec "Sleva" (.p-discount) — v DOM existuje, ale v mockupu se
+   nezobrazuje. Bez explicitního přiřazení grid-area by ho CSS Grid
+   samo "naflowovalo" do dalšího volného místa a vytvořilo tak vizuálně
+   rozbitou bublinu (viz "5 %"/"6 %" pod obrázkem na screenshotech). */
+#cart-wrapper td.p-discount { display: none !important; }
 #cart-wrapper td.p-quantity {
   align-self: start !important;
   display: flex !important;
@@ -2156,7 +2163,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   box-sizing: border-box !important;
   vertical-align: middle !important;
 }
-/* Cena za kus, hned vedle počítadla (grid-area: qtyprice sdílí td.p-price) */
+/* Cena za kus — vlastní sloupec vedle počítadla (grid-area: price) */
 #cart-wrapper td.p-price {
   align-self: start !important;
   display: flex !important;
@@ -2217,10 +2224,10 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 /* Mobil — obrázek přes celou šířku nahoře, zbytek pod ním */
 @media (max-width: 600px) {
   #cart-wrapper .cart-table tr.removeable {
-    grid-template-columns: auto 1fr !important;
+    grid-template-columns: auto auto 1fr !important;
     grid-template-areas:
-      "img name"
-      "img qtyprice" !important;
+      "img name  name"
+      "img qty   price" !important;
   }
   #cart-wrapper td.p-total {
     grid-area: unset !important;
