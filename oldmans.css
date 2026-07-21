@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v4.1
+   OLD MAN'S — Shoptet Disco — Custom CSS v4.4
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -1989,10 +1989,11 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   color: #1a1a1a !important;
   margin-bottom: 10px !important;
 }
+/* Ikona odstraněna (21. 7. 2026) — JS už ji nevkládá; display:none je
+   jen pojistka pro případ zastaralé zacachované verze JS, viz lekce
+   o jsDelivr @main cache. */
 #cart-wrapper .om-cart-truck-icon {
-  width: 36px !important;
-  height: auto !important;
-  flex-shrink: 0 !important;
+  display: none !important;
 }
 #cart-wrapper .extra.delivery strong { font-weight: 700 !important; }
 #cart-wrapper .price-range {
@@ -2099,6 +2100,18 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   background: #fafafa !important;
   overflow: hidden !important;
   width: fit-content !important;
+  /* OPRAVA (21. 7. 2026) — tlačítka +/- byla vizuálně u spodního
+     okraje, ne na středu. Container neměl pevnou výšku ani vynulovaný
+     padding, takže nativní Shoptet padding/výška (vyšší než 32px
+     obsah tlačítek) odsunula obsah dolů, i když align-items:center
+     na flexu bylo nastavené — center totiž centruje v RÁMCI výšky
+     containeru, a ta byla větší, než jsme čekali. Explicitní výška +
+     vynulovaný padding + box-sizing to napraví natvrdo. */
+  height: 32px !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  line-height: normal !important;
+  vertical-align: middle !important;
 }
 #cart-wrapper .quantity button.increase,
 #cart-wrapper .quantity button.decrease {
@@ -2114,6 +2127,8 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   padding: 0 !important;
   margin: 0 !important;
   flex: 0 0 auto !important;
+  align-self: center !important;
+  box-sizing: border-box !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -2137,6 +2152,9 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   padding: 0 !important;
   margin: 0 !important;
   flex: 0 0 auto !important;
+  align-self: center !important;
+  box-sizing: border-box !important;
+  vertical-align: middle !important;
 }
 /* Cena za kus, hned vedle počítadla (grid-area: qtyprice sdílí td.p-price) */
 #cart-wrapper td.p-price {
@@ -2328,14 +2346,14 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 
 #cart-wrapper .om-cart-security-text {
   text-align: center !important;
-  font-size: 12px !important;
+  font-size: 16px !important; /* +30% z 12px */
   color: #777 !important;
-  margin: 16px 0 10px !important;
+  margin: 20px 0 13px !important;
 }
 #cart-wrapper .om-cart-payment-logos {
   display: block !important;
   margin: 0 auto !important;
-  max-width: 220px !important;
+  max-width: 286px !important; /* +30% z 220px */
   opacity: .8 !important;
 }
 
