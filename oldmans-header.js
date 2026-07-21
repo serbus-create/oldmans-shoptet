@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 3.7 — Oprava zacachované staré ikony náklaďáku (@main → připnutý commit)
+     Verze: 3.8 — Košík: skutečný dvousloupcový layout (produkty vlevo, sticky souhrn vpravo)
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -224,14 +224,22 @@
   function enhanceCartPage() {
     if (!document.getElementById('cart-wrapper')) return;
 
-    /* 0. Přesunout pruh "Objednejte ještě za X Kč..." (nativně vnořený
-       hluboko v .col-md-8 vedle slevového kupónu) nad tabulku produktů
-       — podle klientova mockupu má být úplně nahoře, hned pod kroky
-       1/2/3, ne dole u kupónu. */
+    /* 0. PŘESUN produktové tabulky + pruhu dopravy zdarma DOVNITŘ
+       .col-md-8 (21. 7. 2026, na žádost klienta: opravdový dvousloupec
+       — produkty vlevo, souhrn vpravo, sticky během scrollování).
+       Nativně jsou .cart-inner (tabulka produktů) i .box.box-bg-default
+       (pruh dopravy) SOUROZENCI .row.summary, ne uvnitř něj — CSS samo
+       o sobě (flex na .row.summary) by proto vytvořilo dvousloupec jen
+       z kupónu a souhrnu, produkty by zůstaly samostatný blok nahoře
+       (viz lekce o nativní struktuře — DOM se musí fyzicky přesunout,
+       ne jen nastylovat). Pořadí v levém sloupci po přesunu: pruh
+       dopravy → produkty → (zbytek, co tam nativně je: kupón). */
+    var colLeft = document.querySelector('.row.summary > .col-md-8');
     var shippingBox = document.querySelector('.box.box-md.box-bg-default');
     var cartInner = document.querySelector('.cart-inner[data-testid="tableCart"]');
-    if (shippingBox && cartInner && cartInner.parentNode) {
-      cartInner.parentNode.insertBefore(shippingBox, cartInner);
+    if (colLeft && cartInner && !colLeft.contains(cartInner)) {
+      colLeft.insertBefore(cartInner, colLeft.firstChild);
+      if (shippingBox) colLeft.insertBefore(shippingBox, cartInner);
     }
 
     /* 1. Ikona náklaďáku před text "Objednejte ještě za X Kč..."
