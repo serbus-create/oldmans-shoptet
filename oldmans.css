@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v3.8
+   OLD MAN'S — Shoptet Disco — Custom CSS v3.9
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -1964,72 +1964,69 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 
 /* Pruh "Objednejte ještě za X Kč a budete mít dopravu ZDARMA" — ikona
    (nahraný SVG "free doprava.svg") + text v řádku, progress bar pod
-   tím. Ikonu vkládá JS jako první dítě .extra.delivery. */
+   tím. Ikonu vkládá JS jako první dítě .extra.delivery.
+   PŘEPSÁNO (21. 7. 2026, verze dodaná klientem): icon 38px s auto
+   výškou (místo pevného 40×40 čtverce), align-items zpět na center,
+   progress bar přes celou šířku vlastním řádkem pod textem, částka
+   už NENÍ zeleně (JS už nepřidává třídu .om-delivery-amount — viz
+   enhanceCartPage). POZN.: align-items:center byl původní stav, který
+   dřív dělal dojem "dvou ikon" (viz starší komentáře v historii) — tahle
+   verze to řeší jinak (užší 38px ikona + mezera 12px pod řádkem
+   textu), takže sem tam vizuálně ověřit po nasazení. */
 #cart-wrapper .box.box-bg-default {
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
   margin: 0 0 26px !important;
+  width: 100% !important;
 }
 #cart-wrapper .extra.delivery {
   display: flex !important;
-  /* OPRAVA (21. 7. 2026): align-items:center centrovalo ikonu NAPŘÍČ
-     celým dvouřádkovým obsahem (text + price-range pod ním). Ikona
-     (náklaďák s bedýnkou "FREE" na korbě) tak měla horní půlku u textu
-     a spodní půlku (kola/rám) u progress baru — vypadalo to jako dvě
-     samostatné ikonky, byla to ale jedna špatně zarovnaná. flex-start
-     ji drží celou vedle prvního řádku (textu), progress bar zůstává
-     čistě pod tím. */
-  align-items: flex-start !important;
-  gap: 14px !important;
+  align-items: center !important;
+  gap: 12px !important;
   font-size: 15px !important;
   color: #1a1a1a !important;
+  margin-bottom: 12px !important;
 }
-/* Ikona podle WP reference — větší, vedle textu; malý margin-top ji
-   opticky srovná se středem první řádky textu (baseline korekce). */
 #cart-wrapper .om-cart-truck-icon {
-  width: 40px !important;
-  height: 40px !important;
+  width: 38px !important;
+  height: auto !important;
   flex-shrink: 0 !important;
-  margin-top: -2px !important;
+  margin: 0 !important;
 }
-#cart-wrapper .extra.delivery strong { color: #1a1a1a !important; }
-/* Částka ("1091 Kč") zeleně — třídu .om-delivery-amount přidává JS
-   prvnímu strong s "Kč" v textu. POZOR na specificitu (lekce 3):
-   obecné pravidlo výš (.extra.delivery strong = #1a1a1a) by jinak
-   vyhrálo, proto plný prefix + strong v selektoru. */
-#cart-wrapper .extra.delivery strong.om-delivery-amount {
-  color: #79b530 !important;
+/* Všechny tučné texty v liště (částka i ZDARMA) černé — JS už
+   nepřidává .om-delivery-amount, takže tohle jediné pravidlo stačí. */
+#cart-wrapper .extra.delivery strong {
+  color: #1a1a1a !important;
+  font-weight: 700 !important;
 }
 #cart-wrapper .price-range {
-  margin-top: 12px !important;
+  margin-top: 8px !important;
   width: 100% !important;
-  height: 6px !important;
-  background: #e5e5e5 !important;
+  height: 4px !important;
+  background: #ebebeb !important;
   border-radius: 10px !important;
-  overflow: visible !important;
   position: relative !important;
+  overflow: visible !important;
 }
-/* Zelený progress (podle WP reference — dřív červený #9f1400) */
 #cart-wrapper .price-range > div {
   height: 100% !important;
   background: #79b530 !important;
   border-radius: 10px !important;
   position: relative !important;
 }
-/* Kulatý "puntík" na konci vyplněné části pruhu, jako v mockupu */
 #cart-wrapper .price-range > div:after {
   content: "" !important;
   position: absolute !important;
   right: -6px !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
-  width: 14px !important;
-  height: 14px !important;
+  width: 13px !important;
+  height: 13px !important;
   background: #79b530 !important;
-  border: 2px solid #fff !important;
+  border: none !important;
   border-radius: 50% !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,.2) !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,.15) !important;
 }
 
 /* Tabulka produktů -> kartičky (tabulku "rozbalíme" na flex řádky,
