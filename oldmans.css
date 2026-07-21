@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v4.8
+   OLD MAN'S — Shoptet Disco — Custom CSS v4.9
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -2121,34 +2121,30 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  border: 1px solid #ddd !important;
-  border-radius: 8px !important;
-  background: #fafafa !important;
+  border: 1.5px solid #ddd !important;
+  border-radius: 50px !important;
+  background: #fff !important;
   overflow: hidden !important;
   width: fit-content !important;
-  /* OPRAVA (21. 7. 2026) — tlačítka +/- byla vizuálně u spodního
-     okraje, ne na středu. Container neměl pevnou výšku ani vynulovaný
-     padding, takže nativní Shoptet padding/výška (vyšší než 32px
-     obsah tlačítek) odsunula obsah dolů, i když align-items:center
-     na flexu bylo nastavené — center totiž centruje v RÁMCI výšky
-     containeru, a ta byla větší, než jsme čekali. Explicitní výška +
-     vynulovaný padding + box-sizing to napraví natvrdo. */
-  height: 32px !important;
-  padding: 0 !important;
+  height: 44px !important;
+  padding: 0 4px !important;
   box-sizing: border-box !important;
   line-height: normal !important;
   vertical-align: middle !important;
+  gap: 2px !important;
 }
 #cart-wrapper .quantity button.increase,
 #cart-wrapper .quantity button.decrease {
-  width: 32px !important;
-  height: 32px !important;
-  min-width: 32px !important;
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
   border: none !important;
+  border-radius: 50% !important;
   background: transparent !important;
-  font-size: 16px !important;
+  font-size: 19px !important;
+  font-weight: 500 !important;
   line-height: 1 !important;
-  color: #666 !important;
+  color: #1a1a1a !important;
   cursor: pointer !important;
   padding: 0 !important;
   margin: 0 !important;
@@ -2161,19 +2157,20 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   transition: background .2s !important;
 }
 #cart-wrapper .quantity button.increase:hover,
-#cart-wrapper .quantity button.decrease:hover { background: #eee !important; }
+#cart-wrapper .quantity button.decrease:hover { background: #f0f0f0 !important; }
 #cart-wrapper .quantity button:disabled {
   opacity: .35 !important;
   cursor: not-allowed !important;
 }
 #cart-wrapper .quantity button:disabled:hover { background: transparent !important; }
 #cart-wrapper .quantity input.amount {
-  width: 36px !important;
-  height: 32px !important;
+  width: 34px !important;
+  height: 36px !important;
   border: none !important;
   text-align: center !important;
   font-weight: 700 !important;
-  font-size: 14px !important;
+  font-size: 16px !important;
+  color: #1a1a1a !important;
   background: transparent !important;
   padding: 0 !important;
   margin: 0 !important;
@@ -2184,7 +2181,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 }
 /* Cena za kus — vlastní sloupec vedle počítadla (grid-area: price) */
 #cart-wrapper td.p-price {
-  align-self: start !important;
+  align-self: center !important;
   display: flex !important;
   align-items: center !important;
   margin-top: 0 !important;
@@ -2260,6 +2257,8 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 #cart-wrapper .coupon-input,
 #cart-wrapper .toggle-coupon-input {
   display: flex !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
   gap: 10px !important;
   margin-top: 25px !important;
   padding-top: 20px !important;
