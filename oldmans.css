@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v3.5
+   OLD MAN'S — Shoptet Disco — Custom CSS v3.6
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -1890,18 +1890,43 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
    Vše scoped pod #cart-wrapper, ať se nedotkne ničeho jinde na webu. */
 
 /* Kroky (Nákupní košík / Doprava & platba / Informace o vás) —
-   SCHOVANÉ (20. 7. 2026, podle referenčního screenshotu WP originálu:
-   na stránce košíku žádný krokový indikátor není, stránka začíná rovnou
-   pruhem dopravy zdarma). Dřívější styling kroků (zelený kruh) tím
-   pádem zrušen. */
+   VRÁCENO (21. 7. 2026, na žádost klienta: zákazník musí vidět, v jaké
+   fázi objednávky je). Styl podle nativního Shoptet screenshotu:
+   dokončené/aktivní kroky zelený kruh s číslem + spojovací čára,
+   budoucí krok bílý kruh se šedým obrysem. Konkrétní strukturu tříd
+   (.cart-header .step / .step.active / .step.done) řídí Shoptet
+   nativně — my jen barvíme, na pozicování/rozvržení nesaháme, ať se
+   nerozbije nativní krokový layout (viz lekce o nativních prvcích). */
 #cart-wrapper .cart-header {
-  display: none !important;
+  display: flex !important;
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 10px 0 32px !important;
 }
 
 /* Dvousloupcové rozvržení — produkty 2/3, souhrn 1/3 (Bootstrap
    col-md-8/col-md-4 to už dělá nativně, jen doladěná mezera) */
 #cart-wrapper .row.summary {
   gap: 0 24px !important;
+}
+
+/* Šířka bloku produktů + pruhu dopravy (21. 7. 2026, na žádost
+   klienta): nativně sedí tabulka produktů i pruh dopravy zdarma přes
+   CELOU šířku webu (nad dvousloupcovým rozvržením), což je zbytečně
+   roztažené. Omezujeme je na ~55 % šířky (zhruba jako sloupec produktů
+   v cílovém 2/3 layoutu) a zarovnáváme vlevo. Souhrn vpravo tím není
+   dotčen (je v samostatném .row.summary pod tím). */
+#cart-wrapper .cart-inner[data-testid="tableCart"],
+#cart-wrapper .box.box-bg-default {
+  max-width: 55% !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+@media (max-width: 991px) {
+  #cart-wrapper .cart-inner[data-testid="tableCart"],
+  #cart-wrapper .box.box-bg-default {
+    max-width: 100% !important;
+  }
 }
 
 /* Pruh "Objednejte ještě za X Kč a budete mít dopravu ZDARMA" — ikona
@@ -2042,10 +2067,15 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 #cart-wrapper td.p-quantity .p-label { display: none !important; }
 /* Minimalistický počítadlo kusů — jeden zaoblený obrys kolem celé
    skupiny (-, číslo, +), bez viditelných rámečků na jednotlivých
-   tlačítkách, podle mockupu. */
+   tlačítkách, podle mockupu.
+   OPRAVA (21. 7. 2026): +/- byly odsunuté do rohů (skoro mimo box),
+   protože nativní tlačítka mají vlastní odsazení a znaky nebyly
+   vycentrované. justify-content:center + flex-none na tlačítkách a
+   flexbox centrování obsahu tlačítek to srovná. */
 #cart-wrapper .quantity {
-  display: flex !important;
+  display: inline-flex !important;
   align-items: center !important;
+  justify-content: center !important;
   border: 1px solid #ddd !important;
   border-radius: 8px !important;
   background: #fafafa !important;
@@ -2053,24 +2083,36 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   width: fit-content !important;
 }
 #cart-wrapper .quantity input.amount {
-  width: 36px !important;
-  height: 32px !important;
+  width: 40px !important;
+  height: 34px !important;
   text-align: center !important;
   border: none !important;
   background: transparent !important;
   font-size: 14px !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  flex: 0 0 auto !important;
+  -moz-appearance: textfield !important;
 }
 #cart-wrapper .quantity button.increase,
 #cart-wrapper .quantity button.decrease {
-  width: 30px !important;
-  height: 32px !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
   border: none !important;
   background: transparent !important;
-  font-size: 14px !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
   color: #777 !important;
   cursor: pointer !important;
   transition: background .2s !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  flex: 0 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 #cart-wrapper .quantity button.increase:hover,
 #cart-wrapper .quantity button.decrease:hover { background: #eee !important; }
@@ -2329,16 +2371,18 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   display: flex !important;
   flex-wrap: nowrap !important;
   gap: 20px !important;
-  overflow-x: auto !important;
-  scroll-snap-type: x mandatory !important;
+  overflow-x: auto !important; /* nutné pro programový scrollBy (smooth animace šipek) */
   scroll-behavior: smooth !important;
   -webkit-overflow-scrolling: touch !important;
   padding: 4px 4px 10px !important;
   margin: -4px -4px 0 !important;
   scrollbar-width: none !important;
+  /* POZOR: žádný scroll-snap! Recyklační nekonečná smyčka (viz JS
+     loopNext/loopPrev) přesouvá karty mezi konci a tiše koriguje
+     scrollLeft — scroll-snap by se s tou korekcí pral a způsobil
+     viditelné poskočení. */
 }
 .om-cart-upsell-track::-webkit-scrollbar { display: none; }
-.om-cart-upsell-track .product { scroll-snap-align: start !important; }
 /* Šipky — stejný vizuální styl (žlutý kruh + chevron) jako "Vybrané
    recepty" na homepage, ale vlastní třída (ne .product-slider-navigation),
    ať nezdědíme homepage-specifický margin-top offset, který by tady
