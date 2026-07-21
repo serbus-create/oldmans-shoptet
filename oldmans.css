@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v3.4
+   OLD MAN'S — Shoptet Disco — Custom CSS v3.5
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -1889,24 +1889,13 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
    3 věci v nativním Shoptet DOM neexistují, přidává je JS).
    Vše scoped pod #cart-wrapper, ať se nedotkne ničeho jinde na webu. */
 
-/* Kroky (Nákupní košík / Doprava & platba / Informace o vás) */
+/* Kroky (Nákupní košík / Doprava & platba / Informace o vás) —
+   SCHOVANÉ (20. 7. 2026, podle referenčního screenshotu WP originálu:
+   na stránce košíku žádný krokový indikátor není, stránka začíná rovnou
+   pruhem dopravy zdarma). Dřívější styling kroků (zelený kruh) tím
+   pádem zrušen. */
 #cart-wrapper .cart-header {
-  display: flex !important;
-  list-style: none !important;
-  flex-wrap: wrap !important;
-  gap: 28px !important;
-  padding: 0 !important;
-  margin: 6px 0 28px !important;
-  font-size: 14px !important;
-  color: #999 !important;
-}
-#cart-wrapper .cart-header .step a {
-  color: inherit !important;
-  text-decoration: none !important;
-}
-#cart-wrapper .cart-header .step.active {
-  color: #9f1400 !important;
-  font-weight: 700 !important;
+  display: none !important;
 }
 
 /* Dvousloupcové rozvržení — produkty 2/3, souhrn 1/3 (Bootstrap
@@ -1926,20 +1915,28 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 }
 #cart-wrapper .extra.delivery {
   display: flex !important;
-  align-items: flex-start !important;
-  gap: 10px !important;
-  font-size: 14px !important;
-  color: #444 !important;
+  align-items: center !important;
+  gap: 14px !important;
+  font-size: 15px !important;
+  color: #1a1a1a !important;
 }
+/* Ikona podle WP reference — větší, vedle textu */
 #cart-wrapper .om-cart-truck-icon {
-  width: 22px !important;
-  height: 22px !important;
+  width: 40px !important;
+  height: 40px !important;
   flex-shrink: 0 !important;
-  margin-top: 1px !important;
+  margin-top: 0 !important;
 }
 #cart-wrapper .extra.delivery strong { color: #1a1a1a !important; }
+/* Částka ("1091 Kč") zeleně — třídu .om-delivery-amount přidává JS
+   prvnímu strong s "Kč" v textu. POZOR na specificitu (lekce 3):
+   obecné pravidlo výš (.extra.delivery strong = #1a1a1a) by jinak
+   vyhrálo, proto plný prefix + strong v selektoru. */
+#cart-wrapper .extra.delivery strong.om-delivery-amount {
+  color: #79b530 !important;
+}
 #cart-wrapper .price-range {
-  margin-top: 10px !important;
+  margin-top: 12px !important;
   width: 100% !important;
   height: 6px !important;
   background: #e5e5e5 !important;
@@ -1947,9 +1944,10 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   overflow: visible !important;
   position: relative !important;
 }
+/* Zelený progress (podle WP reference — dřív červený #9f1400) */
 #cart-wrapper .price-range > div {
   height: 100% !important;
-  background: #9f1400 !important;
+  background: #79b530 !important;
   border-radius: 10px !important;
   position: relative !important;
 }
@@ -1962,7 +1960,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   transform: translateY(-50%) !important;
   width: 14px !important;
   height: 14px !important;
-  background: #9f1400 !important;
+  background: #79b530 !important;
   border: 2px solid #fff !important;
   border-radius: 50% !important;
   box-shadow: 0 1px 3px rgba(0,0,0,.2) !important;
@@ -1978,11 +1976,20 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 }
 #cart-wrapper .cart-table tbody { display: block !important; }
 #cart-wrapper .cart-table-header { display: none !important; }
+/* Rozvržení podle WP reference (20. 7. 2026): obrázek vlevo přes obě
+   řady, název nahoře, POD názvem počítadlo kusů + "X Kč / ks" hned
+   vedle, celková cena vpravo svisle na střed, "X" smazat v pravém
+   horním rohu (absolutně, beze změny). Grid místo flexu — flex neumí
+   "obrázek přes dva řádky obsahu" bez zásahů do DOM pořadí td. */
 #cart-wrapper .cart-table tr.removeable {
-  display: flex !important;
+  display: grid !important;
+  grid-template-columns: auto auto 1fr auto !important;
+  grid-template-areas:
+    "img name name total"
+    "img qty  price total" !important;
   align-items: center !important;
-  flex-wrap: wrap !important;
-  gap: 16px !important;
+  column-gap: 18px !important;
+  row-gap: 8px !important;
   background: #fff !important;
   border: 1px solid #ececec !important;
   border-radius: 14px !important;
@@ -1996,16 +2003,20 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   padding: 0 !important;
   border: none !important;
 }
-#cart-wrapper td.cart-p-image { flex: 0 0 auto !important; }
+#cart-wrapper td.cart-p-image { grid-area: img !important; }
 #cart-wrapper td.cart-p-image img {
-  width: 72px !important;
-  height: 72px !important;
+  width: 88px !important;
+  height: 88px !important;
   object-fit: cover !important;
   border-radius: 10px !important;
   background: #f6f6f6 !important;
   display: block !important;
 }
-#cart-wrapper td.p-name { flex: 1 1 200px !important; min-width: 160px !important; }
+#cart-wrapper td.p-name {
+  grid-area: name !important;
+  align-self: end !important;
+  padding-right: 40px !important; /* rezerva na absolutní "X" v rohu */
+}
 #cart-wrapper td.p-name .main-link {
   font-weight: 600 !important;
   font-size: 14px !important;
@@ -2023,7 +2034,11 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 #cart-wrapper .cart-table tr.removeable td.p-availability {
   display: none !important;
 }
-#cart-wrapper td.p-quantity { flex: 0 0 auto !important; margin-top: 8px !important; }
+#cart-wrapper td.p-quantity {
+  grid-area: qty !important;
+  align-self: start !important;
+  margin-top: 0 !important;
+}
 #cart-wrapper td.p-quantity .p-label { display: none !important; }
 /* Minimalistický počítadlo kusů — jeden zaoblený obrys kolem celé
    skupiny (-, číslo, +), bez viditelných rámečků na jednotlivých
@@ -2059,18 +2074,24 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 }
 #cart-wrapper .quantity button.increase:hover,
 #cart-wrapper .quantity button.decrease:hover { background: #eee !important; }
+/* Cena za kus — hned VEDLE počítadla (WP reference: "259 Kč / ks"
+   normálním tmavým písmem, ne malé šedé vpravo) */
 #cart-wrapper td.p-price {
-  flex: 0 0 auto !important;
-  text-align: right !important;
-  font-size: 12px !important;
-  color: #999 !important;
-  margin-top: 8px !important;
+  grid-area: price !important;
+  justify-self: start !important;
+  align-self: start !important;
+  text-align: left !important;
+  font-size: 14px !important;
+  color: #444 !important;
+  margin-top: 0 !important;
+  line-height: 32px !important; /* svisle zarovnané na střed počítadla (výška 32px) */
 }
 #cart-wrapper td.p-price .p-label { display: none !important; }
-#cart-wrapper td.p-price strong.price-final { color: #999 !important; font-weight: 500 !important; }
+#cart-wrapper td.p-price strong.price-final { color: #444 !important; font-weight: 500 !important; }
 #cart-wrapper td.p-total {
-  flex: 0 0 auto !important;
-  margin-left: auto !important;
+  grid-area: total !important;
+  justify-self: end !important;
+  margin-left: 0 !important;
   display: flex !important;
   align-items: center !important;
 }
@@ -2125,16 +2146,19 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 }
 #cart-wrapper .toggle-coupon-input-button { display: none !important; }
 #cart-wrapper .discount-coupon { display: block !important; }
+/* Přes celou šířku sloupce produktů (WP reference — input zabírá
+   většinu řádku, černé tlačítko "Uplatnit" hned za ním) */
 #cart-wrapper .discount-coupon .input-group {
   display: flex !important;
   gap: 10px !important;
-  max-width: 420px !important;
+  max-width: none !important;
+  width: 100% !important;
 }
 #cart-wrapper .discount-coupon input#discountCouponCode {
   flex: 1 !important;
   border: 1px solid #ddd !important;
   border-radius: 10px !important;
-  padding: 10px 16px !important;
+  padding: 13px 18px !important;
   font-size: 14px !important;
 }
 #cart-wrapper .discount-coupon button[type="submit"] {
@@ -2158,68 +2182,100 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   background: transparent !important;
   padding: 0 !important;
 }
+/* Šedý zaoblený box BEZ rámečku/stínu (WP reference — dřív bílá karta
+   s borderem a stínem) */
 #cart-wrapper .price-wrapper {
-  background: #fff !important;
-  border: 1px solid #ececec !important;
+  background: #f5f5f5 !important;
+  border: none !important;
   border-radius: 16px !important;
-  padding: 24px !important;
+  padding: 26px !important;
   box-sizing: border-box !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,.03) !important;
+  box-shadow: none !important;
   margin-bottom: 16px !important;
 }
 /* Nadpis "Souhrn objednávky" — vkládá JS, tady jen styl */
 #cart-wrapper .om-cart-summary-title {
-  font-size: 18px !important;
+  font-size: 19px !important;
   font-weight: 800 !important;
   color: #1a1a1a !important;
-  margin: 0 0 18px !important;
+  margin: 0 0 16px !important;
+  text-align: left !important;
+}
+/* Řádky souhrnu (WP reference): "Celkem s DPH ......... 259 Kč" a
+   "Doprava ......... od 149 Kč", label vlevo / hodnota vpravo na
+   JEDNOM řádku, mezi řádky tenká linka. JS obalí nativní label +
+   cenu do div.om-summary-line a přidá vlastní řádek Doprava. */
+#cart-wrapper .om-summary-line {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: baseline !important;
+  gap: 12px !important;
+  padding: 12px 0 !important;
+}
+#cart-wrapper .om-summary-line + .om-summary-line {
+  border-top: 1px solid #e2e2e2 !important;
 }
 #cart-wrapper .price-label.price-primary {
-  font-size: 14px !important;
-  color: #666 !important;
+  font-size: 15px !important;
+  color: #1a1a1a !important;
   font-weight: 500 !important;
-  display: block !important;
+  display: inline-block !important;
 }
 #cart-wrapper strong.price.price-primary {
   display: inline-block !important;
-  font-size: 18px !important;
+  font-size: 17px !important;
   font-weight: 800 !important;
   color: #1a1a1a !important;
-  float: right !important;
+  float: none !important;
 }
+#cart-wrapper .om-summary-line .price-label {
+  font-size: 15px !important;
+  color: #1a1a1a !important;
+  font-weight: 500 !important;
+}
+#cart-wrapper .om-summary-line strong {
+  font-size: 17px !important;
+  font-weight: 800 !important;
+  color: #1a1a1a !important;
+}
+/* "Cena bez DPH" — v referenci není vůbec */
 #cart-wrapper .price-label.price-secondary,
 #cart-wrapper strong.price.price-secondary {
-  font-size: 13px !important;
-  color: #999 !important;
+  display: none !important;
 }
 #cart-wrapper .next-step.next-step--cart {
   display: flex !important;
   flex-direction: column !important;
   gap: 10px !important;
 }
+/* ZELENÉ tlačítko "Pokračovat na dopravu a platbu ›" (WP reference —
+   dřív červené "POKRAČOVAT"; text přepisuje JS, šipku přidává :after) */
 #cart-wrapper .next-step-forward {
-  background: #9f1400 !important;
+  background: #79b530 !important;
   color: #fff !important;
-  border-radius: 10px !important;
-  padding: 14px 20px !important;
+  border-radius: 12px !important;
+  padding: 17px 20px !important;
   font-weight: 700 !important;
-  font-size: 14px !important;
+  font-size: 15px !important;
   text-align: center !important;
   text-decoration: none !important;
+  text-transform: none !important;
   border: none !important;
+  display: block !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  transition: background .2s !important;
 }
-#cart-wrapper .next-step-forward:hover { background: #7a0f00 !important; }
+#cart-wrapper .next-step-forward:after {
+  content: "›" !important;
+  margin-left: 10px !important;
+  font-weight: 800 !important;
+}
+#cart-wrapper .next-step-forward:hover { background: #6aa028 !important; }
+/* "Zpět do obchodu" — ve WP referenci není žádné druhé tlačítko */
 #cart-wrapper .next-step-back {
-  background: transparent !important;
-  color: #1a1a1a !important;
-  border: 1px solid #ddd !important;
-  border-radius: 10px !important;
-  padding: 14px 20px !important;
-  font-size: 14px !important;
-  text-align: center !important;
-  text-decoration: none !important;
+  display: none !important;
 }
-#cart-wrapper .next-step-back:hover { background: #f5f5f5 !important; }
 
 /* Bezpečnostní text + loga plateb pod tlačítkem — oboje vkládá JS
    (v nativním Shoptet DOM na téhle stránce neexistují). */
@@ -2325,6 +2381,202 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   .om-cart-upsell-nav { width: 40px !important; height: 40px !important; }
   .om-cart-upsell-nav-prev { left: 4px; }
   .om-cart-upsell-nav-next { right: 4px; }
+}
+
+/* ── Kartičky v cart-upsell sliderech — STEJNÝ vzhled jako homepage
+   Bestsellery/Omáčky ve slevě (20. 7. 2026). Doteď na košíku platila
+   jen základní .products-block pravidla (rámeček, zelené tlačítko),
+   ale celý detailní layout (název vlevo tučně, čtvercová fotka cover,
+   cena + kompaktní tlačítko na jednom řádku) byl scoped POUZE na
+   .product-slider-holder / .products-alternative / body.type-category
+   — na košík nedopadl vůbec, proto karty vypadaly nativně/rozbitě.
+   Duplikát bloku scoped na .om-cart-upsell-track (viz lekce 12:
+   stejná struktura karet, jiný obalový kontejner = duplikovat pravidla). */
+.om-cart-upsell-track .product .p {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  border-radius: 16px !important;
+  border: 1px solid #ececec !important;
+  background: #fff !important;
+  overflow: hidden !important;
+  transition: border-color .25s, box-shadow .25s, transform .25s !important;
+}
+.om-cart-upsell-track .product .p:hover {
+  border-color: #ddd !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,.10) !important;
+  transform: translateY(-4px) !important;
+}
+.om-cart-upsell-track .product .image,
+.om-cart-upsell-track .product a.image {
+  display: block !important;
+  position: relative !important;
+  width: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+  background: #f6f6f6 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+.om-cart-upsell-track .product .p-image {
+  position: absolute !important;
+  inset: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+.om-cart-upsell-track .product .image img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  padding: 0 !important;
+  display: block !important;
+}
+.om-cart-upsell-track .product .p-in {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+}
+.om-cart-upsell-track .product .p-in-in {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+  padding: 16px !important;
+  gap: 0 !important;
+}
+.om-cart-upsell-track .product .name {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 0 8px !important;
+  padding: 0 !important;
+  min-height: 44px !important;
+  text-align: left !important;
+}
+.om-cart-upsell-track .product .name,
+.om-cart-upsell-track .product .name span,
+.om-cart-upsell-track .product .name a {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  color: #1a1a1a !important;
+  text-align: left !important;
+  justify-content: flex-start !important;
+  display: block !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.om-cart-upsell-track .product .ratings-wrapper {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 0 4px !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+.om-cart-upsell-track .product .stars-placeholder,
+.om-cart-upsell-track .product .ratings-wrapper .stars,
+.om-cart-upsell-track .product .ratings-wrapper [class*="star"],
+.om-cart-upsell-track .product .ratings-wrapper .number-ratings,
+.om-cart-upsell-track .product .ratings-wrapper .show-add-review {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.om-cart-upsell-track .product .availability {
+  display: block !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  text-align: left !important;
+  margin: 0 !important;
+}
+.om-cart-upsell-track .product .p-bottom {
+  margin-top: auto !important;
+  padding: 0 !important;
+}
+.om-cart-upsell-track .product .p-bottom > div {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 0 4px 0 0 !important;
+  margin: 0 !important;
+}
+.om-cart-upsell-track .product .p-bottom .prices {
+  margin: 0 !important;
+  text-align: left !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  line-height: 1.1 !important;
+}
+.om-cart-upsell-track .product .price-final {
+  font-size: 17px !important;
+  font-weight: 800 !important;
+  color: #1a1a1a !important;
+  white-space: nowrap !important;
+  line-height: 1.15 !important;
+}
+.om-cart-upsell-track .product .price-before {
+  display: block !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: #aaa !important;
+  text-decoration: line-through !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+}
+.om-cart-upsell-track .product .price-final.price--sale,
+.om-cart-upsell-track .product ins .price {
+  color: #9f1400 !important;
+}
+/* Tlačítko Do košíku — nativně schované třídou .no-buttons, odkrýt */
+.om-cart-upsell-track .product .p-bottom.no-buttons .p-tools,
+.om-cart-upsell-track .product .p-tools {
+  display: inline-flex !important;
+  margin: 0 0 0 auto !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  width: auto !important;
+}
+.om-cart-upsell-track .product .pr-action {
+  margin: 0 !important;
+  width: auto !important;
+  display: inline-block !important;
+}
+.om-cart-upsell-track .product .add-to-cart-button,
+.om-cart-upsell-track .product .to-cart-button,
+.om-cart-upsell-track .product [class*="buy"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  background: #79b530 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 9px 16px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+  width: auto !important;
+  min-width: 0 !important;
+  line-height: 1.2 !important;
+  cursor: pointer !important;
+  transition: background .25s, transform .15s, box-shadow .25s !important;
+}
+.om-cart-upsell-track .product .add-to-cart-button:hover,
+.om-cart-upsell-track .product .to-cart-button:hover {
+  background: #6aa028 !important;
+  box-shadow: 0 4px 12px rgba(121,181,48,.30) !important;
+  transform: translateY(-1px) !important;
+}
+.om-cart-upsell-track .product .p-desc,
+.om-cart-upsell-track .product .p-code,
+.om-cart-upsell-track .product .quantity {
+  display: none !important;
 }
 
 /* ══════════════════════════════════════════════
