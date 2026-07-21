@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 4.4 — Košík: enhanceCartPage() se znovu spouští po AJAX přepočtu (+/- kusů)
+     Verze: 4.5 — Košík: polling retry (enhanceCartPage i observer čekají na asynchronní vykreslení)
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -351,32 +351,73 @@
      zachytil. Řešeno příznakem `applying` — po dobu vlastního zásahu
      (+ krátká rezerva přes setTimeout) observer nové mutace ignoruje. */
   function watchCartAjaxUpdates() {
-    var wrapper = document.getElementById('cart-wrapper');
-    if (!wrapper) return;
+    var attempts = 0;
+    var maxAttempts = 20;
+    var delay = 200;
 
-    var applying = false;
-    var debounceTimer = null;
+    function trySetup() {
+      attempts++;
+      var wrapper = document.getElementById('cart-wrapper');
+      if (!wrapper) {
+        if (attempts < maxAttempts) setTimeout(trySetup, delay);
+        return;
+      }
 
-    var observer = new MutationObserver(function () {
-      if (applying) return;
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(function () {
-        applying = true;
-        enhanceCartPage();
-        /* Rezerva, ať observer stihne ignorovat i mutace, které naše
-           vlastní enhanceCartPage() právě vyvolala (jsou zpracované
-           jako microtask těsně PO synchronním běhu funkce). */
-        setTimeout(function () { applying = false; }, 50);
-      }, 150);
-    });
+      var applying = false;
+      var debounceTimer = null;
 
-    observer.observe(wrapper, { childList: true, subtree: true });
+      var observer = new MutationObserver(function () {
+        if (applying) return;
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(function () {
+          applying = true;
+          enhanceCartPage();
+          /* Rezerva, ať observer stihne ignorovat i mutace, které naše
+             vlastní enhanceCartPage() právě vyvolala (jsou zpracované
+             jako microtask těsně PO synchronním běhu funkce). */
+          setTimeout(function () { applying = false; }, 50);
+        }, 150);
+      });
+
+      observer.observe(wrapper, { childList: true, subtree: true });
+    }
+
+    trySetup();
+  }
+
+  /* --- Spustí enhanceCartPage() OPAKOVANĚ, dokud se nepovede skutečný
+     přesun (21. 7. 2026, oprava zjištěná díky konzoli): po klasickém
+     POST + redirectu (změna počtu kusů = "Množství bylo úspěšně
+     změněno") se stránka načte znovu od začátku, náš skript proběhne,
+     ALE Shoptet si obsah košíku (.row.summary/.cart-table) může
+     vykreslit AŽ PO DOMContentLoaded (asynchronně) — jednorázové
+     volání tak přijde příliš brzy, selektory nic nenajdou, a funkce
+     mlčky skončí (žádná JS chyba, jen nic se nezmění — přesně to, co
+     ukázala konzole). Řešení: zkoušet to opakovaně (polling), dokud
+     se přesun tabulky do .col-md-8 skutečně nepovede, nebo dokud
+     nedojdou pokusy. */
+  function enhanceCartPageWithRetry() {
+    var attempts = 0;
+    var maxAttempts = 20;
+    var delay = 200;
+
+    function attempt() {
+      attempts++;
+      enhanceCartPage();
+
+      var colLeft = document.querySelector('.row.summary > .col-md-8');
+      var moved = colLeft && colLeft.querySelector('table.cart-table');
+      if (!moved && attempts < maxAttempts) {
+        setTimeout(attempt, delay);
+      }
+    }
+    attempt();
   }
 
   function injectAll() {
 
     customizeFooterCopyright();
-    enhanceCartPage();
+    enhanceCartPageWithRetry();
     watchCartAjaxUpdates();
 
     /* -------------------------------------------------
