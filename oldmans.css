@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v4.7
+   OLD MAN'S — Shoptet Disco — Custom CSS v4.8
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -2303,6 +2303,13 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   padding: 0 !important;
 }
 #cart-wrapper .price-wrapper {
+  /* OPRAVA (21. 7. 2026, zjištěno přes getComputedStyle) — nativní
+     Shoptet dává .price-wrapper display:flex; flex-direction:row, což
+     nutilo jeho přímé děti (nadpis, oba .om-summary-line, "Cena bez
+     DPH") vejít se VEDLE SEBE v jedné řadě místo stohování pod sebe —
+     přesně to způsobovalo překryv textu "Celkem s DPH"/"Doprava".
+     Vynutit block, ať se děti řadí normálně shora dolů. */
+  display: block !important;
   background: #f5f5f5 !important;
   border: none !important;
   border-radius: 16px !important;
@@ -2319,6 +2326,7 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 }
 #cart-wrapper .om-summary-line {
   display: flex !important;
+  width: 100% !important;
   justify-content: space-between !important;
   align-items: center !important;
   padding: 10px 0 !important;
