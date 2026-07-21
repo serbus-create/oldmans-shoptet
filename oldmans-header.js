@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 4.2 — OPRAVA HierarchyRequestError: přesouvá se jen table.cart-table, ne celý cart-inner
+     Verze: 4.4 — Košík: enhanceCartPage() se znovu spouští po AJAX přepočtu (+/- kusů)
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -247,17 +247,9 @@
       if (shippingBox) colLeft.insertBefore(shippingBox, cartTable);
     }
 
-    /* 1. Ikona náklaďáku — připnuto na konkrétní commit hash (ne @main),
-       ať se stejná zacachovaná stará verze neukáže znovu (viz lekce
-       z 21. 7. 2026). */
+    /* 1. Ikona náklaďáku — ODSTRANĚNO (21. 7. 2026, na žádost klienta).
+       .extra.delivery teď obsahuje jen text + progress bar, bez ikony. */
     var deliveryEl = document.querySelector('.extra.delivery');
-    if (deliveryEl && !deliveryEl.querySelector('.om-cart-truck-icon')) {
-      var truckIcon = document.createElement('img');
-      truckIcon.className = 'om-cart-truck-icon';
-      truckIcon.src = 'https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@b855436dedce61f1a58a77d95dd1128a1c36b75b/free%20doprava.svg';
-      truckIcon.alt = '';
-      deliveryEl.insertBefore(truckIcon, deliveryEl.firstChild);
-    }
 
     /* 1b. Přepis textu — nativní Shoptet říká "Objednejte ještě za X Kč
        a budete mít dopravu ZDARMA", mockup chce "Nakupte ještě za X Kč
@@ -344,10 +336,48 @@
     }
   }
 
+  /* --- Znovu spustí enhanceCartPage() po každé AJAX aktualizaci
+     košíku (21. 7. 2026, na žádost klienta: kliknutí na +/- u počtu
+     kusů pošle AJAX přepočet a Shoptet si přitom PŘEPÍŠE vlastní
+     nativní DOM uvnitř #cart-wrapper — naše úpravy (přesunutá tabulka,
+     texty, souhrn) tím zmizí, protože běžely jen jednou při načtení
+     stránky. MutationObserver sleduje #cart-wrapper a po každé změně
+     (childList/subtree) enhanceCartPage() zavolá znovu — funkce je
+     idempotentní (každý krok si hlídá "už jsem to udělal" přes vlastní
+     třídy jako .om-cart-summary-title), takže opakované volání je
+     bezpečné a nic nezdvojí.
+     POZOR na nekonečnou smyčku: enhanceCartPage() sama mutuje DOM
+     (přesouvá tabulku, vkládá elementy), což by observer znovu
+     zachytil. Řešeno příznakem `applying` — po dobu vlastního zásahu
+     (+ krátká rezerva přes setTimeout) observer nové mutace ignoruje. */
+  function watchCartAjaxUpdates() {
+    var wrapper = document.getElementById('cart-wrapper');
+    if (!wrapper) return;
+
+    var applying = false;
+    var debounceTimer = null;
+
+    var observer = new MutationObserver(function () {
+      if (applying) return;
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(function () {
+        applying = true;
+        enhanceCartPage();
+        /* Rezerva, ať observer stihne ignorovat i mutace, které naše
+           vlastní enhanceCartPage() právě vyvolala (jsou zpracované
+           jako microtask těsně PO synchronním běhu funkce). */
+        setTimeout(function () { applying = false; }, 50);
+      }, 150);
+    });
+
+    observer.observe(wrapper, { childList: true, subtree: true });
+  }
+
   function injectAll() {
 
     customizeFooterCopyright();
     enhanceCartPage();
+    watchCartAjaxUpdates();
 
     /* -------------------------------------------------
        0. SKRÝT PRÁZDNÝ SIDEBAR NA STATICKÝCH STRÁNKÁCH
