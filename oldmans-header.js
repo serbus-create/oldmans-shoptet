@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 4.6 — Košík: observer sleduje rodiče #cart-wrapper (AJAX GetCartContent vyměňuje celý uzel)
+     Verze: 4.7 — Košík: ztlumení (fade) během AJAX přepočtu schová probliknutí nativního vzhledu
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -381,9 +381,18 @@
 
       var applying = false;
       var debounceTimer = null;
+      var fadeTimer = null;
 
       var observer = new MutationObserver(function () {
         if (applying) return;
+
+        /* Ztlumit IHNED (ne až po debounce) — schová krátký "probliknutí"
+           nativního vzhledu Shoptetu, než náš JS stihne znovu doběhnout
+           po AJAX přepočtu (setCartItemAmount/GetCartContent). Přechod
+           řeší CSS (.om-cart-transitioning), tady jen přepínáme třídu. */
+        observeTarget.classList.add('om-cart-transitioning');
+        clearTimeout(fadeTimer);
+
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(function () {
           applying = true;
@@ -392,6 +401,12 @@
              vlastní enhanceCartPage() právě vyvolala (jsou zpracované
              jako microtask těsně PO synchronním běhu funkce). */
           setTimeout(function () { applying = false; }, 50);
+
+          /* Krátká prodleva navíc před rozsvícením zpět — ať je vidět
+             hotový, přestylovaný stav, ne mezikrok. */
+          fadeTimer = setTimeout(function () {
+            observeTarget.classList.remove('om-cart-transitioning');
+          }, 80);
         }, 150);
       });
 
