@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 3.6 — Košík: vráceny kroky, opravený počítadlo, užší blok, recyklační nekonečný slider
+     Verze: 3.7 — Oprava zacachované staré ikony náklaďáku (@main → připnutý commit)
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -234,12 +234,18 @@
       cartInner.parentNode.insertBefore(shippingBox, cartInner);
     }
 
-    /* 1. Ikona náklaďáku před text "Objednejte ještě za X Kč..." */
+    /* 1. Ikona náklaďáku před text "Objednejte ještě za X Kč..."
+       OPRAVA (21. 7. 2026): URL byla dřív na @main, což jsDelivr
+       agresivně cachuje — prohlížeč klienta ukazoval STAROU verzi
+       souboru (vypadalo to jako "dvě ikony" navíc), zatímco
+       raw.githubusercontent.com (zdroj pravdy) už měl aktuální obsah.
+       Připnuto na konkrétní commit hash, stejně jako CSS/JS v <head>,
+       ať se stejná stará cache znovu neukáže. */
     var deliveryEl = document.querySelector('.extra.delivery');
     if (deliveryEl && !deliveryEl.querySelector('.om-cart-truck-icon')) {
       var truckIcon = document.createElement('img');
       truckIcon.className = 'om-cart-truck-icon';
-      truckIcon.src = 'https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/free%20doprava.svg';
+      truckIcon.src = 'https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@b855436dedce61f1a58a77d95dd1128a1c36b75b/free%20doprava.svg';
       truckIcon.alt = '';
       deliveryEl.insertBefore(truckIcon, deliveryEl.firstChild);
     }
