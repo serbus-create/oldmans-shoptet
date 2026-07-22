@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.3
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.4
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -962,10 +962,11 @@ body.type-category .benefitBanner.position--benefitHomepage {
   margin: 0 auto !important;
   padding: 20px 40px !important;
   box-sizing: border-box !important;
-  /* Šedé pozadí splývající se zbytkem patičky — bez tohohle měla lišta
-     nativně bílé pozadí (a možná i border/box-shadow), takže vypadala
-     jako bílý "rámeček" plovoucí na šedém pozadí kolem. */
-  background: #f5f5f5 !important;
+  /* Transparentní — splyne přímo s pozadím #footer (#f0f0f0), ať
+     nevzniknou dva různé odstíny šedé vedle sebe (22. 7. 2026, na
+     žádost klienta — dřív mělo vlastní #f5f5f5, mírně odlišné od
+     zbytku patičky). */
+  background: transparent !important;
   border: none !important;
   box-shadow: none !important;
 }
