@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.0
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.1
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -2936,4 +2936,27 @@ html, body {
   }
   .om-recipe-nav-prev { left: 4px; }
   .om-recipe-nav-next { right: 4px; }
+}
+
+/* ══════════════════════════════════════════════
+   CHECKOUT — Rekapitulace objednávky přilepená (sticky)
+   (/objednavka/krok-1/ a /objednavka/krok-2/, 22. 7. 2026)
+   Struktura ověřená přes konzoli:
+     .col-md-4 > .cart-content > .order-summary > .order-summary-inner
+       (h2.h4 "Rekapitulace objednávky" + řádky + tlačítko Pokračovat)
+   Bez sticky box při delším formuláři/rekapitulaci "utíkal" dolů a
+   tlačítko Pokračovat sjelo mimo viditelnou oblast. `.order-summary`
+   je specifická třída (unikátní pro checkout, nekoliduje s ničím na
+   jiné stránce), proto scoped přímo na ni, bez potřeby dalšího
+   obalu jako body.type-xxx. */
+.order-summary {
+  position: sticky !important;
+  top: 20px !important;
+  align-self: flex-start !important;
+  height: fit-content !important;
+}
+@media (max-width: 900px) {
+  .order-summary {
+    position: static !important;
+  }
 }
