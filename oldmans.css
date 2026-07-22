@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.5
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.6
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -2972,21 +2972,28 @@ html, body {
         hned po pár řádcích. Stejný princip jako starší oprava
         `.p-detail-inner` na detailu produktu (display:flex kvůli
         stejné výšce sloupců, viz komentář tam).
-     4. kolo (tahle verze) — display:flex fungoval (`.col-md-4`
-        se skutečně natáhlo na výšku `.col-md-8`, ověřeno konzolí:
-        obě 840px), ALE `.cart-content` se natáhlo TAKY na 840px
-        místo aby zůstalo na své přirozené (kratší) výšce — `height:
-        fit-content` se ukázal nespolehlivý v kombinaci s rodičem,
-        který má (díky flex-stretch) najednou DEFINITIVNÍ výšku
-        misto automatické. Nahrazeno spolehlivější `height: auto`
-        (jednoznačná, dobře podporovaná hodnota — "výška podle
-        vlastního obsahu, ignoruj nataženého rodiče"), která tohle
-        chování nemá. */
+     4. kolo — display:flex fungoval (`.col-md-4` se skutečně
+        natáhlo na výšku `.col-md-8`, ověřeno konzolí: obě 840px),
+        ALE `.cart-content` se natáhlo TAKY na 840px — vyzkoušeno
+        `height: fit-content` i `height: auto`, obojí bez efektu.
+     5. kolo (tahle verze, KOŘEN PROBLÉMU nalezen) — `.cart-content`
+        NENÍ unikátní třída jen pro pravý sloupec se souhrnem!
+        Existuje STEJNOJMENNÁ třída i uvnitř `.col-md-8` (levý
+        sloupec, obaluje celý formulář). Selektor `.cart-content`
+        (bez omezení na rodiče) tak omylem cílil na OBA sloupce
+        současně — a diagnostika přes `document.querySelector
+        ('.cart-content')` (bere jen PRVNÍ shodu v DOM) navíc celou
+        dobu měřila ten ŠPATNÝ, levý element (jehož výška 840
+        logicky odpovídá výšce celého formuláře — nebyl to bug,
+        jen jsme se dívali na jiný box, než jsme mysleli).
+        Opraveno na `.col-md-4 > .cart-content` — cílí VÝHRADNĚ na
+        pravý sloupec se souhrnem, levý sloupec (formulář) už tímhle
+        pravidlem není vůbec dotčen. */
 .row.cart-row {
   display: flex !important;
   flex-wrap: wrap !important;
 }
-.cart-content {
+.col-md-4 > .cart-content {
   position: sticky !important;
   top: 20px !important;
   align-self: flex-start !important;
@@ -2996,7 +3003,7 @@ html, body {
   .row.cart-row {
     display: block !important;
   }
-  .cart-content {
+  .col-md-4 > .cart-content {
     position: static !important;
   }
 }
