@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.2
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.3
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -2942,20 +2942,39 @@ html, body {
    CHECKOUT — Rekapitulace objednávky přilepená (sticky)
    (/objednavka/krok-1/ a /objednavka/krok-2/, 22. 7. 2026)
    Struktura ověřená přes konzoli:
-     .col-md-4 > .cart-content
-       ├─ .order-summary > .order-summary-inner (karta "Rekapitulace
-       │    objednávky" + řádky)
-       └─ .next-step.next-step--step-1 (tlačítko "Pokračovat" —
-            SOUROZENEC .order-summary, NE uvnitř ní!)
-   OPRAVA (22. 7. 2026, druhé kolo) — první pokus dal sticky přímo na
-   .order-summary, ale to tlačítko Pokračovat vůbec nezahrnovalo (je
-   to samostatný element vedle karty, ne uvnitř), takže i s "přilepenou"
-   kartou tlačítko dál normálně odscrollovalo pryč — přesně to
-   uživatel viděl. Sticky proto patří o úroveň výš, na `.cart-content`,
-   která obaluje KARTU I TLAČÍTKO dohromady — obě se tak posouvají a
-   zůstávají spolu na místě. `.cart-content` je specifická třída
-   (unikátní pro checkout), scoped přímo na ni bez potřeby dalšího
-   obalu jako body.type-xxx. */
+     .row.cart-row (display:block nativně — Bootstrap float grid, NE flex)
+       ├─ .col-md-8 (formulář — dlouhý, adresa/doprava/platba...)
+       └─ .col-md-4 > .cart-content
+            ├─ .order-summary > .order-summary-inner (karta)
+            └─ .next-step.next-step--step-1 (tlačítko Pokračovat —
+                 SOUROZENEC .order-summary, NE uvnitř ní!)
+   OPRAVA (22. 7. 2026, TŘETÍ kolo):
+     1. kolo — sticky na .order-summary: nezahrnovalo tlačítko
+        Pokračovat (to je mimo kartu), takže tlačítko dál odjíždělo.
+     2. kolo — sticky na .cart-content (obaluje kartu i tlačítko):
+        tlačítko teď JEZDÍ SPOLU s kartou, ale pořád obojí zmizelo
+        pod červenou USP lištou. Příčina: `.row.cart-row` je nativně
+        `display:block` (starý Bootstrap float grid, NE flex) — pravý
+        sloupec (.col-md-4) se proto NEROZTÁHNE na výšku levého
+        sloupce s dlouhým formulářem (.col-md-8), zůstává jen tak
+        vysoký jako jeho vlastní krátký obsah. Sticky element má
+        "kam šplhat" jen v rámci výšky SVÉHO rodičovského kontejneru
+        — když je ten kontejner krátký, sticky se odlepí hned po pár
+        stovkách pixelů scrollu a pak normálně "uteče" pryč, přesně
+        jak bylo vidět na screenshotech.
+     3. kolo (tahle verze) — vynutit `.row.cart-row` na `display:flex`.
+        Flex řádek default (`align-items: stretch`) automaticky
+        natáhne KRATŠÍ sloupec (.col-md-4) na výšku DELŠÍHO sloupce
+        (.col-md-8), takže .cart-content uvnitř má konečně dost
+        prostoru pro sticky "šplhání" po celou dobu scrollování
+        formuláře — odlepí se teprve těsně u konce formuláře, ne
+        hned po pár řádcích. Stejný princip jako starší oprava
+        `.p-detail-inner` na detailu produktu (display:flex kvůli
+        stejné výšce sloupců, viz komentář tam). */
+.row.cart-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+}
 .cart-content {
   position: sticky !important;
   top: 20px !important;
@@ -2963,6 +2982,9 @@ html, body {
   height: fit-content !important;
 }
 @media (max-width: 900px) {
+  .row.cart-row {
+    display: block !important;
+  }
   .cart-content {
     position: static !important;
   }
