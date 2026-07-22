@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.4
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.5
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -2971,7 +2971,17 @@ html, body {
         formuláře — odlepí se teprve těsně u konce formuláře, ne
         hned po pár řádcích. Stejný princip jako starší oprava
         `.p-detail-inner` na detailu produktu (display:flex kvůli
-        stejné výšce sloupců, viz komentář tam). */
+        stejné výšce sloupců, viz komentář tam).
+     4. kolo (tahle verze) — display:flex fungoval (`.col-md-4`
+        se skutečně natáhlo na výšku `.col-md-8`, ověřeno konzolí:
+        obě 840px), ALE `.cart-content` se natáhlo TAKY na 840px
+        místo aby zůstalo na své přirozené (kratší) výšce — `height:
+        fit-content` se ukázal nespolehlivý v kombinaci s rodičem,
+        který má (díky flex-stretch) najednou DEFINITIVNÍ výšku
+        misto automatické. Nahrazeno spolehlivější `height: auto`
+        (jednoznačná, dobře podporovaná hodnota — "výška podle
+        vlastního obsahu, ignoruj nataženého rodiče"), která tohle
+        chování nemá. */
 .row.cart-row {
   display: flex !important;
   flex-wrap: wrap !important;
@@ -2980,7 +2990,7 @@ html, body {
   position: sticky !important;
   top: 20px !important;
   align-self: flex-start !important;
-  height: fit-content !important;
+  height: auto !important;
 }
 @media (max-width: 900px) {
   .row.cart-row {
