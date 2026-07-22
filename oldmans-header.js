@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.0 — Košík: VŠECHNY úpravy odstraněny, stránka /kosik/ je čistě nativní Shoptet
+     Verze: 5.1 — Patička: copyright text bez "Vytvořil vhs."
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -199,7 +199,7 @@
       if (copyright) {
         var cookiesLink = copyright.querySelector('.js-cookies-settings');
         var cookiesHtml = cookiesLink ? cookiesLink.outerHTML : '';
-        copyright.innerHTML = '© Copyright 2026 <strong>Old Man\'s</strong>. Všechna práva vyhrazena. Vytvořil <a href="https://www.v-h-s.cz/" target="_blank" rel="noopener">vhs.</a> ' + cookiesHtml;
+        copyright.innerHTML = '© Copyright 2026 <strong>Old Man\'s</strong>. Všechna práva vyhrazena. ' + cookiesHtml;
       }
 
       /* Loga platebních metod (Comgate, Visa, Mastercard, GPay, ApplePay)
