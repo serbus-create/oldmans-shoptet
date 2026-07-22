@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.1
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.2
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -2942,21 +2942,28 @@ html, body {
    CHECKOUT — Rekapitulace objednávky přilepená (sticky)
    (/objednavka/krok-1/ a /objednavka/krok-2/, 22. 7. 2026)
    Struktura ověřená přes konzoli:
-     .col-md-4 > .cart-content > .order-summary > .order-summary-inner
-       (h2.h4 "Rekapitulace objednávky" + řádky + tlačítko Pokračovat)
-   Bez sticky box při delším formuláři/rekapitulaci "utíkal" dolů a
-   tlačítko Pokračovat sjelo mimo viditelnou oblast. `.order-summary`
-   je specifická třída (unikátní pro checkout, nekoliduje s ničím na
-   jiné stránce), proto scoped přímo na ni, bez potřeby dalšího
+     .col-md-4 > .cart-content
+       ├─ .order-summary > .order-summary-inner (karta "Rekapitulace
+       │    objednávky" + řádky)
+       └─ .next-step.next-step--step-1 (tlačítko "Pokračovat" —
+            SOUROZENEC .order-summary, NE uvnitř ní!)
+   OPRAVA (22. 7. 2026, druhé kolo) — první pokus dal sticky přímo na
+   .order-summary, ale to tlačítko Pokračovat vůbec nezahrnovalo (je
+   to samostatný element vedle karty, ne uvnitř), takže i s "přilepenou"
+   kartou tlačítko dál normálně odscrollovalo pryč — přesně to
+   uživatel viděl. Sticky proto patří o úroveň výš, na `.cart-content`,
+   která obaluje KARTU I TLAČÍTKO dohromady — obě se tak posouvají a
+   zůstávají spolu na místě. `.cart-content` je specifická třída
+   (unikátní pro checkout), scoped přímo na ni bez potřeby dalšího
    obalu jako body.type-xxx. */
-.order-summary {
+.cart-content {
   position: sticky !important;
   top: 20px !important;
   align-self: flex-start !important;
   height: fit-content !important;
 }
 @media (max-width: 900px) {
-  .order-summary {
+  .cart-content {
     position: static !important;
   }
 }
