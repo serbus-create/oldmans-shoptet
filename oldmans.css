@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.13
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.14
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -3133,4 +3133,18 @@ html, body {
   .om-mobile-slider-nav:focus { outline: none !important; box-shadow: none !important; }
   .om-mobile-slider-nav-prev { left: 4px; }
   .om-mobile-slider-nav-next { right: 4px; }
+
+  /* Kompaktnější rozložení karty (23. 7. 2026, na žádost klienta) —
+     nativní pravidlo `.p-bottom { margin-top: auto !important; }`
+     (sdílené s desktop kartami) tlačí cenu+tlačítko úplně dolů ke
+     kraji karty. Na krátké desktopové kartě (270px) to nevadí, ale
+     na vysoké mobilní kartě (obrázek skoro přes celou šířku
+     obrazovky) to mezi popiskem a cenou vytváří velkou prázdnou
+     mezeru (viz screenshot). Scoped JEN na náš mobilní slider —
+     desktop a ostatní slidery (kategorie, "Podobné produkty") mají
+     jinou výšku karty a tam je to zarovnání žádoucí, necháváme ho
+     beze změny. */
+  .om-mobile-product-slider-track .product .p-bottom {
+    margin-top: 20px !important;
+  }
 }
