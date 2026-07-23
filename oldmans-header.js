@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.1 — Patička: copyright text bez "Vytvořil vhs."
+     Verze: 5.2 — Mobil: vlastní slider pro homepage produkty (Bestsellery, V akci) se scroll-snap
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -951,6 +951,88 @@
       /* Donutíme Shoptet slider přepočítat výšku/pozice po naší úpravě velikosti karet */
       window.dispatchEvent(new Event('resize'));
     }, 2000);
+
+    /* Mobilní vlastní slider (23. 7. 2026) — postaven AŽ PO ustálení
+       nativního Shoptet slideru (2000ms výše), ať klonujeme finální,
+       už správně vykreslené karty. Viz komentář u funkce níže. */
+    setTimeout(buildMobileProductSliders, 2200);
+  }
+
+  /* --- Mobilní vlastní slider pro homepage produkty (Bestsellery,
+     V akci) — 23. 7. 2026, na žádost klienta.
+     Nativní Shoptet slider posouvá karty přes JS transform
+     (translate3d), NE přes opravdové scrollování (potvrzeno
+     konzolí: overflow:hidden + cursor:grab na wrapperu, transform
+     na .products-block) — na mobilu se při tažení prstem
+     nepřichytával na celé karty, uživatel viděl náhodné "půlky"
+     kartiček. Řešení: NEBOJUJEME s nativním JS (jeho touch handlery
+     pravděpodobně blokují nativní scroll přes preventDefault) —
+     místo toho na mobilu nativní slider schováme (CSS) a vedle
+     postavíme VLASTNÍ klon karet (ne nové načítání dat, jen
+     zkopírované už vykreslené .product elementy) s opravdovým
+     overflow-x:auto + scroll-snap-type — stejný, už ověřený princip
+     jako slider "Vybrané recepty" (zdvojené karty + tichý skok na
+     hranici sady pro nekonečné procházení). Desktop beze změny. */
+  function buildMobileProductSlider(headingSelector) {
+    var heading = document.querySelector(headingSelector);
+    if (!heading) return;
+    var holder = heading.nextElementSibling;
+    if (!holder || !holder.classList.contains('product-slider-holder')) return;
+    if (holder.querySelector('.om-mobile-product-slider')) return; /* už postaveno */
+
+    var sourceProducts = holder.querySelectorAll('.products-block .product');
+    if (!sourceProducts.length) return;
+
+    var wrap = document.createElement('div');
+    /* Třída product-slider-holder navíc = klonované karty automaticky
+       zdědí existující "deluxe" styl karet (.product-slider-holder
+       .product .p ...), nemusíme ho duplikovat. CSS výše přebíjí
+       nechtěné vlastnosti (overflow:hidden, padding) vyšší specificitou. */
+    wrap.className = 'om-mobile-product-slider product-slider-holder';
+    wrap.innerHTML =
+      '<button type="button" class="om-mobile-slider-nav om-mobile-slider-nav-prev" aria-label="Předchozí"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 6l-6 6 6 6" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
+      '<div class="om-mobile-product-slider-track"></div>' +
+      '<button type="button" class="om-mobile-slider-nav om-mobile-slider-nav-next" aria-label="Další"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6l6 6-6 6" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+
+    var track = wrap.querySelector('.om-mobile-product-slider-track');
+    Array.prototype.slice.call(sourceProducts).forEach(function (p) {
+      track.appendChild(p.cloneNode(true));
+    });
+
+    holder.appendChild(wrap);
+
+    /* Zdvojení karet — tichý skok na hranici sady, stejné jako recepty */
+    var originalItems = Array.prototype.slice.call(track.querySelectorAll('.product'));
+    originalItems.forEach(function (item) {
+      var clone = item.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      clone.setAttribute('tabindex', '-1');
+      track.appendChild(clone);
+    });
+
+    var prevBtn = wrap.querySelector('.om-mobile-slider-nav-prev');
+    var nextBtn = wrap.querySelector('.om-mobile-slider-nav-next');
+
+    var scrollByCard = function (dir) {
+      var card = track.querySelector('.product');
+      var step = card ? card.getBoundingClientRect().width + 14 : 300;
+      var half = track.scrollWidth / 2;
+
+      if (dir > 0) {
+        if (track.scrollLeft >= half - 5) track.scrollLeft -= half;
+        track.scrollBy({ left: step, behavior: 'smooth' });
+      } else {
+        if (track.scrollLeft <= 5) track.scrollLeft += half;
+        track.scrollBy({ left: -step, behavior: 'smooth' });
+      }
+    };
+    prevBtn.addEventListener('click', function () { scrollByCard(-1); });
+    nextBtn.addEventListener('click', function () { scrollByCard(1); });
+  }
+
+  function buildMobileProductSliders() {
+    buildMobileProductSlider('.homepage-products-heading-1');
+    buildMobileProductSlider('.homepage-products-heading-2');
   }
 
   /* --- Trust badges + price box + partner loga na detailu produktu --- */
