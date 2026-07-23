@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.7
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.10
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -3023,4 +3023,84 @@ html, body {
   .col-md-4 > .cart-content {
     position: static !important;
   }
+}
+
+/* ══════════════════════════════════════════════
+   MOBILNÍ VLASTNÍ SLIDER — homepage produkty
+   (Bestsellery, V akci) — 23. 7. 2026
+   Nativní Shoptet slider posouvá karty přes JS transform
+   (translate3d), NE přes opravdové scrollování — na mobilu
+   se při tažení prstem nepřichytával na celé karty (bez ohledu
+   na CSS scroll-snap, protože to není nativní scroll container).
+   Řešení: na mobilu nativní slider schováme (viz media query
+   níže) a zobrazíme VLASTNÍ klon karet s opravdovým
+   overflow-x:auto + scroll-snap — stejný princip jako už
+   funkční slider "Vybrané recepty". Desktop je beze změny,
+   tam nativní slider funguje správně. */
+.om-mobile-product-slider {
+  display: none;
+}
+@media (max-width: 768px) {
+  /* Nativní Shoptet slider (identifikovaný přes data-columns,
+     ověřeno konzolí) — na mobilu schovaný */
+  .product-slider-holder > .product-slider[data-columns] {
+    display: none !important;
+  }
+  .om-mobile-product-slider {
+    display: block;
+    position: relative;
+  }
+  /* Přebíjí základní .product-slider-holder pravidlo (overflow:hidden;
+     padding-bottom:40px) vyšší specificitou dvou tříd — nechceme to
+     tady, potřebujeme viditelné šipky přesahující přes okraj a žádný
+     extra padding navíc. */
+  .om-mobile-product-slider.product-slider-holder {
+    overflow: visible !important;
+    padding-bottom: 10px !important;
+  }
+  .om-mobile-product-slider-track {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 4px 10px;
+    margin: -4px -4px 0;
+    scrollbar-width: none;
+  }
+  .om-mobile-product-slider-track::-webkit-scrollbar { display: none; }
+  .om-mobile-product-slider-track .product {
+    flex: 0 0 auto !important;
+    width: 84vw !important;
+    min-width: 84vw !important;
+    max-width: 84vw !important;
+    scroll-snap-align: start;
+  }
+  .om-mobile-slider-nav {
+    position: absolute;
+    top: calc(84vw / 2);
+    transform: translateY(-50%);
+    background: #f0c944 !important;
+    border: none !important;
+    border-radius: 16px !important;
+    box-shadow: none !important;
+    color: #fff !important;
+    width: 44px !important;
+    height: 44px !important;
+    padding: 0 !important;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .2s, transform .2s;
+  }
+  .om-mobile-slider-nav svg { width: 18px; height: 18px; display: block; }
+  .om-mobile-slider-nav:hover { background: #e6b800 !important; }
+  .om-mobile-slider-nav:focus { outline: none !important; box-shadow: none !important; }
+  .om-mobile-slider-nav-prev { left: 4px; }
+  .om-mobile-slider-nav-next { right: 4px; }
 }
