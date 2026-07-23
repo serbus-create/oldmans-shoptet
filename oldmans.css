@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.16
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.17
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -3077,30 +3077,31 @@ html, body {
   .om-mobile-product-slider-track {
     display: flex;
     flex-wrap: nowrap;
-    gap: 14px;
+    /* Mezera mezi kartami = 2× boční okraj (9%+9%), ať je gutter
+       stejný na obou stranách karty v každé "zastavené" pozici,
+       viz komentář u .product níže (23. 7. 2026, dle klientova
+       schváleného mockupu). */
+    gap: 18%;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
-    padding: 4px 4px 10px;
-    margin: -4px -4px 0;
+    padding: 4px 9% 10px;
+    margin: -4px 0 0;
     scrollbar-width: none;
   }
   .om-mobile-product-slider-track::-webkit-scrollbar { display: none; }
   .om-mobile-product-slider-track .product {
-    /* OPRAVA (23. 7. 2026, na žádost klienta) — dřív 84vw (84 % CELÉ
-       obrazovky), ale kontejner slideru (.product-slider-holder) má
-       vlastní boční padding (20px každá strana), takže karta počítaná
-       vůči celé obrazovce byla širší, než kolik reálně zbývalo místa
-       uvnitř — kartička byla vpravo useknutá (viz screenshot). Teď
-       100 % VLASTNÍHO KONTEJNERU (track), ne celé obrazovky — karta
-       se tak vždy přesně vejde do dostupného prostoru, ať je padding
-       jakýkoliv, a zabírá celou obrazovku bez "nakukování" další
-       karty (jak si klient přál). */
-    flex: 0 0 100% !important;
-    width: 100% !important;
-    min-width: 100% !important;
-    max-width: 100% !important;
+    /* OPRAVA (23. 7. 2026, dle klientova schváleného HTML mockupu) —
+       klient chtěl kartu vycentrovanou s viditelnou mezerou po OBOU
+       stranách (ne na celou šířku obrazovky) — šipky žijí v téhle
+       mezeře. Karta 82 % šířky KONTEJNERU (ne celé obrazovky, viz
+       předchozí oprava níže v historii) + padding 9 % na track na
+       obou stranách drží stejný gutter v každé zastavené pozici. */
+    flex: 0 0 82% !important;
+    width: 82% !important;
+    min-width: 82% !important;
+    max-width: 82% !important;
     scroll-snap-align: start;
   }
   .om-mobile-slider-nav {
