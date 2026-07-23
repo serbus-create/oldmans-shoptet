@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.11
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.12
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -3054,6 +3054,12 @@ html, body {
      produkty" na detailu produktu (.products-alternative), ten má
      jinou strukturu a v tomhle kole úprav se ho nedotýkáme. */
   .product-slider-holder > .product-slider-navigation {
+    display: none !important;
+  }
+  /* Nativní puntíky/pagination Shoptet slideru (.product-slider-pagination)
+     — už ztratily smysl, náš vlastní slider se neposouvá po "stránkách"
+     synchronizovaných s nimi (23. 7. 2026). Stejný scoping jako výše. */
+  .product-slider-holder > .product-slider-pagination {
     display: none !important;
   }
   .om-mobile-product-slider {
