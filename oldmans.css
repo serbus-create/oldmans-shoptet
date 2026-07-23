@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.15
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.16
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -3155,7 +3155,15 @@ html, body {
   .om-mobile-product-slider-track .product .p-in-in {
     padding: 20px !important;
   }
+  /* Řádek cena+tlačítko (.p-bottom > div) se dřív NENATAHOVAL na
+     celou šířku karty (zůstával jen ~271px), takže tlačítko "Do
+     košíku"/"Detail" (přilepené doprava přes margin-left:auto na
+     .p-tools) končilo daleko od skutečného pravého okraje karty —
+     mezi tlačítkem a zaobleným rohem zůstávala velká prázdná mezera
+     (potvrzeno DevTools screenshotem 23. 7. 2026, element měřil
+     přesně 271×52 místo šířky celé karty). Vynucena plná šířka. */
   .om-mobile-product-slider-track .product .p-bottom > div {
     padding-right: 0 !important;
+    width: 100% !important;
   }
 }
