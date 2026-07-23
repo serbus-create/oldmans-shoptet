@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.2 — Mobil: vlastní slider pro homepage produkty (Bestsellery, V akci) se scroll-snap
+     Verze: 5.3 — Mobil: karta produktu na 100% šířky kontejneru (ne 84vw) + přesné vycentrování šipek přes JS
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -1028,6 +1028,27 @@
     };
     prevBtn.addEventListener('click', function () { scrollByCard(-1); });
     nextBtn.addEventListener('click', function () { scrollByCard(1); });
+
+    /* Přesné svislé vycentrování šipek na obrázek karty (23. 7. 2026)
+       — od doby, co karta má šířku 100 % kontejneru místo pevných
+       84vw, nejde výšku obrázku (čtvercový poměr stran) spolehlivě
+       spočítat čistě v CSS, protože záleží na skutečné pixelové šířce
+       kontejneru (ta se liší podle paddingu na dané stránce/zařízení).
+       Změříme SKUTEČNOU vykreslenou výšku prvního obrázku a podle ní
+       nastavíme "top" šipek — s malou rezervou počkáme na načtení
+       obrázku (naming/lazy-load), ať neměříme nulovou výšku. */
+    function positionSliderArrows() {
+      var firstImage = track.querySelector('.image, a.image');
+      if (!firstImage) return;
+      var h = firstImage.getBoundingClientRect().height;
+      if (!h) return;
+      prevBtn.style.top = (h / 2) + 'px';
+      nextBtn.style.top = (h / 2) + 'px';
+    }
+    positionSliderArrows();
+    window.addEventListener('resize', positionSliderArrows);
+    /* Ještě jednou o kousek později — pro případ pozdě dotaženého obrázku */
+    setTimeout(positionSliderArrows, 500);
   }
 
   function buildMobileProductSliders() {
