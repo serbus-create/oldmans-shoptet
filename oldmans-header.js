@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.12 — DIAGNOSTIKA: zrcadlení vyhledávání do skrytého nativního inputu
+     Verze: 5.13 — Desktop: dropdown s návrhy vyhledávání (searchWhisperer) přesunutý z hlavičky
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -435,6 +435,23 @@
           nativeInput.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true }));
         });
       });
+
+      /* Přesun dropdownu s návrhy (nativní .searchWhisperer, viz Network
+         odpověď ajaxSearch/) ven ze skrytého #header (29. 7. 2026, na
+         žádost klienta). Element sám o sobě má display:flex a jeho
+         vlastní JS ho normálně zobrazuje/skrývá přidáváním/odebíráním
+         třídy "active" — jen byl uvězněný uvnitř #header (display:none),
+         takže byl vždycky neviditelný bez ohledu na svůj vlastní stav.
+         Přesouváme HO SAMOTNÉHO (ne kopii) do našeho vlastního desktop
+         vyhledávacího boxu — Shoptetí JS ho dál ovládá (mění obsah/třídu
+         "active") přesně stejně jako předtím, jen teď sedí ve viditelné
+         části stránky. Zatím JEN desktop (na žádost klienta — mobil
+         later). */
+      var whisperer = document.querySelector('.searchWhisperer');
+      var desktopSearchBox = document.querySelector('#om-header .om-search');
+      if (whisperer && desktopSearchBox && !desktopSearchBox.contains(whisperer)) {
+        desktopSearchBox.appendChild(whisperer);
+      }
     }
     mirrorSearchToNative();
 
