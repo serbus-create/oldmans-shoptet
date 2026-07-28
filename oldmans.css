@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.24
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.25
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -3115,6 +3115,27 @@ html, body {
   /* Sticky fotka produktu na mobilu nedává smysl (sloupce jsou pod sebou) */
   .p-image-wrapper {
     position: static !important;
+  }
+
+  /* Hlavní fotka produktu — full width přes celou šířku obrazovky
+     (na žádost klienta, 28. 7. 2026, podle referenčního vzoru), stejný
+     "breakout" trik jako u hero banneru / USP lišty jinde v souboru.
+     Cíleno JEN na .p-image (přímý obal <img>) — miniatury náhledů pod
+     fotkou jsou mimo tenhle element, zůstávají beze změny (normální
+     odsazení jako na klientově referenci). */
+  .p-image {
+    position: relative !important;
+    left: 50% !important;
+    right: 50% !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin-left: -50vw !important;
+    margin-right: -50vw !important;
+  }
+  .p-image img {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
   }
 
   /* Loga partnerů na detailu — menší, ať se vejdou */
