@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.32
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.33
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -2251,8 +2251,11 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   display: none !important;
 }
 
-/* Nadpis — přepínání krátké (desktop) / dlouhé (mobil) varianty */
-.qd-headline-mobile { display: none; }
+/* Nadpis — na žádost klienta (28. 7. 2026) dlouhá varianta "Množstevní
+   sleva — víc kusů, nižší cena za kus" VŽDY, i na desktopu (dřív jen
+   na mobilu; krátká "Množství" byla jen pro desktop). */
+.qd-headline-desktop { display: none; }
+.qd-headline-mobile { display: inline; }
 .qd-mobile-subtitle {
   font-weight: 400;
   color: #888;
@@ -2404,9 +2407,6 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
    karty 2×2 místo kompaktního řádku po 4 (na úzké obrazovce by se
    4 sloupce nevešly čitelně) ── */
 @media (max-width: 768px) {
-  .qd-headline-desktop { display: none; }
-  .qd-headline-mobile { display: inline; }
-
   .qd-mobile-grid {
     grid-template-columns: 1fr 1fr;
     gap: 14px 12px;
@@ -2452,6 +2452,19 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   background: #9f1400 !important;
   border-color: #9f1400 !important;
   border-radius: 8px !important;
+  /* Ikona košíku napravo od textu (28. 7. 2026, na žádost klienta) —
+     barva tlačítka zůstává beze změny, jen se přidává ikona. */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+}
+.btn.btn-conversion.add-to-cart-button.om-cart-btn-white:after,
+.om-cart-btn-white:after {
+  content: "🛒";
+  font-size: 17px;
+  line-height: 1;
+  flex-shrink: 0;
 }
 .btn.btn-conversion.add-to-cart-button.om-cart-btn-white:hover,
 .om-cart-btn-white:hover {
