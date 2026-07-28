@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.3 — Mobil: karta produktu na 100% šířky kontejneru (ne 84vw) + přesné vycentrování šipek přes JS
+     Verze: 5.4 — Mobil: vlastní slider i na detailu produktu (Související produkty, Produkty které by vás mohli zajímat)
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -1435,6 +1435,23 @@
   }
 
   enhanceProductDetail();
+
+  /* Mobilní vlastní slider i pro sekce na detailu produktu (28. 7.
+     2026, na žádost klienta — dřív jen homepage). Stejná funkce
+     buildMobileProductSlider() funguje beze změny, protože obě
+     sekce mají STEJNOU strukturu jako homepage slidery — ověřeno
+     přes konzoli:
+       h2.products-related-header      -> sourozenec .product-slider-holder
+       h2.products-alternative-header  -> sourozenec .product-slider-holder
+     (obě "Související produkty" i "Produkty, které by vás mohli
+     zajímat"). Malé zpoždění, ať jsou karty v DOMu už vykreslené
+     (na detailu produktu se nedělá tak dlouhé čekání jako na
+     homepage, protože tahle sekce se nespoléhá na JS přepočet
+     sloupců stejným způsobem — 800ms je bezpečná rezerva). */
+  setTimeout(function () {
+    buildMobileProductSlider('h2.products-related-header');
+    buildMobileProductSlider('h2.products-alternative-header');
+  }, 800);
 
   /* Po přidání do košíku → přesměrovat na košík */
   function watchCart() {
