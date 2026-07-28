@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.7 — Mobil: druhá kopie trust badges mezi "Pro firmy" a hodnocením
+     Verze: 5.8 — Desktop: loga partnerů přesunuta pod náhledy fotek (vyplnění mezery)
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -1270,6 +1270,32 @@
         </div>
       `;
       dataWrapper.appendChild(partnersWrap);
+
+      /* Na desktopu (>=992px) přesunout loga partnerů pod náhledy
+         fotek do LEVÉHO sloupce (28. 7. 2026, na žádost klienta) —
+         pomáhá vyplnit prázdné místo pod fotkou, protože pravý sloupec
+         (cena, badge, karty množstevní slevy...) je vyšší než levý.
+         Na mobilu (sloupce pod sebou) zůstává na původním místě pod
+         cenovým boxem — jinak by na mobilu logo partnerů "přeskočilo"
+         nad cenu a tlačítko Do košíku, což NENÍ žádoucí (mobil je už
+         doladěný a funguje). Reaguje i na změnu šířky okna (resize),
+         ne jen na první vykreslení. */
+      var imageWrapperForPartners = document.querySelector('.p-image-wrapper');
+      function relocatePartnersForDesktop() {
+        if (!imageWrapperForPartners || !dataWrapper) return;
+        var isDesktop = window.matchMedia('(min-width: 992px)').matches;
+        if (isDesktop) {
+          if (partnersWrap.parentNode !== imageWrapperForPartners) {
+            imageWrapperForPartners.appendChild(partnersWrap);
+          }
+        } else {
+          if (partnersWrap.parentNode !== dataWrapper) {
+            dataWrapper.appendChild(partnersWrap);
+          }
+        }
+      }
+      relocatePartnersForDesktop();
+      window.addEventListener('resize', relocatePartnersForDesktop);
     }
 
     /* 5b. Diskuze — úplně odstranit tab (i verzi v hidden-links pro mobil) */
