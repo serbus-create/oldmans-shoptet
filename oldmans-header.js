@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.11 — "Hlídat dostupnost" u vyprodaných produktů (přesun + zvýraznění)
+     Verze: 5.12 — DIAGNOSTIKA: zrcadlení vyhledávání do skrytého nativního inputu
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -405,6 +405,38 @@
         if (e.target.closest('a')) closeMenu();
       });
     })();
+
+    /* -------------------------------------------------
+       4c. NAŠEPTÁVÁNÍ VE VLASTNÍM VYHLEDÁVACÍM POLI
+       (29. 7. 2026, na žádost klienta — DIAGNOSTICKÝ KROK)
+       Naše vlastní vyhledávací pole (#om-header .om-search input a
+       .om-mobile-search input) je čistě nový, samostatný <input>, NENÍ
+       to nativní Shoptet input — proto na něj nefunguje vestavěné
+       "napovídání" při psaní (to je nativní Shoptet funkce navázaná na
+       PŮVODNÍ input uvnitř skrytého #header, viz .js-search-input).
+       Řešení — ZRCADLIT text z našeho pole do skrytého nativního
+       (#header input.js-search-input) a vyvolat na něm STEJNÉ události
+       (input/keyup), na které nativní skript čeká, aby si sám dopočítal
+       návrhy. Zatím JEN zrcadlení — jestli se návrhy i VIZUÁLNĚ
+       zobrazí, záleží na tom, kam Shoptet svůj dropdown s návrhy
+       vykresluje (pokud zůstává uvnitř skrytého #header, bude potřeba
+       další krok, který přesune/zviditelní i samotný dropdown). */
+    function mirrorSearchToNative() {
+      var nativeInput = document.querySelector('#header input.js-search-input');
+      if (!nativeInput) return;
+
+      var customInputs = document.querySelectorAll('#om-header .om-search input[type="search"], .om-mobile-search input[type="search"]');
+      customInputs.forEach(function (input) {
+        if (input.dataset.omWhisperBound) return;
+        input.dataset.omWhisperBound = 'true';
+        input.addEventListener('input', function () {
+          nativeInput.value = input.value;
+          nativeInput.dispatchEvent(new Event('input', { bubbles: true }));
+          nativeInput.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true }));
+        });
+      });
+    }
+    mirrorSearchToNative();
 
     /* -------------------------------------------------
        4b. DYNAMICKÉ NAČTENÍ KATEGORIÍ ZE SHOPTETU
