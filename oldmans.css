@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.22
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.23
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -2271,12 +2271,12 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   gap: 3px;
   padding: 4px 7px;
   border-radius: 20px;
-  font-size: 8.5px;
+  font-size: 9.5px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: .2px;
   white-space: normal;
-  line-height: 1.2;
+  line-height: 1.25;
   text-align: center;
 }
 .qd-mobile-pill--selected {
@@ -2296,26 +2296,29 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   border-color: #e0a83c;
 }
 .qd-mobile-qty {
-  font-size: 19px;
+  font-size: 23px;
   font-weight: 800;
   color: #1a1a1a;
   line-height: 1.1;
   margin: 8px 0 6px;
 }
 .qd-mobile-price {
-  font-size: 12.5px;
+  font-size: 14px;
   font-weight: 800;
   color: #1a1a1a;
   margin-bottom: 6px;
   line-height: 1.3;
+  /* Bez white-space:nowrap — text "199 Kč / ks 199" se u větších
+     fontů sám přirozeně zalomí na druhý řádek místo přetečení mimo
+     kartu (karta je jen ~100px široká, viz .qd-mobile-grid 4 sloupce). */
 }
 .qd-mobile-unit {
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 500;
   color: #888;
 }
 .qd-mobile-orig {
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 500;
   color: #aaa;
   text-decoration: line-through;
@@ -2326,10 +2329,14 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   padding: 3px 7px;
   background: #eef8e4;
   border-radius: 20px;
-  font-size: 9.5px;
+  font-size: 10.5px;
   font-weight: 700;
   color: #4a8f22;
-  white-space: nowrap;
+  /* Bez white-space:nowrap ze stejného důvodu jako .qd-mobile-price
+     výše — u větších fontů se text zalomí, místo aby přetekl přes
+     okraj kartičky. */
+  white-space: normal;
+  line-height: 1.25;
 }
 .qd-mobile-save--big {
   background: #4a9b3f;
