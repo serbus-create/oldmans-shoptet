@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.10 — Mobil: oprava aktualizace počtu na sticky liště
+     Verze: 5.11 — "Hlídat dostupnost" u vyprodaných produktů (přesun + zvýraznění)
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -1705,6 +1705,23 @@
           }
         });
       }
+    }
+
+    /* 9. "Hlídat dostupnost" u vyprodaných/nedostupných produktů
+       (29. 7. 2026, na žádost klienta) — nativní odkaz "Hlídat"
+       (a.watchdog) se přesune vedle textu "Položka byla vyprodána…"
+       (.sold-out-wrapper > span.sold-out), zarovnaný doprava na stejný
+       řádek, přejmenuje na "Hlídat dostupnost" a zvýrazní zeleně.
+       Element .sold-out-wrapper existuje v DOM JEN když je produkt
+       nedostupný — takže tahle úprava se sama netýká skladem produktů
+       (ty žádný .sold-out-wrapper nemají, ověřeno konzolí). */
+    var soldOutWrapper = document.querySelector('.sold-out-wrapper');
+    var watchdogLink = document.querySelector('.link-icons .watchdog, a.watchdog');
+    if (soldOutWrapper && watchdogLink && !soldOutWrapper.querySelector('.watchdog')) {
+      watchdogLink.classList.add('om-watchdog-cta');
+      var watchdogLabel = watchdogLink.querySelector('span');
+      if (watchdogLabel) watchdogLabel.textContent = 'Hlídat dostupnost';
+      soldOutWrapper.appendChild(watchdogLink);
     }
   }
 
