@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.26
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.28
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -2708,6 +2708,32 @@ body.type-product .p-short-description {
     padding-left: 0 !important;
     padding-right: 0 !important;
     box-sizing: border-box !important;
+  }
+
+  /* Zvětšené náhledy fotek pod hlavní fotkou (28. 7. 2026, na žádost
+     klienta) — pomáhá vyplnit prázdné místo pod fotkou, protože pravý
+     sloupec (cena, badge, karty množstevní slevy...) je teď o dost
+     vyšší než levý. Ověřeno v konzoli — je to jednoduchý float layout
+     (ne JS transform-pozicované položky jako homepage slider), takže
+     zvětšení přes CSS je bezpečné. */
+  .p-thumbnails {
+    height: 140px !important;
+  }
+  .p-thumbnail {
+    width: 140px !important;
+    height: 140px !important;
+  }
+  .p-thumbnail img {
+    width: 140px !important;
+    height: 140px !important;
+  }
+
+  /* Loga partnerů přesunutá pod náhledy do LEVÉHO sloupce (viz JS
+     relocatePartnersForDesktop) — přepisuje původní odsazení laděné
+     pro pozici pod cenovým boxem v pravém sloupci. */
+  .p-image-wrapper #om-product-partners {
+    margin-top: 28px !important;
+    max-width: 100% !important;
   }
 }
 /* Fotka produktu — "sticky", ať sjíždí s obsahem místo prázdného místa pod sebou
