@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.37
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.38
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -3637,4 +3637,29 @@ html, body {
 .om-watchdog-cta:hover {
   color: #3a7a30 !important;
   text-decoration: underline !important;
+}
+
+/* Mobil — méně místa než na desktopu, "Položka byla vyprodána…" +
+   "Hlídat dostupnost" se s výchozí velikostí nevešly vedle sebe a
+   zalomilo se to na dva řádky (29. 7. 2026 — klient chtěl stejnou
+   strukturu jako na desktopu, tedy v jednom řádku). Zmenšené písmo +
+   ikona + zákaz zalomení. */
+@media (max-width: 768px) {
+  .sold-out-wrapper {
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+  }
+  .sold-out-wrapper .sold-out {
+    font-size: 14px !important;
+  }
+  .om-watchdog-cta {
+    font-size: 12px !important;
+    gap: 4px !important;
+    flex-shrink: 0 !important;
+  }
+  .om-watchdog-cta svg,
+  .om-watchdog-cta img {
+    width: 16px !important;
+    height: 16px !important;
+  }
 }
