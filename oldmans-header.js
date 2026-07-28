@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.4 — Mobil: vlastní slider i na detailu produktu (Související produkty, Produkty které by vás mohli zajímat)
+     Verze: 5.5 — Mobil: nová grafika množstevní slevy (interaktivní karty) + ukazatel dopravy zdarma
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -1319,8 +1319,16 @@
        > .quantity-discounts__title (text "2 ks = sleva 5 %") + .quantity-discounts__price-wrapper */
     var qdTable = document.querySelector('.quantity-discounts__table');
     var qdHeadline = document.querySelector('.quantity-discounts__headline');
-    if (qdHeadline && qdHeadline.textContent.trim() === 'Množstevní sleva') {
-      qdHeadline.textContent = 'Množství';
+    /* Nadpis — DESKTOP zůstává krátký "Množství" (jako doteď), MOBIL dostává
+       delší variantu "Množstevní sleva — víc kusů, nižší cena za kus" podle
+       klientova mockupu (28. 7. 2026). Obě varianty existují v DOM zároveň,
+       přepínají se přes CSS media query (stejný princip jako tlačítko
+       "Ukázat všechny" jinde na webu). */
+    if (qdHeadline && !qdHeadline.dataset.omHeadlineDone) {
+      qdHeadline.innerHTML =
+        '<span class="qd-headline-desktop">Množství</span>' +
+        '<span class="qd-headline-mobile">Množstevní sleva <span class="qd-mobile-subtitle">— víc kusů, nižší cena za kus</span></span>';
+      qdHeadline.dataset.omHeadlineDone = 'true';
     }
     if (qdTable && !qdTable.dataset.omDone) {
       Array.prototype.slice.call(qdTable.querySelectorAll('.quantity-discounts__item')).forEach(function(item) {
@@ -1353,6 +1361,178 @@
         item.appendChild(body);
       });
       qdTable.dataset.omDone = 'true';
+    }
+
+    /* 7b. MOBILNÍ vlastní grafika množstevní slevy (28. 7. 2026, podle
+       klientova schváleného mockupu) — samostatná sada karet VEDLE
+       nativní/desktop verze z kroku 7 výše (ta zůstává, jen se na
+       mobilu schová přes CSS). Zdroj dat: stejné .quantity-discounts__item
+       elementy (data-amount, data-price-ratio, .quantity-discounts__item--
+       highlighted = nativní příznak "nejprodávanější", .qd-qty = už
+       naformátovaný text množství z kroku 7 výše). */
+    if (qdTable && !qdTable.dataset.omMobileDone) {
+      var origPriceMobile = parseFloat(qdTable.getAttribute('data-orig-price'));
+      var mobileItems = Array.prototype.slice.call(qdTable.querySelectorAll('.quantity-discounts__item[data-amount]'));
+
+      if (!isNaN(origPriceMobile) && mobileItems.length) {
+        var formatKc = function (value) {
+          return Math.round(value) + ' Kč';
+        };
+        /* "2 ks" -> "2×", "3 - 5 ks" -> "3–5×", "6 a více ks" -> "6×+" */
+        var formatQtyLabel = function (rawText) {
+          var t = (rawText || '').replace(/\s+/g, ' ').trim();
+          var m;
+          if ((m = t.match(/^(\d+)\s*-\s*(\d+)\s*ks$/))) return m[1] + '\u2013' + m[2] + '\u00d7';
+          if ((m = t.match(/^(\d+)\s*a\s*v[ií]ce\s*ks$/i))) return m[1] + '\u00d7+';
+          if ((m = t.match(/^(\d+)\s*ks$/))) return m[1] + '\u00d7';
+          return t;
+        };
+
+        var mobileTiers = mobileItems.map(function (item) {
+          var qtyEl = item.querySelector('.qd-qty');
+          return {
+            amount: parseInt(item.getAttribute('data-amount'), 10),
+            ratio: parseFloat(item.getAttribute('data-price-ratio')),
+            highlighted: item.classList.contains('quantity-discounts__item--highlighted'),
+            qtyLabel: formatQtyLabel(qtyEl ? qtyEl.textContent : '')
+          };
+        }).sort(function (a, b) { return a.amount - b.amount; });
+
+        var grid = document.createElement('div');
+        grid.className = 'qd-mobile-grid';
+
+        mobileTiers.forEach(function (tier, idx) {
+          var isLast = idx === mobileTiers.length - 1;
+          var card = document.createElement('div');
+          card.className = 'qd-mobile-item';
+          card.setAttribute('data-amount', tier.amount);
+
+          var priceValue = origPriceMobile * tier.ratio;
+          var priceHtml = '<div class="qd-mobile-price">' + formatKc(priceValue) +
+            ' <span class="qd-mobile-unit">/ ks</span>';
+          if (tier.ratio < 1) {
+            priceHtml += ' <span class="qd-mobile-orig">' + Math.round(origPriceMobile) + '</span>';
+          }
+          priceHtml += '</div>';
+
+          var saveHtml = '';
+          if (tier.ratio < 1) {
+            var totalSave = Math.round((origPriceMobile - priceValue) * tier.amount);
+            saveHtml = '<div class="qd-mobile-save' + (isLast ? ' qd-mobile-save--big' : '') + '">ušetříte ' + totalSave + ' Kč</div>';
+          }
+
+          card.innerHTML =
+            '<div class="qd-mobile-pill-slot"></div>' +
+            '<div class="qd-mobile-qty">' + tier.qtyLabel + '</div>' +
+            priceHtml +
+            saveHtml;
+
+          card.addEventListener('click', function () {
+            var qtyInput = document.querySelector('#product-detail-form input[name="amount"], #product-detail-form input[type="number"]');
+            if (!qtyInput) return;
+            qtyInput.value = tier.amount;
+            qtyInput.dispatchEvent(new Event('input', { bubbles: true }));
+          });
+
+          grid.appendChild(card);
+        });
+
+        qdTable.parentNode.insertBefore(grid, qdTable.nextSibling);
+
+        /* Zvýraznění aktuálně "vybrané" karty (červený rámeček + pilulka
+           "✓ Vybráno") podle hodnoty v počítadle kusů — přepočítá se při
+           načtení, po psaní do pole i po kliknutí na +/- v košíkovém
+           formuláři (stejný vzorec jako updateMainPrice() výše). */
+        var updateMobileQtySelection = function () {
+          var qtyInput = document.querySelector('#product-detail-form input[name="amount"], #product-detail-form input[type="number"]');
+          var qty = qtyInput ? parseInt(qtyInput.value, 10) : 1;
+          if (!qty || qty < 1) qty = 1;
+
+          var applicable = mobileTiers[0];
+          mobileTiers.forEach(function (t) {
+            if (qty >= t.amount && t.amount >= applicable.amount) applicable = t;
+          });
+
+          grid.querySelectorAll('.qd-mobile-item').forEach(function (card) {
+            var amount = parseInt(card.getAttribute('data-amount'), 10);
+            var slot = card.querySelector('.qd-mobile-pill-slot');
+            var isSelected = amount === applicable.amount;
+            card.classList.toggle('qd-mobile-item--selected', isSelected);
+            if (!slot) return;
+
+            if (isSelected) {
+              slot.innerHTML = '<div class="qd-mobile-pill qd-mobile-pill--selected">\u2713 Vybráno</div>';
+              return;
+            }
+            var idx = mobileTiers.map(function (t) { return t.amount; }).indexOf(amount);
+            var tier = mobileTiers[idx];
+            var isLast = idx === mobileTiers.length - 1;
+            if (tier && tier.highlighted) {
+              slot.innerHTML = '<div class="qd-mobile-pill qd-mobile-pill--popular">\u2605 Nejprodávanější</div>';
+            } else if (isLast) {
+              slot.innerHTML = '<div class="qd-mobile-pill qd-mobile-pill--savings">Největší úspora</div>';
+            } else {
+              slot.innerHTML = '';
+            }
+          });
+        };
+
+        updateMobileQtySelection();
+        document.addEventListener('input', function (e) {
+          if (e.target.matches('#product-detail-form input[name="amount"], #product-detail-form input[type="number"]')) {
+            updateMobileQtySelection();
+          }
+        });
+        document.addEventListener('click', function (e) {
+          if (e.target.closest('#product-detail-form')) {
+            setTimeout(updateMobileQtySelection, 50);
+          }
+        });
+
+        /* Ukazatel dopravy zdarma (28. 7. 2026, podle mockupu) — vychází
+           ZE SKUTEČNÉHO OBSAHU KOŠÍKU (ne jen z tohoto produktu), stejné
+           čtení částky jako syncCart() výše (.header-cart-total apod.).
+           Limit 1350 Kč — stejná hodnota jako v červené USP liště na
+           homepage ("Doprava zdarma u objednávek nad 1 350 Kč"). */
+        var FREE_SHIPPING_THRESHOLD = 1350;
+        var shipWrap = document.createElement('div');
+        shipWrap.className = 'qd-mobile-shipping';
+        shipWrap.innerHTML =
+          '<div class="qd-mobile-shipping-bar"><div class="qd-mobile-shipping-fill"></div></div>' +
+          '<div class="qd-mobile-shipping-text">🚚 <span class="qd-mobile-shipping-msg"></span></div>';
+        grid.parentNode.insertBefore(shipWrap, grid.nextSibling);
+
+        var getCartTotalKc = function () {
+          var el = document.querySelector('.header-cart-total, .cart-total-price, [data-testid="headerCartPrice"]');
+          if (!el) return 0;
+          var num = (el.textContent || '').replace(/[^\d,.]/g, '').replace(',', '.');
+          var val = parseFloat(num);
+          return isNaN(val) ? 0 : val;
+        };
+
+        var updateShippingProgress = function () {
+          var total = getCartTotalKc();
+          var remaining = FREE_SHIPPING_THRESHOLD - total;
+          var pct = Math.max(0, Math.min(100, (total / FREE_SHIPPING_THRESHOLD) * 100));
+          var fillEl = shipWrap.querySelector('.qd-mobile-shipping-fill');
+          var msgEl = shipWrap.querySelector('.qd-mobile-shipping-msg');
+          if (fillEl) fillEl.style.width = pct + '%';
+          if (msgEl) {
+            msgEl.textContent = remaining > 0
+              ? ('ještě ' + Math.ceil(remaining) + ' Kč a vezeme zdarma')
+              : 'Máte dopravu zdarma!';
+          }
+        };
+
+        updateShippingProgress();
+        /* Košík se natahuje asynchronně (viz syncCart() výše) — zkusíme to
+           i o kousek později, ať máme reálnou částku, ne jen "Prázdný košík". */
+        setTimeout(updateShippingProgress, 1000);
+        setTimeout(updateShippingProgress, 2500);
+        document.addEventListener('click', function () { setTimeout(updateShippingProgress, 600); });
+
+        qdTable.dataset.omMobileDone = 'true';
+      }
     }
 
     /* 8. Hlavní cena se má měnit podle zadaného počtu kusů (dle množstevní slevy).
