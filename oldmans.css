@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.34
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.35
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -3490,5 +3490,107 @@ html, body {
     position: relative !important;
     left: -10px !important;
     top: -14px !important;
+  }
+}
+
+/* ══════════════════════════════════════════════
+   MOBILNÍ STICKY CTA LIŠTA (28. 7. 2026, na žádost klienta)
+   Přilepená lišta dole s počítadlem kusů + tlačítkem Přidat do košíku,
+   aktivuje se JEN když hlavní CTA řádek (.om-buy-row) není vidět —
+   viz IntersectionObserver v JS (enhanceProductDetail). Karty
+   množstevní slevy se na sticky liště NEZOBRAZUJÍ, jen počet a
+   tlačítko — přepočet cen/slev ale funguje beze změny, protože sticky
+   tlačítka jen proklikávají nativní +/- a nativní tlačítko Do košíku.
+   ══════════════════════════════════════════════ */
+#om-sticky-cta {
+  display: none;
+}
+@media (max-width: 768px) {
+  #om-sticky-cta {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 998;
+    background: #fff;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, .12);
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+    box-sizing: border-box;
+    /* Skrytá mimo obrazovku dole, dokud JS nepřidá
+       .om-sticky-cta-visible (hlavní CTA odscrollováno pryč) */
+    transform: translateY(100%);
+    transition: transform .3s ease;
+  }
+  #om-sticky-cta.om-sticky-cta-visible {
+    transform: translateY(0);
+  }
+  .om-sticky-cta-inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .om-sticky-cta-qty {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .om-sticky-cta-minus,
+  .om-sticky-cta-plus {
+    width: 42px;
+    height: 44px;
+    background: #f7f7f7;
+    border: none;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+  .om-sticky-cta-minus:active,
+  .om-sticky-cta-plus:active {
+    background: #ececec;
+  }
+  .om-sticky-cta-count {
+    min-width: 30px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+  .om-sticky-cta-btn {
+    flex: 1 1 auto;
+    height: 44px;
+    background: #9f1400;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 0 14px;
+  }
+  .om-sticky-cta-btn:active {
+    background: #7a0f00;
+  }
+  /* Stejná bílá SVG ikona košíku jako na hlavním tlačítku Přidat do
+     košíku (viz .om-cart-btn-white:after výše) — konzistentní vzhled. */
+  .om-sticky-cta-btn:after {
+    content: "";
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%202%203%206v14a2%202%200%200%200%202%202h14a2%202%200%200%200%202-2V6l-3-4Z%22%3E%3C/path%3E%3Cpath%20d%3D%22M3%206h18%22%3E%3C/path%3E%3Cpath%20d%3D%22M16%2010a4%204%200%200%201-8%200%22%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
   }
 }
