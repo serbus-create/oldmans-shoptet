@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.31
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.32
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -2728,14 +2728,15 @@ body.type-product .p-short-description {
     height: 140px !important;
   }
 
-  /* Posun náhledů o 50px dolů (28. 7. 2026, na žádost klienta) —
-     vytvoří menší mezeru mezi hlavní fotkou a náhledy, ale zvětší
-     celkovou výšku levého sloupce, čímž se zmenší mezera POD náhledy
-     (levý sloupec je stále kratší než pravý — cena, badge, karty
-     množstevní slevy...). `.row` je přímý rodič `.p-thumbnails-wrapper`
-     uvnitř `.p-image-wrapper` (viz konzole 28. 7. 2026). */
+  /* Posun náhledů dolů (28. 7. 2026, na žádost klienta) — vytvoří
+     menší mezeru mezi hlavní fotkou a náhledy, ale zvětší celkovou
+     výšku levého sloupce, čímž se zmenší mezera POD náhledy (levý
+     sloupec je stále kratší než pravý — cena, badge, karty množstevní
+     slevy...). `.row` je přímý rodič `.p-thumbnails-wrapper` uvnitř
+     `.p-image-wrapper` (viz konzole 28. 7. 2026). Nejdřív 50px,
+     klient chtěl ještě víc — zdvojnásobeno na 100px. */
   .p-image-wrapper .row {
-    margin-top: 50px !important;
+    margin-top: 100px !important;
   }
 }
 /* Fotka produktu — "sticky", ať sjíždí s obsahem místo prázdného místa pod sebou
