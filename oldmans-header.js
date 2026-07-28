@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.8 — Desktop: loga partnerů přesunuta pod náhledy fotek (vyplnění mezery)
+     Verze: 5.9 — Mobil: sticky CTA lišta dole (počet + Přidat do košíku)
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -1195,6 +1195,70 @@
         buyRow.appendChild(cartBtn);
       }
 
+      /* ── MOBILNÍ STICKY CTA LIŠTA (28. 7. 2026, na žádost klienta) ──
+         Přilepená lišta dole s počítadlem kusů + tlačítkem Přidat do
+         košíku, aktivuje se JEN když hlavní CTA (.om-buy-row) není
+         vidět (odscrollováno pryč) — přes IntersectionObserver.
+         Žádné duplicitní přepočty cen/slev: tlačítka +/- na sticky
+         liště jen PROKLIKÁVAJÍ nativní tlačítka Shoptetu
+         (button.increase/.decrease), a tlačítko Přidat do košíku jen
+         PROKLIKÁVÁ nativní cartBtn — veškerá logika množstevní slevy
+         (přepočet ceny, "ušetříte", mobilní karty) zůstává beze změny,
+         protože běží přes stejný input#amount a jeho 'input' event,
+         který už posloucháme jinde (updateMainPrice,
+         updateMobileQtySelection). Karty množstevní slevy se na
+         sticky liště NEZOBRAZUJÍ (jen počet + tlačítko), podle zadání. */
+      if (buyRow && qtyInput && cartBtn && !document.getElementById('om-sticky-cta')) {
+        var nativeIncreaseBtn = qtyWrap.querySelector('button.increase');
+        var nativeDecreaseBtn = qtyWrap.querySelector('button.decrease');
+
+        var stickyBar = document.createElement('div');
+        stickyBar.id = 'om-sticky-cta';
+        stickyBar.innerHTML =
+          '<div class="om-sticky-cta-inner">' +
+            '<div class="om-sticky-cta-qty">' +
+              '<button type="button" class="om-sticky-cta-minus" aria-label="Snížit množství">−</button>' +
+              '<span class="om-sticky-cta-count">1</span>' +
+              '<button type="button" class="om-sticky-cta-plus" aria-label="Zvýšit množství">+</button>' +
+            '</div>' +
+            '<button type="button" class="om-sticky-cta-btn">Přidat do košíku</button>' +
+          '</div>';
+        document.body.appendChild(stickyBar);
+
+        var stickyCount = stickyBar.querySelector('.om-sticky-cta-count');
+        var stickyMinus = stickyBar.querySelector('.om-sticky-cta-minus');
+        var stickyPlus = stickyBar.querySelector('.om-sticky-cta-plus');
+        var stickyAddBtn = stickyBar.querySelector('.om-sticky-cta-btn');
+
+        function syncStickyCount() {
+          stickyCount.textContent = qtyInput.value || '1';
+        }
+        syncStickyCount();
+        qtyInput.addEventListener('input', syncStickyCount);
+
+        stickyMinus.addEventListener('click', function () {
+          if (nativeDecreaseBtn) nativeDecreaseBtn.click();
+        });
+        stickyPlus.addEventListener('click', function () {
+          if (nativeIncreaseBtn) nativeIncreaseBtn.click();
+        });
+        stickyAddBtn.addEventListener('click', function () {
+          cartBtn.click();
+        });
+
+        /* Sledujeme viditelnost nativního řádku s počítadlem a
+           tlačítkem (.om-buy-row) — lišta se ukáže, jen když tenhle
+           řádek NENÍ vidět (uživatel ho odscrolloval pryč). */
+        if ('IntersectionObserver' in window) {
+          var stickyObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+              stickyBar.classList.toggle('om-sticky-cta-visible', !entry.isIntersecting);
+            });
+          }, { threshold: 0 });
+          stickyObserver.observe(buyRow);
+        }
+      }
+
       /* Odkaz Pro firmy — UVNITŘ boxu, s ikonkou z GitHubu */
       var proFirmy = document.createElement('a');
       proFirmy.href = '/velkoobchod/';
@@ -1270,32 +1334,6 @@
         </div>
       `;
       dataWrapper.appendChild(partnersWrap);
-
-      /* Na desktopu (>=992px) přesunout loga partnerů pod náhledy
-         fotek do LEVÉHO sloupce (28. 7. 2026, na žádost klienta) —
-         pomáhá vyplnit prázdné místo pod fotkou, protože pravý sloupec
-         (cena, badge, karty množstevní slevy...) je vyšší než levý.
-         Na mobilu (sloupce pod sebou) zůstává na původním místě pod
-         cenovým boxem — jinak by na mobilu logo partnerů "přeskočilo"
-         nad cenu a tlačítko Do košíku, což NENÍ žádoucí (mobil je už
-         doladěný a funguje). Reaguje i na změnu šířky okna (resize),
-         ne jen na první vykreslení. */
-      var imageWrapperForPartners = document.querySelector('.p-image-wrapper');
-      function relocatePartnersForDesktop() {
-        if (!imageWrapperForPartners || !dataWrapper) return;
-        var isDesktop = window.matchMedia('(min-width: 992px)').matches;
-        if (isDesktop) {
-          if (partnersWrap.parentNode !== imageWrapperForPartners) {
-            imageWrapperForPartners.appendChild(partnersWrap);
-          }
-        } else {
-          if (partnersWrap.parentNode !== dataWrapper) {
-            dataWrapper.appendChild(partnersWrap);
-          }
-        }
-      }
-      relocatePartnersForDesktop();
-      window.addEventListener('resize', relocatePartnersForDesktop);
     }
 
     /* 5b. Diskuze — úplně odstranit tab (i verzi v hidden-links pro mobil) */
