@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.36
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.37
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -3608,4 +3608,33 @@ html, body {
     background-size: contain;
     background-position: center;
   }
+}
+
+/* ══════════════════════════════════════════════
+   "HLÍDAT DOSTUPNOST" U VYPRODANÝCH PRODUKTŮ
+   (29. 7. 2026, na žádost klienta)
+   .sold-out-wrapper existuje v DOM jen když je produkt nedostupný —
+   JS (krok 9 v enhanceProductDetail) do něj přesune odkaz .watchdog
+   a přidá třídu .om-watchdog-cta.
+   ══════════════════════════════════════════════ */
+.sold-out-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+}
+.om-watchdog-cta {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  color: #4a9b3f !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+}
+.om-watchdog-cta:hover {
+  color: #3a7a30 !important;
+  text-decoration: underline !important;
 }
