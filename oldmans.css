@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.35
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.36
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -1993,7 +1993,13 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   display: flex !important;
   align-items: center;
   gap: 12px;
-  flex-wrap: wrap;
+  /* OPRAVA (29. 7. 2026) — s "wrap" se tlačítko (po přidání ikony
+     košíku) na úzkých mobilech nevešlo vedle počítadla kusů, zalomilo
+     se na vlastní řádek a roztáhlo přes celou šířku (flex:1 1 auto
+     u osamocené položky na řádku). "nowrap" nutí zůstat na jednom
+     řádku vždy — tlačítko se místo zalomení jen zúží (viz min-width:0
+     níže, aby se opravdu mohlo zmenšit pod svou přirozenou šířku). */
+  flex-wrap: nowrap;
   width: 100% !important;
 }
 /* Tlačítko Do košíku vyplní zbytek šířky vedle počítadla kusů, ať
@@ -2006,6 +2012,15 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 .om-buy-row .add-to-cart-button,
 .om-buy-row .om-cart-btn-white {
   flex: 1 1 auto !important;
+  /* Bez tohohle flexbox nedovolí zmenšit tlačítko pod jeho přirozenou
+     (obsahem danou) šířku — s ikonou + textem "Přidat do košíku" by
+     na úzkém mobilu i tak přetékalo přes okraj řádku (29. 7. 2026). */
+  min-width: 0 !important;
+}
+.om-buy-row .add-to-cart {
+  /* Počítadlo kusů nesmí flexboxem zmenšit — musí si držet svou
+     přirozenou šířku, ať zbyde tlačítku maximum prostoru (29. 7. 2026). */
+  flex-shrink: 0 !important;
 }
 .om-price-box .om-availability-line {
   display: flex !important;
