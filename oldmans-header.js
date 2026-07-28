@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.5 — Mobil: nová grafika množstevní slevy (interaktivní karty) + ukazatel dopravy zdarma
+     Verze: 5.6 — Mobil: odznak "Nejprodávanější" natvrdo na tier 2 ks
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -1393,7 +1393,11 @@
           return {
             amount: parseInt(item.getAttribute('data-amount'), 10),
             ratio: parseFloat(item.getAttribute('data-price-ratio')),
-            highlighted: item.classList.contains('quantity-discounts__item--highlighted'),
+            /* Natvrdo vždy na tier s 2 kusy (na žádost klienta, 28. 7. 2026) —
+               NE podle nativního Shoptet příznaku quantity-discounts__item--
+               highlighted (ten by odznak dal na jinou hladinu, podle toho, co
+               je zrovna nastavené v administraci Shoptetu). */
+            highlighted: parseInt(item.getAttribute('data-amount'), 10) === 2,
             qtyLabel: formatQtyLabel(qtyEl ? qtyEl.textContent : '')
           };
         }).sort(function (a, b) { return a.amount - b.amount; });
