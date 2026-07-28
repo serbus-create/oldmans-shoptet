@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.9 — Mobil: sticky CTA lišta dole (počet + Přidat do košíku)
+     Verze: 5.10 — Mobil: oprava aktualizace počtu na sticky liště
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -1238,9 +1238,18 @@
 
         stickyMinus.addEventListener('click', function () {
           if (nativeDecreaseBtn) nativeDecreaseBtn.click();
+          /* Nativní tlačítko Shoptetu mění hodnotu inputu synchronně,
+             ale ne vždy vyvolá 'input' event, na který spoléhá
+             syncStickyCount() výše (28. 7. 2026 — klient hlásil, že
+             se počet na sticky liště po kliknutí neaktualizoval).
+             Přímé zavolání HNED po kliknutí je spolehlivé bez ohledu
+             na to, jaký event (pokud vůbec nějaký) Shoptet interně
+             používá. */
+          syncStickyCount();
         });
         stickyPlus.addEventListener('click', function () {
           if (nativeIncreaseBtn) nativeIncreaseBtn.click();
+          syncStickyCount();
         });
         stickyAddBtn.addEventListener('click', function () {
           cartBtn.click();
