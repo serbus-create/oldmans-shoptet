@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.21
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.22
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -2208,11 +2208,21 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 }
 
 /* ══════════════════════════════════════════════
-   MNOŽSTEVNÍ SLEVA — MOBILNÍ VLASTNÍ GRAFIKA
-   (28. 7. 2026, podle klientova schváleného mockupu)
-   Desktop (žluté pruhy .qd-badge/.qd-body z kroku 7 JS) zůstává
-   BEZE ZMĚNY — jen se na mobilu schová a nahradí touhle novou
-   sadou karet (.qd-mobile-grid, vytváří JS krok 7b). ══════════ */
+   MNOŽSTEVNÍ SLEVA — VLASTNÍ GRAFIKA (karty s pilulkami)
+   (28. 7. 2026, mobil; 28. 7. 2026, rozšířeno na desktop)
+   Nativní Shoptet widget (.quantity-discounts__table, žluté pruhy
+   z kroku 7 JS) je teď VŽDY schovaný — nahrazuje ho VŠUDE tahle
+   vlastní sada karet (.qd-mobile-grid, vytváří JS krok 7b).
+   DESKTOP: 4 kompaktní kartičky v jednom řádku (jako původní
+   nativní rozložení), stejná grafika (velké číslo, pilulky
+   Vybráno/Nejprodávanější/Největší úspora nahoře, zelený štítek
+   "ušetříte"), jen zmenšená, ať se vejde do užšího sloupce.
+   MOBIL (do 768px): stejné jako doteď — velké karty 2×2. ══════ */
+
+/* Nativní widget schovaný VŽDY (nahrazen na obou velikostech) */
+.quantity-discounts__table {
+  display: none !important;
+}
 
 /* Nadpis — přepínání krátké (desktop) / dlouhé (mobil) varianty */
 .qd-headline-mobile { display: none; }
@@ -2222,148 +2232,185 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   font-size: 0.75em;
 }
 
-/* Mobilní karty i ukazatel dopravy — na desktopu vždy schované */
-.qd-mobile-grid,
-.qd-mobile-shipping {
-  display: none;
+/* ── DESKTOP (výchozí) — kompaktní řádek po 4 ── */
+.qd-mobile-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  /* Extra prostor nahoře na první řádek — pilulky přesahují přes
+     horní okraj karty, potřebují místo, ať nic neuřežou. */
+  margin-top: 22px;
+  max-width: 460px;
+}
+.qd-mobile-item {
+  position: relative;
+  background: #fff;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 14px 6px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s;
+}
+.qd-mobile-item--selected {
+  border-color: #9f1400;
+}
+.qd-mobile-pill-slot {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 130px;
+  z-index: 2;
+}
+.qd-mobile-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 4px 7px;
+  border-radius: 20px;
+  font-size: 8.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .2px;
+  white-space: normal;
+  line-height: 1.2;
+  text-align: center;
+}
+.qd-mobile-pill--selected {
+  background: #9f1400;
+  color: #fff;
+}
+.qd-mobile-pill--popular {
+  background: #e0a83c;
+  color: #fff;
+}
+.qd-mobile-pill--savings {
+  background: #fff;
+  border: 1.5px solid #4a9b3f;
+  color: #4a9b3f;
+}
+.qd-mobile-item:has(.qd-mobile-pill--popular) {
+  border-color: #e0a83c;
+}
+.qd-mobile-qty {
+  font-size: 19px;
+  font-weight: 800;
+  color: #1a1a1a;
+  line-height: 1.1;
+  margin: 8px 0 6px;
+}
+.qd-mobile-price {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+.qd-mobile-unit {
+  font-size: 10px;
+  font-weight: 500;
+  color: #888;
+}
+.qd-mobile-orig {
+  font-size: 10px;
+  font-weight: 500;
+  color: #aaa;
+  text-decoration: line-through;
+  margin-left: 1px;
+}
+.qd-mobile-save {
+  display: inline-block;
+  padding: 3px 7px;
+  background: #eef8e4;
+  border-radius: 20px;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #4a8f22;
+  white-space: nowrap;
+}
+.qd-mobile-save--big {
+  background: #4a9b3f;
+  color: #fff;
 }
 
+/* Ukazatel dopravy zdarma — na desktopu i mobilu */
+.qd-mobile-shipping {
+  display: block;
+  max-width: 460px;
+  margin: 18px 0 0;
+}
+.qd-mobile-shipping-bar {
+  width: 100%;
+  height: 8px;
+  background: #ebebeb;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.qd-mobile-shipping-fill {
+  height: 100%;
+  width: 0%;
+  background: #4a9b3f;
+  border-radius: 10px;
+  transition: width .3s ease;
+}
+.qd-mobile-shipping-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4a9b3f;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── MOBIL (do 768px) — beze změny oproti dřívější verzi: velké
+   karty 2×2 místo kompaktního řádku po 4 (na úzké obrazovce by se
+   4 sloupce nevešly čitelně) ── */
 @media (max-width: 768px) {
   .qd-headline-desktop { display: none; }
   .qd-headline-mobile { display: inline; }
 
-  /* Nativní desktop karty (žluté pruhy) na mobilu schované */
-  .quantity-discounts__table {
-    display: none !important;
-  }
-
   .qd-mobile-grid {
-    display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 14px 12px;
-    /* Extra prostor nahoře na první řádek — pilulky přesahují přes
-       horní okraj karty, potřebují místo, ať nic neuřežou. */
-    margin-top: 22px;
-    max-width: 460px;
   }
   .qd-mobile-item {
-    position: relative;
-    background: #fff;
-    border: 2px solid #e0e0e0;
     border-radius: 14px;
     padding: 18px 14px 16px;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color .2s;
-  }
-  .qd-mobile-item--selected {
-    border-color: #9f1400;
   }
   .qd-mobile-pill-slot {
-    position: absolute;
     top: -14px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: max-content;
-    z-index: 2;
+    max-width: none;
   }
   .qd-mobile-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
     padding: 5px 12px;
-    border-radius: 20px;
     font-size: 11px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: .3px;
     white-space: nowrap;
-  }
-  .qd-mobile-pill--selected {
-    background: #9f1400;
-    color: #fff;
-  }
-  .qd-mobile-pill--popular {
-    background: #e0a83c;
-    color: #fff;
-  }
-  .qd-mobile-pill--savings {
-    background: #fff;
-    border: 1.5px solid #4a9b3f;
-    color: #4a9b3f;
-  }
-  .qd-mobile-item:has(.qd-mobile-pill--popular) {
-    border-color: #e0a83c;
   }
   .qd-mobile-qty {
     font-size: 34px;
-    font-weight: 800;
-    color: #1a1a1a;
-    line-height: 1.1;
     margin: 10px 0 8px;
   }
   .qd-mobile-price {
     font-size: 17px;
-    font-weight: 800;
-    color: #1a1a1a;
     margin-bottom: 8px;
   }
   .qd-mobile-unit {
     font-size: 13px;
-    font-weight: 500;
-    color: #888;
   }
   .qd-mobile-orig {
     font-size: 13px;
-    font-weight: 500;
-    color: #aaa;
-    text-decoration: line-through;
     margin-left: 2px;
   }
   .qd-mobile-save {
-    display: inline-block;
     padding: 4px 10px;
-    background: #eef8e4;
-    border-radius: 20px;
     font-size: 12px;
-    font-weight: 700;
-    color: #4a8f22;
-  }
-  .qd-mobile-save--big {
-    background: #4a9b3f;
-    color: #fff;
-  }
-
-  /* Ukazatel dopravy zdarma */
-  .qd-mobile-shipping {
-    display: block;
-    max-width: 460px;
-    margin: 18px 0 0;
-  }
-  .qd-mobile-shipping-bar {
-    width: 100%;
-    height: 8px;
-    background: #ebebeb;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 8px;
-  }
-  .qd-mobile-shipping-fill {
-    height: 100%;
-    width: 0%;
-    background: #4a9b3f;
-    border-radius: 10px;
-    transition: width .3s ease;
-  }
-  .qd-mobile-shipping-text {
-    font-size: 14px;
-    font-weight: 600;
-    color: #4a9b3f;
-    display: flex;
-    align-items: center;
-    gap: 6px;
   }
 }
+
 
 /* Tlačítko Do košíku na detailu produktu — červená (podle návrhu klienta) */
 .btn.btn-conversion.add-to-cart-button.om-cart-btn-white,
