@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.6 — Mobil: odznak "Nejprodávanější" natvrdo na tier 2 ks
+     Verze: 5.7 — Mobil: druhá kopie trust badges mezi "Pro firmy" a hodnocením
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -1113,9 +1113,10 @@
     /* 1. Badges AŽ ZA hodnocením (nebo za nadpisem, pokud hodnocení nenajdeme) */
     var insertAfterEl = ratingRow || h1;
 
-    var badges = document.createElement('div');
-    badges.id = 'om-trust-badges';
-    badges.innerHTML = `
+    /* Obsah badge (Vyrobeno v ČR / Ruční výroba / Vždy čerstvé) — vytažený
+       do proměnné, ať se nemusí opisovat 2× (druhá kopie se vkládá níž,
+       na mobilu, viz krok 3 u priceBlock). */
+    var trustBadgesHtml = `
       <div class="om-badge">
         <img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/vyrobeno-cr.png" alt="">
         <div><strong>Vyrobeno v ČR</strong><span>Pouze česká značka</span></div>
@@ -1129,6 +1130,10 @@
         <div><strong>Vždy čerstvé</strong><span>S důrazem na kvalitu</span></div>
       </div>
     `;
+
+    var badges = document.createElement('div');
+    badges.id = 'om-trust-badges';
+    badges.innerHTML = trustBadgesHtml;
     if (insertAfterEl && insertAfterEl.parentNode) {
       insertAfterEl.parentNode.insertBefore(badges, insertAfterEl.nextSibling);
     }
@@ -1196,6 +1201,18 @@
       proFirmy.className = 'om-pro-firmy';
       proFirmy.innerHTML = '<img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/pro%20firmy.svg" alt=""> <strong>Pro firmy – Nabídka na míru</strong>';
       priceBlock.appendChild(proFirmy);
+
+      /* Druhá kopie trust badges (Vyrobeno v ČR / Ruční výroba / Vždy
+         čerstvé) — JEN pro mobil (viz CSS #om-trust-badges-mobile),
+         umístěná přesně mezi odkaz "Pro firmy" a box hodnocení/zákazníků,
+         podle klientova zadání (28. 7. 2026). Nahoře pod nadpisem
+         (#om-trust-badges) zůstává jen pro desktop. */
+      if (!document.getElementById('om-trust-badges-mobile')) {
+        var badgesMobile = document.createElement('div');
+        badgesMobile.id = 'om-trust-badges-mobile';
+        badgesMobile.innerHTML = trustBadgesHtml;
+        priceBlock.appendChild(badgesMobile);
+      }
 
       /* Box hodnocení + box spokojených zákazníků — pod tlačítkem
          Do košíku (podle návrhu klienta). Hodnoty pro hvězdičky/počet
