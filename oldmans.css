@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.33
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.34
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -2461,10 +2461,20 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 }
 .btn.btn-conversion.add-to-cart-button.om-cart-btn-white:after,
 .om-cart-btn-white:after {
-  content: "🛒";
-  font-size: 17px;
-  line-height: 1;
+  content: "";
+  width: 19px;
+  height: 19px;
   flex-shrink: 0;
+  /* Bílá obrysová SVG ikona košíku (stejná jako v hlavičce, viz JS
+     #om-header .om-cart-icon svg) — 28. 7. 2026, na žádost klienta:
+     emoji 🛒 nešlo přebarvit na bílo (emoji mají vlastní pevné barvy,
+     CSS `color` na ně nepůsobí), takže bylo na červeném pozadí špatně
+     vidět. SVG jako background-image s natvrdo bílým stroke řeší to
+     stejně spolehlivě jako CSS `mask`, bez nutnosti fallbacku. */
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%202%203%206v14a2%202%200%200%200%202%202h14a2%202%200%200%200%202-2V6l-3-4Z%22%3E%3C/path%3E%3Cpath%20d%3D%22M3%206h18%22%3E%3C/path%3E%3Cpath%20d%3D%22M16%2010a4%204%200%200%201-8%200%22%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 }
 .btn.btn-conversion.add-to-cart-button.om-cart-btn-white:hover,
 .om-cart-btn-white:hover {
