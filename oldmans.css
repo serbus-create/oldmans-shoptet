@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.42
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.43
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -244,6 +244,14 @@ body.type-category .benefitBanner.position--benefitHomepage {
   box-shadow: 0 12px 32px rgba(0, 0, 0, .16) !important;
   max-height: 70vh !important;
   overflow-y: auto !important;
+  /* Bez tohohle se na iOS Safari uvnitř dropdownu nedalo scrollovat —
+     dotykové gesto "propadlo" na rodičovský scrollující kontejner
+     (.om-mobile-drawer), místo aby se scrolloval samotný dropdown.
+     -webkit-overflow-scrolling zapíná plynulé (momentum) scrollování
+     na iOS, overscroll-behavior zabrání "přelití" scrollu na rodiče,
+     jakmile dropdown dojede na svůj konec (29. 7. 2026). */
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
   padding: 16px !important;
   box-sizing: border-box !important;
 }
