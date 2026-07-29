@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.53
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.54
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -3459,49 +3459,28 @@ html, body {
         nepřesností v odlepení sticky zůstal vždycky dostatek
         prostoru a nic se nepřekrývalo. Pragmatické řešení místo
         honění posledního pixelu přesnosti. */
-/* ZMĚNA (29. 7. 2026, na žádost klienta) — `position: sticky` se
-   chovalo správně (karta jela s obsahem a odlepila se až na konci
-   formuláře), ale klient chce, aby stála ÚPLNĚ NAPEVNO a nehnula se
-   vůbec. Proto `position: fixed` místo sticky. Fixed prvek vypadne
-   z normálního toku stránky (nezabírá už místo ve flex řádku), takže
-   šířku i pozici je nutné dopočítat ručně — proto pevná šířka sloupce
-   a `right`. `max-height` + `overflow-y: auto` jsou pojistka pro
-   případ, že je karta vyšší než okno (naměřeno 835px, běžné okno má
-   ~800-900px) — bez toho by spodek karty včetně tlačítka Pokračovat
-   nebyl dosažitelný. */
+/* ZMĚNA (29. 7. 2026, na žádost klienta) — pravý sloupec se souhrnem
+   má být ÚPLNĚ STATICKÝ: sedí na svém místě vedle formuláře a
+   scrolluje s ním jako běžný obsah stránky. Žádné `sticky` (jelo to
+   s oknem a odlepovalo se na konci formuláře), žádné `fixed`
+   (zůstávalo přilepené k oknu při scrollování). Prostě normální
+   sloupec ve flex řádku — proto se všechna dřívější pozicovací
+   pravidla ruší zpět na výchozí hodnoty. Historii předchozích pokusů
+   (6 kol ladění sticky varianty, 22. 7. 2026) viz komentář výše. */
 .row.cart-row {
   display: flex !important;
   flex-wrap: wrap !important;
   margin-bottom: 100px !important;
 }
 .col-md-4 > .cart-content {
-  position: fixed !important;
-  top: 20px !important;
-  right: calc((100vw - 1400px) / 2 + 20px) !important;
-  width: calc(1400px / 3 - 40px) !important;
-  max-height: calc(100vh - 40px) !important;
-  overflow-y: auto !important;
+  position: static !important;
   align-self: flex-start !important;
   height: auto !important;
-}
-/* Pro užší okna (pod 1440px) je kontejner stránky užší než 1400px —
-   dopočítáváme z okna místo z pevné šířky kontejneru. */
-@media (max-width: 1440px) {
-  .col-md-4 > .cart-content {
-    right: 40px !important;
-    width: calc((100vw - 80px) / 3 - 20px) !important;
-  }
 }
 @media (max-width: 900px) {
   .row.cart-row {
     display: block !important;
     margin-bottom: 0 !important;
-  }
-  .col-md-4 > .cart-content {
-    position: static !important;
-    width: auto !important;
-    max-height: none !important;
-    overflow-y: visible !important;
   }
 }
 
