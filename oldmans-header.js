@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.17 — Desktop: box "Dárek ZDARMA ke každé objednávce"
+     Verze: 5.18 — Dárek zdarma: zrušeno prokliknutí (jen informační box)
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -1241,19 +1241,21 @@
          Nachos 80g) je nastavený přímo v Shoptetu (produkt s cenou 0,
          automaticky se přidává ke každé objednávce), takže tady jde
          čistě o marketingové upozornění/vizuál, ne o funkční přidání
-         do košíku. Odkaz vede na stránku dárkového produktu pro víc
-         informací. Vkládá se AŽ TEĎ (za availWrap), ať skončí NAD
-         dostupností — oba insertBefore cílí na firstChild, takže ten,
-         co se vloží PODRUHÉ, skončí navrchu. */
+         do košíku. NEPROKLIKÁVÁ se nikam (na žádost klienta — čistě
+         informační box, ne odkaz na produkt), ale hover efekt (tmavší
+         žlutá) zůstává přes CSS :hover na .om-free-gift-box. Vkládá se
+         AŽ TEĎ (za availWrap), ať skončí NAD dostupností — oba
+         insertBefore cílí na firstChild, takže ten, co se vloží
+         PODRUHÉ, skončí navrchu. */
       if (!document.getElementById('om-free-gift')) {
         var freeGift = document.createElement('div');
         freeGift.id = 'om-free-gift';
         freeGift.innerHTML = `
           <div class="om-free-gift-label">🎁 Dárek ZDARMA ke každé objednávce</div>
-          <a href="/zbozi/balicek-nachos--80g-zdarma-ke-kazde-objednavce/" class="om-free-gift-box">
+          <div class="om-free-gift-box">
             <img src="https://cdn.myshoptet.com/usr/788253.myshoptet.com/user/shop/big/1066_nachos-zdarma.webp?ff=1&x=100&y=100&q=85&ts=6a6906dd&sg=38cb01fe" alt="Balíček NACHOS (80g) - ZDARMA ke každé objednávce">
             <span>Balíček Nachos (80g)</span>
-          </a>`;
+          </div>`;
         priceBlock.insertBefore(freeGift, priceBlock.firstChild);
       }
 
