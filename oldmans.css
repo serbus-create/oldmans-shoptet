@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.39
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.40
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -202,7 +202,13 @@ body.type-category .benefitBanner.position--benefitHomepage {
 #om-header .om-contact:hover .om-contact-numb { text-decoration: underline; }
 
 /* Vyhledavani */
-#om-header .om-search { flex: 1; max-width: 848px; margin: 0 16px; position: relative; }
+#om-header .om-search {
+  flex: 1; max-width: 848px; margin: 0 16px; position: relative;
+  /* Musí být nad Shoptet zatemňovací clonou (z-index:1002 při aktivním
+     vyhledávání, viz .searchWhisperer níže) — jinak zešedne i samotné
+     pole, ne jen dropdown pod ním. 29. 7. 2026, na žádost klienta. */
+  z-index: 1010;
+}
 #om-header .om-search form {
   display: flex; align-items: center; background: #f3f3f4;
   border-radius: 50px; padding: 4px 4px 4px 0; height: 52px;
@@ -220,7 +226,12 @@ body.type-category .benefitBanner.position--benefitHomepage {
   top: calc(100% + 10px) !important;
   left: 0 !important;
   right: 0 !important;
-  z-index: 1000 !important;
+  /* Shoptet při aktivním vyhledávání (body.search-focused) vykresluje
+     černou zatemňovací clonu (fixed, z-index:1002) přes celou stránku
+     — náš dropdown musí být NAD ní, jinak je pod ní vidět jen šedě
+     a navíc nejde proklikat na produkty (clona zachytává kliky).
+     29. 7. 2026, na žádost klienta. */
+  z-index: 1010 !important;
   background: #fff !important;
   border-radius: 14px !important;
   box-shadow: 0 12px 32px rgba(0, 0, 0, .16) !important;
