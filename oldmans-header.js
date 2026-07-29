@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.14 — Oprava: přesun searchWhisperer při každém psaní (ne jen jednou)
+     Verze: 5.15 — Oprava: autocomplete=off na vlastním vyhledávacím poli (historie prohlížeče překrývala návrhy)
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -285,7 +285,7 @@
         <div class="om-search">
           <form action="/action/ProductSearch/prepareString/" method="post">
             <input type="hidden" name="language" value="cs">
-            <input type="search" name="string" placeholder="Napište, co hledáte..">
+            <input type="search" name="string" placeholder="Napište, co hledáte.." autocomplete="off">
             <button type="submit">Hledat</button>
           </form>
         </div>
@@ -356,7 +356,7 @@
       <button type="button" class="om-mobile-close" aria-label="Zavřít menu">✕</button>
       <form class="om-mobile-search" action="/action/ProductSearch/prepareString/" method="post">
         <input type="hidden" name="language" value="cs">
-        <input type="search" name="string" placeholder="Napište, co hledáte..">
+        <input type="search" name="string" placeholder="Napište, co hledáte.." autocomplete="off">
         <button type="submit">Hledat</button>
       </form>
       <ul class="om-mobile-cats" id="omMobileCatList"></ul>
