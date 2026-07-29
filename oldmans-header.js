@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.18 — Dárek zdarma: zrušeno prokliknutí (jen informační box)
+     Verze: 5.19 — Dárek zdarma: komentář aktualizován (mobil sdílí stejnou pozici)
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -1236,7 +1236,9 @@
       }
 
       /* 3a. "Dárek ZDARMA ke každé objednávce" (29. 7. 2026, na žádost
-         klienta, ZATÍM JEN DESKTOP — mobil vyřeší klient později).
+         klienta; rozšířeno z desktop-only na i mobil, také 29. 7. 2026
+         — CSS mělo box schovaný pod media query, DOM pozice zůstala
+         beze změny).
          Statický box, STEJNÝ na každém produktu — dárek (Balíček
          Nachos 80g) je nastavený přímo v Shoptetu (produkt s cenou 0,
          automaticky se přidává ke každé objednávce), takže tady jde
