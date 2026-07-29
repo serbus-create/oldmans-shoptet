@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.51
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.52
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -2097,10 +2097,13 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
      ořízne text (nikdy nezalomí na 2. řádek, jak klient výslovně
      nechce). */
   .om-free-gift-label {
-    font-size: clamp(13px, 5.8vw, 20px);
+    font-size: clamp(12px, 5.2vw, 18px);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    /* Vycentrováno, ať je odsazení od levého i pravého okraje stejné
+       (29. 7. 2026, na žádost klienta). */
+    text-align: center;
   }
 }
 .om-free-gift-box {
