@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.48
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.50
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -2088,9 +2088,19 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 }
 @media (max-width: 480px) {
   /* Na úzkém mobilu se text se stejnou velikostí jako na desktopu
-     zalomil na dva řádky (29. 7. 2026, klient chtěl jeden řádek). */
+     zalomil na dva řádky (29. 7. 2026, klient chtěl jeden řádek).
+     OPRAVA — klient chtěl popisek vizuálně stejně dlouhý jako pruh
+     SKLADEM pod ním, ale BEZ roztahování mezer mezi slovy (radši
+     větší písmo). Zvýšený `vw` koeficient v clamp() ať se přiblíží
+     šířce SKLADEM pruhu. Pojistka pro extrémně úzké telefony, kde by
+     se i tak nevešlo: `overflow:hidden` + `text-overflow:ellipsis`
+     ořízne text (nikdy nezalomí na 2. řádek, jak klient výslovně
+     nechce). */
   .om-free-gift-label {
-    font-size: 16px;
+    font-size: clamp(15px, 6.4vw, 22px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 .om-free-gift-box {
