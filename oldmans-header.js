@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.15 — Oprava: autocomplete=off na vlastním vyhledávacím poli (historie prohlížeče překrývala návrhy)
+     Verze: 5.16 — Mobil: dropdown s návrhy vyhledávání (searchWhisperer) rozšířen i na mobilní menu
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -434,19 +434,19 @@
          Přesouváme HO SAMOTNÉHO (ne kopii) do našeho vlastního desktop
          vyhledávacího boxu — Shoptetí JS ho dál ovládá (mění obsah/třídu
          "active") přesně stejně jako předtím, jen teď sedí ve viditelné
-         části stránky. Zatím JEN desktop (na žádost klienta — mobil
-         later).
+         části stránky. Nejdřív jen desktop (na výslovnou žádost
+         klienta), 29. 7. 2026 rozšířeno i na mobil.
          OPRAVA — .searchWhisperer neexistuje v DOM hned při načtení
          stránky (vzniká/objeví se až dynamicky, nejspíš při první
          interakci s vyhledáváním), takže jednorázový přesun jen při
          načtení stránky ho nenašel. Zkoušíme přesunout při KAŽDÉM
          stisku klávesy — funkce je idempotentní (přeskočí, pokud už
          tam element je), takže to není problém volat opakovaně. */
-      function relocateWhisperer() {
+      function relocateWhisperer(targetContainer) {
         var whisperer = document.querySelector('.searchWhisperer');
-        var desktopSearchBox = document.querySelector('#om-header .om-search');
-        if (whisperer && desktopSearchBox && !desktopSearchBox.contains(whisperer)) {
-          desktopSearchBox.appendChild(whisperer);
+        if (!whisperer || !targetContainer) return;
+        if (!targetContainer.contains(whisperer)) {
+          targetContainer.appendChild(whisperer);
         }
       }
 
@@ -454,19 +454,23 @@
       customInputs.forEach(function (input) {
         if (input.dataset.omWhisperBound) return;
         input.dataset.omWhisperBound = 'true';
+        /* Cílový kontejner podle toho, jestli se píše do desktopového
+           nebo mobilního pole (29. 7. 2026 — rozšířeno i na mobil,
+           předtím jen desktop na výslovnou žádost klienta). */
+        var targetContainer = input.closest('#om-header .om-search') || input.closest('.om-mobile-search');
         input.addEventListener('input', function () {
           nativeInput.value = input.value;
           nativeInput.dispatchEvent(new Event('input', { bubbles: true }));
           nativeInput.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true }));
-          relocateWhisperer();
+          relocateWhisperer(targetContainer);
           /* Ještě jednou o kousek později — pro případ, že Shoptet
              element vytvoří/vloží do DOM až po zpracování AJAX
              odpovědi, ne hned synchronně po keyup. */
-          setTimeout(relocateWhisperer, 300);
+          setTimeout(function () { relocateWhisperer(targetContainer); }, 300);
         });
       });
 
-      relocateWhisperer();
+      relocateWhisperer(document.querySelector('#om-header .om-search'));
     }
     mirrorSearchToNative();
 
