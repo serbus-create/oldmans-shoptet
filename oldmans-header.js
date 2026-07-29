@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.13 — Desktop: dropdown s návrhy vyhledávání (searchWhisperer) přesunutý z hlavičky
+     Verze: 5.14 — Oprava: přesun searchWhisperer při každém psaní (ne jen jednou)
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -425,17 +425,6 @@
       var nativeInput = document.querySelector('#header input.js-search-input');
       if (!nativeInput) return;
 
-      var customInputs = document.querySelectorAll('#om-header .om-search input[type="search"], .om-mobile-search input[type="search"]');
-      customInputs.forEach(function (input) {
-        if (input.dataset.omWhisperBound) return;
-        input.dataset.omWhisperBound = 'true';
-        input.addEventListener('input', function () {
-          nativeInput.value = input.value;
-          nativeInput.dispatchEvent(new Event('input', { bubbles: true }));
-          nativeInput.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true }));
-        });
-      });
-
       /* Přesun dropdownu s návrhy (nativní .searchWhisperer, viz Network
          odpověď ajaxSearch/) ven ze skrytého #header (29. 7. 2026, na
          žádost klienta). Element sám o sobě má display:flex a jeho
@@ -446,12 +435,38 @@
          vyhledávacího boxu — Shoptetí JS ho dál ovládá (mění obsah/třídu
          "active") přesně stejně jako předtím, jen teď sedí ve viditelné
          části stránky. Zatím JEN desktop (na žádost klienta — mobil
-         later). */
-      var whisperer = document.querySelector('.searchWhisperer');
-      var desktopSearchBox = document.querySelector('#om-header .om-search');
-      if (whisperer && desktopSearchBox && !desktopSearchBox.contains(whisperer)) {
-        desktopSearchBox.appendChild(whisperer);
+         later).
+         OPRAVA — .searchWhisperer neexistuje v DOM hned při načtení
+         stránky (vzniká/objeví se až dynamicky, nejspíš při první
+         interakci s vyhledáváním), takže jednorázový přesun jen při
+         načtení stránky ho nenašel. Zkoušíme přesunout při KAŽDÉM
+         stisku klávesy — funkce je idempotentní (přeskočí, pokud už
+         tam element je), takže to není problém volat opakovaně. */
+      function relocateWhisperer() {
+        var whisperer = document.querySelector('.searchWhisperer');
+        var desktopSearchBox = document.querySelector('#om-header .om-search');
+        if (whisperer && desktopSearchBox && !desktopSearchBox.contains(whisperer)) {
+          desktopSearchBox.appendChild(whisperer);
+        }
       }
+
+      var customInputs = document.querySelectorAll('#om-header .om-search input[type="search"], .om-mobile-search input[type="search"]');
+      customInputs.forEach(function (input) {
+        if (input.dataset.omWhisperBound) return;
+        input.dataset.omWhisperBound = 'true';
+        input.addEventListener('input', function () {
+          nativeInput.value = input.value;
+          nativeInput.dispatchEvent(new Event('input', { bubbles: true }));
+          nativeInput.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true }));
+          relocateWhisperer();
+          /* Ještě jednou o kousek později — pro případ, že Shoptet
+             element vytvoří/vloží do DOM až po zpracování AJAX
+             odpovědi, ne hned synchronně po keyup. */
+          setTimeout(relocateWhisperer, 300);
+        });
+      });
+
+      relocateWhisperer();
     }
     mirrorSearchToNative();
 
