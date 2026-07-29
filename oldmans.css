@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.40
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.41
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -184,7 +184,14 @@ body.type-category .benefitBanner.position--benefitHomepage {
   padding: 10px 0;
   position: sticky;
   top: 0;
-  z-index: 999;
+  /* Shoptet zatemňovací clona při aktivním vyhledávání má z-index:1002
+     (fixed, přes celou stránku). #om-header sám o sobě vytváří stacking
+     context (position:sticky + z-index), takže i kdyby měl dropdown
+     .searchWhisperer uvnitř vyšší z-index, platí to jen VNITŘ hlavičky
+     — celá hlavička jako celek se porovnává s clonou podle SVÉHO
+     vlastního z-indexu. Proto musí být z-index hlavičky vyšší než
+     clona, jinak se přes ni dropdown ani neproklikne (29. 7. 2026). */
+  z-index: 1010;
   box-shadow: 0 2px 10px rgba(0,0,0,.06);
 }
 #om-header .om-header-inner {
