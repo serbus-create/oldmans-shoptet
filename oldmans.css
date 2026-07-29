@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.38
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.39
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -202,14 +202,35 @@ body.type-category .benefitBanner.position--benefitHomepage {
 #om-header .om-contact:hover .om-contact-numb { text-decoration: underline; }
 
 /* Vyhledavani */
-#om-header .om-search { flex: 1; max-width: 848px; margin: 0 16px; }
+#om-header .om-search { flex: 1; max-width: 848px; margin: 0 16px; position: relative; }
 #om-header .om-search form {
   display: flex; align-items: center; background: #f3f3f4;
   border-radius: 50px; padding: 4px 4px 4px 0; height: 52px;
   transition: box-shadow .3s; position: relative;
 }
-#om-header .om-search form:hover { box-shadow: 0 0 0 2px #f7c91b; }
+
+/* Dropdown s návrhy vyhledávání (nativní Shoptet .searchWhisperer,
+   29. 7. 2026, na žádost klienta) — JS ho přesunul dovnitř tohohle
+   boxu (#om-header .om-search), takže potřebuje absolutní pozici
+   vůči němu, ne vůči původnímu (skrytému) nativnímu headeru.
+   Viditelnost/skrývání (třída .active) řídí dál sám nativní Shoptet
+   JS beze změny — tady jen pozicujeme a stylujeme rámeček. */
+.searchWhisperer {
+  position: absolute !important;
+  top: calc(100% + 10px) !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 1000 !important;
+  background: #fff !important;
+  border-radius: 14px !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .16) !important;
+  max-height: 70vh !important;
+  overflow-y: auto !important;
+  padding: 16px !important;
+  box-sizing: border-box !important;
+}
 #om-header .om-search input:focus { outline: none !important; box-shadow: none !important; }
+#om-header .om-search form:hover { box-shadow: 0 0 0 2px #f7c91b; }
 #om-header .om-search form:focus-within { box-shadow: 0 0 0 2px #f7c91b !important; }
 #om-header .om-search input,
 #om-header .om-search input:focus,
