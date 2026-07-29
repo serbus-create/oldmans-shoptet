@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.54
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.55
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -3476,6 +3476,19 @@ html, body {
   position: static !important;
   align-self: flex-start !important;
   height: auto !important;
+}
+/* KLÍČOVÉ (29. 7. 2026) — Shoptet má na `.col-md-4` VLASTNÍ JS sticky
+   implementaci, která sloupci nastavuje INLINE styl
+   `position: relative; top: 584.43px` (hodnota se mění při scrollování,
+   ověřeno v konzoli — nekulaté číslo = počítáno JS, ne z CSS). Tohle
+   způsobovalo, že pravý sloupec "ujížděl" dolů a jeho spodek (Celkem
+   k úhradě + tlačítko Pokračovat) končil schovaný pod červenou USP
+   lištou. Inline styl jde přebít jedině přes `!important` — to má
+   v CSS kaskádě přednost i nad inline stylem, takže JS sice hodnotu
+   dál přepisuje, ale vizuálně se neprojeví. */
+.row.cart-row > .col-md-4 {
+  position: static !important;
+  top: auto !important;
 }
 @media (max-width: 900px) {
   .row.cart-row {
