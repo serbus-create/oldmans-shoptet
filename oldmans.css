@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.45
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.46
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -2080,21 +2080,21 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
     margin: 0 0 14px;
   }
   .om-free-gift-label {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 800;
     color: #1a1a1a;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
   .om-free-gift-box {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
     width: 100%;
     box-sizing: border-box;
     border: 2px dashed #f0c944;
-    border-radius: 12px;
+    border-radius: 14px;
     background: #fffbea;
-    padding: 10px 14px;
+    padding: 16px 20px;
     text-decoration: none !important;
     transition: background .2s, border-color .2s;
     /* Není to odkaz (klient chce jen informační box, ne prokliknutí),
@@ -2107,16 +2107,16 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
     border-color: #e6b800;
   }
   .om-free-gift-box img {
-    width: 44px;
-    height: 44px;
+    width: 64px;
+    height: 64px;
     object-fit: contain;
-    border-radius: 8px;
+    border-radius: 10px;
     background: #fff;
     flex-shrink: 0;
   }
   .om-free-gift-box span {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 700;
     color: #1a1a1a;
   }
 }
