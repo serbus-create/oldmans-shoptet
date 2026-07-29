@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.44
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.45
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -2080,8 +2080,8 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
     margin: 0 0 14px;
   }
   .om-free-gift-label {
-    font-size: 13px;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: 800;
     color: #1a1a1a;
     margin-bottom: 8px;
   }
@@ -2089,12 +2089,18 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
     display: flex;
     align-items: center;
     gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
     border: 2px dashed #f0c944;
     border-radius: 12px;
     background: #fffbea;
     padding: 10px 14px;
     text-decoration: none !important;
     transition: background .2s, border-color .2s;
+    /* Není to odkaz (klient chce jen informační box, ne prokliknutí),
+       ale hover efekt zůstává i na obyčejném divu — cursor:default,
+       ne pointer, ať nevypadá klikatelně (29. 7. 2026). */
+    cursor: default;
   }
   .om-free-gift-box:hover {
     background: #fdf3c9;
