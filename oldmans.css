@@ -1,8 +1,15 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.55
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.56
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
+
+/* Font pro menu kategorií (30. 7. 2026, na žádost klienta — zaoblený,
+   "friendly" styl podle referenčního screenshotu). Na webu dosud nebyl
+   načtený žádný podobný font (jen nativní Shoptet "Source Sans 3"),
+   proto dotažen přes Google Fonts. @import MUSÍ být úplně první
+   pravidlo v souboru, jinak ho prohlížeč ignoruje. */
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap');
 
 
 /* ──────────────────────────────────────────────
@@ -331,8 +338,12 @@ body.type-category .benefitBanner.position--benefitHomepage {
 }
 .om-cat-list > li {
   display: inline-flex; white-space: nowrap;
-  font-size: 14px; font-weight: 500; border-radius: 5px;
+  font-size: 17px; font-weight: 700; border-radius: 5px;
   transition: .3s; align-items: center;
+  /* Zaoblený "friendly" font podle klientovy reference (30. 7. 2026) —
+     dřív jen nativní Shoptet font, teď Baloo 2 (viz @import na začátku
+     souboru), větší a tučnější, ať je čitelný v tomhle stylu písma. */
+  font-family: 'Baloo 2', sans-serif;
 }
 .om-cat-list > li > a {
   color: #000; padding: 14px 13px;
