@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.58
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.57
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -369,18 +369,19 @@ body.type-category .benefitBanner.position--benefitHomepage {
 .om-more-submenu li a { color: #000; text-decoration: none; }
 
 /* ──────────────────────────────────────────────
-   TLAČÍTKO "OBCHOD" — rozbalovací mřížka kategorií
+   ZVÝRAZNĚNÍ NATIVNÍ KATEGORIE "OBCHOD"
    (30. 7. 2026, na žádost klienta, podle reference webu Fermat)
-   PŘIDÁNO NAVÍC vedle stávajících plochých kategorií — NIC se
-   neschovává, žádná kategorie nemizí. "Obchod" je jen další
-   položka v liště, zeleně zvýrazněná, po najetí myší se rozbalí
-   mřížka všech kategorií s ikonami (stejné ikony/URL jako
-   homepage sekce "Kategorie" — .om-cats-grid — pro konzistenci).
+   "Obchod" je existující nativní Shoptet kategorie (/kategorie/obchod/),
+   která se v liště zobrazuje jako běžná položka (li.om-cat-dynamic,
+   ověřeno konzolí) — NEVYTVÁŘÍME nový prvek, jen tenhle existující
+   zeleně zvýrazníme a přidáme mu po najetí myší rozbalovací mřížku
+   všech kategorií (stejné ikony/URL jako homepage sekce "Kategorie").
+   Ostatní kategorie v liště zůstávají úplně beze změny.
 ────────────────────────────────────────────── */
-.om-obchod-item {
+li.om-cat-dynamic.om-obchod-enhanced {
   position: relative;
 }
-.om-obchod-btn {
+li.om-cat-dynamic.om-obchod-enhanced > a.om-obchod-btn {
   display: inline-flex !important;
   align-items: center !important;
   gap: 7px !important;
@@ -390,12 +391,10 @@ body.type-category .benefitBanner.position--benefitHomepage {
   margin: 8px 0 !important;
   border-radius: 50px !important;
   font-weight: 700 !important;
-  font-size: 14px !important;
-  text-decoration: none !important;
-  white-space: nowrap !important;
-  transition: background .2s !important;
 }
-.om-obchod-btn:hover { background: #6aa028 !important; }
+li.om-cat-dynamic.om-obchod-enhanced:hover > a.om-obchod-btn {
+  background: #6aa028 !important;
+}
 .om-obchod-chevron {
   width: 8px;
   height: 8px;
@@ -403,10 +402,11 @@ body.type-category .benefitBanner.position--benefitHomepage {
   border-bottom: 2px solid #fff;
   transform: rotate(45deg);
   margin-top: -4px;
+  margin-left: 2px;
   transition: transform .2s;
-  flex-shrink: 0;
+  display: inline-block;
 }
-.om-obchod-item:hover .om-obchod-chevron {
+li.om-cat-dynamic.om-obchod-enhanced:hover .om-obchod-chevron {
   transform: rotate(225deg);
   margin-top: 4px;
 }
@@ -429,7 +429,7 @@ body.type-category .benefitBanner.position--benefitHomepage {
   transition: opacity .2s ease, transform .2s ease, visibility .2s;
   z-index: 1002;
 }
-.om-obchod-item:hover .om-obchod-dropdown {
+li.om-cat-dynamic.om-obchod-enhanced:hover .om-obchod-dropdown {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
@@ -463,9 +463,6 @@ body.type-category .benefitBanner.position--benefitHomepage {
   font-weight: 800 !important;
 }
 @media (max-width: 992px) {
-  /* Stejně jako zbytek desktop menu (.om-header .om-nav, #om-cat-menu)
-     se na mobilu celá lišta kategorií schovává — Obchod tlačítko tedy
-     netřeba řešit zvlášť, zdědí to samé schování jako zbytek #om-cat-menu. */
   .om-obchod-dropdown {
     width: 90vw;
   }
