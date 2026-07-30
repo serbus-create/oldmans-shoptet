@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.56
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.58
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -367,6 +367,109 @@ body.type-category .benefitBanner.position--benefitHomepage {
 }
 .om-more-submenu li { display: flex !important; padding: 8px 12px; }
 .om-more-submenu li a { color: #000; text-decoration: none; }
+
+/* ──────────────────────────────────────────────
+   TLAČÍTKO "OBCHOD" — rozbalovací mřížka kategorií
+   (30. 7. 2026, na žádost klienta, podle reference webu Fermat)
+   PŘIDÁNO NAVÍC vedle stávajících plochých kategorií — NIC se
+   neschovává, žádná kategorie nemizí. "Obchod" je jen další
+   položka v liště, zeleně zvýrazněná, po najetí myší se rozbalí
+   mřížka všech kategorií s ikonami (stejné ikony/URL jako
+   homepage sekce "Kategorie" — .om-cats-grid — pro konzistenci).
+────────────────────────────────────────────── */
+.om-obchod-item {
+  position: relative;
+}
+.om-obchod-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  background: #79b530 !important;
+  color: #fff !important;
+  padding: 9px 18px !important;
+  margin: 8px 0 !important;
+  border-radius: 50px !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  transition: background .2s !important;
+}
+.om-obchod-btn:hover { background: #6aa028 !important; }
+.om-obchod-chevron {
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(45deg);
+  margin-top: -4px;
+  transition: transform .2s;
+  flex-shrink: 0;
+}
+.om-obchod-item:hover .om-obchod-chevron {
+  transform: rotate(225deg);
+  margin-top: 4px;
+}
+.om-obchod-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  width: 720px;
+  max-width: 90vw;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity .2s ease, transform .2s ease, visibility .2s;
+  z-index: 1002;
+}
+.om-obchod-item:hover .om-obchod-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.om-obchod-dropdown-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 10px 12px !important;
+  border: 1px solid #e5e5e5 !important;
+  border-radius: 10px !important;
+  text-decoration: none !important;
+  color: #1a1a1a !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  transition: border-color .2s, background .2s !important;
+}
+.om-obchod-dropdown-item:hover {
+  border-color: #79b530 !important;
+  background: #f9fdf5 !important;
+}
+.om-obchod-dropdown-item img {
+  width: 28px !important;
+  height: 28px !important;
+  object-fit: contain !important;
+  flex-shrink: 0 !important;
+}
+.om-obchod-dropdown-item .om-obchod-arrow {
+  margin-left: auto !important;
+  color: #79b530 !important;
+  font-weight: 800 !important;
+}
+@media (max-width: 992px) {
+  /* Stejně jako zbytek desktop menu (.om-header .om-nav, #om-cat-menu)
+     se na mobilu celá lišta kategorií schovává — Obchod tlačítko tedy
+     netřeba řešit zvlášť, zdědí to samé schování jako zbytek #om-cat-menu. */
+  .om-obchod-dropdown {
+    width: 90vw;
+  }
+}
 
 /* ──────────────────────────────────────────────
    PRODUKTY
