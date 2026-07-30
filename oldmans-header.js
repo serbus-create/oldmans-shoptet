@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.19 — Dárek zdarma: komentář aktualizován (mobil sdílí stejnou pozici)
+     Verze: 5.20 — Zvýraznění nativní kategorie "Obchod" + rozbalovací mřížka (bezpečně přes DOM, ne šablonu)
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -572,6 +572,67 @@
         mobileList.appendChild(clone);
       });
     }
+
+    /* Zvýrazní existující nativní kategorii "Obchod" (li.om-cat-dynamic
+       s odkazem na /kategorie/obchod/, ověřeno konzolí 30. 7. 2026) —
+       zeleně, s rozbalovací mřížkou po najetí myší. NEVYTVÁŘÍ nový
+       prvek, jen doplňuje ten, který už existuje díky dynamickému
+       čtení kategorií výše (buildDynamicCategoryMenu). Bezpečně přes
+       DOM metody (createElement/appendChild), ne vkládáním do velkého
+       HTML template stringu — izolovaná chyba tady by nemohla strhnout
+       zbytek hlavičky. */
+    function enhanceObchodMenuItem() {
+      var list = document.getElementById('omCatList');
+      if (!list) return false;
+      var obchodLi = Array.prototype.slice.call(list.querySelectorAll('li.om-cat-dynamic')).find(function (li) {
+        var a = li.querySelector('a');
+        return a && a.textContent.trim() === 'Obchod';
+      });
+      if (!obchodLi) return false;
+      if (obchodLi.classList.contains('om-obchod-enhanced')) return true;
+
+      obchodLi.classList.add('om-obchod-enhanced');
+      var link = obchodLi.querySelector('a');
+      if (link) {
+        link.classList.add('om-obchod-btn');
+        var chevron = document.createElement('span');
+        chevron.className = 'om-obchod-chevron';
+        link.appendChild(chevron);
+      }
+
+      var dropdown = document.createElement('div');
+      dropdown.className = 'om-obchod-dropdown';
+      dropdown.innerHTML =
+        '<a href="/kategorie/marinady/" class="om-obchod-dropdown-item"><img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/marinades.png" alt=""> Marinády <span class="om-obchod-arrow">\u203a</span></a>' +
+        '<a href="/kategorie/puff/" class="om-obchod-dropdown-item"><img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/puff.png" alt=""> Puff <span class="om-obchod-arrow">\u203a</span></a>' +
+        '<a href="/kategorie/squeeze-blast/" class="om-obchod-dropdown-item"><img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/squeeze-blast.png" alt=""> Squeeze Blast <span class="om-obchod-arrow">\u203a</span></a>' +
+        '<a href="/kategorie/omacky-a-majonezy/" class="om-obchod-dropdown-item"><img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/specials-oldmans.png" alt=""> Omáčky a majonézy <span class="om-obchod-arrow">\u203a</span></a>' +
+        '<a href="/kategorie/burger-a-steak/" class="om-obchod-dropdown-item"><img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/burger.png" alt=""> Burger a steak <span class="om-obchod-arrow">\u203a</span></a>' +
+        '<a href="/kategorie/chilli-omacky/" class="om-obchod-dropdown-item"><img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-icons-chilli.png" alt=""> Chilli omáčky <span class="om-obchod-arrow">\u203a</span></a>' +
+        '<a href="/kategorie/salatove-dressingy/" class="om-obchod-dropdown-item"><img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/oldmans-icons-salads.png" alt=""> Salátové dresingy <span class="om-obchod-arrow">\u203a</span></a>' +
+        '<a href="/kategorie/ceska-klasika/" class="om-obchod-dropdown-item"><img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/czech-republic.png" alt=""> Česká klasika <span class="om-obchod-arrow">\u203a</span></a>' +
+        '<a href="/kategorie/chilli-mash/" class="om-obchod-dropdown-item"><img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/chilli-mash.png" alt=""> Chilli Mash <span class="om-obchod-arrow">\u203a</span></a>' +
+        '<a href="/kategorie/okurkove-relishe/" class="om-obchod-dropdown-item"><img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/cucumber.png" alt=""> Okurkové Relishe <span class="om-obchod-arrow">\u203a</span></a>' +
+        '<a href="/kategorie/premiove-pomazanky/" class="om-obchod-dropdown-item"><img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/sauce-cat.png" alt=""> Prémiové pomazánky <span class="om-obchod-arrow">\u203a</span></a>' +
+        '<a href="/kategorie/snacky-a-orechy/" class="om-obchod-dropdown-item"><img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/nuts.png" alt=""> Snacky a ořechy <span class="om-obchod-arrow">\u203a</span></a>' +
+        '<a href="/kategorie/gumovi-medvidci/" class="om-obchod-dropdown-item"><img src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/bears.png" alt=""> Gumoví medvídci <span class="om-obchod-arrow">\u203a</span></a>';
+      obchodLi.appendChild(dropdown);
+      return true;
+    }
+
+    /* Zkusíme opakovaně, dokud se položka "Obchod" v DOM neobjeví
+       (dynamické kategorie se mohou naplnit asynchronně, viz
+       initCategoryMenu níže) */
+    (function tryEnhanceObchod() {
+      var attempts = 0;
+      var maxAttempts = 15;
+      function attempt() {
+        attempts++;
+        if (enhanceObchodMenuItem()) return;
+        if (attempts < maxAttempts) setTimeout(attempt, 300);
+      }
+      attempt();
+    })();
 
     /* Zkusíme hned, a pokud nativní menu ještě není naplněné, zkusíme to
        ještě několikrát v krátkých intervalech. Teprve po úspěchu (nebo
