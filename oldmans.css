@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.57
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.58
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -421,8 +421,16 @@ li.om-cat-dynamic.om-obchod-enhanced:hover .om-obchod-chevron {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-  width: 720px;
-  max-width: 90vw;
+  /* OPRAVA (30. 7. 2026) — 4. sloupec (delší názvy jako "Omáčky a
+     majonézy", "Česká klasika") přetékal MIMO bílý box — grid sloupce
+     se defaultně nedovolí zmenšit pod šířku svého obsahu, takže box
+     zůstal 720px, ale obsah reálně potřeboval víc a vylil se ven bez
+     bílého pozadí za sebou (stejná chyba, jakou jsme řešili u karet
+     množstevní slevy — viz min-width:0 na .om-obchod-dropdown-item
+     níže). Širší box (880px) dá čtyřem sloupcům dost místa. */
+  width: 880px;
+  max-width: 92vw;
+  overflow: hidden;
   opacity: 0;
   visibility: hidden;
   transform: translateY(6px);
@@ -446,6 +454,11 @@ li.om-cat-dynamic.om-obchod-enhanced:hover .om-obchod-dropdown {
   font-weight: 600 !important;
   font-size: 14px !important;
   transition: border-color .2s, background .2s !important;
+  /* KRITICKÉ — bez tohohle grid sloupec s "1fr" nejde zmenšit pod
+     šířku textu (browser default min-width:auto), takže delší název
+     roztáhne svůj sloupec přes hranici boxu (stejná lekce jako u
+     karet množstevní slevy na detailu produktu). */
+  min-width: 0 !important;
 }
 .om-obchod-dropdown-item:hover {
   border-color: #79b530 !important;
