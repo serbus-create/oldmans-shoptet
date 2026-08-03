@@ -1197,15 +1197,29 @@ h1.category-title {
    klienta. Struktura ověřená přes DevTools (screenshot klienta):
      ul.subcategories.with-image
        li.col-xs-6.col-sm-6.col-lg-3.col-xl-3
-         a[href]  ← obsah uvnitř (ikona/text) neznámý, screenshot ho
-                     měl sbalený, takže NESAHÁME na vnitřní rozložení
-                     (display/align-items/gap) — jen orámujeme
+         a[href]  ← obsah uvnitř (ikona/text/šipka) neznámý, screenshot
+                     ho měl sbalený, takže NESAHÁME na vnitřní
+                     rozložení (display/align-items) — jen orámujeme
                      bordrem/paddingem, podobně jako homepage sekce
                      "Kategorie" (.om-cat-item). Platí obecně pro
                      VŠECHNY kategorie s tímhle markupem, ne jen
-                     Obchod. */
+                     Obchod.
+   OPRAVA (4. 8. 2026, druhé kolo, na žádost klienta):
+   — zvýraznění při najetí myší přebarveno ze zelené... počkat, z
+     ČERVENÉ na ZELENOU (#79b530, stejný odstín jako zbytek zelené na
+     webu — tlačítko Do košíku, dropdown Obchod apod.) + jemné světle
+     zelené pozadí, stejný vzorec jako .om-obchod-dropdown-item:hover.
+   — mezera mezi kartami (`gap` na flex kontejneru `ul`, funguje jak
+     mezi sloupci, tak mezi řádky zároveň) — nahrazuje dřívější
+     margin-bottom na `li`, čistší řešení pro flex layout.
+   — zelená šipka: nevíme přesnou třídu/element (obsah `a` jsme
+     neviděli rozbalený), zkoušíme obecné selektory (svg, [class*=
+     "arrow"/"icon"]) — pokud by nesedělo přesně, pošli outerHTML
+     toho <a> a doladíme na míru. */
+ul.subcategories.with-image {
+  gap: 12px !important;
+}
 ul.subcategories.with-image > li {
-  margin-bottom: 14px !important;
   box-sizing: border-box !important;
 }
 ul.subcategories.with-image > li > a {
@@ -1215,11 +1229,19 @@ ul.subcategories.with-image > li > a {
   padding: 14px 16px !important;
   box-sizing: border-box !important;
   text-decoration: none !important;
-  transition: border-color .25s, box-shadow .25s !important;
+  transition: border-color .25s, background .25s, box-shadow .25s !important;
 }
 ul.subcategories.with-image > li > a:hover {
-  border-color: #9f1400 !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, .08) !important;
+  border-color: #79b530 !important;
+  background: #f9fdf5 !important;
+  box-shadow: 0 4px 12px rgba(121, 181, 48, .15) !important;
+}
+ul.subcategories.with-image > li > a svg,
+ul.subcategories.with-image > li > a [class*="arrow"],
+ul.subcategories.with-image > li > a [class*="icon-arrow"] {
+  color: #79b530 !important;
+  fill: #79b530 !important;
+  stroke: #79b530 !important;
 }
 
 /* ── Grid: 5 produktů v řadě, konzistentní mezery ── */
