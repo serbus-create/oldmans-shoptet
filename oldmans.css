@@ -3957,6 +3957,10 @@ html, body {
   margin-right: 16px !important;
   font-weight: 700 !important;
   text-decoration: underline !important;
+  /* OPRAVA (3. 8. 2026, na žádost klienta) — velká písmena, stejně
+     jako "Pokračovat" (to je uppercase přirozeně už z nativního
+     textu, "Zpět do obchodu" potřebovalo CSS text-transform). */
+  text-transform: uppercase !important;
   transition: background .2s !important;
 }
 .next-step.next-step--cart a.next-step-back:hover {
@@ -4124,23 +4128,34 @@ html, body {
 .om-cart-top-actions a.next-step-forward:hover {
   background: #6aa028 !important;
 }
-/* MOBIL (3. 8. 2026, na žádost klienta) — dřív tu byl horní duplikát
-   úplně schovaný, teď je i na mobilu, ale ve stejném DUCHU jako na
-   desktopu — malé vycentrované pilulky vedle sebe (NE roztažené na
-   celou šířku obrazovky, to už dělá hlavní spodní dvojice tlačítek).
-   Jen zmenšený min-width a padding oproti desktopu, ať se obě pilulky
-   pohodlně vejdou vedle sebe i na užších telefonech. */
+/* MOBIL (3. 8. 2026, na žádost klienta, podle vzoru — Pokračovat
+   nahoře, Zpět do obchodu pod ním, obě přes celou šířku) — dřív tu
+   byly malé vycentrované pilulky vedle sebe, teď stejný "pod sebou"
+   vzhled jako u spodní hlavní dvojice tlačítek v košíku. Pořadí
+   v DOM je JS klonem vždy "Zpět do obchodu" → "Pokračovat" (viz JS
+   duplicateCartTopButtons), takže obrácené pořadí řešíme přes
+   `order`, ne přepisováním DOM. */
 @media (max-width: 768px) {
   .om-cart-top-actions {
-    margin: 28px 0 12px;
-    gap: 8px;
-    padding: 0 4px;
-    box-sizing: border-box;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    gap: 10px !important;
+    margin: 20px 0 16px !important;
+    padding: 0 !important;
   }
   .om-cart-top-actions a.next-step-back,
   .om-cart-top-actions a.next-step-forward {
-    min-width: 120px !important;
-    padding: 6px 16px !important;
-    font-size: 12px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    padding: 14px 20px !important;
+    font-size: 15px !important;
+  }
+  .om-cart-top-actions a.next-step-forward {
+    order: 1 !important;
+  }
+  .om-cart-top-actions a.next-step-back {
+    order: 2 !important;
   }
 }
