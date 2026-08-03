@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.63
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.64
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -4007,5 +4007,65 @@ html, body {
   .next-step.next-step--cart a.next-step-back {
     margin-right: 0 !important;
     margin-top: 12px !important;
+  }
+}
+
+/* ──────────────────────────────────────────────
+   DUPLIKÁT TLAČÍTEK NAHOŘE V KOŠÍKU
+   (3. 8. 2026, na žádost klienta, podle mockupu) — klon "Zpět do
+   obchodu" + "Pokračovat" (viz JS duplicateCartTopButtons), malý,
+   zarovnaný vpravo nahoře vedle kroků. DOPLŇUJE, nenahrazuje
+   stávající dvojici dole. Vlastní, kompaktní styl — klon NENÍ uvnitř
+   .next-step.next-step--cart, takže nesdílí velký styl tlačítek
+   z předchozí sekce, potřebuje vlastní pravidla.
+────────────────────────────────────────────── */
+#cart-wrapper {
+  position: relative !important;
+}
+.om-cart-top-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 5;
+}
+.om-cart-top-actions a.next-step-back {
+  background: transparent !important;
+  color: #888 !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  text-decoration: underline !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+}
+.om-cart-top-actions a.next-step-back:hover {
+  color: #555 !important;
+}
+.om-cart-top-actions a.next-step-forward {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  background: #79b530 !important;
+  color: #fff !important;
+  padding: 6px 14px !important;
+  border-radius: 50px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  text-transform: uppercase !important;
+  transition: background .2s !important;
+}
+.om-cart-top-actions a.next-step-forward:hover {
+  background: #6aa028 !important;
+}
+/* Na mobilu je nahoře málo místa a spodní dvojice tlačítek už je na
+   celou šířku — horní duplikát tam schováváme, ať nepůsobí natěsnaně. */
+@media (max-width: 768px) {
+  .om-cart-top-actions {
+    display: none !important;
   }
 }
