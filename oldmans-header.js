@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.21 — Košík: duplikovaná tlačítka Zpět/Pokračovat nahoře vedle kroků
+     Verze: 5.22 — Košík: horní tlačítka přesunuta nad tabulku objednávek (normální tok, ne absolutní pozice)
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -1906,7 +1906,12 @@
      stávající dvojici dole u souhrnu. Klonujeme živé <a> odkazy
      (ne button) — mají href, takže fungují samy o sobě, žádný extra
      JS pro funkčnost není potřeba. Struktura ověřená konzolí:
-     #cart-wrapper > ol.cart-header (kroky, první dítě) + .cart-inner. */
+     #cart-wrapper > ol.cart-header (kroky, první dítě) + .cart-inner.
+     OPRAVA (3. 8. 2026, druhé kolo) — dřív vloženo PŘED kroky a
+     pozicováno absolutně (top:50% vůči CELÉMU #cart-wrapper), což
+     centrovalo dvojici doprostřed tabulky objednávek, ne vedle
+     kroků. Teď v normálním toku (žádné absolutní pozicování), vlevo
+     nahoře NAD tabulkou objednávek, přesně tam, kde to klient chtěl. */
   function duplicateCartTopButtons() {
     var wrapper = document.getElementById('cart-wrapper');
     if (!wrapper) return;
@@ -1914,14 +1919,15 @@
 
     var backLink = wrapper.querySelector('a.next-step-back');
     var forwardLink = wrapper.querySelector('a.next-step-forward');
-    if (!backLink || !forwardLink) return;
+    var cartInner = wrapper.querySelector('.cart-inner');
+    if (!backLink || !forwardLink || !cartInner) return;
 
     var topActions = document.createElement('div');
     topActions.className = 'om-cart-top-actions';
     topActions.appendChild(backLink.cloneNode(true));
     topActions.appendChild(forwardLink.cloneNode(true));
 
-    wrapper.insertBefore(topActions, wrapper.firstChild);
+    wrapper.insertBefore(topActions, cartInner);
   }
 
   /* Na stránce košíku (native Shoptet DOM) může být #cart-wrapper
