@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.66
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.67
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -4020,36 +4020,35 @@ html, body {
    z předchozí sekce, potřebuje vlastní pravidla.
 ────────────────────────────────────────────── */
 .om-cart-top-actions {
-  /* OPRAVA (3. 8. 2026, druhé kolo) — žádné absolutní pozicování,
-     normální tok, vlevo nahoře nad tabulkou objednávek. Dřív
-     position:absolute + top:50% centrovalo vůči celému
-     #cart-wrapper (celý košík), takže to skončilo uprostřed
-     tabulky místo vedle kroků — viz komentář u JS funkce
-     duplicateCartTopButtons(). */
+  /* OPRAVA (3. 8. 2026, třetí kolo) — posunuto o 15px dolů (bylo
+     margin-top 20px, teď 35px), ať to má trochu odstup od kroků. */
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 20px 0 16px;
+  margin: 35px 0 16px;
 }
 .om-cart-top-actions a.next-step-back,
 .om-cart-top-actions a.next-step-forward {
+  /* OPRAVA (3. 8. 2026, třetí kolo) — sladěno se stylem spodní
+     hlavní dvojice tlačítek (žádné velké písmena/letter-spacing,
+     to bylo jen tady navíc a vypadalo jinak). Zmenšeno o ~30 % a
+     zploštěno — nižší, o něco širší tvar (menší svislý padding,
+     větší vodorovný). */
   display: inline-flex !important;
   align-items: center !important;
   gap: 4px !important;
-  padding: 8px 18px !important;
+  padding: 6px 22px !important;
   border-radius: 50px !important;
   font-size: 12px !important;
   font-weight: 700 !important;
   text-decoration: none !important;
-  text-transform: uppercase !important;
-  letter-spacing: .3px !important;
   transition: background .2s, border-color .2s !important;
 }
-/* "Zpět do obchodu" — žlutá, stejná barva jako spodní hlavní verze
-   (na žádost klienta, dřív bílá obrysová). */
+/* "Zpět do obchodu" — stejné jako spodní hlavní verze: žluté pozadí
+   + BÍLÝ text (dřív tmavý, neshodovalo se). */
 .om-cart-top-actions a.next-step-back {
   background: #f7c91b !important;
-  color: #1a1a1a !important;
+  color: #fff !important;
   border: none !important;
   margin: 0 !important;
 }
