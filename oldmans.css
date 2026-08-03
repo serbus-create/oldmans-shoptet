@@ -3970,19 +3970,35 @@ html, body {
   color: inherit !important;
 }
 .next-step.next-step--cart a.next-step-forward {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
   border-radius: 0 !important;
   color: #1a1a1a !important;
 }
 .next-step.next-step--cart a.next-step-forward .order-button-text {
   color: inherit !important;
 }
-/* Nativní šipka Shoptetu uvnitř "Pokračovat" — pojistka, ať se
-   přebarví spolu s textem (SVG může mít barvu přes fill i přes
-   stroke, podle konkrétní ikony, proto vynucujeme oboje). */
+/* OPRAVA (3. 8. 2026, třinácté kolo, na žádost klienta) — nativní
+   šipka Shoptetu vypadala jinak než referenční obrázek (silná
+   dvoulinková šipka). Schovaná a nahrazená stejnou vlastní šipkou
+   jako u horního klonu tlačítek (.om-cart-top-actions), ať je vzhled
+   konzistentní na celé stránce. */
 .next-step.next-step--cart a.next-step-forward svg,
-.next-step.next-step--cart a.next-step-forward svg * {
-  fill: currentColor !important;
-  stroke: currentColor !important;
+.next-step.next-step--cart a.next-step-forward [class*="icon"] {
+  display: none !important;
+}
+.next-step.next-step--cart a.next-step-forward:after {
+  content: "";
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-top: 2.5px solid currentColor;
+  border-right: 2.5px solid currentColor;
+  border-radius: 1.5px;
+  transform: rotate(45deg);
+  flex-shrink: 0;
 }
 
 /* ──────────────────────────────────────────────
@@ -4000,7 +4016,14 @@ html, body {
    ČERNÝ text (dřív bílý) — klient chtěl "Pokračovat"/"Objednat"
    sjednotit barevně se zbytkem procesu.
 ────────────────────────────────────────────── */
-.next-step.next-step--step-1 button.next-step-forward,
+.next-step.next-step--step-1 button.next-step-forward {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  border-radius: 0 !important;
+  color: #1a1a1a !important;
+}
 .next-step.next-step--step-2 button.next-step-finish {
   border-radius: 0 !important;
   color: #1a1a1a !important;
@@ -4010,10 +4033,28 @@ html, body {
 .next-step.next-step--step-2 button.next-step-finish .order-button-suffix {
   color: inherit !important;
 }
-/* Nativní ikona (pokud tlačítko nějakou má) — stejná pojistka jako
-   u tlačítka "Pokračovat" v košíku, ať se barva ikony drží textu. */
+/* OPRAVA (3. 8. 2026, třinácté kolo, na žádost klienta) — krok-1 má
+   jednořádkový text (jako "Pokračovat" v košíku), takže tam nasazujeme
+   stejnou vlastní silnou šipku pro vizuální konzistenci. Krok-2 má
+   DVA řádky textu (název + podtext "s povinností platby") — bez
+   živého ověření struktury tam radši neměníme layout na flex/vlastní
+   šipku (riziko rozbití zalomení), necháváme jen pojistku na barvu
+   nativní ikony (fill/stroke currentColor). */
 .next-step.next-step--step-1 button.next-step-forward svg,
-.next-step.next-step--step-1 button.next-step-forward svg *,
+.next-step.next-step--step-1 button.next-step-forward [class*="icon"] {
+  display: none !important;
+}
+.next-step.next-step--step-1 button.next-step-forward:after {
+  content: "";
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-top: 2.5px solid currentColor;
+  border-right: 2.5px solid currentColor;
+  border-radius: 1.5px;
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
 .next-step.next-step--step-2 button.next-step-finish svg,
 .next-step.next-step--step-2 button.next-step-finish svg * {
   fill: currentColor !important;
@@ -4100,12 +4141,22 @@ html, body {
 .om-cart-top-actions a.next-step-forward [class*="icon"] {
   display: none !important;
 }
+/* OPRAVA (3. 8. 2026, třinácté kolo, na žádost klienta) — typografický
+   znak "›" vypadal jinak než "silná" dvoulinková šipka používaná jinde
+   na webu (viz stejná technika u .product-slider-navigation:before,
+   .om-recipe-nav svg apod.) — nahrazeno stejnou border-chevron
+   technikou pro vizuální konzistenci s referenčním obrázkem klienta. */
 .om-cart-top-actions a.next-step-forward:after {
-  content: "\203a";
-  font-size: 16px;
-  font-weight: 800;
-  line-height: 1;
-  color: inherit;
+  content: "";
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-top: 2.5px solid currentColor;
+  border-right: 2.5px solid currentColor;
+  border-radius: 1.5px;
+  transform: rotate(45deg);
+  flex-shrink: 0;
+  margin-left: 2px;
 }
 /* "Zpět do obchodu" — jen obrys (border), bez vyplněného pozadí,
    černý podtržený text. */
