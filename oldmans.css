@@ -4267,8 +4267,12 @@ html, body {
     width: 100% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
-    padding: 14px 20px !important;
-    font-size: 15px !important;
+    /* OPRAVA (4. 8. 2026, na žádost klienta) — dřív 14px 20px + 15px
+       písmo, což bylo znatelně větší než spodní hlavní dvojice
+       tlačítek (ta má na mobilu padding 12px 24px a menší písmo,
+       zděděné z desktopové základny). Sjednoceno na stejné rozměry. */
+    padding: 12px 24px !important;
+    font-size: 13px !important;
   }
   .om-cart-top-actions a.next-step-forward {
     order: 1 !important;
