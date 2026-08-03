@@ -3,7 +3,7 @@
   /* =====================================================
      OLD MAN'S Shoptet – Custom Header + Homepage sekce
      GitHub: serbus-create/oldmans-shoptet
-     Verze: 5.20 — Zvýraznění nativní kategorie "Obchod" + rozbalovací mřížka (bezpečně přes DOM, ne šablonu)
+     Verze: 5.21 — Košík: duplikovaná tlačítka Zpět/Pokračovat nahoře vedle kroků
      ===================================================== */
 
   /* --- Vytvoří červenou USP lištu --- */
@@ -1898,6 +1898,47 @@
     buildMobileProductSlider('h2.products-related-header');
     buildMobileProductSlider('h2.products-alternative-header');
   }, 800);
+
+  /* Duplikace tlačítek "Zpět do obchodu" + "Pokračovat" nahoru na
+     stránku košíku (3. 8. 2026, na žádost klienta, podle mockupu) —
+     malá verze zarovnaná vpravo nahoře vedle kroků "1 Nákupní košík /
+     2 Doprava & platba / 3 Informace o vás", DOPLŇUJE (nenahrazuje)
+     stávající dvojici dole u souhrnu. Klonujeme živé <a> odkazy
+     (ne button) — mají href, takže fungují samy o sobě, žádný extra
+     JS pro funkčnost není potřeba. Struktura ověřená konzolí:
+     #cart-wrapper > ol.cart-header (kroky, první dítě) + .cart-inner. */
+  function duplicateCartTopButtons() {
+    var wrapper = document.getElementById('cart-wrapper');
+    if (!wrapper) return;
+    if (wrapper.querySelector('.om-cart-top-actions')) return; /* už hotovo */
+
+    var backLink = wrapper.querySelector('a.next-step-back');
+    var forwardLink = wrapper.querySelector('a.next-step-forward');
+    if (!backLink || !forwardLink) return;
+
+    var topActions = document.createElement('div');
+    topActions.className = 'om-cart-top-actions';
+    topActions.appendChild(backLink.cloneNode(true));
+    topActions.appendChild(forwardLink.cloneNode(true));
+
+    wrapper.insertBefore(topActions, wrapper.firstChild);
+  }
+
+  /* Na stránce košíku (native Shoptet DOM) může být #cart-wrapper
+     vykreslený až po malém zpoždění — opakujeme pár pokusů, stejný
+     vzorec jako jinde v tomhle souboru. */
+  (function tryDuplicateCartTopButtons() {
+    var attempts = 0;
+    var maxAttempts = 15;
+    function attempt() {
+      attempts++;
+      duplicateCartTopButtons();
+      if (!document.querySelector('.om-cart-top-actions') && attempts < maxAttempts) {
+        setTimeout(attempt, 300);
+      }
+    }
+    attempt();
+  })();
 
   /* Po přidání do košíku → přesměrovat na košík */
   function watchCart() {
