@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.58
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.59
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -3927,4 +3927,32 @@ html, body {
     width: 16px !important;
     height: 16px !important;
   }
+}
+
+/* ──────────────────────────────────────────────
+   TLAČÍTKO "ZPĚT DO OBCHODU" NA STRÁNCE KOŠÍK
+   (3. 8. 2026, na žádost klienta — nativní Shoptet vzhled byl
+   pouhý šedý text bez pozadí, klient chtěl grafickou úpravu:
+   žluté pozadí + zaoblené rohy. Selektor ověřen konzolí —
+   a.next-step-back uvnitř .next-step.next-step--cart, unikátní
+   pro košík, nekoliduje s ničím jinde na webu.)
+────────────────────────────────────────────── */
+.next-step.next-step--cart a.next-step-back {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #f7c91b !important;
+  color: #1a1a1a !important;
+  border: none !important;
+  border-radius: 50px !important;
+  padding: 12px 24px !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  transition: background .2s !important;
+}
+.next-step.next-step--cart a.next-step-back:hover {
+  background: #e6b800 !important;
+}
+.next-step.next-step--cart a.next-step-back .continue-shopping {
+  color: inherit !important;
 }
