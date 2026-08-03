@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.69
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.70
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -4037,12 +4037,22 @@ html, body {
 }
 .om-cart-top-actions a.next-step-back,
 .om-cart-top-actions a.next-step-forward {
-  /* OPRAVA (3. 8. 2026, páté kolo) — STEJNÁ velikost písma na obou
-     (dřív se lišily), velká písmena na obou (podle mockupu). */
+  /* OPRAVA (3. 8. 2026, šesté kolo — "Pokračovat" má nativně
+     navíc třídu .btn-conversion, která si nese VLASTNÍ font ze
+     Shoptet šablony, jiný než "Zpět do obchodu" — proto vypadaly
+     jinak, i když font-size/weight byly nastavené stejně. Vynucen
+     jednotný, bezpečný font-family na obou. Zároveň stejná PEVNÁ
+     šířka (min-width) a vycentrovaný obsah, ať jsou tlačítka
+     stejně velká bez ohledu na délku textu, a zmenšený vodorovný
+     padding (dřív zbytečně široké). */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
   display: inline-flex !important;
   align-items: center !important;
+  justify-content: center !important;
   gap: 4px !important;
-  padding: 9px 22px !important;
+  min-width: 190px !important;
+  box-sizing: border-box !important;
+  padding: 9px 16px !important;
   border-radius: 50px !important;
   font-size: 13px !important;
   font-weight: 700 !important;
