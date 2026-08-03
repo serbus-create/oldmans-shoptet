@@ -381,25 +381,32 @@ body.type-category .benefitBanner.position--benefitHomepage {
 li.om-cat-dynamic.om-obchod-enhanced {
   position: relative;
 }
+/* OPRAVA (3. 8. 2026, na žádost klienta) — barva změněna ze zelené
+   na žlutou (stejný odstín jako zbytek žlutých prvků na webu,
+   #f7c91b) a tvar z kulaté pilulky (50px) na lehké zaoblení (6px,
+   stejné jako tlačítka v košíku/checkoutu). Text/šipka přebarveny na
+   tmavou (#1a1a1a) — na žlutém pozadí je to čitelnější a odpovídá
+   zavedené konvenci webu (žluté prvky mají všude tmavý text, viz
+   .om-btn-primary, .om-footer-ig, ikona košíku v hlavičce). */
 li.om-cat-dynamic.om-obchod-enhanced > a.om-obchod-btn {
   display: inline-flex !important;
   align-items: center !important;
   gap: 7px !important;
-  background: #79b530 !important;
-  color: #fff !important;
+  background: #f7c91b !important;
+  color: #1a1a1a !important;
   padding: 9px 18px !important;
   margin: 8px 0 !important;
-  border-radius: 50px !important;
+  border-radius: 6px !important;
   font-weight: 700 !important;
 }
 li.om-cat-dynamic.om-obchod-enhanced:hover > a.om-obchod-btn {
-  background: #6aa028 !important;
+  background: #e6b800 !important;
 }
 .om-obchod-chevron {
   width: 8px;
   height: 8px;
-  border-right: 2px solid #fff;
-  border-bottom: 2px solid #fff;
+  border-right: 2px solid #1a1a1a;
+  border-bottom: 2px solid #1a1a1a;
   transform: rotate(45deg);
   margin-top: -4px;
   margin-left: 2px;
