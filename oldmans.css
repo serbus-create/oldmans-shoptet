@@ -3934,36 +3934,49 @@ html, body {
    (3. 8. 2026, na žádost klienta)
    Selektory ověřeny konzolí — obě tlačítka jsou sourozenci uvnitř
    .next-step.next-step--cart, unikátní pro košík:
-     a.next-step-back    = "Zpět do obchodu" (žluté, viz níže)
+     a.next-step-back    = "Zpět do obchodu"
      a.next-step-forward = "Pokračovat" (zelené, nativní barva
-       necháváme, jen bílý text + zaoblení rohů podle "Zpět do obchodu")
+       necháváme)
+   OPRAVA (3. 8. 2026, jedenácté kolo, na žádost klienta) — stejné
+   finální zadání jako u horního klonu (.om-cart-top-actions): "Zpět
+   do obchodu" jen obrys + podtržený černý text (žádné vyplněné
+   pozadí), "Pokračovat" zelené pozadí + ČERNÝ text + šipka ">".
+   Rohy hranaté (ne kulaté), stejně jako u horního klonu.
 ────────────────────────────────────────────── */
 .next-step.next-step--cart a.next-step-back {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  background: #f7c91b !important;
-  color: #fff !important;
-  border: none !important;
-  border-radius: 50px !important;
+  background: transparent !important;
+  color: #1a1a1a !important;
+  border: 1.5px solid #1a1a1a !important;
+  border-radius: 6px !important;
   padding: 12px 24px !important;
   margin-right: 16px !important;
   font-weight: 700 !important;
-  text-decoration: none !important;
+  text-decoration: underline !important;
   transition: background .2s !important;
 }
 .next-step.next-step--cart a.next-step-back:hover {
-  background: #e6b800 !important;
+  background: rgba(0, 0, 0, .05) !important;
 }
 .next-step.next-step--cart a.next-step-back .continue-shopping {
   color: inherit !important;
 }
 .next-step.next-step--cart a.next-step-forward {
-  border-radius: 50px !important;
-  color: #fff !important;
+  border-radius: 6px !important;
+  color: #1a1a1a !important;
 }
 .next-step.next-step--cart a.next-step-forward .order-button-text {
   color: inherit !important;
+}
+/* Nativní šipka Shoptetu uvnitř "Pokračovat" — pojistka, ať se
+   přebarví spolu s textem (SVG může mít barvu přes fill i přes
+   stroke, podle konkrétní ikony, proto vynucujeme oboje). */
+.next-step.next-step--cart a.next-step-forward svg,
+.next-step.next-step--cart a.next-step-forward svg * {
+  fill: currentColor !important;
+  stroke: currentColor !important;
 }
 
 /* ──────────────────────────────────────────────
@@ -3976,10 +3989,13 @@ html, body {
        uvnitř .next-step.next-step--step-1
      /objednavka/krok-2/ → button.next-step-finish
        uvnitř .next-step.next-step--step-2
+   OPRAVA (3. 8. 2026, jedenácté kolo) — jen rohy hranaté (ne kulaté),
+   barvy/text beze změny (klient zmínil "hranaté" jen pro tvar, ne
+   pro barevné schéma jako u tlačítek v košíku).
 ────────────────────────────────────────────── */
 .next-step.next-step--step-1 button.next-step-forward,
 .next-step.next-step--step-2 button.next-step-finish {
-  border-radius: 50px !important;
+  border-radius: 6px !important;
   color: #fff !important;
 }
 .next-step.next-step--step-1 button.next-step-forward .order-button-text,
@@ -4044,7 +4060,10 @@ html, body {
   min-width: 160px !important;
   box-sizing: border-box !important;
   padding: 6px 26px !important;
-  border-radius: 50px !important;
+  /* OPRAVA (3. 8. 2026, jedenácté kolo, na žádost klienta) — hranaté
+     rohy místo kulaté pilulky, stejně jako spodní hlavní dvojice
+     tlačítek a tlačítka na checkoutu. */
+  border-radius: 6px !important;
   font-size: 13px !important;
   font-weight: 700 !important;
   text-decoration: none !important;
