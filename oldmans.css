@@ -4189,6 +4189,13 @@ html, body {
      tlačítek a checkout. */
   border-radius: 6px !important;
   font-size: 13px !important;
+  /* OPRAVA (4. 8. 2026, na žádost klienta, druhé kolo) — nalezeno přes
+     konzoli (getComputedStyle): tlačítko bylo VYŠŠÍ (74px) než spodní
+     hlavní dvojice (58px), i přes menší font-size (13px vs. nativních
+     20px dole) — příčina byl zděděný velký `line-height` z nativního
+     Shoptet stylu tlačítka (nikdy jsme ho tu explicitně nenastavili,
+     takže se "táhl" odjinud). Vynucen normální poměr. */
+  line-height: 1.3 !important;
   font-weight: 700 !important;
   text-decoration: none !important;
   text-transform: uppercase !important;
