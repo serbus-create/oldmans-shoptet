@@ -4278,12 +4278,16 @@ html, body {
     width: 100% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
-    /* OPRAVA (4. 8. 2026, na žádost klienta) — dřív 14px 20px + 15px
-       písmo, což bylo znatelně větší než spodní hlavní dvojice
-       tlačítek (ta má na mobilu padding 12px 24px a menší písmo,
-       zděděné z desktopové základny). Sjednoceno na stejné rozměry. */
     padding: 12px 24px !important;
     font-size: 13px !important;
+    /* OPRAVA (4. 8. 2026, čtvrté kolo, na žádost klienta) — přes
+       shodný padding/font-size/line-height zůstal rozdíl ve výšce
+       (47.4px vs. 58px u spodní dvojice, ověřeno konzolí), zdroj
+       rozdílu se nepodařilo dohledat analyticky (nejspíš nativní
+       min-height nebo metrika fontu mimo naši kontrolu). Řešení:
+       výšku vynucujeme napevno na stejnou hodnotu (58px), ať to sedí
+       bez ohledu na to, co ji jinak ovlivňuje. */
+    height: 58px !important;
   }
   .om-cart-top-actions a.next-step-forward {
     order: 1 !important;
