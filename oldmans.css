@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.61
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.62
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -3963,5 +3963,27 @@ html, body {
   color: #fff !important;
 }
 .next-step.next-step--cart a.next-step-forward .order-button-text {
+  color: inherit !important;
+}
+
+/* ──────────────────────────────────────────────
+   TLAČÍTKA "POKRAČOVAT" / "OBJEDNAT" NA CHECKOUTU
+   (3. 8. 2026, na žádost klienta — stejný styl jako v košíku)
+   Selektory ověřeny konzolí — na krok-1 je to <button>, ne <a>
+   (jiné než v košíku), na krok-2 má jiné jméno třídy i dva textové
+   spany (název + podtext "s povinností platby"):
+     /objednavka/krok-1/ → button.next-step-forward
+       uvnitř .next-step.next-step--step-1
+     /objednavka/krok-2/ → button.next-step-finish
+       uvnitř .next-step.next-step--step-2
+────────────────────────────────────────────── */
+.next-step.next-step--step-1 button.next-step-forward,
+.next-step.next-step--step-2 button.next-step-finish {
+  border-radius: 50px !important;
+  color: #fff !important;
+}
+.next-step.next-step--step-1 button.next-step-forward .order-button-text,
+.next-step.next-step--step-2 button.next-step-finish .order-button-text,
+.next-step.next-step--step-2 button.next-step-finish .order-button-suffix {
   color: inherit !important;
 }
