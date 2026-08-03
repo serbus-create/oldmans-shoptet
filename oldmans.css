@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.67
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.68
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -4020,26 +4020,25 @@ html, body {
    z předchozí sekce, potřebuje vlastní pravidla.
 ────────────────────────────────────────────── */
 .om-cart-top-actions {
-  /* OPRAVA (3. 8. 2026, třetí kolo) — posunuto o 15px dolů (bylo
-     margin-top 20px, teď 35px), ať to má trochu odstup od kroků. */
+  /* OPRAVA (3. 8. 2026, čtvrté kolo) — posunuto o dalších 15px dolů
+     (bylo margin-top 35px, teď 50px). */
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 35px 0 16px;
+  margin: 50px 0 16px;
 }
 .om-cart-top-actions a.next-step-back,
 .om-cart-top-actions a.next-step-forward {
-  /* OPRAVA (3. 8. 2026, třetí kolo) — sladěno se stylem spodní
-     hlavní dvojice tlačítek (žádné velké písmena/letter-spacing,
-     to bylo jen tady navíc a vypadalo jinak). Zmenšeno o ~30 % a
-     zploštěno — nižší, o něco širší tvar (menší svislý padding,
-     větší vodorovný). */
+  /* OPRAVA (3. 8. 2026, čtvrté kolo) — dřív se zmenšilo jen písmo
+     (vizuálně, kvůli odstranění velkých písmen), samotné tlačítko
+     (padding) zůstávalo prakticky stejně velké. Teď zmenšen i box
+     tlačítka samotného, ne jen text. */
   display: inline-flex !important;
   align-items: center !important;
   gap: 4px !important;
-  padding: 6px 22px !important;
+  padding: 4px 16px !important;
   border-radius: 50px !important;
-  font-size: 12px !important;
+  font-size: 11px !important;
   font-weight: 700 !important;
   text-decoration: none !important;
   transition: background .2s, border-color .2s !important;
