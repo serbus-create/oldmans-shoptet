@@ -4051,14 +4051,16 @@ html, body {
   text-transform: uppercase !important;
   transition: background .2s, border-color .2s !important;
 }
-/* Šipka vlevo u "Zpět do obchodu" (podle mockupu — nativně tam
-   žádná nebyla, "Pokračovat" má svou šipku vpravo už z nativního
-   Shoptet stylu). */
-.om-cart-top-actions a.next-step-back:before {
-  content: "\2039";
-  font-size: 16px;
-  font-weight: 800;
-  line-height: 1;
+/* OPRAVA (3. 8. 2026, deváté kolo, na žádost klienta) — obě šipky
+   pryč. Naše vlastní šipka u "Zpět do obchodu" (:before) zrušena.
+   Nativní šipka Shoptetu u "Pokračovat" není naše CSS třída (patří
+   k nativnímu stylu tlačítka) — schováváme ji obecně (SVG ikona nebo
+   :after pseudo-element), scoped JEN na tenhle horní klon, ať se
+   nedotkne šipky u hlavní spodní dvojice tlačítek. */
+.om-cart-top-actions a.next-step-forward:after,
+.om-cart-top-actions a.next-step-forward svg,
+.om-cart-top-actions a.next-step-forward [class*="icon"] {
+  display: none !important;
 }
 /* "Zpět do obchodu" — stejné jako spodní hlavní verze: žluté pozadí
    + BÍLÝ text (dřív tmavý, neshodovalo se). */
@@ -4079,10 +4081,23 @@ html, body {
 .om-cart-top-actions a.next-step-forward:hover {
   background: #6aa028 !important;
 }
-/* Na mobilu je nahoře málo místa a spodní dvojice tlačítek už je na
-   celou šířku — horní duplikát tam schováváme, ať nepůsobí natěsnaně. */
+/* MOBIL (3. 8. 2026, na žádost klienta) — dřív tu byl horní duplikát
+   úplně schovaný, teď je i na mobilu, ale ve stejném DUCHU jako na
+   desktopu — malé vycentrované pilulky vedle sebe (NE roztažené na
+   celou šířku obrazovky, to už dělá hlavní spodní dvojice tlačítek).
+   Jen zmenšený min-width a padding oproti desktopu, ať se obě pilulky
+   pohodlně vejdou vedle sebe i na užších telefonech. */
 @media (max-width: 768px) {
   .om-cart-top-actions {
-    display: none !important;
+    margin: 28px 0 12px;
+    gap: 8px;
+    padding: 0 4px;
+    box-sizing: border-box;
+  }
+  .om-cart-top-actions a.next-step-back,
+  .om-cart-top-actions a.next-step-forward {
+    min-width: 120px !important;
+    padding: 6px 16px !important;
+    font-size: 12px !important;
   }
 }
