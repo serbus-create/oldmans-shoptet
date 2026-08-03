@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.65
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.66
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -4019,23 +4019,17 @@ html, body {
    .next-step.next-step--cart, takže nesdílí velký styl tlačítek
    z předchozí sekce, potřebuje vlastní pravidla.
 ────────────────────────────────────────────── */
-#cart-wrapper {
-  position: relative !important;
-}
 .om-cart-top-actions {
-  position: absolute;
-  /* OPRAVA (3. 8. 2026, na žádost klienta — "vypadá to odporně") —
-     dřív top:0 zarovnávalo dvojici tlačítek na úroveň ČÍSEL kroků
-     (kruhy 1/2/3), takže to viselo příliš vysoko a vypadalo odtrženě
-     od zbytku bloku. Teď svisle vycentrováno v CELÉM bloku kroků
-     (čísla + popisky pod nimi), přirozeněji zapadá do řádku. */
-  top: 50%;
-  transform: translateY(-50%);
-  right: 0;
+  /* OPRAVA (3. 8. 2026, druhé kolo) — žádné absolutní pozicování,
+     normální tok, vlevo nahoře nad tabulkou objednávek. Dřív
+     position:absolute + top:50% centrovalo vůči celému
+     #cart-wrapper (celý košík), takže to skončilo uprostřed
+     tabulky místo vedle kroků — viz komentář u JS funkce
+     duplicateCartTopButtons(). */
   display: flex;
   align-items: center;
   gap: 10px;
-  z-index: 5;
+  margin: 20px 0 16px;
 }
 .om-cart-top-actions a.next-step-back,
 .om-cart-top-actions a.next-step-forward {
@@ -4051,27 +4045,24 @@ html, body {
   letter-spacing: .3px !important;
   transition: background .2s, border-color .2s !important;
 }
-/* "Zpět do obchodu" — teď taky button (na žádost klienta), obrysový
-   styl (bílé pozadí + šedý rámeček), ať vizuálně sedí vedle zeleného
-   "Pokračovat" jako pár stejně velkých pilulek. */
+/* "Zpět do obchodu" — žlutá, stejná barva jako spodní hlavní verze
+   (na žádost klienta, dřív bílá obrysová). */
 .om-cart-top-actions a.next-step-back {
-  background: #fff !important;
-  color: #555 !important;
-  border: 1.5px solid #ddd !important;
+  background: #f7c91b !important;
+  color: #1a1a1a !important;
+  border: none !important;
   margin: 0 !important;
 }
 .om-cart-top-actions a.next-step-back:hover {
-  background: #f7f7f7 !important;
-  border-color: #bbb !important;
+  background: #e6b800 !important;
 }
 .om-cart-top-actions a.next-step-forward {
   background: #79b530 !important;
   color: #fff !important;
-  border: 1.5px solid #79b530 !important;
+  border: none !important;
 }
 .om-cart-top-actions a.next-step-forward:hover {
   background: #6aa028 !important;
-  border-color: #6aa028 !important;
 }
 /* Na mobilu je nahoře málo místa a spodní dvojice tlačítek už je na
    celou šířku — horní duplikát tam schováváme, ať nepůsobí natěsnaně. */
