@@ -3950,7 +3950,9 @@ html, body {
   background: transparent !important;
   color: #1a1a1a !important;
   border: 1.5px solid #1a1a1a !important;
-  border-radius: 6px !important;
+  /* OPRAVA (3. 8. 2026, dvanácté kolo, na žádost klienta) — úplně
+     ostré rohy (0), ne jen mírně zaoblené. */
+  border-radius: 0 !important;
   padding: 12px 24px !important;
   margin-right: 16px !important;
   font-weight: 700 !important;
@@ -3964,7 +3966,7 @@ html, body {
   color: inherit !important;
 }
 .next-step.next-step--cart a.next-step-forward {
-  border-radius: 6px !important;
+  border-radius: 0 !important;
   color: #1a1a1a !important;
 }
 .next-step.next-step--cart a.next-step-forward .order-button-text {
@@ -3989,19 +3991,29 @@ html, body {
        uvnitř .next-step.next-step--step-1
      /objednavka/krok-2/ → button.next-step-finish
        uvnitř .next-step.next-step--step-2
-   OPRAVA (3. 8. 2026, jedenácté kolo) — jen rohy hranaté (ne kulaté),
-   barvy/text beze změny (klient zmínil "hranaté" jen pro tvar, ne
-   pro barevné schéma jako u tlačítek v košíku).
+   OPRAVA (3. 8. 2026, dvanácté kolo, na žádost klienta) — ostré rohy
+   (border-radius:0, stejně jako zbytek košíku/checkoutu) a teď i
+   ČERNÝ text (dřív bílý) — klient chtěl "Pokračovat"/"Objednat"
+   sjednotit barevně se zbytkem procesu.
 ────────────────────────────────────────────── */
 .next-step.next-step--step-1 button.next-step-forward,
 .next-step.next-step--step-2 button.next-step-finish {
-  border-radius: 6px !important;
-  color: #fff !important;
+  border-radius: 0 !important;
+  color: #1a1a1a !important;
 }
 .next-step.next-step--step-1 button.next-step-forward .order-button-text,
 .next-step.next-step--step-2 button.next-step-finish .order-button-text,
 .next-step.next-step--step-2 button.next-step-finish .order-button-suffix {
   color: inherit !important;
+}
+/* Nativní ikona (pokud tlačítko nějakou má) — stejná pojistka jako
+   u tlačítka "Pokračovat" v košíku, ať se barva ikony drží textu. */
+.next-step.next-step--step-1 button.next-step-forward svg,
+.next-step.next-step--step-1 button.next-step-forward svg *,
+.next-step.next-step--step-2 button.next-step-finish svg,
+.next-step.next-step--step-2 button.next-step-finish svg * {
+  fill: currentColor !important;
+  stroke: currentColor !important;
 }
 
 /* ──────────────────────────────────────────────
@@ -4060,10 +4072,10 @@ html, body {
   min-width: 160px !important;
   box-sizing: border-box !important;
   padding: 6px 26px !important;
-  /* OPRAVA (3. 8. 2026, jedenácté kolo, na žádost klienta) — hranaté
-     rohy místo kulaté pilulky, stejně jako spodní hlavní dvojice
-     tlačítek a tlačítka na checkoutu. */
-  border-radius: 6px !important;
+  /* OPRAVA (3. 8. 2026, dvanácté kolo, na žádost klienta) — úplně
+     ostré rohy (0) místo kulaté pilulky nebo mírného zaoblení,
+     stejně jako spodní hlavní dvojice tlačítek a checkout. */
+  border-radius: 0 !important;
   font-size: 13px !important;
   font-weight: 700 !important;
   text-decoration: none !important;
