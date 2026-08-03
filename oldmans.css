@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.60
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.61
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -3947,6 +3947,7 @@ html, body {
   border: none !important;
   border-radius: 50px !important;
   padding: 12px 24px !important;
+  margin-right: 16px !important;
   font-weight: 700 !important;
   text-decoration: none !important;
   transition: background .2s !important;
