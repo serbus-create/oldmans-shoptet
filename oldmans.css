@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.71
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.72
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -4020,28 +4020,30 @@ html, body {
    z předchozí sekce, potřebuje vlastní pravidla.
 ────────────────────────────────────────────── */
 .om-cart-top-actions {
-  /* OPRAVA (3. 8. 2026, sedmé kolo) — zpátky vedle sebe (ne pod
-     sebou), přirozené pořadí "Zpět do obchodu" / "Pokračovat"
-     odpovídá pořadí v DOM, žádný order swap potřeba. */
+  /* OPRAVA (3. 8. 2026, osmé kolo) — vycentrováno (width:100% +
+     justify-content:center, ať se řádek se dvěma tlačítky zarovná
+     na střed dostupné šířky, ne jen zleva). */
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
+  width: 100%;
   gap: 10px;
   margin: 50px 0 16px;
 }
 .om-cart-top-actions a.next-step-back,
 .om-cart-top-actions a.next-step-forward {
-  /* OPRAVA (3. 8. 2026, sedmé kolo) — užší (min-width 190px → 150px,
-     padding zmenšen), velikost písma NEMĚNÍME (zůstává stejná na
-     obou, 13px — to je to hlavní, co má sedět). */
+  /* OPRAVA (3. 8. 2026, osmé kolo) — nižší a širší tvar (placatější
+     pilulka) — svislý padding zmenšen (9px → 6px), vodorovný zvětšen
+     (12px → 26px). Velikost písma beze změny (13px). */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 4px !important;
-  min-width: 150px !important;
+  min-width: 160px !important;
   box-sizing: border-box !important;
-  padding: 9px 12px !important;
+  padding: 6px 26px !important;
   border-radius: 50px !important;
   font-size: 13px !important;
   font-weight: 700 !important;
