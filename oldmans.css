@@ -4200,7 +4200,10 @@ html, body {
      Shoptet stylu tlačítka (nikdy jsme ho tu explicitně nenastavili,
      takže se "táhl" odjinud). Vynucen normální poměr. */
   line-height: 1.3 !important;
-  font-weight: 700 !important;
+  /* OPRAVA (4. 8. 2026, páté kolo, na žádost klienta) — nalezeno přes
+     konzoli: spodní tlačítka mají font-weight 900, horní klon jen
+     700 — vypadal tak méně tučně. Sjednoceno. */
+  font-weight: 900 !important;
   text-decoration: none !important;
   text-transform: uppercase !important;
   transition: background .2s, border-color .2s !important;
@@ -4271,7 +4274,15 @@ html, body {
     width: 100% !important;
     gap: 10px !important;
     margin: 20px 0 16px !important;
-    padding: 0 !important;
+    /* OPRAVA (4. 8. 2026, páté kolo, na žádost klienta) — nalezeno
+       přes konzoli: horní klon byl o 40px širší (390px) než spodní
+       hlavní dvojice (350px) — rozdíl přesně odpovídá dvojnásobku
+       standardního bočního odsazení stránky (2× 20px). Horní klon je
+       vložený JS přímo do #cart-wrapper (viz duplicateCartTopButtons)
+       a zjevně obchází běžný padding obsahu, který mají spodní
+       tlačítka automaticky od svého rodiče. Doplněno ručně. */
+    padding: 0 20px !important;
+    box-sizing: border-box !important;
   }
   .om-cart-top-actions a.next-step-back,
   .om-cart-top-actions a.next-step-forward {
