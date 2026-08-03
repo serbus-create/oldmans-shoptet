@@ -1216,9 +1216,6 @@ h1.category-title {
      neviděli rozbalený), zkoušíme obecné selektory (svg, [class*=
      "arrow"/"icon"]) — pokud by nesedělo přesně, pošli outerHTML
      toho <a> a doladíme na míru. */
-ul.subcategories.with-image {
-  gap: 12px !important;
-}
 ul.subcategories.with-image > li {
   box-sizing: border-box !important;
 }
@@ -1227,6 +1224,15 @@ ul.subcategories.with-image > li > a {
   border: 1px solid #e1e1e1 !important;
   border-radius: 10px !important;
   padding: 14px 16px !important;
+  /* OPRAVA (4. 8. 2026, třetí kolo, na žádost klienta) — `gap` na
+     flex kontejneru `ul` se sčítal s procentuální šířkou sloupců
+     (Bootstrap col-xl-3 = 25 % atd.), takže se řádek přestal vejít a
+     4. karta spadla na nový řádek — vznikla velká prázdná mezera
+     vpravo. Řešení: mezeru neděláme na kontejneru, ale zmenšením
+     samotné karty uvnitř své buňky přes `margin` — šířka `li` (a tedy
+     počet sloupců v řádku) zůstává nedotčená, jen karta uvnitř má
+     menší "obsah" a vznikne tak rovnoměrná mezera na všech stranách. */
+  margin: 6px !important;
   box-sizing: border-box !important;
   text-decoration: none !important;
   transition: border-color .25s, background .25s, box-shadow .25s !important;
