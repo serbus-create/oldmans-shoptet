@@ -3950,9 +3950,10 @@ html, body {
   background: transparent !important;
   color: #1a1a1a !important;
   border: 1.5px solid #1a1a1a !important;
-  /* OPRAVA (3. 8. 2026, dvanácté kolo, na žádost klienta) — úplně
-     ostré rohy (0), ne jen mírně zaoblené. */
-  border-radius: 0 !important;
+  /* OPRAVA (3. 8. 2026, čtrnácté kolo, na žádost klienta) — dvanácté
+     kolo dalo úplně ostré rohy (0), ale klient se nakonec vrátil
+     k mírnému zaoblení (6px) — "ať to neděláš". */
+  border-radius: 6px !important;
   padding: 12px 24px !important;
   margin-right: 16px !important;
   font-weight: 700 !important;
@@ -3974,7 +3975,7 @@ html, body {
   align-items: center !important;
   justify-content: center !important;
   gap: 6px !important;
-  border-radius: 0 !important;
+  border-radius: 6px !important;
   color: #1a1a1a !important;
 }
 .next-step.next-step--cart a.next-step-forward .order-button-text {
@@ -4021,11 +4022,11 @@ html, body {
   align-items: center !important;
   justify-content: center !important;
   gap: 6px !important;
-  border-radius: 0 !important;
+  border-radius: 6px !important;
   color: #1a1a1a !important;
 }
 .next-step.next-step--step-2 button.next-step-finish {
-  border-radius: 0 !important;
+  border-radius: 6px !important;
   color: #1a1a1a !important;
 }
 .next-step.next-step--step-1 button.next-step-forward .order-button-text,
@@ -4117,10 +4118,11 @@ html, body {
   min-width: 160px !important;
   box-sizing: border-box !important;
   padding: 6px 26px !important;
-  /* OPRAVA (3. 8. 2026, dvanácté kolo, na žádost klienta) — úplně
-     ostré rohy (0) místo kulaté pilulky nebo mírného zaoblení,
-     stejně jako spodní hlavní dvojice tlačítek a checkout. */
-  border-radius: 0 !important;
+  /* OPRAVA (3. 8. 2026, čtrnácté kolo, na žádost klienta) — dvanácté
+     kolo dalo úplně ostré rohy (0), ale klient se nakonec vrátil
+     k mírnému zaoblení (6px), stejně jako spodní hlavní dvojice
+     tlačítek a checkout. */
+  border-radius: 6px !important;
   font-size: 13px !important;
   font-weight: 700 !important;
   text-decoration: none !important;
