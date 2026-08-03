@@ -1192,6 +1192,36 @@ h1.category-title {
   letter-spacing: 1px !important;
 }
 
+/* ── Podkategorie s obrázkem (u kategorií, které mají vlastní
+   podkategorie, např. /kategorie/obchod/) — 4. 8. 2026, na žádost
+   klienta. Struktura ověřená přes DevTools (screenshot klienta):
+     ul.subcategories.with-image
+       li.col-xs-6.col-sm-6.col-lg-3.col-xl-3
+         a[href]  ← obsah uvnitř (ikona/text) neznámý, screenshot ho
+                     měl sbalený, takže NESAHÁME na vnitřní rozložení
+                     (display/align-items/gap) — jen orámujeme
+                     bordrem/paddingem, podobně jako homepage sekce
+                     "Kategorie" (.om-cat-item). Platí obecně pro
+                     VŠECHNY kategorie s tímhle markupem, ne jen
+                     Obchod. */
+ul.subcategories.with-image > li {
+  margin-bottom: 14px !important;
+  box-sizing: border-box !important;
+}
+ul.subcategories.with-image > li > a {
+  background: #fff !important;
+  border: 1px solid #e1e1e1 !important;
+  border-radius: 10px !important;
+  padding: 14px 16px !important;
+  box-sizing: border-box !important;
+  text-decoration: none !important;
+  transition: border-color .25s, box-shadow .25s !important;
+}
+ul.subcategories.with-image > li > a:hover {
+  border-color: #9f1400 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .08) !important;
+}
+
 /* ── Grid: 5 produktů v řadě, konzistentní mezery ── */
 body.type-category .products.products-page {
   gap: 0 !important;
