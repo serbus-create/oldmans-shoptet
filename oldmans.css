@@ -4051,31 +4051,43 @@ html, body {
   text-transform: uppercase !important;
   transition: background .2s, border-color .2s !important;
 }
-/* OPRAVA (3. 8. 2026, deváté kolo, na žádost klienta) — obě šipky
-   pryč. Naše vlastní šipka u "Zpět do obchodu" (:before) zrušena.
-   Nativní šipka Shoptetu u "Pokračovat" není naše CSS třída (patří
-   k nativnímu stylu tlačítka) — schováváme ji obecně (SVG ikona nebo
-   :after pseudo-element), scoped JEN na tenhle horní klon, ať se
-   nedotkne šipky u hlavní spodní dvojice tlačítek. */
-.om-cart-top-actions a.next-step-forward:after,
+/* OPRAVA (3. 8. 2026, desáté kolo, finální zadání klienta podle
+   mockupu se dvěma popiskami):
+   — "Pokračovat": zůstává zelené pozadí jako nativní, ale ČERNÝ text
+     (dřív bílý) + šipka ">" napravo.
+   — "Zpět do obchodu": zůstává jako hypertext (odkaz), ale vizuálně
+     jen OBRYS tlačítka (žádné vyplněné pozadí) + černý PODTRŽENÝ
+     text uvnitř — žádná ikona/šipka u něj klient nechtěl.
+   Nativní šipka Shoptetu u "Pokračovat" (SVG/ikona, ne naše třída)
+   schovaná a nahrazená naší vlastní ">" (přes :after), ať máme jistou
+   kontrolu nad vzhledem/barvou. */
 .om-cart-top-actions a.next-step-forward svg,
 .om-cart-top-actions a.next-step-forward [class*="icon"] {
   display: none !important;
 }
-/* "Zpět do obchodu" — stejné jako spodní hlavní verze: žluté pozadí
-   + BÍLÝ text (dřív tmavý, neshodovalo se). */
+.om-cart-top-actions a.next-step-forward:after {
+  content: "\203a";
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1;
+  color: inherit;
+}
+/* "Zpět do obchodu" — jen obrys (border), bez vyplněného pozadí,
+   černý podtržený text. */
 .om-cart-top-actions a.next-step-back {
-  background: #f7c91b !important;
-  color: #fff !important;
-  border: none !important;
+  background: transparent !important;
+  color: #1a1a1a !important;
+  border: 1.5px solid #1a1a1a !important;
+  text-decoration: underline !important;
   margin: 0 !important;
 }
 .om-cart-top-actions a.next-step-back:hover {
-  background: #e6b800 !important;
+  background: rgba(0, 0, 0, .05) !important;
 }
+/* "Pokračovat" — zelené pozadí (beze změny), teď černý text místo bílého. */
 .om-cart-top-actions a.next-step-forward {
   background: #79b530 !important;
-  color: #fff !important;
+  color: #1a1a1a !important;
   border: none !important;
 }
 .om-cart-top-actions a.next-step-forward:hover {
