@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.70
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.71
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -4020,39 +4020,28 @@ html, body {
    z předchozí sekce, potřebuje vlastní pravidla.
 ────────────────────────────────────────────── */
 .om-cart-top-actions {
-  /* OPRAVA (3. 8. 2026, páté kolo — podle klientova mockupu) —
-     tlačítka NAD SEBOU (ne vedle sebe), Pokračovat nahoře, Zpět do
-     obchodu pod ním. */
+  /* OPRAVA (3. 8. 2026, sedmé kolo) — zpátky vedle sebe (ne pod
+     sebou), přirozené pořadí "Zpět do obchodu" / "Pokračovat"
+     odpovídá pořadí v DOM, žádný order swap potřeba. */
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
   gap: 10px;
   margin: 50px 0 16px;
 }
-.om-cart-top-actions a.next-step-forward {
-  order: 1;
-}
-.om-cart-top-actions a.next-step-back {
-  order: 2;
-}
 .om-cart-top-actions a.next-step-back,
 .om-cart-top-actions a.next-step-forward {
-  /* OPRAVA (3. 8. 2026, šesté kolo — "Pokračovat" má nativně
-     navíc třídu .btn-conversion, která si nese VLASTNÍ font ze
-     Shoptet šablony, jiný než "Zpět do obchodu" — proto vypadaly
-     jinak, i když font-size/weight byly nastavené stejně. Vynucen
-     jednotný, bezpečný font-family na obou. Zároveň stejná PEVNÁ
-     šířka (min-width) a vycentrovaný obsah, ať jsou tlačítka
-     stejně velká bez ohledu na délku textu, a zmenšený vodorovný
-     padding (dřív zbytečně široké). */
+  /* OPRAVA (3. 8. 2026, sedmé kolo) — užší (min-width 190px → 150px,
+     padding zmenšen), velikost písma NEMĚNÍME (zůstává stejná na
+     obou, 13px — to je to hlavní, co má sedět). */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 4px !important;
-  min-width: 190px !important;
+  min-width: 150px !important;
   box-sizing: border-box !important;
-  padding: 9px 16px !important;
+  padding: 9px 12px !important;
   border-radius: 50px !important;
   font-size: 13px !important;
   font-weight: 700 !important;
