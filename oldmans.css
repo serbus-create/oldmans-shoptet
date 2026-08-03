@@ -1,5 +1,5 @@
 /* ================================================
-   OLD MAN'S — Shoptet Disco — Custom CSS v5.62
+   OLD MAN'S — Shoptet Disco — Custom CSS v5.63
    GitHub: serbus-create/oldmans-shoptet
    Cil: vizualne sedet na oldmans.cz (WordPress)
    ================================================ */
@@ -3986,4 +3986,26 @@ html, body {
 .next-step.next-step--step-2 button.next-step-finish .order-button-text,
 .next-step.next-step--step-2 button.next-step-finish .order-button-suffix {
   color: inherit !important;
+}
+
+/* ──────────────────────────────────────────────
+   MOBIL — tlačítka "Pokračovat"/"Objednat" + "Zpět do obchodu"
+   se pod sebou (na úzké obrazovce) lepila bez mezery a nebyla
+   stejně velká (3. 8. 2026, na žádost klienta). Sjednocena šířka
+   na 100 % a přidána svislá mezera mezi nimi. Platí pro košík
+   i oba kroky checkoutu — stejná trojice selektorů jako výše,
+   jen boční margin (pro vedle sebe na desktopu) nahrazen dolním
+   (pro pod sebou na mobilu). */
+@media (max-width: 768px) {
+  .next-step.next-step--cart a.next-step-back,
+  .next-step.next-step--step-1 button.next-step-forward,
+  .next-step.next-step--step-2 button.next-step-finish,
+  .next-step.next-step--cart a.next-step-forward {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .next-step.next-step--cart a.next-step-back {
+    margin-right: 0 !important;
+    margin-top: 12px !important;
+  }
 }
