@@ -4206,6 +4206,15 @@ html, body {
   font-weight: 900 !important;
   text-decoration: none !important;
   text-transform: uppercase !important;
+  /* OPRAVA (4. 8. 2026, na žádost klienta, DESKTOP) — bez tohohle se
+     flex položka (výchozí flex-shrink:1) mohla zmenšit pod přirozenou
+     šířku obsahu, pokud byl dostupný prostor v řádku těsný — text se
+     pak zalomil na 2 řádky a tlačítko bylo znatelně vyšší než to
+     druhé (přesně tenhle rozdíl byl vidět na screenshotu). Zákaz
+     zalomení + zákaz zmenšení pod přirozenou šířku obsahu zaručí
+     stejnou výšku obou tlačítek bez ohledu na dostupnou šířku. */
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
   transition: background .2s, border-color .2s !important;
 }
 /* OPRAVA (3. 8. 2026, desáté kolo, finální zadání klienta podle
