@@ -4357,3 +4357,17 @@ html, body {
 .cart-table .p-discount {
   display: table-cell !important;
 }
+/* OPRAVA (4. 8. 2026, druhé kolo, na žádost klienta) — na mobilu (pod
+   767px, stejný breakpoint jako u sousedních buněk .p-price/.p-quantity)
+   Shoptet mění celý řádek `<tr>` na flexbox (kartové rozložení) —
+   `display: table-cell` tomu tam odporuje a buňka se vizuálně
+   "vznáší" mimo běžný tok (ověřeno přes DevTools — `<tr>` má na
+   mobilu `display:flex; flex-wrap:wrap`). Na mobilu proto místo
+   table-cell použijeme flex, ať zapadne do stejného rozložení jako
+   ostatní buňky v kartě. */
+@media (max-width: 767px) {
+  .cart-table .p-discount {
+    display: flex !important;
+    width: 100% !important;
+  }
+}
