@@ -4335,3 +4335,25 @@ html, body {
     order: 2 !important;
   }
 }
+
+/* ──────────────────────────────────────────────
+   SLOUPEC "SLEVA" V KOŠÍKU — odkrytí
+   (4. 8. 2026, na žádost klienta)
+   Shoptet má ve VLASTNÍM nativním CSS pravidlo, které sloupec
+   s procentem slevy natvrdo schovává:
+     .cart-table .inline.delete-cart-item,
+     .cart-table .p-discount,
+     .cart-table .product-table-name-footer { display: none; }
+   Data (procento slevy, tooltip s rozpisem) v HTML JSOU (ověřeno
+   přes DevTools — <td class="p-discount p-cell"><span class="p-label">
+   Sleva</span><span class="show-tooltip acronym">9 %</span></td>),
+   jen jsou vizuálně schované. Stačí přebít `display` zpátky na
+   `table-cell` (přirozená hodnota pro <td>), ať se sloupec (hlavička
+   i hodnoty u jednotlivých produktů) zase zobrazí. Platí to samo o
+   sobě pro VŠECHNY produkty v košíku, ne jen pro jeden konkrétní —
+   Shoptet vyplňuje hodnotu (i "0 %", pokud sleva neplatí) automaticky
+   sám, žádná další logika na naší straně není potřeba.
+────────────────────────────────────────────── */
+.cart-table .p-discount {
+  display: table-cell !important;
+}
