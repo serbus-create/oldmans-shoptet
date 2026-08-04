@@ -4357,20 +4357,16 @@ html, body {
 .cart-table .p-discount {
   display: table-cell !important;
 }
-/* OPRAVA (4. 8. 2026, třetí kolo, na žádost klienta) — dvě předchozí
-   kola (display:flex, width:100%) mobilní kartové rozložení Shoptetu
-   pořád nerozbila správně (buňka "vlaje" mimo tok, obrázek špatně
-   zarovnaný). Mobilní kartový layout zjevně používá vlastní `order`
-   hodnoty na jednotlivých buňkách, které jsme bez živého přístupu do
-   konzole nedokázali spolehlivě zjistit — další hádání by riskovalo
-   rozbití i toho, co teď funguje (obrázek, cena, dostupnost). Pragma-
-   tické řešení: sloupec necháváme ZAPNUTÝ jen na desktopu, na mobilu
-   ho vracíme zpátky na schovaný (jako před touhle úpravou), dokud
-   nebudeme mít možnost přesně ověřit `order`/`flex` hodnoty všech
-   sousedních buněk (obrázek, název, dostupnost, počet, cena, celkem)
-   přes Computed panel v DevTools. */
+/* OPRAVA (4. 8. 2026, čtvrté kolo, na žádost klienta — "předešlá verze
+   byla lepší") — vráceno na variantu display:flex + width:100%. Na
+   mobilu (pod 767px) Shoptet mění celý řádek `<tr>` na flexbox
+   (kartové rozložení) — `display: table-cell` tomu odporuje, proto
+   flex. Rozložení uvnitř karty (pozice vůči obrázku) není ještě
+   dokonalé — klient to bude ladit dál, případně přes Computed panel
+   v DevTools zjistíme `order`/`flex` hodnoty sousedních buněk. */
 @media (max-width: 767px) {
   .cart-table .p-discount {
-    display: none !important;
+    display: flex !important;
+    width: 100% !important;
   }
 }
