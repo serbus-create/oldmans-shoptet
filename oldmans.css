@@ -4027,6 +4027,15 @@ html, body {
      jako "Pokračovat" (to je uppercase přirozeně už z nativního
      textu, "Zpět do obchodu" potřebovalo CSS text-transform). */
   text-transform: uppercase !important;
+  /* OPRAVA (4. 8. 2026, šesté kolo, na žádost klienta) — nalezeno
+     přes konzoli: "Zpět do obchodu" (font 16px/700, padding 12px 24px,
+     border 1.5px) vychází na 63px, "Pokračovat" (nativní font 20px/900,
+     padding 10px 20px, border 1px) na 58px — čistě proto, že mají
+     navzájem jiné nativní rozměry. Sjednoceno napevno na stejnou
+     výšku, box-sizing:border-box zaručí, že se do ní vejde obojí bez
+     ohledu na padding/font. */
+  box-sizing: border-box !important;
+  height: 60px !important;
   transition: background .2s !important;
 }
 .next-step.next-step--cart a.next-step-back:hover {
@@ -4042,6 +4051,8 @@ html, body {
   gap: 6px !important;
   border-radius: 6px !important;
   color: #1a1a1a !important;
+  box-sizing: border-box !important;
+  height: 60px !important;
 }
 .next-step.next-step--cart a.next-step-forward .order-button-text {
   color: inherit !important;
@@ -4215,6 +4226,14 @@ html, body {
      stejnou výšku obou tlačítek bez ohledu na dostupnou šířku. */
   white-space: nowrap !important;
   flex-shrink: 0 !important;
+  /* OPRAVA (4. 8. 2026, šesté kolo, na žádost klienta) — nalezeno
+     přes konzoli: "Zpět do obchodu" vycházel na 31.9px (přesně podle
+     padding+line-height+border), ale "Pokračovat" na 35.4px — nejde
+     dopočítat odkud těch +6.5px navíc bere (stejná záhada jako dřív
+     na mobilu u stejného tlačítka). Řešení stejné jako u spodní
+     dvojice — výška napevno, box-sizing:border-box zaručí, že se do
+     ní obsah vejde bez ohledu na to, co jinak její výšku ovlivňuje. */
+  height: 32px !important;
   transition: background .2s, border-color .2s !important;
 }
 /* OPRAVA (3. 8. 2026, desáté kolo, finální zadání klienta podle
