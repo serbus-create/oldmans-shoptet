@@ -2206,13 +2206,18 @@
           if (saveEl) {
             saveEl.style.display = (applicable.ratio < 1) ? '' : 'none';
           }
-          /* Částka v pilulce "Ušetříte X Kč" — nativní hodnota se při změně
-             počtu kusů nepřepočítávala (zůstávala 0 Kč, přitom karty množstevní
-             slevy ukazují např. "ušetříte 149 Kč"). Počítá se stejně jako
-             u karet: (původní cena − cena po slevě) × počet kusů, zaokrouhleno
-             na celé Kč. Zobrazování pilulky (display) se tím nemění. */
-          expectedSaved = Math.round(qty * origPrice * (1 - applicable.ratio)) + ' Kč';
-          applySaved();
+          /* Částka v pilulce "Ušetříte X Kč" — JEN u akčních produktů (tam,
+             kde je akční box, značí ho atribut data-om-promo na
+             .om-price-box). Nativní hodnota se při změně počtu kusů
+             nepřepočítávala (zůstávala 0 Kč, přitom karty množstevní slevy
+             ukazují např. "ušetříte 149 Kč"). Počítá se stejně jako u karet:
+             (původní cena − cena po slevě) × počet kusů, zaokrouhleno na celé
+             Kč. U normálních produktů se pilulka nemění (chová se jako dřív)
+             a zobrazování pilulky (display) se nemění nikde. */
+          if (document.querySelector('.om-price-box[data-om-promo]')) {
+            expectedSaved = Math.round(qty * origPrice * (1 - applicable.ratio)) + ' Kč';
+            applySaved();
+          }
         };
 
         /* Kdyby Shoptet částku v pilulce sám přepsal zpět (jeho skript se
