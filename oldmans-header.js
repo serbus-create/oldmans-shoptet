@@ -1294,7 +1294,8 @@
      + −23 %). Tady z něj přečteme procento (když v něm chybí, dopočte
      se z původní a aktuální ceny — ta z <meta property=
      "product:price:amount">) a nahoře v cenovém boxu postavíme
-     výrazný akční box: AKCE + procento + odpočet. Nic se nevymýšlí —
+     výrazný akční box: AKCE + procento + odpočet, a pod ně se (jako
+     u vzoru) přesune cena s přeškrtnutou původní cenou a tlačítko do košíku. Nic se nevymýšlí —
      bez nativního štítku slevy se box vůbec nezobrazí.
      ODPOČET: konec akce se čte z microdat stránky (meta itemprop=
      "priceValidUntil", viz findEndText) — Shoptet ho plní z data "do"
@@ -1437,6 +1438,39 @@
       '<span class="om-promo-badge">–' + pct + '&nbsp;%</span></div>' +
       (timerHtml ? '<div class="om-promo-body">' + timerHtml + '</div>' : '');
     priceBlock.insertBefore(box, priceBlock.firstChild);
+
+    /* SLOUČENÍ S CENOU A TLAČÍTKEM (jako vzor): cenový řádek (přeškrtnutá
+       cena, aktuální cena) a nákupní řádek (počet kusů + Přidat do košíku)
+       se přesunou DO boxu — box se postaví těsně nad cenu. Přesouvají se
+       přímo ty samé prvky (ne kopie), takže počítání ceny podle množství,
+       formulář a sticky lišta na mobilu dál fungují. Děje se až po dokončení
+       stránky (opakovaně, idempotentně), protože nákupní řádek a cenový
+       řádek staví zbytek enhanceProductDetail() až po vložení boxu. */
+    var combine = function () {
+      if (box.getAttribute('data-combined')) return true;
+      var pf = priceBlock.querySelector('.price-final');
+      var buyRow = priceBlock.querySelector('.om-buy-row');
+      if (!pf || !buyRow) return false;
+      var wrap = pf.closest('.om-price-row') || pf.closest('.p-final-price-wrapper') || pf.parentElement;
+      if (!wrap || wrap === priceBlock || wrap.contains(buyRow) || buyRow.contains(wrap) || box.contains(wrap)) return false;
+      var body = box.querySelector('.om-promo-body');
+      if (!body) {
+        body = document.createElement('div');
+        body.className = 'om-promo-body';
+        box.appendChild(body);
+      }
+      var buy = document.createElement('div');
+      buy.className = 'om-promo-buy';
+      wrap.parentNode.insertBefore(box, wrap);
+      buy.appendChild(wrap);
+      buy.appendChild(buyRow);
+      body.appendChild(buy);
+      box.setAttribute('data-combined', '1');
+      return true;
+    };
+    [0, 400, 1200, 2500].forEach(function (ms) {
+      setTimeout(function () { combine(); }, ms);
+    });
 
     if (hasTimer) {
       var u = {
