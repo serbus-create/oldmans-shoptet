@@ -4514,8 +4514,9 @@ html, body {
   flex-direction: column;
   justify-content: center;
 }
-/* Nativní cenový řádek uvnitř boxu: cena + štítek −X %, pod nimi
-   přeškrtnutá původní cena (pořadí přes order, DOM se nemění) */
+/* Nativní cenový řádek uvnitř boxu: cena na celém řádku, pod ní štítek −X %
+   (vždy pod cenou, nikdy vedle ní), pod ním přeškrtnutá původní cena
+   (pořadí přes order, DOM se nemění) */
 .om-promo .om-promo-right > * {
   display: flex !important;
   flex-wrap: wrap !important;
@@ -4523,7 +4524,7 @@ html, body {
   gap: 4px 8px !important;
 }
 .om-promo .om-promo-right > * > * { order: 5; }
-.om-promo .om-promo-right > * > .om-promo-price { order: 1; }
+.om-promo .om-promo-right > * > .om-promo-price { order: 1; flex: 0 0 100%; }
 .om-promo .om-promo-right > * > .om-promo-badge { order: 2; }
 .om-promo .om-promo-right > * > .om-promo-strike { order: 3; flex: 0 0 100%; }
 .om-promo .om-promo-right > * > .quantity-discounts__save { order: 4; }
