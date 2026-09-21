@@ -2768,11 +2768,12 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 }
 
 
-/* Tlačítko Do košíku na detailu produktu — červená (podle návrhu klienta) */
+/* Tlačítko Do košíku na detailu produktu — zelená #79b530 (21. 9. 2026,
+   sjednoceno s tlačítky na kartách produktů; dřív červená #9f1400). */
 .btn.btn-conversion.add-to-cart-button.om-cart-btn-white,
 .om-cart-btn-white {
-  background: #9f1400 !important;
-  border-color: #9f1400 !important;
+  background: #79b530 !important;
+  border-color: #79b530 !important;
   border-radius: 8px !important;
   /* Ikona košíku napravo od textu (28. 7. 2026, na žádost klienta) —
      barva tlačítka zůstává beze změny, jen se přidává ikona. */
@@ -2800,8 +2801,8 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
 }
 .btn.btn-conversion.add-to-cart-button.om-cart-btn-white:hover,
 .om-cart-btn-white:hover {
-  background: #7a0f00 !important;
-  border-color: #7a0f00 !important;
+  background: #6aa028 !important;
+  border-color: #6aa028 !important;
 }
 .btn.btn-conversion.add-to-cart-button.om-cart-btn-white,
 .btn.btn-conversion.add-to-cart-button.om-cart-btn-white *,
@@ -3910,7 +3911,7 @@ html, body {
   .om-sticky-cta-btn {
     flex: 1 1 auto;
     height: 44px;
-    background: #9f1400;
+    background: #79b530;
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -3924,7 +3925,7 @@ html, body {
     padding: 0 14px;
   }
   .om-sticky-cta-btn:active {
-    background: #7a0f00;
+    background: #6aa028;
   }
   /* Stejná bílá SVG ikona košíku jako na hlavním tlačítku Přidat do
      košíku (viz .om-cart-btn-white:after výše) — konzistentní vzhled. */
