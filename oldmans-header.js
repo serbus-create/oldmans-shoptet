@@ -1255,14 +1255,14 @@
   }
 
   /* --- Trust badges + price box + partner loga na detailu produktu --- */
-  /* --- Detail produktu: AKČNÍ BOX (AKCE −23 %, úspora, odpočet) ---
+  /* --- Detail produktu: AKČNÍ BOX (AKCE, −23 %, odpočet) ---
      (21. 9. 2026, na žádost klienta) Shoptet u akčního produktu sám
      ukáže jen nativní štítek slevy na fotce (přeškrtnutá původní cena
-     + −23 %). Tady z něj přečteme původní cenu a procento, aktuální
-     cenu vezmeme z <meta property="product:price:amount"> (základní
-     cena bez množstevní slevy) a nahoře v cenovém boxu postavíme
-     výrazný akční box. Nic se nevymýšlí — bez nativního štítku slevy
-     se box vůbec nezobrazí.
+     + −23 %). Tady z něj přečteme procento (když v něm chybí, dopočte
+     se z původní a aktuální ceny — ta z <meta property=
+     "product:price:amount">) a nahoře v cenovém boxu postavíme
+     výrazný akční box: AKCE + procento + odpočet. Nic se nevymýšlí —
+     bez nativního štítku slevy se box vůbec nezobrazí.
      ODPOČET: záměrně JEN z explicitního doplňkového parametru produktu
      "Akce do" (řádek v tabulce Doplňkové parametry, hodnota např.
      "30. 9. 2026" nebo "2026-09-30 23:59"; bez času = do 23:59:59
@@ -1279,11 +1279,6 @@
     function parsePrice(text) {
       var m = String(text || '').replace(/\u00a0/g, ' ').match(/(\d[\d ]*(?:[.,]\d+)?)\s*Kč/);
       return m ? parseFloat(m[1].replace(/ /g, '').replace(',', '.')) : NaN;
-    }
-    function formatKc(v) {
-      var r = Math.round(v * 100) / 100;
-      var t = (r % 1 === 0) ? String(r) : r.toFixed(2).replace('.', ',');
-      return t.replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0') + '\u00a0Kč';
     }
     function pad(n) { return (n < 10 ? '0' : '') + n; }
 
@@ -1398,10 +1393,6 @@
     var box = document.createElement('div');
     box.id = 'om-promo';
     box.className = 'om-promo' + (hasTimer ? '' : ' om-promo--static');
-    var saveHtml = hasPrices
-      ? '<div class="om-promo-save">Ušetříte <strong>' + formatKc(old - cur) + '</strong>' +
-        '<span class="om-promo-old">' + formatKc(old) + '</span></div>'
-      : '';
     var timerHtml = hasTimer
       ? '<div class="om-promo-timer" role="timer">' +
         '<span class="om-promo-timer-label">Akce končí za</span>' +
@@ -1415,7 +1406,7 @@
     box.innerHTML =
       '<div class="om-promo-head"><span class="om-promo-title">🔥 Akce</span>' +
       '<span class="om-promo-badge">–' + pct + '&nbsp;%</span></div>' +
-      ((timerHtml || saveHtml) ? '<div class="om-promo-body">' + timerHtml + saveHtml + '</div>' : '');
+      (timerHtml ? '<div class="om-promo-body">' + timerHtml + '</div>' : '');
     priceBlock.insertBefore(box, priceBlock.firstChild);
 
     if (hasTimer) {
@@ -2110,12 +2101,7 @@
             }
           }
           if (saveEl) {
-            /* POZOR: .quantity-discounts__save má v CSS display:inline-flex
-               !important, obyčejné style.display = 'none' by nikdy nezabralo
-               (pilulka "Ušetříte 0 Kč" zůstávala vidět i u 1 ks) — proto
-               setProperty(..., 'important') / removeProperty. */
-            if (applicable.ratio < 1) saveEl.style.removeProperty('display');
-            else saveEl.style.setProperty('display', 'none', 'important');
+            saveEl.style.display = (applicable.ratio < 1) ? '' : 'none';
           }
         };
 
