@@ -1515,7 +1515,10 @@
         var diff = Math.floor((endTs - Date.now()) / 1000);
         if (diff <= 0) {
           if (iv) clearInterval(iv);
-          box.style.setProperty('display', 'none', 'important');
+          /* Box se NESCHOVÁVÁ celý — je v něm cena a tlačítko do košíku.
+             Označí se jako skončený (CSS schová odpočet, štítek a přeškrtnutou
+             cenu a vrátí zelené tlačítko), cena a nákup zůstanou. */
+          box.classList.add('om-promo--ended');
           return;
         }
         u.d.textContent = pad(Math.floor(diff / 86400));
