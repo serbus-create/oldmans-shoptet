@@ -1255,6 +1255,193 @@
   }
 
   /* --- Trust badges + price box + partner loga na detailu produktu --- */
+  /* --- Detail produktu: AKČNÍ BOX (AKCE −23 %, úspora, odpočet) ---
+     (21. 9. 2026, na žádost klienta) Shoptet u akčního produktu sám
+     ukáže jen nativní štítek slevy na fotce (přeškrtnutá původní cena
+     + −23 %). Tady z něj přečteme původní cenu a procento, aktuální
+     cenu vezmeme z <meta property="product:price:amount"> (základní
+     cena bez množstevní slevy) a nahoře v cenovém boxu postavíme
+     výrazný akční box. Nic se nevymýšlí — bez nativního štítku slevy
+     se box vůbec nezobrazí.
+     ODPOČET: záměrně JEN z explicitního doplňkového parametru produktu
+     "Akce do" (řádek v tabulce Doplňkové parametry, hodnota např.
+     "30. 9. 2026" nebo "2026-09-30 23:59"; bez času = do 23:59:59
+     českého času). Datum z jiných zdrojů (JSON-LD priceValidUntil)
+     se NEPOUŽÍVÁ, dokud není ověřeno, že je to skutečný konec akce —
+     falešný odpočet by byl klamavý. Bez parametru se ukáže box bez
+     odpočtu. Po uplynutí odpočtu se box schová.
+     Ladění: přidat k URL ?omdebug=1 → do konzole vypíše, co našel. */
+  function buildPromoBox(priceBlock, detailInner) {
+    if (!priceBlock || !detailInner) return false;
+    if (document.getElementById('om-promo')) return true;
+    var debug = location.search.indexOf('omdebug') !== -1;
+
+    function parsePrice(text) {
+      var m = String(text || '').replace(/\u00a0/g, ' ').match(/(\d[\d ]*(?:[.,]\d+)?)\s*Kč/);
+      return m ? parseFloat(m[1].replace(/ /g, '').replace(',', '.')) : NaN;
+    }
+    function formatKc(v) {
+      var r = Math.round(v * 100) / 100;
+      var t = (r % 1 === 0) ? String(r) : r.toFixed(2).replace('.', ',');
+      return t.replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0') + '\u00a0Kč';
+    }
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+    /* Nativní štítek slevy: nejdřív v obalu fotky, pak v celém detailu.
+       Přijme se, jen když obsahuje procento (−23 %) nebo .price-standard —
+       obyčejný štítek s textem "… Kč" (třeba doprava zdarma) se ignoruje. */
+    function findDiscount() {
+      var scopes = [];
+      var imgWrap = detailInner.querySelector('.p-image-wrapper');
+      if (imgWrap) scopes.push(imgWrap);
+      scopes.push(detailInner);
+      for (var s = 0; s < scopes.length; s++) {
+        var cands = scopes[s].querySelectorAll('.flag-discount, .flags-extra, .flags .flag');
+        for (var i = 0; i < cands.length; i++) {
+          var el = cands[i];
+          if (el.closest('.quantity-discounts')) continue;
+          var txt = (el.textContent || '').replace(/\u00a0/g, ' ');
+          var pm = txt.match(/[−–—-]\s*(\d{1,3})\s*%/);
+          var ps = el.querySelector('.price-standard');
+          if (!pm && !ps) continue;
+          return {
+            pct: pm ? parseInt(pm[1], 10) : NaN,
+            old: parsePrice(ps ? ps.textContent : txt)
+          };
+        }
+      }
+      return null;
+    }
+
+    /* Čas v pásmu Europe/Prague -> UTC timestamp (letní/zimní čas řeší Intl) */
+    function pragueToUtc(y, mo, d, h, mi, s) {
+      var guess = Date.UTC(y, mo - 1, d, h, mi, s);
+      var fmt = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Europe/Prague', hourCycle: 'h23',
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+      });
+      function offsetAt(ts) {
+        var p = {};
+        fmt.formatToParts(new Date(ts)).forEach(function (x) { p[x.type] = x.value; });
+        return Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute, +p.second) - ts;
+      }
+      var off = offsetAt(guess);
+      var ts = guess - off;
+      var off2 = offsetAt(ts);
+      if (off2 !== off) ts = guess - off2;
+      return ts;
+    }
+    function parseEnd(str) {
+      str = String(str || '').replace(/\u00a0/g, ' ').trim();
+      var m = str.match(/^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2})(?::(\d{2}))?)?\s*(Z|[+-]\d{2}:?\d{2})?$/);
+      if (m) {
+        if (m[7]) {
+          var tz = m[7] === 'Z' ? 'Z' : m[7].replace(/^([+-]\d{2}):?(\d{2})$/, '$1:$2');
+          return Date.parse(m[1] + '-' + m[2] + '-' + m[3] + 'T' + (m[4] || '23') + ':' + (m[5] || '59') + ':' + (m[6] || '59') + tz);
+        }
+        return m[4] ? pragueToUtc(+m[1], +m[2], +m[3], +m[4], +m[5], +(m[6] || 0))
+                    : pragueToUtc(+m[1], +m[2], +m[3], 23, 59, 59);
+      }
+      m = str.match(/(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{4})(?:\D+(\d{1,2}):(\d{2}))?/);
+      if (m) {
+        return m[4] ? pragueToUtc(+m[3], +m[2], +m[1], +m[4], +m[5], 0)
+                    : pragueToUtc(+m[3], +m[2], +m[1], 23, 59, 59);
+      }
+      return NaN;
+    }
+    /* Doplňkový parametr "Akce do" (tabulka Doplňkové parametry) */
+    function findEndText() {
+      var ths = document.querySelectorAll('th');
+      for (var j = 0; j < ths.length; j++) {
+        if (/^\s*akce\s*(do|končí)\s*:?\s*$/i.test(ths[j].textContent)) {
+          var row = ths[j].parentNode;
+          var td = row && row.querySelector('td');
+          if (td) {
+            var val = td.textContent;
+            row.style.setProperty('display', 'none', 'important'); /* nechceme ho ukazovat jako parametr */
+            return val;
+          }
+        }
+      }
+      return '';
+    }
+
+    var found = findDiscount();
+    if (!found) {
+      if (debug) {
+        var flagsInfo = [];
+        detailInner.querySelectorAll('[class*="flag"]').forEach(function (e) {
+          flagsInfo.push(e.className + ' | ' + (e.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 60));
+        });
+        console.info('[om-promo] nativní štítek slevy nenalezen. Prvky s "flag":', flagsInfo);
+      }
+      return false;
+    }
+
+    var meta = document.querySelector('meta[property="product:price:amount"]');
+    var cur = meta ? parseFloat(meta.getAttribute('content')) : NaN;
+    if (isNaN(cur)) {
+      var pf = priceBlock.querySelector('.price-final');
+      cur = pf ? parsePrice(pf.textContent) : NaN;
+    }
+    var old = found.old;
+    var hasPrices = !isNaN(old) && !isNaN(cur) && cur > 0 && old > cur;
+    var pct = !isNaN(found.pct) ? found.pct : (hasPrices ? Math.round((old - cur) / old * 100) : NaN);
+    if (isNaN(pct) || pct <= 0) return false;
+
+    var endText = findEndText();
+    var endTs = endText ? parseEnd(endText) : NaN;
+    var hasTimer = !isNaN(endTs) && endTs > Date.now();
+    if (debug) console.info('[om-promo] sleva', { pct: pct, old: old, cur: cur, endText: endText, endTs: endTs, hasTimer: hasTimer });
+
+    var box = document.createElement('div');
+    box.id = 'om-promo';
+    box.className = 'om-promo' + (hasTimer ? '' : ' om-promo--static');
+    var saveHtml = hasPrices
+      ? '<div class="om-promo-save">Ušetříte <strong>' + formatKc(old - cur) + '</strong>' +
+        '<span class="om-promo-old">' + formatKc(old) + '</span></div>'
+      : '';
+    var timerHtml = hasTimer
+      ? '<div class="om-promo-timer" role="timer">' +
+        '<span class="om-promo-timer-label">Akce končí za</span>' +
+        '<div class="om-promo-units">' +
+        '<div class="om-promo-unit"><b data-u="d">00</b><small>dny</small></div>' +
+        '<div class="om-promo-unit"><b data-u="h">00</b><small>hod</small></div>' +
+        '<div class="om-promo-unit"><b data-u="m">00</b><small>min</small></div>' +
+        '<div class="om-promo-unit"><b data-u="s">00</b><small>sek</small></div>' +
+        '</div></div>'
+      : '';
+    box.innerHTML =
+      '<div class="om-promo-head"><span class="om-promo-title">🔥 Akce</span>' +
+      '<span class="om-promo-badge">–' + pct + '&nbsp;%</span></div>' +
+      ((timerHtml || saveHtml) ? '<div class="om-promo-body">' + timerHtml + saveHtml + '</div>' : '');
+    priceBlock.insertBefore(box, priceBlock.firstChild);
+
+    if (hasTimer) {
+      var u = {
+        d: box.querySelector('[data-u="d"]'), h: box.querySelector('[data-u="h"]'),
+        m: box.querySelector('[data-u="m"]'), s: box.querySelector('[data-u="s"]')
+      };
+      var iv = null;
+      var tick = function () {
+        var diff = Math.floor((endTs - Date.now()) / 1000);
+        if (diff <= 0) {
+          if (iv) clearInterval(iv);
+          box.style.setProperty('display', 'none', 'important');
+          return;
+        }
+        u.d.textContent = pad(Math.floor(diff / 86400));
+        u.h.textContent = pad(Math.floor((diff % 86400) / 3600));
+        u.m.textContent = pad(Math.floor((diff % 3600) / 60));
+        u.s.textContent = pad(diff % 60);
+      };
+      iv = setInterval(tick, 1000);
+      tick();
+    }
+    return true;
+  }
+
   function enhanceProductDetail() {
     if (!document.body.classList.contains('type-product')) return;
     if (document.getElementById('om-trust-badges')) return;
@@ -1389,6 +1576,16 @@
             <span>Balíček Nachos (80g)</span>
           </div>`;
         priceBlock.insertBefore(freeGift, priceBlock.firstChild);
+      }
+
+      /* Akční box (AKCE −23 %, úspora, odpočet) — vkládá se AŽ TEĎ, ať
+         skončí úplně nahoře v cenovém boxu (insertBefore na firstChild,
+         viz výše). Nativní štítek slevy někdy Shoptet dorenderuje o chvíli
+         později, proto pár opakování. */
+      if (!buildPromoBox(priceBlock, detailInner)) {
+        [600, 1800].forEach(function (ms) {
+          setTimeout(function () { buildPromoBox(priceBlock, detailInner); }, ms);
+        });
       }
 
       var cartBtn = priceBlock.querySelector('.add-to-cart-button, .btn-conversion');
@@ -1913,7 +2110,12 @@
             }
           }
           if (saveEl) {
-            saveEl.style.display = (applicable.ratio < 1) ? '' : 'none';
+            /* POZOR: .quantity-discounts__save má v CSS display:inline-flex
+               !important, obyčejné style.display = 'none' by nikdy nezabralo
+               (pilulka "Ušetříte 0 Kč" zůstávala vidět i u 1 ks) — proto
+               setProperty(..., 'important') / removeProperty. */
+            if (applicable.ratio < 1) saveEl.style.removeProperty('display');
+            else saveEl.style.setProperty('display', 'none', 'important');
           }
         };
 
