@@ -1255,6 +1255,39 @@
   }
 
   /* --- Trust badges + price box + partner loga na detailu produktu --- */
+  /* --- Detail produktu: přebarvení nativního kolečka slevy (−23 %) ---
+     (21. 9. 2026, na žádost klienta) Shoptet nemá nastavení barvy tohoto
+     "modrého kolečka slev". JS najde prvek, který kolečko OPRAVDU
+     vykresluje (od prvku s přeškrtnutou cenou / procentem jde nahoru a
+     vezme první předek s viditelným pozadím) a přidá mu třídu
+     .om-discount-circle — CSS ji přebarví do červené webu. Bere se JEN
+     kolečko uvnitř detailu produktu (.p-detail-inner), karty produktů
+     ve výpisech se nemění. Ladění: ?omdebug=1. */
+  function markDiscountCircle(detailInner) {
+    if (!detailInner) return false;
+    if (detailInner.querySelector('.om-discount-circle')) return true;
+    var scope = detailInner.querySelector('.p-image-wrapper') || detailInner;
+    var inner = scope.querySelector('.price-standard, .price-save');
+    var el = inner ? inner.parentElement : scope.querySelector('.flag-discount');
+    for (var depth = 0; el && depth < 5; depth++, el = el.parentElement) {
+      if (el === scope || el.classList.contains('p-image') || el.classList.contains('p-image-wrapper')) break;
+      var r = el.getBoundingClientRect();
+      if (r.width > 260) break; /* už je to velký kontejner, ne kolečko */
+      var cs = window.getComputedStyle(el);
+      var bg = cs.backgroundColor || '';
+      var solid = bg && bg !== 'transparent' && !/^rgba\(\s*\d+,\s*\d+,\s*\d+,\s*0\s*\)$/.test(bg);
+      var image = cs.backgroundImage && cs.backgroundImage !== 'none';
+      if (solid || image) {
+        el.classList.add('om-discount-circle');
+        if (location.search.indexOf('omdebug') !== -1) {
+          console.info('[om-promo] kolečko slevy přebarveno, prvek:', el.tagName + '.' + String(el.className).replace(/\s+/g, '.'), 'původní pozadí:', bg);
+        }
+        return true;
+      }
+    }
+    return false;
+  }
+
   /* --- Detail produktu: AKČNÍ BOX (AKCE, −23 %, odpočet) ---
      (21. 9. 2026, na žádost klienta) Shoptet u akčního produktu sám
      ukáže jen nativní štítek slevy na fotce (přeškrtnutá původní cena
@@ -1572,6 +1605,13 @@
       if (!buildPromoBox(priceBlock, detailInner)) {
         [600, 1800].forEach(function (ms) {
           setTimeout(function () { buildPromoBox(priceBlock, detailInner); }, ms);
+        });
+      }
+
+      /* Kolečko slevy na fotce do červené webu (viz markDiscountCircle) */
+      if (!markDiscountCircle(detailInner)) {
+        [600, 1800].forEach(function (ms) {
+          setTimeout(function () { markDiscountCircle(detailInner); }, ms);
         });
       }
 
