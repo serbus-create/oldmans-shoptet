@@ -4530,3 +4530,14 @@ html, body {
   .om-promo-unit { min-width: 40px; }
   .om-promo-unit b { font-size: 18px; }
 }
+
+
+/* Nativní "modré kolečko slev" na fotce produktu (−23 %) v červené webu
+   (21. 9. 2026, na žádost klienta). Třídu .om-discount-circle přidává JS
+   (markDiscountCircle) JEN prvku uvnitř detailu produktu, který kolečko
+   skutečně vykresluje. Mění se pouze barva pozadí — tvar, velikost a
+   poloha zůstávají podle Shoptetu. */
+.om-discount-circle {
+  background: #9f1400 !important;
+  border-color: #9f1400 !important;
+}
