@@ -4438,8 +4438,7 @@ html, body {
    Vkládá JS buildPromoBox() úplně nahoru do .om-price-box, JEN když má
    produkt nativní štítek slevy (akční cena). Vzor: červená hlavička
    AKCE + štítek −X %, dole odpočet v boxících (DNY/HOD/MIN/SEK, když je
-   vyplněný parametr "Akce do") a úspora s přeškrtnutou původní cenou.
-   Varianta bez odpočtu = .om-promo--static.
+   vyplněný parametr "Akce do"). Bez odpočtu = jen hlavička (.om-promo--static).
    ══════════════════════════════════════════════ */
 .om-promo {
   width: 100%;
@@ -4523,40 +4522,6 @@ html, body {
   letter-spacing: .4px;
   color: #888;
 }
-.om-promo-save {
-  margin-left: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
-  text-align: right;
-  font-size: 15px;
-  font-weight: 700;
-  color: #1a1a1a;
-}
-.om-promo-save strong {
-  font-size: 22px;
-  font-weight: 800;
-  color: #9f1400;
-}
-.om-promo-old {
-  font-size: 14px;
-  font-weight: 500;
-  color: #999;
-  text-decoration: line-through;
-}
-/* Bez odpočtu — úspora a původní cena vedle sebe v jednom řádku */
-.om-promo--static .om-promo-body {
-  justify-content: flex-start;
-}
-.om-promo--static .om-promo-save {
-  margin-left: 0;
-  flex-direction: row;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 4px 10px;
-  text-align: left;
-}
 @media (max-width: 480px) {
   .om-promo-head { padding: 8px 12px; font-size: 14px; }
   .om-promo-badge { font-size: 16px; }
@@ -4564,5 +4529,4 @@ html, body {
   .om-promo-units { gap: 5px; }
   .om-promo-unit { min-width: 40px; }
   .om-promo-unit b { font-size: 18px; }
-  .om-promo-save { margin-left: 0; align-items: flex-start; text-align: left; }
 }
