@@ -2206,34 +2206,7 @@
           if (saveEl) {
             saveEl.style.display = (applicable.ratio < 1) ? '' : 'none';
           }
-          /* Částka v pilulce "Ušetříte X Kč" — JEN u akčních produktů (tam,
-             kde je akční box, značí ho atribut data-om-promo na
-             .om-price-box). Nativní hodnota se při změně počtu kusů
-             nepřepočítávala (zůstávala 0 Kč, přitom karty množstevní slevy
-             ukazují např. "ušetříte 149 Kč"). Počítá se stejně jako u karet:
-             (původní cena − cena po slevě) × počet kusů, zaokrouhleno na celé
-             Kč. U normálních produktů se pilulka nemění (chová se jako dřív)
-             a zobrazování pilulky (display) se nemění nikde. */
-          if (document.querySelector('.om-price-box[data-om-promo]')) {
-            expectedSaved = Math.round(qty * origPrice * (1 - applicable.ratio)) + ' Kč';
-            applySaved();
-          }
         };
-
-        /* Kdyby Shoptet částku v pilulce sám přepsal zpět (jeho skript se
-           pouští na vlastní události), vrátí ji MutationObserver — bez
-           smyčky: zapisuje se jen, když se text liší od očekávaného. */
-        var expectedSaved = null;
-        var applySaved = function() {
-          if (expectedSaved === null || !saveEl) return;
-          var amountEl = saveEl.querySelector('.quantity-discounts__saved-amount');
-          if (amountEl && amountEl.textContent.replace(/\u00a0/g, ' ').trim() !== expectedSaved) {
-            amountEl.textContent = expectedSaved;
-          }
-        };
-        if (saveEl && window.MutationObserver) {
-          new MutationObserver(applySaved).observe(saveEl, { childList: true, characterData: true, subtree: true });
-        }
 
         updateMainPrice();
         document.addEventListener('input', function(e) {
