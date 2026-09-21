@@ -2737,14 +2737,18 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
     font-size: 13px !important;
     margin-bottom: 5px !important;
   }
+  /* 21. 9. 2026 (2. kolo): rámečky karet o dalších 10 % menší (šířka
+     mřížky 90 %, o ~10 % nižší karty přes menší vnitřní odsazení a
+     odsazení kolem čísla/ceny) — písmo beze změny. */
   .qd-mobile-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 11px 10px;
+    width: 90%;
+    gap: 10px 9px;
     margin-top: 18px;
   }
   .qd-mobile-item {
-    border-radius: 11px;
-    padding: 14px 11px 13px;
+    border-radius: 10px;
+    padding: 10px 9px 9px;
   }
   .qd-mobile-pill-slot {
     top: -11px;
@@ -2757,11 +2761,11 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   }
   .qd-mobile-qty {
     font-size: 27px;
-    margin: 8px 0 6px;
+    margin: 6px 0 5px;
   }
   .qd-mobile-price {
     font-size: 14px;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
   }
   .qd-mobile-unit {
     font-size: 10.5px;
