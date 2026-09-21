@@ -4435,82 +4435,43 @@ html, body {
 
 /* ══════════════════════════════════════════════
    AKČNÍ BOX NA DETAILU PRODUKTU (21. 9. 2026, na žádost klienta)
-   Vkládá JS buildPromoBox() do .om-price-box, JEN když má produkt
-   nativní štítek slevy (akční cena). Vzor: červená hlavička AKCE +
-   štítek −X %, odpočet v boxících (DNY/HOD/MIN/SEK, když je u akční ceny
-   datum "do"), pod ním cena s přeškrtnutou původní cenou a tlačítko do
-   košíku. Bez odpočtu = hlavička + cena + tlačítko (.om-promo--static).
+   Staví JS buildPromoBox() JEN u produktu s nativním štítkem slevy (akční
+   cena). Rozložení podle předlohy: vlevo titulek AKCE + odpočet v boxících
+   (DNY/HOD/MIN/SEK, když je u akční ceny datum "do"), svislá čára, vpravo
+   cena se štítkem −X % a přeškrtnutou původní cenou, dole počet kusů +
+   tlačítko do košíku. Cenový a nákupní řádek sem JS přesouvá (combine()),
+   .om-promo-price/-strike/-pct jsou třídy, které JS přidá částem
+   nativního cenového řádku. Bez odpočtu = .om-promo--static (vlevo jen
+   titulek). .om-promo--solo = záloha, když se sloučení s cenou nepovedlo.
    ══════════════════════════════════════════════ */
 .om-promo {
   width: 100%;
   box-sizing: border-box;
-  border: 2px solid #9f1400;
-  border-radius: 12px;
-  overflow: hidden;
+  padding: 16px;
   background: #fff;
-  box-shadow: 0 6px 18px rgba(159, 20, 0, .14);
+  border: 1.5px solid #f0b7b0;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(159, 20, 0, .10);
   margin: 0 0 6px;
 }
-.om-promo-head {
+.om-promo-top {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+}
+.om-promo-left {
+  flex: 0 0 auto;
+}
+.om-promo-title {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  background: #9f1400;
-  color: #fff;
-  padding: 9px 14px;
-  font-size: 15px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: .6px;
-}
-.om-promo-badge {
-  background: #f0c344;
-  color: #1a1a1a;
-  border-radius: 8px;
-  padding: 3px 10px;
+  gap: 6px;
+  margin-bottom: 8px;
+  color: #9f1400;
   font-size: 17px;
   font-weight: 800;
-  letter-spacing: 0;
-  white-space: nowrap;
-}
-.om-promo-body {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 12px;
-  padding: 12px 14px;
-}
-/* Cena + počet kusů + tlačítko (JS je sem přesune, viz combine()) */
-.om-promo-buy {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.om-promo-timer + .om-promo-buy {
-  padding-top: 12px;
-  border-top: 1px solid #f0d9d4;
-}
-.om-promo .price-final,
-.om-promo strong.price-final {
-  font-size: 30px !important;
-  color: #9f1400 !important;
-}
-/* Procento je v červené hlavičce, nativní "–23 %" u ceny by bylo zdvojené */
-.om-promo .price-save {
-  display: none !important;
-}
-.om-promo-timer {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.om-promo-timer-label {
-  font-size: 12px;
-  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: .4px;
-  color: #666;
+  letter-spacing: .5px;
 }
 .om-promo-units {
   display: flex;
@@ -4518,9 +4479,9 @@ html, body {
 }
 .om-promo-unit {
   box-sizing: border-box;
-  min-width: 46px;
-  padding: 4px 4px 3px;
-  border: 2px solid #9f1400;
+  width: 44px;
+  padding: 5px 2px 4px;
+  border: 1.5px solid #9f1400;
   border-radius: 8px;
   background: #fff;
   text-align: center;
@@ -4536,20 +4497,76 @@ html, body {
 .om-promo-unit small {
   display: block;
   margin-top: 1px;
-  font-size: 9px;
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: .4px;
-  color: #888;
+  color: #777;
+}
+.om-promo-divider {
+  flex: 0 0 auto;
+  width: 1px;
+  background: #f0d9d4;
+}
+.om-promo-right {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+/* Nativní cenový řádek uvnitř boxu: cena + štítek −X %, pod nimi
+   přeškrtnutá původní cena (pořadí přes order, DOM se nemění) */
+.om-promo .om-promo-right > * {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 4px 8px !important;
+}
+.om-promo .om-promo-right > * > * { order: 5; }
+.om-promo .om-promo-right > * > .om-promo-price { order: 1; }
+.om-promo .om-promo-right > * > .om-promo-badge { order: 2; }
+.om-promo .om-promo-right > * > .om-promo-strike { order: 3; flex: 0 0 100%; }
+.om-promo .om-promo-right > * > .quantity-discounts__save { order: 4; }
+.om-promo .om-promo-right > * > .om-promo-pct { display: none !important; }
+.om-promo .price-final,
+.om-promo strong.price-final {
+  font-size: 32px !important;
+  line-height: 1 !important;
+  color: #9f1400 !important;
+}
+.om-promo-strike,
+.om-promo-strike * {
+  font-size: 16px !important;
+  color: #999 !important;
+}
+.om-promo-badge {
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #9f1400;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.om-promo-buy {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #f0d9d4;
+}
+.om-promo--solo .om-promo-divider,
+.om-promo--solo .om-promo-right,
+.om-promo--solo .om-promo-buy {
+  display: none;
 }
 @media (max-width: 480px) {
-  .om-promo-head { padding: 8px 12px; font-size: 14px; }
-  .om-promo-badge { font-size: 16px; }
-  .om-promo-body { padding: 10px 12px; }
+  .om-promo { padding: 14px; }
+  .om-promo-top { flex-direction: column; gap: 12px; }
+  .om-promo-divider { display: none; }
   .om-promo-units { gap: 5px; }
-  .om-promo-unit { min-width: 40px; }
-  .om-promo-unit b { font-size: 18px; }
+  .om-promo-unit { flex: 1; width: auto; }
   .om-promo .price-final,
-  .om-promo strong.price-final { font-size: 26px !important; }
+  .om-promo strong.price-final { font-size: 28px !important; }
+  .om-promo .om-promo-right > * > .om-promo-strike { flex: 0 0 auto; }
 }
 
 
