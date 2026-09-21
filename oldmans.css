@@ -4435,10 +4435,11 @@ html, body {
 
 /* ══════════════════════════════════════════════
    AKČNÍ BOX NA DETAILU PRODUKTU (21. 9. 2026, na žádost klienta)
-   Vkládá JS buildPromoBox() úplně nahoru do .om-price-box, JEN když má
-   produkt nativní štítek slevy (akční cena). Vzor: červená hlavička
-   AKCE + štítek −X %, dole odpočet v boxících (DNY/HOD/MIN/SEK, když je
-   vyplněný parametr "Akce do"). Bez odpočtu = jen hlavička (.om-promo--static).
+   Vkládá JS buildPromoBox() do .om-price-box, JEN když má produkt
+   nativní štítek slevy (akční cena). Vzor: červená hlavička AKCE +
+   štítek −X %, odpočet v boxících (DNY/HOD/MIN/SEK, když je u akční ceny
+   datum "do"), pod ním cena s přeškrtnutou původní cenou a tlačítko do
+   košíku. Bez odpočtu = hlavička + cena + tlačítko (.om-promo--static).
    ══════════════════════════════════════════════ */
 .om-promo {
   width: 100%;
@@ -4475,11 +4476,29 @@ html, body {
 }
 .om-promo-body {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px 16px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
   padding: 12px 14px;
+}
+/* Cena + počet kusů + tlačítko (JS je sem přesune, viz combine()) */
+.om-promo-buy {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.om-promo-timer + .om-promo-buy {
+  padding-top: 12px;
+  border-top: 1px solid #f0d9d4;
+}
+.om-promo .price-final,
+.om-promo strong.price-final {
+  font-size: 30px !important;
+  color: #9f1400 !important;
+}
+/* Procento je v červené hlavičce, nativní "–23 %" u ceny by bylo zdvojené */
+.om-promo .price-save {
+  display: none !important;
 }
 .om-promo-timer {
   display: flex;
@@ -4529,6 +4548,8 @@ html, body {
   .om-promo-units { gap: 5px; }
   .om-promo-unit { min-width: 40px; }
   .om-promo-unit b { font-size: 18px; }
+  .om-promo .price-final,
+  .om-promo strong.price-final { font-size: 26px !important; }
 }
 
 
