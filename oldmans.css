@@ -2725,45 +2725,65 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   gap: 6px;
 }
 
-/* ── MOBIL (do 768px) — beze změny oproti dřívější verzi: velké
-   karty 2×2 místo kompaktního řádku po 4 (na úzké obrazovce by se
-   4 sloupce nevešly čitelně) ── */
+/* ── MOBIL (do 768px) — karty 2×2 místo kompaktního řádku po 4 (na úzké
+   obrazovce by se 4 sloupce nevešly čitelně).
+   21. 9. 2026, na žádost klienta: celá sekce zmenšená na 80 % (velikosti
+   písma, vnitřní odsazení, mezery, zaoblení, nadpis i ukazatel dopravy).
+   Šířka karet se nemění — pořád vyplňují sloupec, ať lícují s tlačítkem
+   Přidat do košíku. Rámečky karet zůstávají 2px (tenčí by na displejích
+   s nízkým DPR vypadaly nezřetelně). ── */
 @media (max-width: 768px) {
+  .quantity-discounts__headline {
+    font-size: 13px !important;
+    margin-bottom: 5px !important;
+  }
   .qd-mobile-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 14px 12px;
+    gap: 11px 10px;
+    margin-top: 18px;
   }
   .qd-mobile-item {
-    border-radius: 14px;
-    padding: 18px 14px 16px;
+    border-radius: 11px;
+    padding: 14px 11px 13px;
   }
   .qd-mobile-pill-slot {
-    top: -14px;
+    top: -11px;
     max-width: none;
   }
   .qd-mobile-pill {
-    padding: 5px 12px;
-    font-size: 11px;
+    padding: 4px 10px;
+    font-size: 9px;
     white-space: nowrap;
   }
   .qd-mobile-qty {
-    font-size: 34px;
-    margin: 10px 0 8px;
+    font-size: 27px;
+    margin: 8px 0 6px;
   }
   .qd-mobile-price {
-    font-size: 17px;
-    margin-bottom: 8px;
+    font-size: 14px;
+    margin-bottom: 6px;
   }
   .qd-mobile-unit {
-    font-size: 13px;
+    font-size: 10.5px;
   }
   .qd-mobile-orig {
-    font-size: 13px;
-    margin-left: 2px;
+    font-size: 10.5px;
+    margin-left: 1px;
   }
   .qd-mobile-save {
-    padding: 4px 10px;
-    font-size: 12px;
+    padding: 3px 8px;
+    font-size: 9.5px;
+  }
+  .qd-mobile-shipping {
+    margin-top: 14px;
+  }
+  .qd-mobile-shipping-bar {
+    height: 6px;
+    margin-bottom: 6px;
+  }
+  .qd-mobile-shipping-text {
+    font-size: 11px;
+    gap: 5px;
   }
 }
 
