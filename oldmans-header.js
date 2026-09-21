@@ -1263,13 +1263,11 @@
      "product:price:amount">) a nahoře v cenovém boxu postavíme
      výrazný akční box: AKCE + procento + odpočet. Nic se nevymýšlí —
      bez nativního štítku slevy se box vůbec nezobrazí.
-     ODPOČET: záměrně JEN z explicitního doplňkového parametru produktu
-     "Akce do" (řádek v tabulce Doplňkové parametry, hodnota např.
-     "30. 9. 2026" nebo "2026-09-30 23:59"; bez času = do 23:59:59
-     českého času). Datum z jiných zdrojů (JSON-LD priceValidUntil)
-     se NEPOUŽÍVÁ, dokud není ověřeno, že je to skutečný konec akce —
-     falešný odpočet by byl klamavý. Bez parametru se ukáže box bez
-     odpočtu. Po uplynutí odpočtu se box schová.
+     ODPOČET: konec akce se čte z microdat stránky (meta itemprop=
+     "priceValidUntil", viz findEndText) — Shoptet ho plní z data "do"
+     u akční ceny, klient nic nezadává navíc. Datum bez času = do
+     23:59:59 českého času. Bez data (nebo prošlé) se ukáže box bez
+     odpočtu, po uplynutí odpočtu se box schová.
      Ladění: přidat k URL ?omdebug=1 → do konzole vypíše, co našel. */
   function buildPromoBox(priceBlock, detailInner) {
     if (!priceBlock || !detailInner) return false;
@@ -1345,19 +1343,17 @@
       }
       return NaN;
     }
-    /* Doplňkový parametr "Akce do" (tabulka Doplňkové parametry) */
+    /* Konec akce: Shoptet ho vypisuje do microdat detailu produktu jako
+       <meta itemprop="priceValidUntil" content="2026-09-30"> (ověřeno na
+       testovacím produktu — shoduje se s datem "do" u akční ceny v Ceníku).
+       Meta z karet produktů (slidery Související/Podobné, výpisy) se
+       ignorují — berou se jen ty mimo seznamy produktů. */
     function findEndText() {
-      var ths = document.querySelectorAll('th');
-      for (var j = 0; j < ths.length; j++) {
-        if (/^\s*akce\s*(do|končí)\s*:?\s*$/i.test(ths[j].textContent)) {
-          var row = ths[j].parentNode;
-          var td = row && row.querySelector('td');
-          if (td) {
-            var val = td.textContent;
-            row.style.setProperty('display', 'none', 'important'); /* nechceme ho ukazovat jako parametr */
-            return val;
-          }
-        }
+      var metas = document.querySelectorAll('meta[itemprop="priceValidUntil"]');
+      for (var k = 0; k < metas.length; k++) {
+        if (metas[k].closest('.products, .products-block, .products-alternative, .products-related, .product-slider-holder, .om-mobile-product-slider')) continue;
+        var v = metas[k].getAttribute('content');
+        if (v) return v;
       }
       return '';
     }
