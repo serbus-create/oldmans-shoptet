@@ -2744,7 +2744,8 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
     grid-template-columns: 1fr 1fr;
     width: 90%;
     gap: 10px 9px;
-    margin-top: 18px;
+    /* Vycentrováno na střed sloupce (21. 9. 2026) */
+    margin: 18px auto 0;
   }
   .qd-mobile-item {
     border-radius: 10px;
