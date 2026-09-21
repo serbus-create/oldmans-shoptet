@@ -3862,6 +3862,38 @@ html, body {
     left: -10px !important;
     top: -14px !important;
   }
+  /* Zelené tlačítko Do košíku o 30 % větší (21. 9. 2026, na žádost
+     klienta) — písmo 14→18 px, padding 9×16→12×21 px, mezera a ikona
+     úměrně. Scoped na mobilní slider (velká karta na celou šířku). */
+  .om-mobile-product-slider-track .product .add-to-cart-button,
+  .om-mobile-product-slider-track .product .to-cart-button {
+    font-size: 18px !important;
+    padding: 12px 21px !important;
+    gap: 8px !important;
+    border-radius: 10px !important;
+  }
+  .om-mobile-product-slider-track .product .add-to-cart-button:before,
+  .om-mobile-product-slider-track .product .to-cart-button:before {
+    font-size: 18px !important;
+  }
+}
+
+/* Kategorie na úzkém mobilu (do 480px = 1 karta na řádek, stejně velká
+   karta jako v mobilním slideru) — stejné zvětšení tlačítka o 30 %.
+   Záměrně JEN do 480px: mezi 481–768px jsou karty ve 2 sloupcích a
+   o 30 % větší tlačítko by se vedle ceny nevešlo. */
+@media (max-width: 480px) {
+  body.type-category .products.products-page .product .add-to-cart-button,
+  body.type-category .products.products-page .product .to-cart-button {
+    font-size: 18px !important;
+    padding: 12px 21px !important;
+    gap: 8px !important;
+    border-radius: 10px !important;
+  }
+  body.type-category .products.products-page .product .add-to-cart-button:before,
+  body.type-category .products.products-page .product .to-cart-button:before {
+    font-size: 18px !important;
+  }
 }
 
 /* ══════════════════════════════════════════════
