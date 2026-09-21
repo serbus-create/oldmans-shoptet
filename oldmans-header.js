@@ -181,6 +181,71 @@
     wrapper.classList.add('om-recipes-done', 'om-recipes-grid');
   }
 
+  /* --- Homepage "Vybrané recepty": aktuální náhledové obrázky ---
+     (21. 9. 2026, na žádost klienta) Karty na homepage jsou v JS napevno
+     (odkaz + titulek + fotka ze statického souboru v repu), takže když
+     klient změnil náhledové obrázky u receptů v administraci, na homepage
+     zůstávaly staré. Teď se po sestavení sekce přečte stránka /recepty/
+     (stejná doména, žádná cizí služba), z každého .news-item se vezme
+     odkaz + první <img> (přesně stejně jako buildRecipeGallery() výše,
+     takže homepage ukazuje totéž co karty na /recepty/) a obrázek se
+     vymění u karty se shodným odkazem (i u zdvojených kopií slideru).
+     Výběr receptů, pořadí a titulky zůstávají tak, jak jsou v JS.
+     Statické fotky v kartě slouží jako záloha — když se načtení nepovede
+     nebo stránka /recepty/ nic nevrátí, nic se nemění.
+     Výsledek se na 1 hodinu ukládá do localStorage (jen mapa odkaz →
+     URL fotky), ať se /recepty/ nestahuje při každém načtení homepage;
+     uložená verze se použije hned, bez čekání na síť. */
+  function syncHomepageRecipeImages(container) {
+    if (!container || !window.fetch || !window.DOMParser) return;
+    var CACHE_KEY = 'om_recipe_imgs_v1';
+    var CACHE_TTL = 60 * 60 * 1000;
+
+    function pathOf(href) {
+      try { return new URL(href, location.origin).pathname; } catch (e) { return ''; }
+    }
+    function apply(map) {
+      container.querySelectorAll('.om-recipe-item').forEach(function (card) {
+        var img = card.querySelector('img');
+        var src = map[pathOf(card.getAttribute('href'))];
+        if (img && src && img.getAttribute('src') !== src) img.setAttribute('src', src);
+      });
+    }
+
+    var cached = null;
+    try {
+      var raw = localStorage.getItem(CACHE_KEY);
+      if (raw) cached = JSON.parse(raw);
+    } catch (e) { cached = null; }
+    if (cached && cached.map) apply(cached.map);
+    if (cached && cached.t && (Date.now() - cached.t) < CACHE_TTL) return; /* čerstvé */
+
+    fetch('/recepty/', { credentials: 'same-origin' })
+      .then(function (r) { return r.ok ? r.text() : Promise.reject(r.status); })
+      .then(function (html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        var map = {};
+        var count = 0;
+        doc.querySelectorAll('.news-wrapper .news-item').forEach(function (item) {
+          var a = item.querySelector('h2 a');
+          var img = item.querySelector('img');
+          if (!a || !img) return;
+          var src = img.getAttribute('src') || '';
+          if (!src || src.indexOf('data:') === 0) src = img.getAttribute('data-src') || '';
+          var path = pathOf(a.getAttribute('href') || '');
+          if (!src || !path) return;
+          map[path] = src;
+          count++;
+        });
+        if (!count) return; /* nic nenalezeno — necháme záložní fotky */
+        apply(map);
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), map: map }));
+        } catch (e) {}
+      })
+      .catch(function () { /* záložní (statické) fotky zůstávají */ });
+  }
+
   /* --- Přestaví nativní Shoptet copyright lištu (dole pod patičkou) ---
      Původní markup:
      <span id="signature"><a class="image">...</a><a class="title">Vytvořil Shoptet</a></span>
@@ -1050,6 +1115,10 @@
       recipesPrev.addEventListener('click', function() { scrollByCard(-1); });
       recipesNext.addEventListener('click', function() { scrollByCard(1); });
     }
+
+    /* Živé náhledové obrázky receptů (viz syncHomepageRecipeImages) —
+       voláme až PO zdvojení karet slideru, ať se výměna projeví i v kopiích. */
+    syncHomepageRecipeImages(recipes);
 
     insertAfter(instagram, recipes);
 
