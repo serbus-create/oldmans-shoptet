@@ -3864,16 +3864,19 @@ html, body {
   }
   /* Zelené tlačítko Do košíku o 30 % větší (21. 9. 2026, na žádost
      klienta) — písmo 14→18 px, padding 9×16→12×21 px, mezera a ikona
-     úměrně. Scoped na mobilní slider (velká karta na celou šířku). */
-  .om-mobile-product-slider-track .product .add-to-cart-button,
-  .om-mobile-product-slider-track .product .to-cart-button {
+     úměrně. Scoped na mobilní slider (velká karta na celou šířku)
+     JEN mimo detail produktu (body:not(.type-product)) — tam se stejný
+     slider staví pro "Související"/"Podobné produkty" a klient je chce
+     nechat beze změny. */
+  body:not(.type-product) .om-mobile-product-slider-track .product .add-to-cart-button,
+  body:not(.type-product) .om-mobile-product-slider-track .product .to-cart-button {
     font-size: 18px !important;
     padding: 12px 21px !important;
     gap: 8px !important;
     border-radius: 10px !important;
   }
-  .om-mobile-product-slider-track .product .add-to-cart-button:before,
-  .om-mobile-product-slider-track .product .to-cart-button:before {
+  body:not(.type-product) .om-mobile-product-slider-track .product .add-to-cart-button:before,
+  body:not(.type-product) .om-mobile-product-slider-track .product .to-cart-button:before {
     font-size: 18px !important;
   }
 }
