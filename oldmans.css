@@ -4554,6 +4554,34 @@ html, body {
   padding-top: 14px;
   border-top: 1px solid #f0d9d4;
 }
+/* Odpočet doběhl (box zůstává kvůli ceně a tlačítku, akční prvky mizí) */
+.om-promo--ended .om-promo-left,
+.om-promo--ended .om-promo-divider,
+.om-promo--ended .om-promo-badge,
+.om-promo--ended .om-promo-strike {
+  display: none !important;
+}
+/* Tlačítko Přidat do košíku ČERVENĚ — jen v akčním boxu, tedy jen u produktu
+   s akční cenou (21. 9. 2026, na žádost klienta). Jinde zůstává zelené.
+   #om-promo kvůli specificitě (přebíjí zelené pravidlo tlačítka). Po
+   skončení odpočtu se vrací zelená. */
+#om-promo:not(.om-promo--ended) .om-cart-btn-white,
+#om-promo:not(.om-promo--ended) .om-cart-btn-white.add-to-cart-button {
+  background: #9f1400 !important;
+  border-color: #9f1400 !important;
+}
+#om-promo:not(.om-promo--ended) .om-cart-btn-white:hover {
+  background: #7a0f00 !important;
+  border-color: #7a0f00 !important;
+}
+/* Přilepená lišta s tlačítkem na mobilu — stejně červená, ale jen když je na
+   stránce funkční akční box (ne záložní ani skončený) */
+body:has(#om-promo:not(.om-promo--solo):not(.om-promo--ended)) .om-sticky-cta-btn {
+  background: #9f1400;
+}
+body:has(#om-promo:not(.om-promo--solo):not(.om-promo--ended)) .om-sticky-cta-btn:active {
+  background: #7a0f00;
+}
 .om-promo--solo .om-promo-divider,
 .om-promo--solo .om-promo-right,
 .om-promo--solo .om-promo-buy {
