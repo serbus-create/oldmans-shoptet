@@ -1305,7 +1305,7 @@
      Ladění: přidat k URL ?omdebug=1 → do konzole vypíše, co našel. */
   function buildPromoBox(priceBlock, detailInner) {
     if (!priceBlock || !detailInner) return false;
-    if (document.getElementById('om-promo')) return true;
+    if (priceBlock.getAttribute('data-om-promo') || document.getElementById('om-promo')) return true;
     var debug = location.search.indexOf('omdebug') !== -1;
 
     function parsePrice(text) {
@@ -1420,12 +1420,14 @@
     var hasTimer = !isNaN(endTs) && endTs > Date.now();
     if (debug) console.info('[om-promo] sleva', { pct: pct, old: old, cur: cur, endText: endText, endTs: endTs, hasTimer: hasTimer });
 
+    /* Box se staví ODPOJENÝ a do stránky se vloží až na správné místo u ceny
+       (combine níže), ať po načtení nepřeskakuje z jednoho místa na druhé. */
+    priceBlock.setAttribute('data-om-promo', '1');
     var box = document.createElement('div');
     box.id = 'om-promo';
     box.className = 'om-promo' + (hasTimer ? '' : ' om-promo--static');
     var timerHtml = hasTimer
-      ? '<div class="om-promo-timer" role="timer">' +
-        '<span class="om-promo-timer-label">Akce končí za</span>' +
+      ? '<div class="om-promo-timer" role="timer" aria-label="Do konce akce zbývá">' +
         '<div class="om-promo-units">' +
         '<div class="om-promo-unit"><b data-u="d">00</b><small>dny</small></div>' +
         '<div class="om-promo-unit"><b data-u="h">00</b><small>hod</small></div>' +
@@ -1433,19 +1435,31 @@
         '<div class="om-promo-unit"><b data-u="s">00</b><small>sek</small></div>' +
         '</div></div>'
       : '';
+    /* Rozložení podle předlohy: vlevo titulek + odpočet, svislá čára,
+       vpravo cena se štítkem −X % a přeškrtnutou původní cenou (sem se
+       přesune nativní cenový řádek), dole počet kusů + tlačítko. */
     box.innerHTML =
-      '<div class="om-promo-head"><span class="om-promo-title">🔥 Akce</span>' +
-      '<span class="om-promo-badge">–' + pct + '&nbsp;%</span></div>' +
-      (timerHtml ? '<div class="om-promo-body">' + timerHtml + '</div>' : '');
-    priceBlock.insertBefore(box, priceBlock.firstChild);
+      '<div class="om-promo-top">' +
+        '<div class="om-promo-left"><div class="om-promo-title">🔥 Akce</div>' + timerHtml + '</div>' +
+        '<div class="om-promo-divider"></div>' +
+        '<div class="om-promo-right"></div>' +
+      '</div>' +
+      '<div class="om-promo-buy"></div>';
+    var badge = document.createElement('span');
+    badge.className = 'om-promo-badge';
+    badge.innerHTML = '–' + pct + '&nbsp;%';
 
-    /* SLOUČENÍ S CENOU A TLAČÍTKEM (jako vzor): cenový řádek (přeškrtnutá
-       cena, aktuální cena) a nákupní řádek (počet kusů + Přidat do košíku)
-       se přesunou DO boxu — box se postaví těsně nad cenu. Přesouvají se
+    /* SLOUČENÍ S CENOU A TLAČÍTKEM: cenový řádek (přeškrtnutá cena,
+       aktuální cena) a nákupní řádek (počet kusů + Přidat do košíku)
+       se přesunou DO boxu a box se postaví těsně nad cenu. Přesouvají se
        přímo ty samé prvky (ne kopie), takže počítání ceny podle množství,
        formulář a sticky lišta na mobilu dál fungují. Děje se až po dokončení
        stránky (opakovaně, idempotentně), protože nákupní řádek a cenový
-       řádek staví zbytek enhanceProductDetail() až po vložení boxu. */
+       řádek staví zbytek enhanceProductDetail() až po vložení boxu.
+       Části cenového řádku se poznají podle třídy NEBO obsahu (přeškrtnutá
+       cena = text s "Kč" a line-through, nativní procento = text s "%") a
+       dostanou třídy .om-promo-price/-strike/-pct pro CSS. Nativní procento
+       se schová, místo něj je náš štítek za cenou. */
     var combine = function () {
       if (box.getAttribute('data-combined')) return true;
       var pf = priceBlock.querySelector('.price-final');
@@ -1453,24 +1467,43 @@
       if (!pf || !buyRow) return false;
       var wrap = pf.closest('.om-price-row') || pf.closest('.p-final-price-wrapper') || pf.parentElement;
       if (!wrap || wrap === priceBlock || wrap.contains(buyRow) || buyRow.contains(wrap) || box.contains(wrap)) return false;
-      var body = box.querySelector('.om-promo-body');
-      if (!body) {
-        body = document.createElement('div');
-        body.className = 'om-promo-body';
-        box.appendChild(body);
-      }
-      var buy = document.createElement('div');
-      buy.className = 'om-promo-buy';
+      var pfChild = pf;
+      while (pfChild && pfChild.parentNode !== wrap) pfChild = pfChild.parentNode;
+      if (!pfChild) return false;
+      pfChild.classList.add('om-promo-price');
+      Array.prototype.forEach.call(wrap.children, function (c) {
+        if (c === pfChild) return;
+        if (c.classList.contains('quantity-discounts__save') || c.classList.contains('om-price-orig')) return;
+        var t = (c.textContent || '').replace(/\u00a0/g, ' ');
+        if (/%/.test(t) && !/Kč/.test(t)) { c.classList.add('om-promo-pct'); return; }
+        if (/Kč/.test(t)) {
+          var cs = window.getComputedStyle(c);
+          if (c.classList.contains('price-standard') ||
+              /line-through/.test((cs.textDecorationLine || '') + ' ' + (cs.textDecoration || ''))) {
+            c.classList.add('om-promo-strike');
+          }
+        }
+      });
+      wrap.insertBefore(badge, pfChild.nextSibling);
       wrap.parentNode.insertBefore(box, wrap);
-      buy.appendChild(wrap);
-      buy.appendChild(buyRow);
-      body.appendChild(buy);
+      box.querySelector('.om-promo-right').appendChild(wrap);
+      box.querySelector('.om-promo-buy').appendChild(buyRow);
       box.setAttribute('data-combined', '1');
       return true;
     };
     [0, 400, 1200, 2500].forEach(function (ms) {
       setTimeout(function () { combine(); }, ms);
     });
+    /* Záloha: kdyby se sloučit nepodařilo (nečekaná struktura stránky),
+       ukáže se aspoň titulek a odpočet nahoře v cenovém boxu; cena a
+       tlačítko zůstanou na svém místě. */
+    setTimeout(function () {
+      if (!box.getAttribute('data-combined') && !box.parentNode) {
+        box.classList.add('om-promo--solo');
+        priceBlock.insertBefore(box, priceBlock.firstChild);
+        if (debug) console.info('[om-promo] sloučení s cenou se nepodařilo, box je samostatně nahoře');
+      }
+    }, 3000);
 
     if (hasTimer) {
       var u = {
