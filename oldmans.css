@@ -1466,6 +1466,21 @@ body.type-category .products.products-page .product .p-tools {
   flex-grow: 0 !important;
   width: auto !important;
 }
+/* Pilulka slevy (a odpočet) přesunuté JS-em (relocateCardDiscountBadges)
+   před tlačítko — sloupec vpravo: pilulka, pak odpočet, pak tlačítko. */
+body.type-category .products.products-page .product .p-tools {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+body.type-category .products.products-page .product .p-tools .price-save {
+  align-self: center !important;
+  margin: 0 !important;
+}
+body.type-category .products.products-page .product .p-tools .om-card-cd {
+  margin: 0 !important;
+}
 body.type-category .products.products-page .product .pr-action {
   margin: 0 !important;
   width: auto !important;
@@ -1692,6 +1707,20 @@ body.type-category .products.products-page .product .quantity {
   flex-shrink: 0 !important;
   flex-grow: 0 !important;
   width: auto !important;
+}
+/* Pilulka slevy (a odpočet) přesunuté JS-em před tlačítko — sloupec
+   vpravo: pilulka, pak odpočet, pak tlačítko (viz kategorie výše). */
+.products-alternative .product .p-tools {
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+.products-alternative .product .p-tools .price-save {
+  align-self: center !important;
+  margin: 0 !important;
+}
+.products-alternative .product .p-tools .om-card-cd {
+  margin: 0 !important;
 }
 .products-alternative .product .pr-action {
   margin: 0 !important;
@@ -1920,6 +1949,20 @@ h2.products-alternative-header {
   flex-shrink: 0 !important;
   flex-grow: 0 !important;
   width: auto !important;
+}
+/* Pilulka slevy (a odpočet) přesunuté JS-em před tlačítko — sloupec
+   vpravo: pilulka, pak odpočet, pak tlačítko (viz kategorie výše). */
+.product-slider-holder .product .p-tools {
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+.product-slider-holder .product .p-tools .price-save {
+  align-self: center !important;
+  margin: 0 !important;
+}
+.product-slider-holder .product .p-tools .om-card-cd {
+  margin: 0 !important;
 }
 .product-slider-holder .product .pr-action {
   margin: 0 !important;
