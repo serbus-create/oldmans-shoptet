@@ -1673,24 +1673,31 @@
   function saveCardCdCache(map) {
     try { localStorage.setItem(CARD_CD_CACHE_KEY, JSON.stringify(map)); } catch (e) { /* ignorováno (soukromý režim apod.) */ }
   }
-  function formatRemaining(diffSec) {
-    var d = Math.floor(diffSec / 86400);
-    var h = Math.floor((diffSec % 86400) / 3600);
-    var m = Math.floor((diffSec % 3600) / 60);
-    if (d >= 1) return 'Končí za ' + d + ' ' + (d === 1 ? 'den' : (d < 5 ? 'dny' : 'dní')) + (h > 0 ? ' ' + h + ' h' : '');
-    if (h >= 1) return 'Končí za ' + h + ' h ' + m + ' min';
-    if (m >= 1) return 'Končí za ' + m + ' min';
-    return 'Končí za chvíli';
-  }
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+  /* Varianta A (klient si vybral z náčrtu 23. 9. 2026) — čtyři malé
+     boxíky DNY/HOD/MIN/SEK, stejné rozložení jako na detailu produktu
+     (.om-promo-unit), jen zmenšené na šířku karty (.om-card-cd-unit). */
   function renderCardCountdown(saveEl, endTs) {
     if (saveEl.parentNode.querySelector('.om-card-cd')) return; /* už hotovo */
     var el = document.createElement('div');
     el.className = 'om-card-cd';
+    el.innerHTML =
+      '<div class="om-card-cd-unit"><b data-u="d">00</b><small>d</small></div>' +
+      '<div class="om-card-cd-unit"><b data-u="h">00</b><small>h</small></div>' +
+      '<div class="om-card-cd-unit"><b data-u="m">00</b><small>m</small></div>' +
+      '<div class="om-card-cd-unit"><b data-u="s">00</b><small>s</small></div>';
     saveEl.insertAdjacentElement('afterend', el);
+    var u = {
+      d: el.querySelector('[data-u="d"]'), h: el.querySelector('[data-u="h"]'),
+      m: el.querySelector('[data-u="m"]'), s: el.querySelector('[data-u="s"]')
+    };
     var tick = function () {
       var diff = Math.floor((endTs - Date.now()) / 1000);
       if (diff <= 0) { el.remove(); return false; }
-      el.textContent = formatRemaining(diff);
+      u.d.textContent = pad2(Math.floor(diff / 86400));
+      u.h.textContent = pad2(Math.floor((diff % 86400) / 3600));
+      u.m.textContent = pad2(Math.floor((diff % 3600) / 60));
+      u.s.textContent = pad2(diff % 60);
       return true;
     };
     if (tick()) om_cardCountdownTickers.push(tick);
@@ -1698,14 +1705,15 @@
 
   var om_cardCountdownTickers = [];
   if (!window.__omCardCdInterval) {
-    /* JEDEN sdílený interval pro všechny karty najednou (ne časovač
-       na kartu) — šetrnější k výkonu, aktualizuje se jednou za minutu,
-       text v minutách stejně jemněji nepotřebuje. */
+    /* JEDEN sdílený interval pro všechny karty najednou (ne časovač na
+       kartu) — i s živými sekundami (boxíky, varianta A) je to levné,
+       protože se jen přepisuje textContent pár prvků, ne přepočítávají
+       celé karty. Karet se slevou bývá v kategorii jen pár. */
     window.__omCardCdInterval = setInterval(function () {
       for (var i = om_cardCountdownTickers.length - 1; i >= 0; i--) {
         if (!om_cardCountdownTickers[i]()) om_cardCountdownTickers.splice(i, 1);
       }
-    }, 60000);
+    }, 1000);
   }
 
   function fetchProductEndDate(path) {
