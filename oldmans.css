@@ -4608,3 +4608,16 @@ body:has(#om-promo:not(.om-promo--solo):not(.om-promo--ended)) .om-sticky-cta-bt
   background: #9f1400 !important;
   border-color: #9f1400 !important;
 }
+
+
+/* Nativní widget Shoptetu "Instagram" v patičce (Vzhled a obsah → Widgety
+   → Instagram) — 23. 9. 2026, na žádost klienta: schovat celý blok i s
+   nadpisem "Instagram". Fotky z něj náš JS (syncInstagramTiles) použije
+   jako zdroj dat pro sekci "Na Instagramu" na homepage; widget sám ale
+   nemá být vidět nikde na webu (na ostatních stránkách, kde není
+   syncInstagramTiles voláno, by jinak zůstal viditelný). Skryté prvky
+   zůstávají v DOM a jejich atributy jdou dál číst, takže se tím čtení
+   dat nijak neomezí. */
+.custom-footer__instagram {
+  display: none !important;
+}
