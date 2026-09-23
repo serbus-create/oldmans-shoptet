@@ -1449,6 +1449,15 @@ body.type-category .products.products-page .product .price-save {
   line-height: 1.5 !important;
   white-space: nowrap !important;
 }
+/* Odpočet konce akce pod pilulkou (viz syncCardCountdowns) — jen
+   text, žádný rám, ať na malé kartě nepůsobí těžkopádně. */
+body.type-category .products.products-page .product .om-card-cd {
+  margin: 3px 0 0 !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  color: #9f1400 !important;
+  white-space: nowrap !important;
+}
 
 /* ── Tlačítko — vpravo, kompaktní, s ikonou košíku ── */
 body.type-category .products.products-page .product .p-tools {
@@ -1666,6 +1675,13 @@ body.type-category .products.products-page .product .quantity {
   font-size: 11px !important;
   font-weight: 800 !important;
   line-height: 1.5 !important;
+  white-space: nowrap !important;
+}
+.products-alternative .product .om-card-cd {
+  margin: 3px 0 0 !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  color: #9f1400 !important;
   white-space: nowrap !important;
 }
 /* Tlačítko Do košíku — nativně schované třídou .no-buttons, odkrýt */
@@ -1887,6 +1903,13 @@ h2.products-alternative-header {
   font-size: 11px !important;
   font-weight: 800 !important;
   line-height: 1.5 !important;
+  white-space: nowrap !important;
+}
+.product-slider-holder .product .om-card-cd {
+  margin: 3px 0 0 !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  color: #9f1400 !important;
   white-space: nowrap !important;
 }
 /* Tlačítko Do košíku — nativně schované třídou .no-buttons, odkrýt */
