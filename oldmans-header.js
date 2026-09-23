@@ -320,6 +320,13 @@
   }
 
   function injectAll() {
+    /* Sleva (%) na kartách bez závorek (viz cleanCardDiscountBadges) —
+       ZÁMĚRNĚ hned na začátku, před klonováním pro mobilní slidery
+       (2200ms níže, a 800ms na detailu produktu) — klony pak zdědí
+       už vyčištěný text, není potřeba volat na víc místech. Pokrývá
+       kategorii (karty rovnou v DOM), homepage slidery i detail
+       produktu (Související/Podobné produkty) — všude najednou. */
+    cleanCardDiscountBadges();
 
     customizeFooterCopyright();
 
@@ -1584,6 +1591,25 @@
       tick();
     }
     return true;
+  }
+
+  /* --- Karty produktů: štítek slevy (%) bez závorek ---
+     (23. 9. 2026, na žádost klienta) .price-save je teď stylovaný jako
+     červená pilulka (viz CSS), ale nativní text od Shoptetu má tvar
+     "(−23 %)" — uvnitř barevné pilulky vypadají závorky nadbytečně.
+     Tahle funkce je jen odstraní, číslo a "%" nechá beze změny.
+     Idempotentní (bezpečné volat opakovaně), nic nedělá s produkty
+     bez slevy (žádný .price-save = nic k úpravě). */
+  function cleanCardDiscountBadges() {
+    document.querySelectorAll(
+      'body.type-category .products.products-page .product .price-save,' +
+      '.products-alternative .product .price-save,' +
+      '.product-slider-holder .product .price-save'
+    ).forEach(function (el) {
+      var t = el.textContent;
+      var cleaned = t.replace(/^\s*\(\s*/, '').replace(/\s*\)\s*$/, '');
+      if (cleaned !== t) el.textContent = cleaned;
+    });
   }
 
   function enhanceProductDetail() {
