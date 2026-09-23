@@ -327,6 +327,7 @@
        kategorii (karty rovnou v DOM), homepage slidery i detail
        produktu (Související/Podobné produkty) — všude najednou. */
     cleanCardDiscountBadges();
+    relocateCardDiscountBadges();
 
     customizeFooterCopyright();
 
@@ -1618,6 +1619,30 @@
       var t = el.textContent;
       var cleaned = t.replace(/^\s*\(\s*/, '').replace(/\s*\)\s*$/, '');
       if (cleaned !== t) el.textContent = cleaned;
+    });
+  }
+
+  /* --- Karty produktů: pilulka slevy (a později i odpočet) nad tlačítko ---
+     (23. 9. 2026, na žádost klienta, podle mockupu) Pilulka "−23 %" žila
+     uvnitř .prices (pod cenou, vlevo). Teď se fyzicky přesouvá do .p-tools,
+     před tlačítko Do košíku — vizuálně tvoří společně s odpočtem (viz
+     syncCardCountdowns) sloupec NAD tlačítkem, vpravo na kartě. Cena
+     (price-final/price-before) zůstává vlevo beze změny.
+     ZÁMĚRNĚ volané PŘED klonováním pro mobilní slidery (stejně jako
+     cleanCardDiscountBadges), ať klony zdědí už přesunutou strukturu.
+     Idempotentní (data-om-relocated), produkty bez slevy nedotčené. */
+  function relocateCardDiscountBadges() {
+    document.querySelectorAll(
+      'body.type-category .products.products-page .product .price-save,' +
+      '.products-alternative .product .price-save,' +
+      '.product-slider-holder .product .price-save'
+    ).forEach(function (saveEl) {
+      if (saveEl.getAttribute('data-om-relocated')) return;
+      var card = saveEl.closest('.product');
+      var tools = card && card.querySelector('.p-tools');
+      if (!tools) return;
+      tools.insertBefore(saveEl, tools.firstChild);
+      saveEl.setAttribute('data-om-relocated', '1');
     });
   }
 
