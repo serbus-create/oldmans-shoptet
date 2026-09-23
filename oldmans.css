@@ -1431,6 +1431,25 @@ body.type-category .products.products-page .product ins .price {
   color: #9f1400 !important;
 }
 
+/* Sleva (%) na kartě — zvýrazněno jako červená pilulka, jasně viditelná
+   vedle přeškrtnuté ceny (23. 9. 2026, na žádost klienta). Text "(-X %)"
+   je nativní od Shoptetu, jen ho stylujeme; obalené závorky odstraní
+   JS (viz cleanCardDiscountBadges). */
+body.type-category .products.products-page .product .price-save {
+  display: inline-flex !important;
+  align-items: center !important;
+  align-self: flex-start !important;
+  margin: 3px 0 0 !important;
+  padding: 2px 8px !important;
+  border-radius: 20px !important;
+  background: #9f1400 !important;
+  color: #fff !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  line-height: 1.5 !important;
+  white-space: nowrap !important;
+}
+
 /* ── Tlačítko — vpravo, kompaktní, s ikonou košíku ── */
 body.type-category .products.products-page .product .p-tools {
   margin: 0 0 0 auto !important;
@@ -1629,6 +1648,25 @@ body.type-category .products.products-page .product .quantity {
 .products-alternative .product .price-final.price--sale,
 .products-alternative .product ins .price {
   color: #9f1400 !important;
+}
+
+/* Sleva (%) na kartě — zvýrazněno jako červená pilulka, jasně viditelná
+   vedle přeškrtnuté ceny (23. 9. 2026, na žádost klienta). Text "(-X %)"
+   je nativní od Shoptetu, jen ho stylujeme; obalené závorky odstraní
+   JS (viz cleanCardDiscountBadges). */
+.products-alternative .product .price-save {
+  display: inline-flex !important;
+  align-items: center !important;
+  align-self: flex-start !important;
+  margin: 3px 0 0 !important;
+  padding: 2px 8px !important;
+  border-radius: 20px !important;
+  background: #9f1400 !important;
+  color: #fff !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  line-height: 1.5 !important;
+  white-space: nowrap !important;
 }
 /* Tlačítko Do košíku — nativně schované třídou .no-buttons, odkrýt */
 .products-alternative .product .p-bottom.no-buttons .p-tools,
@@ -1831,6 +1869,25 @@ h2.products-alternative-header {
 .product-slider-holder .product .price-final.price--sale,
 .product-slider-holder .product ins .price {
   color: #9f1400 !important;
+}
+
+/* Sleva (%) na kartě — zvýrazněno jako červená pilulka, jasně viditelná
+   vedle přeškrtnuté ceny (23. 9. 2026, na žádost klienta). Text "(-X %)"
+   je nativní od Shoptetu, jen ho stylujeme; obalené závorky odstraní
+   JS (viz cleanCardDiscountBadges). */
+.product-slider-holder .product .price-save {
+  display: inline-flex !important;
+  align-items: center !important;
+  align-self: flex-start !important;
+  margin: 3px 0 0 !important;
+  padding: 2px 8px !important;
+  border-radius: 20px !important;
+  background: #9f1400 !important;
+  color: #fff !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  line-height: 1.5 !important;
+  white-space: nowrap !important;
 }
 /* Tlačítko Do košíku — nativně schované třídou .no-buttons, odkrýt */
 .product-slider-holder .product .p-bottom.no-buttons .p-tools,
