@@ -3253,6 +3253,26 @@ li[data-testid="tabDiscussion"],
   max-width: none !important;
   margin: 24px 0 16px 0 !important;
   padding-left: 0 !important;
+  /* Na mobilu se položky (ikona domů, každá úroveň + lomítko za ní)
+     nevejdou na jeden řádek. Bez flex-wrap flexbox místo zalomení celých
+     položek zužoval jejich šířku, čímž se popisek a lomítko rozlámaly
+     každé na jiný řádek (21. 9. 2026 → oprava 23. 9. 2026: přidán
+     flex-wrap a nowrap na přímé děti, viz níže — každá položka teď drží
+     pohromadě a na nový řádek jde vždy celá). */
+  flex-wrap: wrap !important;
+  row-gap: 4px !important;
+  column-gap: 6px !important;
+}
+/* Každá přímá položka SE SVÝM LOMÍTKEM za sebou (ikona domů, span#navigation-1/2 s
+   popiskem a navazujícím lomítkem uvnitř) zůstává na jednom řádku jako celek —
+   díky tomu se zalamuje vždy celá položka, nikdy uprostřed slova nebo mezi
+   popiskem a lomítkem. POSLEDNÍ položka (aktuální stránka, [data-testid=
+   "breadcrumbsLastLevel"], bez lomítka za sebou) je z pravidla vyjmutá —
+   u dlouhého názvu produktu se má normálně zalomit na víc řádků jako běžný
+   text, ne zůstat na jednom nezalomitelném řádku, který by přetekl mimo
+   obrazovku. */
+.breadcrumbs.navigation-home-icon-wrapper > *:not([data-testid="breadcrumbsLastLevel"]) {
+  white-space: nowrap !important;
 }
 .breadcrumbs.navigation-home-icon-wrapper,
 .breadcrumbs.navigation-home-icon-wrapper * {
