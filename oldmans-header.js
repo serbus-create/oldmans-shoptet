@@ -1324,6 +1324,50 @@
      .om-discount-circle — CSS ji přebarví do červené webu. Bere se JEN
      kolečko uvnitř detailu produktu (.p-detail-inner), karty produktů
      ve výpisech se nemění. Ladění: ?omdebug=1. */
+  /* --- Sdílené pomocné funkce pro práci s koncem akce ---
+     (23. 9. 2026) Původně byly zanořené jen uvnitř buildPromoBox
+     (detail produktu). Teď je používá i syncCardCountdowns (karty
+     v kategorii/sliderech), proto vytažené sem, na jedno místo — ať
+     nevznikají dvě mírně odlišné kopie stejné logiky. */
+
+  /* Čas v pásmu Europe/Prague -> UTC timestamp (letní/zimní čas řeší Intl) */
+  function pragueToUtc(y, mo, d, h, mi, s) {
+    var guess = Date.UTC(y, mo - 1, d, h, mi, s);
+    var fmt = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Europe/Prague', hourCycle: 'h23',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
+    function offsetAt(ts) {
+      var p = {};
+      fmt.formatToParts(new Date(ts)).forEach(function (x) { p[x.type] = x.value; });
+      return Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute, +p.second) - ts;
+    }
+    var off = offsetAt(guess);
+    var ts = guess - off;
+    var off2 = offsetAt(ts);
+    if (off2 !== off) ts = guess - off2;
+    return ts;
+  }
+  function parseEnd(str) {
+    str = String(str || '').replace(/\u00a0/g, ' ').trim();
+    var m = str.match(/^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2})(?::(\d{2}))?)?\s*(Z|[+-]\d{2}:?\d{2})?$/);
+    if (m) {
+      if (m[7]) {
+        var tz = m[7] === 'Z' ? 'Z' : m[7].replace(/^([+-]\d{2}):?(\d{2})$/, '$1:$2');
+        return Date.parse(m[1] + '-' + m[2] + '-' + m[3] + 'T' + (m[4] || '23') + ':' + (m[5] || '59') + ':' + (m[6] || '59') + tz);
+      }
+      return m[4] ? pragueToUtc(+m[1], +m[2], +m[3], +m[4], +m[5], +(m[6] || 0))
+                  : pragueToUtc(+m[1], +m[2], +m[3], 23, 59, 59);
+    }
+    m = str.match(/(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{4})(?:\D+(\d{1,2}):(\d{2}))?/);
+    if (m) {
+      return m[4] ? pragueToUtc(+m[3], +m[2], +m[1], +m[4], +m[5], 0)
+                  : pragueToUtc(+m[3], +m[2], +m[1], 23, 59, 59);
+    }
+    return NaN;
+  }
+
   function markDiscountCircle(detailInner) {
     if (!detailInner) return false;
     if (detailInner.querySelector('.om-discount-circle')) return true;
@@ -1401,43 +1445,8 @@
       return null;
     }
 
-    /* Čas v pásmu Europe/Prague -> UTC timestamp (letní/zimní čas řeší Intl) */
-    function pragueToUtc(y, mo, d, h, mi, s) {
-      var guess = Date.UTC(y, mo - 1, d, h, mi, s);
-      var fmt = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'Europe/Prague', hourCycle: 'h23',
-        year: 'numeric', month: '2-digit', day: '2-digit',
-        hour: '2-digit', minute: '2-digit', second: '2-digit'
-      });
-      function offsetAt(ts) {
-        var p = {};
-        fmt.formatToParts(new Date(ts)).forEach(function (x) { p[x.type] = x.value; });
-        return Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute, +p.second) - ts;
-      }
-      var off = offsetAt(guess);
-      var ts = guess - off;
-      var off2 = offsetAt(ts);
-      if (off2 !== off) ts = guess - off2;
-      return ts;
-    }
-    function parseEnd(str) {
-      str = String(str || '').replace(/\u00a0/g, ' ').trim();
-      var m = str.match(/^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2})(?::(\d{2}))?)?\s*(Z|[+-]\d{2}:?\d{2})?$/);
-      if (m) {
-        if (m[7]) {
-          var tz = m[7] === 'Z' ? 'Z' : m[7].replace(/^([+-]\d{2}):?(\d{2})$/, '$1:$2');
-          return Date.parse(m[1] + '-' + m[2] + '-' + m[3] + 'T' + (m[4] || '23') + ':' + (m[5] || '59') + ':' + (m[6] || '59') + tz);
-        }
-        return m[4] ? pragueToUtc(+m[1], +m[2], +m[3], +m[4], +m[5], +(m[6] || 0))
-                    : pragueToUtc(+m[1], +m[2], +m[3], 23, 59, 59);
-      }
-      m = str.match(/(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{4})(?:\D+(\d{1,2}):(\d{2}))?/);
-      if (m) {
-        return m[4] ? pragueToUtc(+m[3], +m[2], +m[1], +m[4], +m[5], 0)
-                    : pragueToUtc(+m[3], +m[2], +m[1], 23, 59, 59);
-      }
-      return NaN;
-    }
+    /* Čas v pásmu Europe/Prague a parseEnd() jsou sdílené (viz nahoře
+       souboru, používá je i syncCardCountdowns u karet). */
     /* Konec akce: Shoptet ho vypisuje do microdat detailu produktu jako
        <meta itemprop="priceValidUntil" content="2026-09-30"> (ověřeno na
        testovacím produktu — shoduje se s datem "do" u akční ceny v Ceníku).
@@ -1612,8 +1621,140 @@
     });
   }
 
+  /* --- Karty produktů: odpočet konce akce (dotažený z detailu) ---
+     (23. 9. 2026, na žádost klienta) Shoptet na výpisu (kategorie,
+     homepage slidery, Související/Podobné produkty) NEPOSÍLÁ datum
+     konce akce (ověřeno: 0 výskytů priceValidUntil v HTML kategorie).
+     Datum má jen detail produktu. Řešení: pro každou kartu, která má
+     .price-save (= je akční), rovnou po dokončení stránky doděláme
+     jeden lehký fetch na produktovou stránku, z ní přečteme
+     <meta itemprop="priceValidUntil"> a pod pilulku vložíme kompaktní
+     text ("Končí za 9 dní 11 h"). Šetrné k serveru:
+     - jen pro karty s aktivní slevou (ne pro všechny produkty),
+     - nejvýš 4 fetch najednou (fronta),
+     - výsledek na 1 h v localStorage (mapa cesta -> datum konce),
+       další návštěva stránky nic nestahuje.
+     Když fetch selže nebo datum na detailu není, karta zůstane
+     jen s pilulkou — nic se nerozbije, nic se neopakuje dokola. */
+  var CARD_CD_CACHE_KEY = 'om_card_countdown_v1';
+  var CARD_CD_TTL = 60 * 60 * 1000;
+
+  function loadCardCdCache() {
+    try {
+      var raw = localStorage.getItem(CARD_CD_CACHE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) { return {}; }
+  }
+  function saveCardCdCache(map) {
+    try { localStorage.setItem(CARD_CD_CACHE_KEY, JSON.stringify(map)); } catch (e) { /* ignorováno (soukromý režim apod.) */ }
+  }
+  function formatRemaining(diffSec) {
+    var d = Math.floor(diffSec / 86400);
+    var h = Math.floor((diffSec % 86400) / 3600);
+    var m = Math.floor((diffSec % 3600) / 60);
+    if (d >= 1) return 'Končí za ' + d + ' ' + (d === 1 ? 'den' : (d < 5 ? 'dny' : 'dní')) + (h > 0 ? ' ' + h + ' h' : '');
+    if (h >= 1) return 'Končí za ' + h + ' h ' + m + ' min';
+    if (m >= 1) return 'Končí za ' + m + ' min';
+    return 'Končí za chvíli';
+  }
+  function renderCardCountdown(saveEl, endTs) {
+    if (saveEl.parentNode.querySelector('.om-card-cd')) return; /* už hotovo */
+    var el = document.createElement('div');
+    el.className = 'om-card-cd';
+    saveEl.insertAdjacentElement('afterend', el);
+    var tick = function () {
+      var diff = Math.floor((endTs - Date.now()) / 1000);
+      if (diff <= 0) { el.remove(); return false; }
+      el.textContent = formatRemaining(diff);
+      return true;
+    };
+    if (tick()) om_cardCountdownTickers.push(tick);
+  }
+
+  var om_cardCountdownTickers = [];
+  if (!window.__omCardCdInterval) {
+    /* JEDEN sdílený interval pro všechny karty najednou (ne časovač
+       na kartu) — šetrnější k výkonu, aktualizuje se jednou za minutu,
+       text v minutách stejně jemněji nepotřebuje. */
+    window.__omCardCdInterval = setInterval(function () {
+      for (var i = om_cardCountdownTickers.length - 1; i >= 0; i--) {
+        if (!om_cardCountdownTickers[i]()) om_cardCountdownTickers.splice(i, 1);
+      }
+    }, 60000);
+  }
+
+  function fetchProductEndDate(path) {
+    return fetch(path, { credentials: 'same-origin' })
+      .then(function (r) { return r.ok ? r.text() : Promise.reject(r.status); })
+      .then(function (html) {
+        var m = html.match(/<meta[^>]+itemprop=["']priceValidUntil["'][^>]+content=["']([^"']+)["']/i);
+        if (!m) return null;
+        var ts = parseEnd(m[1]);
+        return isNaN(ts) ? null : ts;
+      })
+      .catch(function () { return null; });
+  }
+
+  function syncCardCountdowns() {
+    var saveEls = document.querySelectorAll(
+      'body.type-category .products.products-page .product .price-save,' +
+      '.products-alternative .product .price-save,' +
+      '.product-slider-holder .product .price-save'
+    );
+    if (!saveEls.length) return;
+
+    var cache = loadCardCdCache();
+    var now = Date.now();
+    var cacheDirty = false;
+    var queue = [];
+
+    saveEls.forEach(function (saveEl) {
+      var link = saveEl.closest('.product');
+      link = link && (link.querySelector('a.image[href]') || link.querySelector('a[href]'));
+      if (!link) return;
+      var path;
+      try { path = new URL(link.getAttribute('href'), location.origin).pathname; } catch (e) { return; }
+
+      var cached = cache[path];
+      if (cached && (now - cached.t) < CARD_CD_TTL) {
+        if (cached.end && cached.end > now) renderCardCountdown(saveEl, cached.end);
+        return; /* čerstvé — ať už platné, nebo víme, že datum není */
+      }
+      queue.push({ saveEl: saveEl, path: path });
+    });
+
+    var CONCURRENCY = 4;
+    var idx = 0;
+    function next() {
+      if (idx >= queue.length) return;
+      var item = queue[idx++];
+      fetchProductEndDate(item.path).then(function (endTs) {
+        cache[item.path] = { t: Date.now(), end: endTs || null };
+        cacheDirty = true;
+        if (endTs && endTs > Date.now()) renderCardCountdown(item.saveEl, endTs);
+        next();
+      });
+    }
+    for (var c = 0; c < CONCURRENCY; c++) next();
+
+    /* Cache uložíme až po vyřízení fronty (ne po každé položce zvlášť) */
+    if (queue.length) {
+      var checkDone = setInterval(function () {
+        if (idx >= queue.length) {
+          clearInterval(checkDone);
+          if (cacheDirty) saveCardCdCache(cache);
+        }
+      }, 200);
+    }
+  }
+
+  [400, 1500, 3000].forEach(function (ms) {
+    setTimeout(syncCardCountdowns, ms);
+  });
+
   function enhanceProductDetail() {
     if (!document.body.classList.contains('type-product')) return;
+
     if (document.getElementById('om-trust-badges')) return;
 
     /* Kotva: unikátní formulář, který existuje jen jednou na stránce */
