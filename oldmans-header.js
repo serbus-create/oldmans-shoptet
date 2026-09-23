@@ -145,6 +145,43 @@
   /* --- Přebuduje stránku Recepty na galerii karet (jako originál) ---
      Z každého .news-item vytáhne nadpis, odkaz a první obrázek,
      postaví čistou klikací kartu a schová původní rozbalený obsah. */
+  /* --- Homepage "Na Instagramu": živé fotky z widgetu Shoptetu ---
+     (23. 9. 2026, na žádost klienta, po propojení Instagramu v administraci
+     Shoptetu: Vzhled a obsah → Widgety → Instagram) Naše 4 dlaždice byly
+     napevno v JS (statické soubory .webp z repa, odkaz vždy jen na profil).
+     Shoptet teď sám vykresluje nativní widget (.instagram-widget) — obvykle
+     v patičce, protože ho tam klient přidal jako prvek — s živými fotkami,
+     popisky a odkazem na KONKRÉTNÍ příspěvek. Tahle funkce widget najde,
+     z jeho odkazů/obrázků přečte data a jimi přepíše naše dlaždice ve
+     STEJNÉM DESIGNU jako dřív; nativní widget Shoptetu se pak schová (jeho
+     vlastní vzhled se nepoužívá, sloužil by jen jako zdroj dat).
+     Bez nalezeného widgetu (např. dokud si ho klient nepřidá / než se
+     Instagram znovu připojí) zůstávají naše statické fotky jako záloha —
+     nic se nerozbije. */
+  function syncInstagramTiles(grid) {
+    if (!grid) return false;
+    var widget = document.querySelector('.instagram-widget');
+    if (!widget) return false;
+    var links = widget.querySelectorAll('a[href*="instagram.com/p/"], a[href*="instagram.com/reel/"]');
+    if (!links.length) return false;
+
+    var tiles = grid.querySelectorAll('a');
+    var n = Math.min(tiles.length, links.length);
+    for (var i = 0; i < n; i++) {
+      var src = links[i].querySelector('img');
+      if (!src) continue;
+      var url = src.getAttribute('data-thumbnail-medium') || src.getAttribute('data-src') ||
+                src.getAttribute('src') || src.getAttribute('data-thumbnail-small');
+      if (!url) continue;
+      tiles[i].href = links[i].getAttribute('href');
+      var img = tiles[i].querySelector('img');
+      img.src = url;
+      img.alt = src.getAttribute('alt') || '';
+    }
+    widget.style.setProperty('display', 'none', 'important'); /* nativní vzhled se nepoužívá */
+    return true;
+  }
+
   function buildRecipeGallery() {
     var wrapper = document.querySelector('.news-wrapper');
     if (!wrapper) return;
@@ -1010,6 +1047,15 @@
         </div>
       </div>
     </div>`;
+
+    /* Živé fotky z Instagram widgetu Shoptetu (viz syncInstagramTiles) —
+       widget je typicky v patičce, proto pár opakování po dokončení stránky. */
+    var instaGrid = instagram.querySelector('.om-insta-grid');
+    if (!syncInstagramTiles(instaGrid)) {
+      [500, 1500, 3000].forEach(function (ms) {
+        setTimeout(function () { syncInstagramTiles(instaGrid); }, ms);
+      });
+    }
 
     /* Shoptet produktové sekce */
     var bestsellers = document.querySelector('.homepage-products-heading-1');
