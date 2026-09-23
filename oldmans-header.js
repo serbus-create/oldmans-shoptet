@@ -1049,12 +1049,20 @@
     </div>`;
 
     /* Živé fotky z Instagram widgetu Shoptetu (viz syncInstagramTiles) —
-       widget je typicky v patičce, proto pár opakování po dokončení stránky. */
+       widget je v patičce, tedy až pod ohybem stránky, a Shoptet ho tam
+       často dokresluje se zpožděním (až po dokončení stránky, případně
+       až při doscrollování). Pevných pár pokusů v prvních sekundách proto
+       nestačilo — místo toho zkusíme hned, a pokud se nepovede, hlídáme
+       přes MutationObserver, dokud se widget na stránce neobjeví (max 20 s,
+       ať pozorovatel neběží věčně, kdyby klient Instagram widget na
+       stránku vůbec nepřidal). */
     var instaGrid = instagram.querySelector('.om-insta-grid');
-    if (!syncInstagramTiles(instaGrid)) {
-      [500, 1500, 3000].forEach(function (ms) {
-        setTimeout(function () { syncInstagramTiles(instaGrid); }, ms);
+    if (!syncInstagramTiles(instaGrid) && window.MutationObserver) {
+      var instaObserver = new MutationObserver(function () {
+        if (syncInstagramTiles(instaGrid)) instaObserver.disconnect();
       });
+      instaObserver.observe(document.body, { childList: true, subtree: true });
+      setTimeout(function () { instaObserver.disconnect(); }, 20000);
     }
 
     /* Shoptet produktové sekce */
