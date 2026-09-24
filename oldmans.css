@@ -1434,14 +1434,12 @@ body.type-category .products.products-page .product .price-final.om-sale-price {
 }
 
 /* Diagonální stužka "Akce −23 %" v pravém horním rohu fotky (24. 9. 2026,
-   varianta 3 z náčrtu) — nezávislá na nativní řadě štítků Bestseller/
-   Akce/Více za méně vlevo nahoře, takže se s nimi nemůže překrýt.
-   a.image má overflow:hidden, takže přesah stužky mimo roh je čistě
-   ořezaný. Text doplňuje JS (cleanCardDiscountBadges), do fotky ji
-   přesouvá relocateCardDiscountBadges(). Odpočet (jedna pilulka s
-   textem, celý i se sekundami) žije samostatně vlevo dole
-   (.om-card-cd-photo, a.image má position:relative), naplní ho
-   syncCardCountdowns()/renderCardCountdown(). */
+   varianta 3 z náčrtu, bez odpočtu — ten klient nakonec nechtěl) —
+   nezávislá na nativní řadě štítků Bestseller/Akce/Více za méně vlevo
+   nahoře, takže se s nimi nemůže překrýt. a.image má overflow:hidden,
+   takže přesah stužky mimo roh je čistě ořezaný. Text doplňuje JS
+   (cleanCardDiscountBadges), do fotky ji přesouvá
+   relocateCardDiscountBadges(). */
 body.type-category .products.products-page .product a.image .price-save {
   position: absolute !important;
   top: 14px !important;
@@ -1461,23 +1459,6 @@ body.type-category .products.products-page .product a.image .price-save {
   white-space: nowrap !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, .2) !important;
   z-index: 2 !important;
-}
-body.type-category .products.products-page .product .om-card-cd-photo {
-  position: absolute !important;
-  left: 8px !important;
-  bottom: 8px !important;
-  z-index: 2 !important;
-}
-body.type-category .products.products-page .product .om-card-cd {
-  display: inline-block !important;
-  background: #9f1400 !important;
-  color: #fff !important;
-  font-size: 12px !important;
-  font-weight: 800 !important;
-  padding: 6px 12px !important;
-  border-radius: 10px !important;
-  white-space: nowrap !important;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, .22) !important;
 }
 
 /* ── Tlačítko — vpravo, kompaktní, s ikonou košíku ── */
@@ -1702,23 +1683,6 @@ body.type-category .products.products-page .product .quantity {
   white-space: nowrap !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, .2) !important;
   z-index: 2 !important;
-}
-.products-alternative .product .om-card-cd-photo {
-  position: absolute !important;
-  left: 8px !important;
-  bottom: 8px !important;
-  z-index: 2 !important;
-}
-.products-alternative .product .om-card-cd {
-  display: inline-block !important;
-  background: #9f1400 !important;
-  color: #fff !important;
-  font-size: 12px !important;
-  font-weight: 800 !important;
-  padding: 6px 12px !important;
-  border-radius: 10px !important;
-  white-space: nowrap !important;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, .22) !important;
 }
 /* Tlačítko Do košíku — nativně schované třídou .no-buttons, odkrýt */
 .products-alternative .product .p-bottom.no-buttons .p-tools,
@@ -1945,23 +1909,6 @@ h2.products-alternative-header {
   white-space: nowrap !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, .2) !important;
   z-index: 2 !important;
-}
-.product-slider-holder .product .om-card-cd-photo {
-  position: absolute !important;
-  left: 8px !important;
-  bottom: 8px !important;
-  z-index: 2 !important;
-}
-.product-slider-holder .product .om-card-cd {
-  display: inline-block !important;
-  background: #9f1400 !important;
-  color: #fff !important;
-  font-size: 12px !important;
-  font-weight: 800 !important;
-  padding: 6px 12px !important;
-  border-radius: 10px !important;
-  white-space: nowrap !important;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, .22) !important;
 }
 /* Tlačítko Do košíku — nativně schované třídou .no-buttons, odkrýt */
 .product-slider-holder .product .p-bottom.no-buttons .p-tools,
