@@ -1433,31 +1433,36 @@ body.type-category .products.products-page .product .price-final.om-sale-price {
   color: #9f1400 !important;
 }
 
-/* Diagonální stužka "Akce −23 %" v pravém horním rohu fotky (24. 9. 2026,
-   varianta 3 z náčrtu, bez odpočtu — ten klient nakonec nechtěl) —
-   nezávislá na nativní řadě štítků Bestseller/Akce/Více za méně vlevo
-   nahoře, takže se s nimi nemůže překrýt. a.image má overflow:hidden,
-   takže přesah stužky mimo roh je čistě ořezaný. Text doplňuje JS
-   (cleanCardDiscountBadges), do fotky ji přesouvá
+/* Kruhový štítek "Akce −23 %" v pravém dolním rohu fotky (24. 9. 2026,
+   varianta 4 z náčrtu) — stejný vizuální jazyk jako kolečko na detailu
+   produktu (viz markDiscountCircle), sjednocuje vzhled kategorie
+   s detailem. Nezávislý na nativní řadě štítků Bestseller/Akce/Více za
+   méně vlevo nahoře, takže se s nimi nemůže překrýt. Text doplňuje JS
+   (cleanCardDiscountBadges), do fotky ho přesouvá
    relocateCardDiscountBadges(). */
 body.type-category .products.products-page .product a.image .price-save {
   position: absolute !important;
-  top: 14px !important;
-  right: -34px !important;
-  width: 130px !important;
+  bottom: 10px !important;
+  right: 10px !important;
+  box-sizing: border-box !important;
+  width: 56px !important;
+  height: 56px !important;
   margin: 0 !important;
-  transform: rotate(45deg) !important;
-  text-align: center !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   background: #9f1400 !important;
   color: #fff !important;
-  font-size: 11px !important;
+  font-size: 10px !important;
   font-weight: 800 !important;
-  padding: 4px 0 !important;
+  padding: 0 4px !important;
   text-transform: uppercase !important;
-  letter-spacing: .3px !important;
-  line-height: 1.3 !important;
-  white-space: nowrap !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, .2) !important;
+  letter-spacing: .2px !important;
+  line-height: 1.25 !important;
+  text-align: center !important;
+  white-space: normal !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .25) !important;
   z-index: 2 !important;
 }
 
@@ -1666,22 +1671,27 @@ body.type-category .products.products-page .product .quantity {
    JS (viz cleanCardDiscountBadges). */
 .products-alternative .product a.image .price-save {
   position: absolute !important;
-  top: 14px !important;
-  right: -34px !important;
-  width: 130px !important;
+  bottom: 10px !important;
+  right: 10px !important;
+  box-sizing: border-box !important;
+  width: 56px !important;
+  height: 56px !important;
   margin: 0 !important;
-  transform: rotate(45deg) !important;
-  text-align: center !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   background: #9f1400 !important;
   color: #fff !important;
-  font-size: 11px !important;
+  font-size: 10px !important;
   font-weight: 800 !important;
-  padding: 4px 0 !important;
+  padding: 0 4px !important;
   text-transform: uppercase !important;
-  letter-spacing: .3px !important;
-  line-height: 1.3 !important;
-  white-space: nowrap !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, .2) !important;
+  letter-spacing: .2px !important;
+  line-height: 1.25 !important;
+  text-align: center !important;
+  white-space: normal !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .25) !important;
   z-index: 2 !important;
 }
 /* Tlačítko Do košíku — nativně schované třídou .no-buttons, odkrýt */
@@ -1892,22 +1902,27 @@ h2.products-alternative-header {
    JS (viz cleanCardDiscountBadges). */
 .product-slider-holder .product a.image .price-save {
   position: absolute !important;
-  top: 14px !important;
-  right: -34px !important;
-  width: 130px !important;
+  bottom: 10px !important;
+  right: 10px !important;
+  box-sizing: border-box !important;
+  width: 56px !important;
+  height: 56px !important;
   margin: 0 !important;
-  transform: rotate(45deg) !important;
-  text-align: center !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   background: #9f1400 !important;
   color: #fff !important;
-  font-size: 11px !important;
+  font-size: 10px !important;
   font-weight: 800 !important;
-  padding: 4px 0 !important;
+  padding: 0 4px !important;
   text-transform: uppercase !important;
-  letter-spacing: .3px !important;
-  line-height: 1.3 !important;
-  white-space: nowrap !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, .2) !important;
+  letter-spacing: .2px !important;
+  line-height: 1.25 !important;
+  text-align: center !important;
+  white-space: normal !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .25) !important;
   z-index: 2 !important;
 }
 /* Tlačítko Do košíku — nativně schované třídou .no-buttons, odkrýt */
