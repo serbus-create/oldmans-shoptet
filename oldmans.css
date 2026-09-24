@@ -1449,8 +1449,10 @@ body.type-category .products.products-page .product .price-final.om-sale-price {
 body.type-category .products.products-page .product .flags.flags-default .price-save {
   display: block !important;
   width: fit-content !important;
-  align-self: flex-start !important;
-  margin: 5px 0 0 0 !important;
+  /* Pozici (position/top/left) a margin:0 nastavuje JS
+     (positionCardDiscountBadge) přesně podle skutečně vykreslených
+     nativních štítků — proto tu margin ani position NENÍ !important,
+     ať to JS může přepsat. */
   padding: 5px 12px !important;
   border-radius: 6px !important;
   background: #9f1400 !important;
@@ -1704,8 +1706,10 @@ body.type-category .products.products-page .product .quantity {
 .products-alternative .product .flags.flags-default .price-save {
   display: block !important;
   width: fit-content !important;
-  align-self: flex-start !important;
-  margin: 5px 0 0 0 !important;
+  /* Pozici (position/top/left) a margin:0 nastavuje JS
+     (positionCardDiscountBadge) přesně podle skutečně vykreslených
+     nativních štítků — proto tu margin ani position NENÍ !important,
+     ať to JS může přepsat. */
   padding: 5px 12px !important;
   border-radius: 6px !important;
   background: #9f1400 !important;
@@ -1961,8 +1965,10 @@ h2.products-alternative-header {
 .product-slider-holder .product .flags.flags-default .price-save {
   display: block !important;
   width: fit-content !important;
-  align-self: flex-start !important;
-  margin: 5px 0 0 0 !important;
+  /* Pozici (position/top/left) a margin:0 nastavuje JS
+     (positionCardDiscountBadge) přesně podle skutečně vykreslených
+     nativních štítků — proto tu margin ani position NENÍ !important,
+     ať to JS může přepsat. */
   padding: 5px 12px !important;
   border-radius: 6px !important;
   background: #9f1400 !important;
