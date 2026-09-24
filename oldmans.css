@@ -1442,7 +1442,7 @@ body.type-category .products.products-page .product .price-final.om-sale-price {
    červená barva; text doplňuje JS (cleanCardDiscountBadges). Přesouvá ji
    tam relocateCardDiscountBadges() (24. 9. 2026, varianta 2 z náčrtu —
    nahrazuje dřívější umístění nad tlačítkem, to rozhazovalo výšku
-   cenového řádku oproti běžné kartě). Odpočet (čtyři boxíky, i se
+   cenového řádku oproti běžné kartě). Odpočet (jedna pilulka s textem,
    sekundami) žije přímo ve fotce vlevo dole (.om-card-cd-photo, a.image
    má position:relative), naplní ho syncCardCountdowns()/
    renderCardCountdown(). */
@@ -1471,33 +1471,15 @@ body.type-category .products.products-page .product .om-card-cd-photo {
   z-index: 2 !important;
 }
 body.type-category .products.products-page .product .om-card-cd {
-  display: flex !important;
-  gap: 3px !important;
-}
-body.type-category .products.products-page .product .om-card-cd-unit {
-  box-sizing: border-box !important;
-  width: 25px !important;
-  padding: 2px 0 1px !important;
-  border: 1.3px solid #9f1400 !important;
-  border-radius: 5px !important;
-  background: #fff !important;
-  text-align: center !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, .18) !important;
-}
-body.type-category .products.products-page .product .om-card-cd-unit b {
-  display: block !important;
-  font-size: 11px !important;
-  line-height: 1.1 !important;
+  display: inline-block !important;
+  background: #9f1400 !important;
+  color: #fff !important;
+  font-size: 12px !important;
   font-weight: 800 !important;
-  color: #9f1400 !important;
-  font-variant-numeric: tabular-nums !important;
-}
-body.type-category .products.products-page .product .om-card-cd-unit small {
-  display: block !important;
-  font-size: 7px !important;
-  line-height: 1.3 !important;
-  color: #888 !important;
-  text-transform: uppercase !important;
+  padding: 6px 12px !important;
+  border-radius: 10px !important;
+  white-space: nowrap !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .22) !important;
 }
 
 /* ── Tlačítko — vpravo, kompaktní, s ikonou košíku ── */
@@ -1728,33 +1710,15 @@ body.type-category .products.products-page .product .quantity {
   z-index: 2 !important;
 }
 .products-alternative .product .om-card-cd {
-  display: flex !important;
-  gap: 3px !important;
-}
-.products-alternative .product .om-card-cd-unit {
-  box-sizing: border-box !important;
-  width: 25px !important;
-  padding: 2px 0 1px !important;
-  border: 1.3px solid #9f1400 !important;
-  border-radius: 5px !important;
-  background: #fff !important;
-  text-align: center !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, .18) !important;
-}
-.products-alternative .product .om-card-cd-unit b {
-  display: block !important;
-  font-size: 11px !important;
-  line-height: 1.1 !important;
+  display: inline-block !important;
+  background: #9f1400 !important;
+  color: #fff !important;
+  font-size: 12px !important;
   font-weight: 800 !important;
-  color: #9f1400 !important;
-  font-variant-numeric: tabular-nums !important;
-}
-.products-alternative .product .om-card-cd-unit small {
-  display: block !important;
-  font-size: 7px !important;
-  line-height: 1.3 !important;
-  color: #888 !important;
-  text-transform: uppercase !important;
+  padding: 6px 12px !important;
+  border-radius: 10px !important;
+  white-space: nowrap !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .22) !important;
 }
 /* Tlačítko Do košíku — nativně schované třídou .no-buttons, odkrýt */
 .products-alternative .product .p-bottom.no-buttons .p-tools,
@@ -1987,33 +1951,15 @@ h2.products-alternative-header {
   z-index: 2 !important;
 }
 .product-slider-holder .product .om-card-cd {
-  display: flex !important;
-  gap: 3px !important;
-}
-.product-slider-holder .product .om-card-cd-unit {
-  box-sizing: border-box !important;
-  width: 25px !important;
-  padding: 2px 0 1px !important;
-  border: 1.3px solid #9f1400 !important;
-  border-radius: 5px !important;
-  background: #fff !important;
-  text-align: center !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, .18) !important;
-}
-.product-slider-holder .product .om-card-cd-unit b {
-  display: block !important;
-  font-size: 11px !important;
-  line-height: 1.1 !important;
+  display: inline-block !important;
+  background: #9f1400 !important;
+  color: #fff !important;
+  font-size: 12px !important;
   font-weight: 800 !important;
-  color: #9f1400 !important;
-  font-variant-numeric: tabular-nums !important;
-}
-.product-slider-holder .product .om-card-cd-unit small {
-  display: block !important;
-  font-size: 7px !important;
-  line-height: 1.3 !important;
-  color: #888 !important;
-  text-transform: uppercase !important;
+  padding: 6px 12px !important;
+  border-radius: 10px !important;
+  white-space: nowrap !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .22) !important;
 }
 /* Tlačítko Do košíku — nativně schované třídou .no-buttons, odkrýt */
 .product-slider-holder .product .p-bottom.no-buttons .p-tools,
