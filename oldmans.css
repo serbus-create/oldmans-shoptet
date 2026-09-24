@@ -1426,8 +1426,10 @@ body.type-category .products.products-page .product .price-before {
   line-height: 1.2 !important;
   margin: 0 !important;
 }
-body.type-category .products.products-page .product .price-final.price--sale,
-body.type-category .products.products-page .product ins .price {
+/* Cena akčního produktu červeně — odvozeno z přítomnosti pilulky
+   .price-save (jistá znaka slevy), ne z neověřené třídy .price--sale
+   (ta v realitě nesedí — cena zůstávala černá). 24. 9. 2026. */
+body.type-category .products.products-page .product .price-final.om-sale-price {
   color: #9f1400 !important;
 }
 
@@ -1435,29 +1437,40 @@ body.type-category .products.products-page .product ins .price {
    vedle přeškrtnuté ceny (23. 9. 2026, na žádost klienta). Text "(-X %)"
    je nativní od Shoptetu, jen ho stylujeme; obalené závorky odstraní
    JS (viz cleanCardDiscountBadges). */
-body.type-category .products.products-page .product .price-save {
-  display: inline-flex !important;
-  align-items: center !important;
+/* Pilulka slevy "Akce −23 %" v řadě nativních štítků (Bestseller/Akce/
+   Více za méně) nad fotkou — stejný tvar jako ostatní štítky, jen vlastní
+   červená barva; text doplňuje JS (cleanCardDiscountBadges). Přesouvá ji
+   tam relocateCardDiscountBadges() (24. 9. 2026, varianta 2 z náčrtu —
+   nahrazuje dřívější umístění nad tlačítkem, to rozhazovalo výšku
+   cenového řádku oproti běžné kartě). Odpočet (čtyři boxíky, i se
+   sekundami) žije přímo ve fotce vlevo dole (.om-card-cd-photo, a.image
+   má position:relative), naplní ho syncCardCountdowns()/
+   renderCardCountdown(). */
+body.type-category .products.products-page .product .flags.flags-default .price-save {
+  display: block !important;
+  width: fit-content !important;
   align-self: flex-start !important;
-  margin: 3px 0 0 !important;
-  padding: 2px 8px !important;
-  border-radius: 20px !important;
+  margin: 5px 0 0 0 !important;
+  padding: 5px 12px !important;
+  border-radius: 6px !important;
   background: #9f1400 !important;
   color: #fff !important;
   font-size: 11px !important;
   font-weight: 800 !important;
-  line-height: 1.5 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .3px !important;
+  line-height: 1.3 !important;
   white-space: nowrap !important;
 }
-/* Odpočet konce akce pod pilulkou (viz syncCardCountdowns) — jen
-   text, žádný rám, ať na malé kartě nepůsobí těžkopádně. */
-/* Odpočet konce akce — čtyři malé boxíky (varianta A, klient si
-   vybral z náčrtu 23. 9. 2026), stejné jako na detailu produktu
-   (.om-promo-unit), jen zmenšené na šířku karty. */
+body.type-category .products.products-page .product .om-card-cd-photo {
+  position: absolute !important;
+  left: 8px !important;
+  bottom: 8px !important;
+  z-index: 2 !important;
+}
 body.type-category .products.products-page .product .om-card-cd {
   display: flex !important;
   gap: 3px !important;
-  margin: 3px 0 0 !important;
 }
 body.type-category .products.products-page .product .om-card-cd-unit {
   box-sizing: border-box !important;
@@ -1467,6 +1480,7 @@ body.type-category .products.products-page .product .om-card-cd-unit {
   border-radius: 5px !important;
   background: #fff !important;
   text-align: center !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .18) !important;
 }
 body.type-category .products.products-page .product .om-card-cd-unit b {
   display: block !important;
@@ -1490,22 +1504,6 @@ body.type-category .products.products-page .product .p-tools {
   flex-shrink: 0 !important;
   flex-grow: 0 !important;
   width: auto !important;
-}
-/* Pilulka slevy (a odpočet) přesunuté JS-em (relocateCardDiscountBadges)
-   před tlačítko — sloupec vpravo: pilulka, pak odpočet, pak tlačítko. */
-body.type-category .products.products-page .product .p-tools {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  gap: 4px !important;
-}
-body.type-category .products.products-page .product .p-tools .price-save {
-  align-self: center !important;
-  margin: 0 !important;
-}
-body.type-category .products.products-page .product .p-tools .om-card-cd {
-  margin: 0 !important;
-  justify-content: center !important;
 }
 body.type-category .products.products-page .product .pr-action {
   margin: 0 !important;
@@ -1695,8 +1693,7 @@ body.type-category .products.products-page .product .quantity {
   line-height: 1.2 !important;
   margin: 0 !important;
 }
-.products-alternative .product .price-final.price--sale,
-.products-alternative .product ins .price {
+.products-alternative .product .price-final.om-sale-price {
   color: #9f1400 !important;
 }
 
@@ -1704,27 +1701,31 @@ body.type-category .products.products-page .product .quantity {
    vedle přeškrtnuté ceny (23. 9. 2026, na žádost klienta). Text "(-X %)"
    je nativní od Shoptetu, jen ho stylujeme; obalené závorky odstraní
    JS (viz cleanCardDiscountBadges). */
-.products-alternative .product .price-save {
-  display: inline-flex !important;
-  align-items: center !important;
+.products-alternative .product .flags.flags-default .price-save {
+  display: block !important;
+  width: fit-content !important;
   align-self: flex-start !important;
-  margin: 3px 0 0 !important;
-  padding: 2px 8px !important;
-  border-radius: 20px !important;
+  margin: 5px 0 0 0 !important;
+  padding: 5px 12px !important;
+  border-radius: 6px !important;
   background: #9f1400 !important;
   color: #fff !important;
   font-size: 11px !important;
   font-weight: 800 !important;
-  line-height: 1.5 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .3px !important;
+  line-height: 1.3 !important;
   white-space: nowrap !important;
 }
-/* Odpočet konce akce — čtyři malé boxíky (varianta A, klient si
-   vybral z náčrtu 23. 9. 2026), stejné jako na detailu produktu
-   (.om-promo-unit), jen zmenšené na šířku karty. */
+.products-alternative .product .om-card-cd-photo {
+  position: absolute !important;
+  left: 8px !important;
+  bottom: 8px !important;
+  z-index: 2 !important;
+}
 .products-alternative .product .om-card-cd {
   display: flex !important;
   gap: 3px !important;
-  margin: 3px 0 0 !important;
 }
 .products-alternative .product .om-card-cd-unit {
   box-sizing: border-box !important;
@@ -1734,6 +1735,7 @@ body.type-category .products.products-page .product .quantity {
   border-radius: 5px !important;
   background: #fff !important;
   text-align: center !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .18) !important;
 }
 .products-alternative .product .om-card-cd-unit b {
   display: block !important;
@@ -1758,21 +1760,6 @@ body.type-category .products.products-page .product .quantity {
   flex-shrink: 0 !important;
   flex-grow: 0 !important;
   width: auto !important;
-}
-/* Pilulka slevy (a odpočet) přesunuté JS-em před tlačítko — sloupec
-   vpravo: pilulka, pak odpočet, pak tlačítko (viz kategorie výše). */
-.products-alternative .product .p-tools {
-  flex-direction: column !important;
-  align-items: center !important;
-  gap: 4px !important;
-}
-.products-alternative .product .p-tools .price-save {
-  align-self: center !important;
-  margin: 0 !important;
-}
-.products-alternative .product .p-tools .om-card-cd {
-  margin: 0 !important;
-  justify-content: center !important;
 }
 .products-alternative .product .pr-action {
   margin: 0 !important;
@@ -1963,8 +1950,7 @@ h2.products-alternative-header {
   line-height: 1.2 !important;
   margin: 0 !important;
 }
-.product-slider-holder .product .price-final.price--sale,
-.product-slider-holder .product ins .price {
+.product-slider-holder .product .price-final.om-sale-price {
   color: #9f1400 !important;
 }
 
@@ -1972,27 +1958,31 @@ h2.products-alternative-header {
    vedle přeškrtnuté ceny (23. 9. 2026, na žádost klienta). Text "(-X %)"
    je nativní od Shoptetu, jen ho stylujeme; obalené závorky odstraní
    JS (viz cleanCardDiscountBadges). */
-.product-slider-holder .product .price-save {
-  display: inline-flex !important;
-  align-items: center !important;
+.product-slider-holder .product .flags.flags-default .price-save {
+  display: block !important;
+  width: fit-content !important;
   align-self: flex-start !important;
-  margin: 3px 0 0 !important;
-  padding: 2px 8px !important;
-  border-radius: 20px !important;
+  margin: 5px 0 0 0 !important;
+  padding: 5px 12px !important;
+  border-radius: 6px !important;
   background: #9f1400 !important;
   color: #fff !important;
   font-size: 11px !important;
   font-weight: 800 !important;
-  line-height: 1.5 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .3px !important;
+  line-height: 1.3 !important;
   white-space: nowrap !important;
 }
-/* Odpočet konce akce — čtyři malé boxíky (varianta A, klient si
-   vybral z náčrtu 23. 9. 2026), stejné jako na detailu produktu
-   (.om-promo-unit), jen zmenšené na šířku karty. */
+.product-slider-holder .product .om-card-cd-photo {
+  position: absolute !important;
+  left: 8px !important;
+  bottom: 8px !important;
+  z-index: 2 !important;
+}
 .product-slider-holder .product .om-card-cd {
   display: flex !important;
   gap: 3px !important;
-  margin: 3px 0 0 !important;
 }
 .product-slider-holder .product .om-card-cd-unit {
   box-sizing: border-box !important;
@@ -2002,6 +1992,7 @@ h2.products-alternative-header {
   border-radius: 5px !important;
   background: #fff !important;
   text-align: center !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .18) !important;
 }
 .product-slider-holder .product .om-card-cd-unit b {
   display: block !important;
@@ -2026,21 +2017,6 @@ h2.products-alternative-header {
   flex-shrink: 0 !important;
   flex-grow: 0 !important;
   width: auto !important;
-}
-/* Pilulka slevy (a odpočet) přesunuté JS-em před tlačítko — sloupec
-   vpravo: pilulka, pak odpočet, pak tlačítko (viz kategorie výše). */
-.product-slider-holder .product .p-tools {
-  flex-direction: column !important;
-  align-items: center !important;
-  gap: 4px !important;
-}
-.product-slider-holder .product .p-tools .price-save {
-  align-self: center !important;
-  margin: 0 !important;
-}
-.product-slider-holder .product .p-tools .om-card-cd {
-  margin: 0 !important;
-  justify-content: center !important;
 }
 .product-slider-holder .product .pr-action {
   margin: 0 !important;
