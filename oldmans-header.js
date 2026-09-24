@@ -1720,17 +1720,17 @@
      na žádost klienta — nahrazuje dřívější 4 boxíky DNY/HOD/MIN/SEK).
      Umístěno přímo ve fotce vlevo dole (.om-card-cd-photo, viz
      relocateCardDiscountBadges), NE nad tlačítkem — tam zůstává cena
-     a tlačítko přesně jako u běžné karty. Text je v celých dnech a
-     hodinách (bez minut/sekund, na malé kartě zbytečně jemné), proto
-     stačí přepočítávat řidčeji než jednou za sekundu. */
+     a tlačítko přesně jako u běžné karty. Celý odpočet i s minutami a
+     sekundami (24. 9. 2026, na žádost klienta) — živě tiká po sekundě. */
   function formatCardRemaining(diffSec) {
     var d = Math.floor(diffSec / 86400);
     var h = Math.floor((diffSec % 86400) / 3600);
-    if (d >= 1) return 'Končí za ' + d + ' d ' + h + ' h';
     var m = Math.floor((diffSec % 3600) / 60);
-    if (h >= 1) return 'Končí za ' + h + ' h ' + m + ' min';
-    if (m >= 1) return 'Končí za ' + m + ' min';
-    return 'Končí za chvíli';
+    var s = diffSec % 60;
+    if (d >= 1) return 'Končí za ' + d + ' d ' + h + ' h ' + m + ' min ' + s + ' s';
+    if (h >= 1) return 'Končí za ' + h + ' h ' + m + ' min ' + s + ' s';
+    if (m >= 1) return 'Končí za ' + m + ' min ' + s + ' s';
+    return 'Končí za ' + s + ' s';
   }
   function renderCardCountdown(saveEl, endTs) {
     var card = saveEl.closest('.product');
@@ -1752,13 +1752,14 @@
   var om_cardCountdownTickers = [];
   if (!window.__omCardCdInterval) {
     /* JEDEN sdílený interval pro všechny karty najednou (ne časovač na
-       kartu). Text ukazuje jen dny/hodiny, stačí přepočítávat jednou
-       za minutu, ne po sekundách jako dřívější boxíky. */
+       kartu) — i po sekundách je to levné, jen přepis textContent pár
+       prvků, ne přepočet celé karty. Karet se slevou bývá v kategorii
+       jen pár. */
     window.__omCardCdInterval = setInterval(function () {
       for (var i = om_cardCountdownTickers.length - 1; i >= 0; i--) {
         if (!om_cardCountdownTickers[i]()) om_cardCountdownTickers.splice(i, 1);
       }
-    }, 60000);
+    }, 1000);
   }
 
   function fetchProductEndDate(path) {
