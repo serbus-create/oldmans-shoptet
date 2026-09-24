@@ -1433,30 +1433,28 @@ body.type-category .products.products-page .product .price-final.om-sale-price {
   color: #9f1400 !important;
 }
 
-/* Kruhový štítek "Akce −23 %" v pravém dolním rohu fotky (24. 9. 2026,
-   varianta 4 z náčrtu) — stejný vizuální jazyk jako kolečko na detailu
-   produktu (viz markDiscountCircle), sjednocuje vzhled kategorie
-   s detailem. Nezávislý na nativní řadě štítků Bestseller/Akce/Více za
-   méně vlevo nahoře, takže se s nimi nemůže překrýt. Text doplňuje JS
-   (cleanCardDiscountBadges), do fotky ho přesouvá
+/* Hranatý štítek "Akce −23 %" v pravém horním rohu fotky (24. 9. 2026,
+   varianta 5 z náčrtu) — nezávislý na nativní řadě štítků Bestseller/
+   Akce/Více za méně vlevo nahoře, takže se s nimi nemůže překrýt; je
+   navíc hned vidět, aniž by ho oko muselo hledat mezi ostatními štítky.
+   Text doplňuje JS (cleanCardDiscountBadges), do fotky ho přesouvá
    relocateCardDiscountBadges(). */
 body.type-category .products.products-page .product a.image .price-save {
   position: absolute !important;
-  bottom: 10px !important;
+  top: 10px !important;
   right: 10px !important;
   box-sizing: border-box !important;
-  width: 62px !important;
-  height: 62px !important;
   margin: 0 !important;
-  border-radius: 50% !important;
-  display: flex !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
   background: #9f1400 !important;
   color: #fff !important;
   font-size: 13px !important;
   font-weight: 800 !important;
-  padding: 0 3px !important;
+  padding: 6px 10px !important;
   text-transform: uppercase !important;
   letter-spacing: 0 !important;
   line-height: 1.15 !important;
@@ -1671,21 +1669,20 @@ body.type-category .products.products-page .product .quantity {
    JS (viz cleanCardDiscountBadges). */
 .products-alternative .product a.image .price-save {
   position: absolute !important;
-  bottom: 10px !important;
+  top: 10px !important;
   right: 10px !important;
   box-sizing: border-box !important;
-  width: 62px !important;
-  height: 62px !important;
   margin: 0 !important;
-  border-radius: 50% !important;
-  display: flex !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
   background: #9f1400 !important;
   color: #fff !important;
   font-size: 13px !important;
   font-weight: 800 !important;
-  padding: 0 3px !important;
+  padding: 6px 10px !important;
   text-transform: uppercase !important;
   letter-spacing: 0 !important;
   line-height: 1.15 !important;
@@ -1902,21 +1899,20 @@ h2.products-alternative-header {
    JS (viz cleanCardDiscountBadges). */
 .product-slider-holder .product a.image .price-save {
   position: absolute !important;
-  bottom: 10px !important;
+  top: 10px !important;
   right: 10px !important;
   box-sizing: border-box !important;
-  width: 62px !important;
-  height: 62px !important;
   margin: 0 !important;
-  border-radius: 50% !important;
-  display: flex !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
   background: #9f1400 !important;
   color: #fff !important;
   font-size: 13px !important;
   font-weight: 800 !important;
-  padding: 0 3px !important;
+  padding: 6px 10px !important;
   text-transform: uppercase !important;
   letter-spacing: 0 !important;
   line-height: 1.15 !important;
