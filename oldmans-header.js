@@ -1605,7 +1605,10 @@
      stylovaný jako pilulka (viz CSS), nativní text od Shoptetu má tvar
      "(−23 %)" — závorky se odstraní a doplní se slovo "Akce" na začátek
      (klient chce "Akce −23 %", ne jen "−23 %"). Idempotentní (kontroluje,
-     jestli tam "Akce" už není), nic nedělá s produkty bez slevy. */
+     jestli tam "Akce" už není), nic nedělá s produkty bez slevy. Mezera
+     mezi číslem a "%" se nahradí nezlomitelnou (\u00a0) — na kulatém
+     štítku se text zalamuje na dva řádky ("Akce" / "−23 %") a bez toho
+     by se prohlížeč mohl místo toho zlomit uprostřed "−23 %". */
   function cleanCardDiscountBadges() {
     document.querySelectorAll(
       'body.type-category .products.products-page .product .price-save,' +
@@ -1615,6 +1618,13 @@
       var t = el.textContent;
       var cleaned = t.replace(/^\s*\(\s*/, '').replace(/\s*\)\s*$/, '').trim();
       if (!/^akce\b/i.test(cleaned)) cleaned = 'Akce ' + cleaned;
+      cleaned = cleaned.replace(/ (?=%\s*$)/, '\u00a0');
+      /* Zalomení mezi "Akce" a "−23 %" je VYNUCENÉ skutečným novým
+         řádkem (ne jen dost úzkým kontejnerem) — jinak by se text u
+         větších/menších písem někdy sám vešel na jeden řádek a jindy
+         ne, podle toho, jak přesně to vyjde. CSS na štítku má
+         white-space: pre-line, aby "\n" respektovalo. */
+      cleaned = cleaned.replace(/^Akce /, 'Akce\n');
       if (cleaned !== t) el.textContent = cleaned;
     });
   }
