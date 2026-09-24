@@ -1603,13 +1603,12 @@
     return true;
   }
 
-  /* --- Karty produktů: štítek slevy (%) bez závorek ---
-     (23. 9. 2026, na žádost klienta) .price-save je teď stylovaný jako
-     červená pilulka (viz CSS), ale nativní text od Shoptetu má tvar
-     "(−23 %)" — uvnitř barevné pilulky vypadají závorky nadbytečně.
-     Tahle funkce je jen odstraní, číslo a "%" nechá beze změny.
-     Idempotentní (bezpečné volat opakovaně), nic nedělá s produkty
-     bez slevy (žádný .price-save = nic k úpravě). */
+  /* --- Karty produktů: štítek slevy s textem "Akce" a bez závorek ---
+     (24. 9. 2026, na žádost klienta, varianta 2 z náčrtu) .price-save je
+     stylovaný jako pilulka (viz CSS), nativní text od Shoptetu má tvar
+     "(−23 %)" — závorky se odstraní a doplní se slovo "Akce" na začátek
+     (klient chce "Akce −23 %", ne jen "−23 %"). Idempotentní (kontroluje,
+     jestli tam "Akce" už není), nic nedělá s produkty bez slevy. */
   function cleanCardDiscountBadges() {
     document.querySelectorAll(
       'body.type-category .products.products-page .product .price-save,' +
@@ -1617,20 +1616,25 @@
       '.product-slider-holder .product .price-save'
     ).forEach(function (el) {
       var t = el.textContent;
-      var cleaned = t.replace(/^\s*\(\s*/, '').replace(/\s*\)\s*$/, '');
+      var cleaned = t.replace(/^\s*\(\s*/, '').replace(/\s*\)\s*$/, '').trim();
+      if (!/^akce\b/i.test(cleaned)) cleaned = 'Akce ' + cleaned;
       if (cleaned !== t) el.textContent = cleaned;
     });
   }
 
-  /* --- Karty produktů: pilulka slevy (a později i odpočet) nad tlačítko ---
-     (23. 9. 2026, na žádost klienta, podle mockupu) Pilulka "−23 %" žila
-     uvnitř .prices (pod cenou, vlevo). Teď se fyzicky přesouvá do .p-tools,
-     před tlačítko Do košíku — vizuálně tvoří společně s odpočtem (viz
-     syncCardCountdowns) sloupec NAD tlačítkem, vpravo na kartě. Cena
-     (price-final/price-before) zůstává vlevo beze změny.
-     ZÁMĚRNĚ volané PŘED klonováním pro mobilní slidery (stejně jako
-     cleanCardDiscountBadges), ať klony zdědí už přesunutou strukturu.
-     Idempotentní (data-om-relocated), produkty bez slevy nedotčené. */
+  /* --- Karty produktů: pilulka slevy do řady štítků nad fotkou ---
+     (24. 9. 2026, na žádost klienta, varianta 2 z náčrtu — ne varianta
+     s pilulkou nad tlačítkem z 23. 9., ta rozhazovala výšku cenového
+     řádku oproti běžné kartě) Pilulka "Akce −23 %" se přesune do
+     nativní řady štítků (.flags.flags-default, vlevo nahoře nad fotkou,
+     stejné místo jako Bestseller/Akce/Více za méně), jako její poslední
+     položka. Cena i tlačítko Do košíku zůstávají přesně jako u běžné
+     karty — nic se nerozhazuje.
+     Zároveň připraví prázdný kontejner .om-card-cd-photo (vlevo dole ve
+     fotce, a.image má position:relative) — tam renderCardCountdown()
+     později vloží živý odpočet, pokud pro produkt existuje.
+     ZÁMĚRNĚ volané PŘED klonováním pro mobilní slidery, ať klony zdědí
+     už přesunutou strukturu. Idempotentní (data-om-relocated). */
   function relocateCardDiscountBadges() {
     document.querySelectorAll(
       'body.type-category .products.products-page .product .price-save,' +
@@ -1639,10 +1643,22 @@
     ).forEach(function (saveEl) {
       if (saveEl.getAttribute('data-om-relocated')) return;
       var card = saveEl.closest('.product');
-      var tools = card && card.querySelector('.p-tools');
-      if (!tools) return;
-      tools.insertBefore(saveEl, tools.firstChild);
+      var photo = card && card.querySelector('a.image');
+      var flags = photo && photo.querySelector('.flags.flags-default');
+      if (!photo || !flags) return;
+      /* Cena zůstává v .prices, ale .price-save (jediný signál slevy) se
+         teď stěhuje pryč — proto se cena označí trvalou třídou JEŠTĚ
+         PŘED přesunem, ať jde podle ní obarvit i po přesunu (CSS
+         .price-final.om-sale-price). */
+      var priceFinal = card.querySelector('.price-final');
+      if (priceFinal) priceFinal.classList.add('om-sale-price');
+      flags.appendChild(saveEl);
       saveEl.setAttribute('data-om-relocated', '1');
+      if (!photo.querySelector('.om-card-cd-photo')) {
+        var cdWrap = document.createElement('div');
+        cdWrap.className = 'om-card-cd-photo';
+        photo.appendChild(cdWrap);
+      }
     });
   }
 
@@ -1674,11 +1690,16 @@
     try { localStorage.setItem(CARD_CD_CACHE_KEY, JSON.stringify(map)); } catch (e) { /* ignorováno (soukromý režim apod.) */ }
   }
   function pad2(n) { return (n < 10 ? '0' : '') + n; }
-  /* Varianta A (klient si vybral z náčrtu 23. 9. 2026) — čtyři malé
-     boxíky DNY/HOD/MIN/SEK, stejné rozložení jako na detailu produktu
-     (.om-promo-unit), jen zmenšené na šířku karty (.om-card-cd-unit). */
+  /* Varianta 2 z náčrtu (24. 9. 2026, na žádost klienta) — čtyři malé
+     boxíky DNY/HOD/MIN/SEK (celý odpočet i se sekundami), umístěné
+     přímo ve fotce vlevo dole (.om-card-cd-photo, viz
+     relocateCardDiscountBadges), NE nad tlačítkem — tam zůstává cena
+     a tlačítko přesně jako u běžné karty. */
   function renderCardCountdown(saveEl, endTs) {
-    if (saveEl.parentNode.querySelector('.om-card-cd')) return; /* už hotovo */
+    var card = saveEl.closest('.product');
+    var host = card && card.querySelector('.om-card-cd-photo');
+    if (!host) return; /* fotka/kontejner nenalezen — bez odpočtu, nic se nerozbije */
+    if (host.querySelector('.om-card-cd')) return; /* už hotovo */
     var el = document.createElement('div');
     el.className = 'om-card-cd';
     el.innerHTML =
@@ -1686,7 +1707,7 @@
       '<div class="om-card-cd-unit"><b data-u="h">00</b><small>h</small></div>' +
       '<div class="om-card-cd-unit"><b data-u="m">00</b><small>m</small></div>' +
       '<div class="om-card-cd-unit"><b data-u="s">00</b><small>s</small></div>';
-    saveEl.insertAdjacentElement('afterend', el);
+    host.appendChild(el);
     var u = {
       d: el.querySelector('[data-u="d"]'), h: el.querySelector('[data-u="h"]'),
       m: el.querySelector('[data-u="m"]'), s: el.querySelector('[data-u="s"]')
