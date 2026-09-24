@@ -1635,6 +1635,32 @@
      později vloží živý odpočet, pokud pro produkt existuje.
      ZÁMĚRNĚ volané PŘED klonováním pro mobilní slidery, ať klony zdědí
      už přesunutou strukturu. Idempotentní (data-om-relocated). */
+  /* --- Pozice pilulky slevy v řadě nativních štítků — spočítaná, ne odhadnutá ---
+     (24. 9. 2026) Shoptet pozicuje vlastní štítky (Bestseller/Akce/Více za
+     méně) po svém, patrně individuálně podle typu — když se naše pilulka
+     jen připojila jako další potomek, překrývala se s prvním štítkem
+     místo aby šla pod poslední (viz screenshot klienta). Řešení: NEHÁDAT
+     jak přesně Shoptet štítky pozicuje, ale změřit, kde skutečně ve
+     vykreslené stránce končí (offsetTop + offsetHeight, což respektuje
+     jakýkoli mechanismus pozicování) a naši pilulku postavit přesně pod
+     ně, explicitním position:absolute. Funguje bez ohledu na to, kolik
+     nativních štítků na kartě je nebo jak jsou vnitřně řešené. */
+  function positionCardDiscountBadge(saveEl, flags) {
+    var siblings = [];
+    for (var i = 0; i < flags.children.length; i++) {
+      if (flags.children[i] !== saveEl) siblings.push(flags.children[i]);
+    }
+    var maxBottom = 0, left = 8;
+    siblings.forEach(function (el) {
+      maxBottom = Math.max(maxBottom, el.offsetTop + el.offsetHeight);
+      left = el.offsetLeft; /* poslední ve zdrojovém pořadí = nejspolehlivější referenční levý okraj */
+    });
+    saveEl.style.position = 'absolute';
+    saveEl.style.top = (maxBottom + (siblings.length ? 5 : 8)) + 'px';
+    saveEl.style.left = left + 'px';
+    saveEl.style.margin = '0'; /* CSS margin by k position:absolute přičetl navíc posun */
+  }
+
   function relocateCardDiscountBadges() {
     document.querySelectorAll(
       'body.type-category .products.products-page .product .price-save,' +
@@ -1654,6 +1680,7 @@
       if (priceFinal) priceFinal.classList.add('om-sale-price');
       flags.appendChild(saveEl);
       saveEl.setAttribute('data-om-relocated', '1');
+      positionCardDiscountBadge(saveEl, flags);
       if (!photo.querySelector('.om-card-cd-photo')) {
         var cdWrap = document.createElement('div');
         cdWrap.className = 'om-card-cd-photo';
