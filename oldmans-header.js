@@ -328,6 +328,23 @@
        produktu (Související/Podobné produkty) — všude najednou. */
     cleanCardDiscountBadges();
     relocateCardDiscountBadges();
+    /* Na homepage (Bestsellery, Omáčky ve slevě) se stužka/odpočet po
+       načtení objevily jen na zlomek vteřiny a pak zmizely — slider tam
+       zjevně své karty po startu ještě jednou vlastním skriptem
+       přestaví (karusel), čímž přepíše naši úpravu udělanou jen jednou
+       hned na začátku (na kategorii žádný takový karusel není, tam to
+       funguje). Řešení: hlídat změny v DOM a úpravu zopakovat, kdykoli
+       se objeví nový/nepřesunutý .price-save — idempotentní, levné
+       (funkce se hned vrátí, když není co dělat). Po 20 s přestaneme
+       hlídat, ať pozorovatel neběží věčně. */
+    if (window.MutationObserver) {
+      var badgeObserver = new MutationObserver(function () {
+        cleanCardDiscountBadges();
+        relocateCardDiscountBadges();
+      });
+      badgeObserver.observe(document.body, { childList: true, subtree: true });
+      setTimeout(function () { badgeObserver.disconnect(); }, 20000);
+    }
 
     customizeFooterCopyright();
 
