@@ -649,7 +649,19 @@
         li.className = 'om-cat-dynamic';
         var a = document.createElement('a');
         a.href = cat.href;
-        a.textContent = cat.name;
+        /* "Balíčky" dostává ikonku balíčku, stejně jako Bestseller (⭐)
+           a V akci (🏷️) — na žádost klienta (25. 9. 2026). Cíleno na
+           URL, ne na text, ať to funguje i kdyby se název kategorie
+           v administraci přejmenoval. */
+        if (cat.href.indexOf('/kategorie/balicky/') !== -1) {
+          var icon = document.createElement('span');
+          icon.className = 'cat-icon';
+          icon.textContent = '📦';
+          a.appendChild(icon);
+          a.appendChild(document.createTextNode(' ' + cat.name));
+        } else {
+          a.textContent = cat.name;
+        }
         li.appendChild(a);
         list.insertBefore(li, moreBtn);
       });
