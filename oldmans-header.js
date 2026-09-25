@@ -1629,13 +1629,15 @@
     });
   }
 
-  /* --- Karty produktů: diagonální stužka slevy v rohu fotky ---
-     (24. 9. 2026, na žádost klienta, varianta 3 z náčrtu, bez odpočtu —
-     ten klient nakonec nechtěl) Diagonální stužka v pravém horním rohu
-     fotky, nezávislá na nativní řadě štítků Bestseller/Akce/Více za
-     méně vlevo nahoře, takže se s nimi nemůže překrýt ani rozhodit
-     jejich pozici. Cena i tlačítko Do košíku zůstávají přesně jako
-     u běžné karty — nic se nerozhazuje.
+  /* --- Karty produktů: diagonální stužka slevy + odpočet ve fotce ---
+     (24. 9. 2026, finální volba klienta po sérii vyzkoušených variant)
+     Diagonální stužka "Akce −23 %" v pravém horním rohu fotky, nezávislá
+     na nativní řadě štítků Bestseller/Akce/Více za méně vlevo nahoře,
+     takže se s nimi nemůže překrýt. Cena i tlačítko Do košíku zůstávají
+     přesně jako u běžné karty — nic se nerozhazuje.
+     Zároveň připraví prázdný kontejner .om-card-cd-photo (vlevo dole ve
+     fotce, a.image má position:relative) — tam renderCardCountdown()
+     později vloží živý odpočet, pokud pro produkt existuje.
      ZÁMĚRNĚ volané PŘED klonováním pro mobilní slidery, ať klony zdědí
      už přesunutou strukturu. Idempotentní (data-om-relocated). */
   function relocateCardDiscountBadges() {
@@ -1656,8 +1658,155 @@
       if (priceFinal) priceFinal.classList.add('om-sale-price');
       photo.appendChild(saveEl);
       saveEl.setAttribute('data-om-relocated', '1');
+      if (!photo.querySelector('.om-card-cd-photo')) {
+        var cdWrap = document.createElement('div');
+        cdWrap.className = 'om-card-cd-photo';
+        photo.appendChild(cdWrap);
+      }
     });
   }
+
+  /* --- Karty produktů: odpočet konce akce (dotažený z detailu) ---
+     (23. 9. 2026, na žádost klienta) Shoptet na výpisu (kategorie,
+     homepage slidery, Související/Podobné produkty) NEPOSÍLÁ datum
+     konce akce (ověřeno: 0 výskytů priceValidUntil v HTML kategorie).
+     Datum má jen detail produktu. Řešení: pro každou kartu, která má
+     .price-save (= je akční), rovnou po dokončení stránky doděláme
+     jeden lehký fetch na produktovou stránku, z ní přečteme
+     <meta itemprop="priceValidUntil"> a pod pilulku vložíme kompaktní
+     text ("Končí za 9 dní 11 h"). Šetrné k serveru:
+     - jen pro karty s aktivní slevou (ne pro všechny produkty),
+     - nejvýš 4 fetch najednou (fronta),
+     - výsledek na 1 h v localStorage (mapa cesta -> datum konce),
+       další návštěva stránky nic nestahuje.
+     Když fetch selže nebo datum na detailu není, karta zůstane
+     jen s pilulkou — nic se nerozbije, nic se neopakuje dokola. */
+  var CARD_CD_CACHE_KEY = 'om_card_countdown_v1';
+  var CARD_CD_TTL = 60 * 60 * 1000;
+
+  function loadCardCdCache() {
+    try {
+      var raw = localStorage.getItem(CARD_CD_CACHE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) { return {}; }
+  }
+  function saveCardCdCache(map) {
+    try { localStorage.setItem(CARD_CD_CACHE_KEY, JSON.stringify(map)); } catch (e) { /* ignorováno (soukromý režim apod.) */ }
+  }
+  /* Odpočet jako jedna pilulka s textem "Končí za X d Y h" (24. 9. 2026,
+     na žádost klienta — nahrazuje dřívější 4 boxíky DNY/HOD/MIN/SEK).
+     Umístěno přímo ve fotce vlevo dole (.om-card-cd-photo, viz
+     relocateCardDiscountBadges), NE nad tlačítkem — tam zůstává cena
+     a tlačítko přesně jako u běžné karty. Celý odpočet i s minutami a
+     sekundami (24. 9. 2026, na žádost klienta) — živě tiká po sekundě. */
+  function formatCardRemaining(diffSec) {
+    var d = Math.floor(diffSec / 86400);
+    var h = Math.floor((diffSec % 86400) / 3600);
+    var m = Math.floor((diffSec % 3600) / 60);
+    var s = diffSec % 60;
+    if (d >= 1) return 'Končí za ' + d + ' d ' + h + ' h ' + m + ' min ' + s + ' s';
+    if (h >= 1) return 'Končí za ' + h + ' h ' + m + ' min ' + s + ' s';
+    if (m >= 1) return 'Končí za ' + m + ' min ' + s + ' s';
+    return 'Končí za ' + s + ' s';
+  }
+  function renderCardCountdown(saveEl, endTs) {
+    var card = saveEl.closest('.product');
+    var host = card && card.querySelector('.om-card-cd-photo');
+    if (!host) return; /* fotka/kontejner nenalezen — bez odpočtu, nic se nerozbije */
+    if (host.querySelector('.om-card-cd')) return; /* už hotovo */
+    var el = document.createElement('div');
+    el.className = 'om-card-cd';
+    host.appendChild(el);
+    var tick = function () {
+      var diff = Math.floor((endTs - Date.now()) / 1000);
+      if (diff <= 0) { el.remove(); return false; }
+      el.textContent = formatCardRemaining(diff);
+      return true;
+    };
+    if (tick()) om_cardCountdownTickers.push(tick);
+  }
+
+  var om_cardCountdownTickers = [];
+  if (!window.__omCardCdInterval) {
+    /* JEDEN sdílený interval pro všechny karty najednou (ne časovač na
+       kartu) — i po sekundách je to levné, jen přepis textContent pár
+       prvků, ne přepočet celé karty. Karet se slevou bývá v kategorii
+       jen pár. */
+    window.__omCardCdInterval = setInterval(function () {
+      for (var i = om_cardCountdownTickers.length - 1; i >= 0; i--) {
+        if (!om_cardCountdownTickers[i]()) om_cardCountdownTickers.splice(i, 1);
+      }
+    }, 1000);
+  }
+
+  function fetchProductEndDate(path) {
+    return fetch(path, { credentials: 'same-origin' })
+      .then(function (r) { return r.ok ? r.text() : Promise.reject(r.status); })
+      .then(function (html) {
+        var m = html.match(/<meta[^>]+itemprop=["']priceValidUntil["'][^>]+content=["']([^"']+)["']/i);
+        if (!m) return null;
+        var ts = parseEnd(m[1]);
+        return isNaN(ts) ? null : ts;
+      })
+      .catch(function () { return null; });
+  }
+
+  function syncCardCountdowns() {
+    var saveEls = document.querySelectorAll(
+      'body.type-category .products.products-page .product .price-save,' +
+      '.products-alternative .product .price-save,' +
+      '.product-slider-holder .product .price-save'
+    );
+    if (!saveEls.length) return;
+
+    var cache = loadCardCdCache();
+    var now = Date.now();
+    var cacheDirty = false;
+    var queue = [];
+
+    saveEls.forEach(function (saveEl) {
+      var link = saveEl.closest('.product');
+      link = link && (link.querySelector('a.image[href]') || link.querySelector('a[href]'));
+      if (!link) return;
+      var path;
+      try { path = new URL(link.getAttribute('href'), location.origin).pathname; } catch (e) { return; }
+
+      var cached = cache[path];
+      if (cached && (now - cached.t) < CARD_CD_TTL) {
+        if (cached.end && cached.end > now) renderCardCountdown(saveEl, cached.end);
+        return; /* čerstvé — ať už platné, nebo víme, že datum není */
+      }
+      queue.push({ saveEl: saveEl, path: path });
+    });
+
+    var CONCURRENCY = 4;
+    var idx = 0;
+    function next() {
+      if (idx >= queue.length) return;
+      var item = queue[idx++];
+      fetchProductEndDate(item.path).then(function (endTs) {
+        cache[item.path] = { t: Date.now(), end: endTs || null };
+        cacheDirty = true;
+        if (endTs && endTs > Date.now()) renderCardCountdown(item.saveEl, endTs);
+        next();
+      });
+    }
+    for (var c = 0; c < CONCURRENCY; c++) next();
+
+    /* Cache uložíme až po vyřízení fronty (ne po každé položce zvlášť) */
+    if (queue.length) {
+      var checkDone = setInterval(function () {
+        if (idx >= queue.length) {
+          clearInterval(checkDone);
+          if (cacheDirty) saveCardCdCache(cache);
+        }
+      }, 200);
+    }
+  }
+
+  [400, 1500, 3000].forEach(function (ms) {
+    setTimeout(syncCardCountdowns, ms);
+  });
 
   function enhanceProductDetail() {
     if (!document.body.classList.contains('type-product')) return;
