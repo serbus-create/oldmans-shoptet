@@ -1837,6 +1837,164 @@
     setTimeout(syncCardCountdowns, ms);
   });
 
+  /* --- Detail produktu: blok "I v balíčku s dalšími produkty" ---
+     (29. 9. 2026, na žádost klienta, varianta F z náčrtu)
+     Když je produkt součástí balíčku (kategorie Balíčky), ukáže se pod
+     nákupním boxem blok s procentem úspory, miniaturami produktů z balíčku
+     a odkazem na detail balíčku. Jen procento, žádná cena.
+     ODKUD SE BEROU DATA (Shoptet o složení balíčku na webu nic nevypisuje,
+     Standardní cenu u Sady produktů klient nastavit nemůže):
+       1. Kategorie /kategorie/balicky/ -> seznam balíčků (max 6).
+       2. Detail každého balíčku -> jeho cena (meta product:price:amount)
+          a jeho SOUVISEJÍCÍ produkty (h2.products-related-header + sourozenec
+          s kartami) s aktuálními cenami = složení balíčku.
+       3. Úspora % = (součet cen produktů zvlášť − cena balíčku) / součet.
+          Počítá se z AKTUÁLNÍCH cen (i akčních), tedy z toho, co by zákazník
+          při samostatném nákupu opravdu zaplatil. Každý produkt 1 ks.
+     Blok se ukáže jen tehdy, když je aktuální produkt mezi souvisejícími
+     produkty balíčku a úspora je aspoň 1 %. Je-li v balíčcích víc, vyhrává
+     ten s největší úsporou. Vztah stačí nastavit u BALÍČKU (Související) —
+     nezávisí na vzájemném párování u jednotlivých produktů.
+     Data se na 1 h ukládají do localStorage (další návštěva nic nestahuje);
+     při jakékoli chybě se blok prostě neukáže. */
+  var OM_BUNDLE_CACHE_KEY = 'om_bundles_v1';
+  var OM_BUNDLE_TTL = 60 * 60 * 1000;
+  var OM_BUNDLE_CATEGORY = '/kategorie/balicky/';
+
+  function omNormPath(href) {
+    try { return new URL(href, location.origin).pathname.replace(/\/+$/, '').toLowerCase(); } catch (e) { return ''; }
+  }
+  function omParseKc(text) {
+    var m = String(text || '').replace(/\u00a0/g, ' ').match(/(\d[\d ]*(?:[.,]\d+)?)\s*Kč/);
+    return m ? parseFloat(m[1].replace(/ /g, '').replace(',', '.')) : NaN;
+  }
+  function omFetchDoc(path) {
+    return fetch(path, { credentials: 'same-origin' })
+      .then(function (r) { return r.ok ? r.text() : Promise.reject(r.status); })
+      .then(function (html) { return new DOMParser().parseFromString(html, 'text/html'); });
+  }
+
+  /* Z načteného detailu balíčku: cena + složení. Vrací null, když něco
+     nesedí (chybí cena, málo produktů, některý produkt bez ceny) — raději
+     nic než špatné procento z neúplného součtu. */
+  function omParseBundle(doc, path) {
+    var meta = doc.querySelector('meta[property="product:price:amount"]');
+    var price = meta ? parseFloat(meta.getAttribute('content')) : NaN;
+    var hdr = doc.querySelector('h2.products-related-header');
+    var cards = [];
+    for (var el = hdr && hdr.nextElementSibling; el; el = el.nextElementSibling) {
+      if (/^H[1-6]$/.test(el.tagName)) break; /* už další sekce (Podobné produkty…) */
+      var found = el.querySelectorAll('.product');
+      if (found.length) { cards = Array.prototype.slice.call(found); break; }
+    }
+    var items = [];
+    cards.forEach(function (card) {
+      var a = card.querySelector('a[href*="/zbozi/"]');
+      var itemPath = a ? omNormPath(a.getAttribute('href')) : '';
+      var pf = card.querySelector('.price-final');
+      var pr = omParseKc(pf ? pf.textContent : (card.querySelector('.prices') || {}).textContent);
+      var img = card.querySelector('img');
+      var src = img ? (img.getAttribute('data-src') || img.getAttribute('src') || '') : '';
+      if (itemPath && pr > 0) items.push({ path: itemPath, price: pr, img: src });
+    });
+    if (isNaN(price) || price <= 0 || items.length < 2 || items.length !== cards.length) return null;
+    return { path: path, price: price, items: items };
+  }
+
+  function omLoadBundles() {
+    var cached = null;
+    try { cached = JSON.parse(localStorage.getItem(OM_BUNDLE_CACHE_KEY) || 'null'); } catch (e) { cached = null; }
+    if (cached && cached.t && cached.list && (Date.now() - cached.t) < OM_BUNDLE_TTL) {
+      return Promise.resolve(cached.list);
+    }
+    return omFetchDoc(OM_BUNDLE_CATEGORY).then(function (doc) {
+      var seen = {}, paths = [];
+      doc.querySelectorAll('.product a[href*="/zbozi/"]').forEach(function (a) {
+        var pth = omNormPath(a.getAttribute('href'));
+        if (pth && !seen[pth] && paths.length < 6) { seen[pth] = 1; paths.push(pth); }
+      });
+      return Promise.all(paths.map(function (pth) {
+        return omFetchDoc(pth + '/').then(function (d) { return omParseBundle(d, pth); }).catch(function () { return null; });
+      }));
+    }).then(function (list) {
+      list = list.filter(Boolean);
+      try { localStorage.setItem(OM_BUNDLE_CACHE_KEY, JSON.stringify({ t: Date.now(), list: list })); } catch (e) { /* soukromý režim apod. */ }
+      return list;
+    });
+  }
+
+  function buildBundleUpsell() {
+    if (!document.body.classList.contains('type-product')) return;
+    if (document.getElementById('om-bundle')) return;
+    var priceBlock = document.querySelector('#product-detail-form .p-to-cart-block') || document.querySelector('.p-to-cart-block');
+    if (!priceBlock || !priceBlock.parentNode) return;
+    var here = omNormPath(location.href);
+    if (!here) return;
+
+    omLoadBundles().then(function (bundles) {
+      var best = null;
+      bundles.forEach(function (b) {
+        if (b.path === here) return;
+        var inBundle = b.items.some(function (i) { return i.path === here; });
+        if (!inBundle) return;
+        var sum = b.items.reduce(function (acc, i) { return acc + i.price; }, 0);
+        var pct = Math.round((sum - b.price) / sum * 100);
+        if (pct < 1) return;
+        if (!best || pct > best.pct) best = { b: b, pct: pct };
+      });
+      if (!best || document.getElementById('om-bundle')) return;
+
+      var a = document.createElement('a');
+      a.id = 'om-bundle';
+      a.className = 'om-bundle';
+      a.href = best.b.path + '/';
+
+      var ico = document.createElement('span');
+      ico.className = 'om-bundle-ico';
+      ico.appendChild(document.createTextNode('📦'));
+      var badge = document.createElement('span');
+      badge.className = 'om-bundle-pct';
+      badge.textContent = '−' + best.pct + '\u00a0%';
+      ico.appendChild(badge);
+      a.appendChild(ico);
+
+      var txt = document.createElement('span');
+      txt.className = 'om-bundle-txt';
+      var title = document.createElement('b');
+      title.textContent = 'I v balíčku s dalšími produkty';
+      var sub = document.createElement('small');
+      sub.textContent = 'Klikněte a ušetřete';
+      txt.appendChild(title);
+      txt.appendChild(sub);
+      a.appendChild(txt);
+
+      /* Kroužky = VŽDY produkty z balíčku (max 3, zbytek jako "+N") */
+      var thumbs = document.createElement('span');
+      thumbs.className = 'om-bundle-thumbs';
+      best.b.items.slice(0, 3).forEach(function (it) {
+        var t = document.createElement('span');
+        t.className = 'om-bundle-th';
+        if (it.img) {
+          var im = document.createElement('img');
+          im.src = it.img;
+          im.alt = '';
+          im.loading = 'lazy';
+          t.appendChild(im);
+        }
+        thumbs.appendChild(t);
+      });
+      if (best.b.items.length > 3) {
+        var more = document.createElement('span');
+        more.className = 'om-bundle-more';
+        more.textContent = '+' + (best.b.items.length - 3);
+        thumbs.appendChild(more);
+      }
+      a.appendChild(thumbs);
+
+      priceBlock.parentNode.insertBefore(a, priceBlock.nextSibling);
+    }).catch(function () { /* bez balíčku / chyba sítě: blok se prostě neukáže */ });
+  }
+
   function enhanceProductDetail() {
     if (!document.body.classList.contains('type-product')) return;
 
@@ -2572,6 +2730,7 @@
   }
 
   enhanceProductDetail();
+  buildBundleUpsell();
 
   /* Mobilní vlastní slider i pro sekce na detailu produktu (28. 7.
      2026, na žádost klienta — dřív jen homepage). Stejná funkce
