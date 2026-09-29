@@ -4774,3 +4774,117 @@ body:has(#om-promo:not(.om-promo--solo):not(.om-promo--ended)) .om-sticky-cta-bt
 .custom-footer__instagram {
   display: none !important;
 }
+
+
+/* ══════════════════════════════════════════════
+   BLOK "I V BALÍČKU S DALŠÍMI PRODUKTY" NA DETAILU PRODUKTU
+   (29. 9. 2026, varianta F z náčrtu) Staví buildBundleUpsell() za
+   nákupní box, jen u produktů, které jsou v balíčku. Celý blok je odkaz
+   na detail balíčku. Kroužky = produkty z balíčku, procento úspory jako
+   odznak na ikoně 📦. Bez ceny.
+   ══════════════════════════════════════════════ */
+#om-bundle {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  box-sizing: border-box !important;
+  margin: 18px 0 8px !important;
+  padding: 16px 18px !important;
+  background: #fdf8f0 !important;
+  border-radius: 16px !important;
+  color: #1a1a1a !important;
+  text-decoration: none !important;
+  transition: box-shadow .15s ease, transform .15s ease;
+}
+#om-bundle:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .09) !important;
+  transform: translateY(-1px);
+}
+#om-bundle .om-bundle-ico {
+  position: relative;
+  flex: 0 0 auto;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 14px;
+  font-size: 26px;
+  line-height: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+}
+#om-bundle .om-bundle-pct {
+  position: absolute;
+  right: -10px;
+  bottom: -8px;
+  padding: 3px 7px;
+  background: #9f1400;
+  color: #fff;
+  border: 2px solid #fdf8f0;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+#om-bundle .om-bundle-txt {
+  flex: 1 1 140px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+#om-bundle .om-bundle-txt b {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: #1a1a1a;
+}
+#om-bundle .om-bundle-txt small {
+  font-size: 13px;
+  color: #8a7d5c;
+}
+#om-bundle .om-bundle-thumbs {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+#om-bundle .om-bundle-th,
+#om-bundle .om-bundle-more {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  margin-left: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  overflow: hidden;
+}
+#om-bundle .om-bundle-th:first-child { margin-left: 0; }
+#om-bundle .om-bundle-th {
+  background: #eee6d5;
+  box-shadow: 0 0 0 1px #e2ddd0;
+}
+#om-bundle .om-bundle-th img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+#om-bundle .om-bundle-more {
+  background: #f1f1ef;
+  color: #666;
+  font-size: 13px;
+  font-weight: 800;
+}
+@media (max-width: 480px) {
+  #om-bundle { flex-wrap: wrap !important; gap: 12px 14px !important; padding: 14px !important; }
+  #om-bundle .om-bundle-txt { flex-basis: 0; min-width: 120px; }
+  #om-bundle .om-bundle-thumbs { margin-left: 66px; }
+  #om-bundle .om-bundle-th,
+  #om-bundle .om-bundle-more { width: 42px; height: 42px; }
+}
