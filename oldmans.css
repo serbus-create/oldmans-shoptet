@@ -4791,6 +4791,15 @@ body:has(#om-promo:not(.om-promo--solo):not(.om-promo--ended)) .om-sticky-cta-bt
   flex: 0 0 auto;
   font-size: 16px !important;
 }
+/* Verze S ODPOČTEM: rozložení pravého sloupce se při množstevní slevě nemění
+   (30. 9. 2026) — pilulka "Ušetříte X Kč" zaujme místo štítku −X % (2. řádek)
+   a cena před množstevní slevou místo přeškrtnuté akční ceny (3. řádek, na
+   celou šířku). Úsporná verze (.om-promo--static) zůstává v jednom řádku. */
+.om-promo:not(.om-promo--static) .om-promo-right > * > .quantity-discounts__save { order: 2; }
+.om-promo:not(.om-promo--static) .om-promo-right > * > .om-price-orig { flex: 0 0 100%; }
+@media (max-width: 480px) {
+  .om-promo:not(.om-promo--static) .om-promo-right > * > .om-price-orig { flex: 0 0 auto; }
+}
 
 
 /* Nativní "modré kolečko slev" na fotce produktu (−23 %) v červené webu
