@@ -1602,6 +1602,22 @@
       }
     }, 3000);
 
+    /* Úsporná verze (bez odpočtu): pilulka množstevní úspory "Ušetříte X Kč"
+       se při 0 Kč schová (třída .om-save-zero). Hlídá se MutationObserverem,
+       protože Shoptet text přepisuje při změně množství. */
+    if (!hasTimer && window.MutationObserver) {
+      var syncSave = function () {
+        var s = box.querySelector('.quantity-discounts__save');
+        if (!s) return;
+        var t = (s.textContent || '').replace(/\u00a0/g, ' ');
+        var m = t.match(/(\d[\d ]*(?:[.,]\d+)?)\s*Kč/);
+        var zero = !m || parseFloat(m[1].replace(/ /g, '').replace(',', '.')) === 0;
+        if (s.classList.contains('om-save-zero') !== zero) s.classList.toggle('om-save-zero', zero);
+      };
+      new MutationObserver(syncSave).observe(box, { childList: true, subtree: true, characterData: true });
+      [0, 400, 1200, 2500].forEach(function (ms) { setTimeout(syncSave, ms); });
+    }
+
     if (hasTimer) {
       var u = {
         d: box.querySelector('[data-u="d"]'), h: box.querySelector('[data-u="h"]'),
