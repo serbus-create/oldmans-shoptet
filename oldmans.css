@@ -4775,6 +4775,24 @@ body:has(#om-promo:not(.om-promo--solo):not(.om-promo--ended)) .om-sticky-cta-bt
 .om-promo .quantity-discounts__save.om-save-zero { display: none !important; }
 
 
+/* MNOŽSTEVNÍ SLEVA V AKČNÍM BOXU (30. 9. 2026, na žádost klienta) — když si
+   zákazník zvýší počet kusů a začne platit množstevní sleva (JS updateMainPrice
+   zobrazí .om-price-orig s cenou před množstevní slevou), zmizí původní
+   akční sleva (přeškrtnutá cena před akcí + štítek −X %). Zůstane jen
+   aktuální cena, hned za ní přeškrtnutá cena před množstevní slevou a
+   pilulka "Ušetříte X Kč" (počítaná právě z ní). Bez JS — přepínač je
+   inline display:inline na .om-price-orig (:has). */
+.om-promo:has(.om-price-orig[style*="inline"]) .om-promo-strike,
+.om-promo:has(.om-price-orig[style*="inline"]) .om-promo-badge {
+  display: none !important;
+}
+.om-promo .om-promo-right > * > .om-price-orig {
+  order: 3;
+  flex: 0 0 auto;
+  font-size: 16px !important;
+}
+
+
 /* Nativní "modré kolečko slev" na fotce produktu (−23 %) v červené webu
    (21. 9. 2026, na žádost klienta). Třídu .om-discount-circle přidává JS
    (markDiscountCircle) JEN prvku uvnitř detailu produktu, který kolečko
