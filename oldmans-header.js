@@ -1602,10 +1602,10 @@
       }
     }, 3000);
 
-    /* Úsporná verze (bez odpočtu): pilulka množstevní úspory "Ušetříte X Kč"
-       se při 0 Kč schová (třída .om-save-zero). Hlídá se MutationObserverem,
-       protože Shoptet text přepisuje při změně množství. */
-    if (!hasTimer && window.MutationObserver) {
+    /* Obě verze boxu (s odpočtem i úsporná): pilulka množstevní úspory
+       "Ušetříte X Kč" se při 0 Kč schová (třída .om-save-zero). Hlídá se
+       MutationObserverem, protože Shoptet text přepisuje při změně množství. */
+    if (window.MutationObserver) {
       var syncSave = function () {
         var s = box.querySelector('.quantity-discounts__save');
         if (!s) return;
