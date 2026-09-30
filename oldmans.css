@@ -4752,6 +4752,29 @@ body:has(#om-promo:not(.om-promo--solo):not(.om-promo--ended)) .om-sticky-cta-bt
 }
 
 
+/* ÚSPORNÁ VERZE AKČNÍHO BOXU — akce bez data "do" (30. 9. 2026, na žádost
+   klienta). JS dá boxu .om-promo--static, když u akční ceny chybí datum
+   konce (nebo už uplynulo), a odpočet se tedy nestaví. Bez levého sloupce
+   s odpočtem: nahoře malý titulek 🔥 AKCE, pod ním na JEDNOM řádku cena,
+   štítek −X % a přeškrtnutá původní cena, dole počet kusů + tlačítko.
+   Pilulka množstevní úspory ("Ušetříte X Kč") se při 0 Kč schová
+   (.om-save-zero přepíná JS podle textu). Specificita záměrně o třídu
+   vyšší než pravidla plné verze, bez !important na flex/order. */
+.om-promo.om-promo--static { padding: 12px 14px; }
+.om-promo--static .om-promo-top { flex-direction: column; gap: 6px; }
+.om-promo--static .om-promo-divider { display: none; }
+.om-promo--static .om-promo-title { margin: 0; font-size: 14px; }
+.om-promo--static .om-promo-right { justify-content: flex-start; }
+.om-promo.om-promo--static .om-promo-right > * > .om-promo-price { flex: 0 0 auto; }
+.om-promo.om-promo--static .om-promo-right > * > .om-promo-strike { flex: 0 0 auto; }
+.om-promo--static .om-promo-right > * { gap: 4px 10px !important; }
+.om-promo--static .price-final,
+.om-promo--static strong.price-final { font-size: 30px !important; }
+.om-promo--static .om-promo-badge { padding: 2px 7px; font-size: 13px; }
+.om-promo--static .om-promo-buy { margin-top: 10px; padding-top: 10px; }
+.om-promo .quantity-discounts__save.om-save-zero { display: none !important; }
+
+
 /* Nativní "modré kolečko slev" na fotce produktu (−23 %) v červené webu
    (21. 9. 2026, na žádost klienta). Třídu .om-discount-circle přidává JS
    (markDiscountCircle) JEN prvku uvnitř detailu produktu, který kolečko
