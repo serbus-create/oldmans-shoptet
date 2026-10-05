@@ -4802,6 +4802,91 @@ body:has(#om-promo:not(.om-promo--solo):not(.om-promo--ended)) .om-sticky-cta-bt
 }
 
 
+/* ── HERO BANNERY JAKO KARTY (5. 10. 2026, vzor Fermato / Big Boy) ───────────
+   Aktivuje JS (initHeroCards) třídou .om-cards jen když jsou obrázky karuselu
+   na výšku (≥ 1,2). Jinak platí původní široký banner výše. Karty 2:3, na
+   desktopu 4 vedle sebe (víc než 4 → pátá vykukuje), na tabletu 3, na mobilu
+   jedna a kousek další. Méně karet než se vejde → vystředěné. */
+.wide-carousel.om-cards {
+  --om-cg: 16px;
+  position: relative;
+  width: auto !important; max-width: 1400px !important;
+  margin: 28px auto 8px !important; padding: 0 20px !important;
+  box-sizing: border-box;
+}
+.wide-carousel.om-cards .carousel { position: static; }
+.wide-carousel.om-cards .carousel-indicators { display: none !important; }
+.wide-carousel.om-cards .carousel-inner {
+  display: flex; gap: var(--om-cg);
+  overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory; scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px 0 16px; box-sizing: border-box;
+}
+.wide-carousel.om-cards .carousel-inner::-webkit-scrollbar { display: none; }
+.wide-carousel.om-cards .carousel-inner > .item {
+  display: block !important; position: relative !important;
+  float: none !important; left: auto !important; top: auto !important;
+  transform: none !important; transition: none !important;
+  flex: 0 0 calc((100% - 3 * var(--om-cg)) / 4);
+  width: auto; margin: 0; scroll-snap-align: start;
+}
+.wide-carousel.om-cards.om-cards--many .carousel-inner > .item { flex-basis: calc((100% - 3 * var(--om-cg)) / 4.35); }
+.wide-carousel.om-cards .carousel-inner > .item:first-child { margin-left: auto !important; }
+.wide-carousel.om-cards .carousel-inner > .item:last-child { margin-right: auto !important; }
+.wide-carousel.om-cards .item > a {
+  display: block; position: relative; overflow: hidden; border-radius: 14px;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.wide-carousel.om-cards .item > a:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(0,0,0,.18); }
+.wide-carousel.om-cards img,
+.wide-carousel.om-cards #carousel img {
+  width: 100% !important; height: auto !important; aspect-ratio: 2 / 3;
+  object-fit: cover; border-radius: 14px !important; display: block !important;
+}
+/* šipky */
+.wide-carousel.om-cards .carousel-control {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px; margin: 0; padding: 0;
+  background: #fff !important; background-image: none !important;
+  border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,.22);
+  opacity: 1; z-index: 3; cursor: pointer; text-shadow: none;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity .2s ease;
+}
+.wide-carousel.om-cards .carousel-control.left { left: 6px; }
+.wide-carousel.om-cards .carousel-control.right { right: 6px; }
+.wide-carousel.om-cards .carousel-control > * { display: none !important; }
+.wide-carousel.om-cards .carousel-control::before { content: none !important; }
+.wide-carousel.om-cards .carousel-control::after {
+  content: ""; width: 10px; height: 10px; display: block;
+  border: solid #2a1410; border-width: 0 2px 2px 0;
+}
+.wide-carousel.om-cards .carousel-control.left::after { transform: translateX(2px) rotate(135deg); }
+.wide-carousel.om-cards .carousel-control.right::after { transform: translateX(-2px) rotate(-45deg); }
+.wide-carousel.om-cards .carousel-control.om-ctrl-off { opacity: 0; pointer-events: none; }
+/* tečky */
+.wide-carousel.om-cards .om-cards-dots { display: flex; justify-content: center; gap: 8px; margin-top: 4px; }
+.wide-carousel.om-cards .om-cards-dots button {
+  width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%;
+  background: #d9cdc7; cursor: pointer; transition: background .2s ease, transform .2s ease;
+}
+.wide-carousel.om-cards .om-cards-dots button.on { background: #9f1400; transform: scale(1.25); }
+.wide-carousel.om-cards.om-cards--noscroll .carousel-control,
+.wide-carousel.om-cards.om-cards--noscroll .om-cards-dots { display: none !important; }
+@media (max-width: 1099px) {
+  .wide-carousel.om-cards .carousel-inner > .item { flex-basis: calc((100% - 2 * var(--om-cg)) / 3); }
+  .wide-carousel.om-cards.om-cards--many .carousel-inner > .item { flex-basis: calc((100% - 2 * var(--om-cg)) / 3.35); }
+}
+@media (max-width: 767px) {
+  .wide-carousel.om-cards { --om-cg: 12px; margin-top: 16px !important; padding: 0 !important; }
+  .wide-carousel.om-cards .carousel-inner { padding-left: 0; padding-right: 12px; }
+  .wide-carousel.om-cards .carousel-inner > .item,
+  .wide-carousel.om-cards.om-cards--many .carousel-inner > .item { flex-basis: 78%; }
+  .wide-carousel.om-cards .carousel-control { display: none !important; }
+}
+
+
 /* Nativní "modré kolečko slev" na fotce produktu (−23 %) v červené webu
    (21. 9. 2026, na žádost klienta). Třídu .om-discount-circle přidává JS
    (markDiscountCircle) JEN prvku uvnitř detailu produktu, který kolečko
