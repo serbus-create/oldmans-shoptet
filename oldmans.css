@@ -4822,6 +4822,10 @@ body:has(#om-promo:not(.om-promo--solo):not(.om-promo--ended)) .om-sticky-cta-bt
   scroll-snap-type: x mandatory; scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   padding: 8px 0 16px; box-sizing: border-box;
+  /* Shoptet JS zapisuje na .carousel-inner INLINE min-height podle výšky
+     původního obrázku (u 1360×2048 → ~2035 px) a karusel by byl obří
+     s prázdnou plochou pod kartami. !important v CSS přebije inline styl. */
+  min-height: 0 !important; height: auto !important;
 }
 .wide-carousel.om-cards .carousel-inner::-webkit-scrollbar { display: none; }
 .wide-carousel.om-cards .carousel-inner > .item {
