@@ -2189,7 +2189,18 @@
       }
       a.appendChild(thumbs);
 
+      /* výchozí (záložní) pozice: hned za nákupním boxem */
       priceBlock.parentNode.insertBefore(a, priceBlock.nextSibling);
+      /* cílová pozice (přání klienta): uvnitř nákupního boxu mezi odkaz
+         "Pro firmy – Nabídka na míru" a řádek s hodnocením. Odkaz "Pro firmy"
+         vytváří náš JS, tak se pár pokusů počká, kdyby ještě nebyl hotový. */
+      function placeBundle() {
+        var pf = document.querySelector('a.om-pro-firmy');
+        if (!pf || !pf.parentNode || !a.parentNode) return false;
+        if (pf.nextSibling !== a) pf.parentNode.insertBefore(a, pf.nextSibling);
+        return true;
+      }
+      if (!placeBundle()) { [150, 500, 1200, 2500].forEach(function (ms) { setTimeout(placeBundle, ms); }); }
     }).catch(function () { /* bez balíčku / chyba sítě: blok se prostě neukáže */ });
   }
 
