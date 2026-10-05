@@ -1956,6 +1956,156 @@
     });
   }
 
+  /* ── BALÍČKY AUTOMATICKY Z EXPORTU SAD ZE SHOPTETU (5. 10. 2026) ───────────
+     Shoptet složení sady ("Položky sady") na webu nevypisuje, ale umí ho
+     vyexportovat (sloupce setItem, setItem2… ve tvaru "kód;počet"). Klient si v
+     administraci (Produkty → Export) vytvoří vlastní export produktů v CSV
+     s odkazem; jeho adresu vložíme sem. Pak stačí v Shoptetu založit sadu s
+     položkami a blok "I v balíčku" se sám objeví u všech jejích produktů.
+     Tok: export (cache 3 h) → balíčky obsahující kód aktuálního produktu →
+     živé ceny/odkazy/fotky přes /vyhledavani/?string=KÓD (cache 1 h) → úspora %.
+     Prázdná adresa = vypnuto (platí starší logika přes Související produkty).
+     Kód aktuálního produktu bereme z dataLayer (shoptet.product.code). */
+  var OM_SETS_EXPORT_URL = '';
+  var OM_SETS_KEY = 'om_sets_v1';
+  var OM_SETS_TTL = 3 * 60 * 60 * 1000;
+  var OM_RESOLVE_KEY = 'om_res_v1';
+  var OM_RESOLVE_TTL = 60 * 60 * 1000;
+
+  function omCsvRows(text) {
+    var delim = (text.split('\n')[0] || '').split(';').length >= (text.split('\n')[0] || '').split(',').length ? ';' : ',';
+    var rows = [], row = [], cell = '', q = false, i, c;
+    text = String(text || '').replace(/^\uFEFF/, '');
+    for (i = 0; i < text.length; i++) {
+      c = text.charAt(i);
+      if (q) {
+        if (c === '"') { if (text.charAt(i + 1) === '"') { cell += '"'; i++; } else { q = false; } }
+        else { cell += c; }
+      } else if (c === '"') { q = true; }
+      else if (c === delim) { row.push(cell); cell = ''; }
+      else if (c === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; }
+      else if (c !== '\r') { cell += c; }
+    }
+    if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+    return rows;
+  }
+
+  /* CSV exportu → [{ code, items:[{ code, qty }] }] jen pro sady (≥ 2 položky) */
+  function omParseSets(text) {
+    var rows = omCsvRows(text);
+    if (rows.length < 2) return [];
+    var head = rows[0].map(function (h) { return String(h).trim().toLowerCase(); });
+    var iCode = head.indexOf('code');
+    if (iCode < 0) return [];
+    var setCols = [];
+    head.forEach(function (h, idx) { if (/^setitem\d*$/.test(h)) setCols.push(idx); });
+    if (!setCols.length) return [];
+    var out = [];
+    for (var r = 1; r < rows.length; r++) {
+      var row = rows[r], code = String(row[iCode] || '').trim();
+      if (!code) continue;
+      var items = [];
+      setCols.forEach(function (ci) {
+        var v = String(row[ci] || '').replace(/[()]/g, '').trim();
+        if (!v) return;
+        var p = v.split(';');
+        var ic = String(p[0] || '').trim();
+        var qty = parseFloat(String(p[1] || '1').replace(',', '.'));
+        if (ic) items.push({ code: ic, qty: qty > 0 ? qty : 1 });
+      });
+      if (items.length >= 2) out.push({ code: code, items: items });
+    }
+    return out;
+  }
+
+  function omLoadSets() {
+    var cached = null;
+    try { cached = JSON.parse(localStorage.getItem(OM_SETS_KEY) || 'null'); } catch (e) { cached = null; }
+    if (cached && cached.t && cached.list && (Date.now() - cached.t) < OM_SETS_TTL) return Promise.resolve(cached.list);
+    return fetch(OM_SETS_EXPORT_URL, { credentials: 'same-origin' })
+      .then(function (r) { return r.ok ? r.arrayBuffer() : Promise.reject(r.status); })
+      .then(function (buf) {
+        var text;
+        try { text = new TextDecoder('windows-1250').decode(buf); } catch (e) { text = String.fromCharCode.apply(null, new Uint8Array(buf)); }
+        var list = omParseSets(text);
+        try { localStorage.setItem(OM_SETS_KEY, JSON.stringify({ t: Date.now(), list: list })); } catch (e) { /* soukromý režim */ }
+        return list;
+      });
+  }
+
+  function omProductCode() {
+    var dl = window.dataLayer || [];
+    for (var i = 0; i < dl.length; i++) {
+      var s = dl[i] && dl[i].shoptet;
+      if (s && s.product && s.product.code != null) return String(s.product.code).trim();
+    }
+    return '';
+  }
+
+  /* Kód → { code, path, price, img } z vyhledávání (hledá se přesná shoda data-micro="sku") */
+  function omResolveCode(code) {
+    var store = {};
+    try { store = JSON.parse(localStorage.getItem(OM_RESOLVE_KEY) || '{}') || {}; } catch (e) { store = {}; }
+    var hit = store[code];
+    if (hit && hit.t && (Date.now() - hit.t) < OM_RESOLVE_TTL && hit.v) return Promise.resolve(hit.v);
+    return omFetchDoc('/vyhledavani/?string=' + encodeURIComponent(code)).then(function (doc) {
+      var found = null;
+      Array.prototype.forEach.call(doc.querySelectorAll('.product'), function (card) {
+        if (found) return;
+        var sku = card.querySelector('[data-micro="sku"]');
+        if (!sku || String(sku.textContent || sku.getAttribute('content') || '').trim() !== code) return;
+        var a = card.querySelector('a[href*="/zbozi/"]');
+        var pf = card.querySelector('.price-final');
+        var pr = omParseKc(pf ? pf.textContent : (card.querySelector('[data-micro="offer"]') || {}).textContent);
+        var img = card.querySelector('img');
+        var src = img ? (img.getAttribute('data-src') || img.getAttribute('src') || '') : '';
+        if (a && pr > 0) found = { code: code, path: omNormPath(a.getAttribute('href')), price: pr, img: src };
+      });
+      try {
+        var st = JSON.parse(localStorage.getItem(OM_RESOLVE_KEY) || '{}') || {};
+        st[code] = { t: Date.now(), v: found };
+        localStorage.setItem(OM_RESOLVE_KEY, JSON.stringify(st));
+      } catch (e) { /* ignorovat */ }
+      return found;
+    });
+  }
+
+  /* Balíčky obsahující produkt s daným kódem → pole ve tvaru jako omLoadBundles()
+     ({ path, price, items:[{ path, price (= cena × počet kusů), img }] }). */
+  function omBundlesForCode(code) {
+    return omLoadSets().then(function (sets) {
+      var mine = sets.filter(function (s) {
+        return s.code !== code && s.items.some(function (i) { return i.code === code; });
+      }).slice(0, 3);
+      return Promise.all(mine.map(function (s) {
+        var codes = [s.code];
+        s.items.forEach(function (i) { if (codes.indexOf(i.code) < 0) codes.push(i.code); });
+        return Promise.all(codes.map(function (c) { return omResolveCode(c).catch(function () { return null; }); })).then(function (res) {
+          var map = {};
+          res.forEach(function (x) { if (x) map[x.code] = x; });
+          var bundle = map[s.code];
+          if (!bundle) return null;
+          var items = [];
+          for (var k = 0; k < s.items.length; k++) {
+            var r = map[s.items[k].code];
+            if (!r) return null; /* chybí produkt/cena → raději nic než špatné procento */
+            items.push({ path: r.path, price: r.price * s.items[k].qty, img: r.img });
+          }
+          return { path: bundle.path, price: bundle.price, items: items };
+        });
+      })).then(function (list) { return list.filter(Boolean); });
+    });
+  }
+
+  /* Zdroj dat pro blok: export sad (je-li zapnutý a funguje), jinak Související produkty */
+  function omLoadBundleCandidates() {
+    var code = omProductCode();
+    if (OM_SETS_EXPORT_URL && code) {
+      return omBundlesForCode(code).catch(function () { return omLoadBundles(); });
+    }
+    return omLoadBundles();
+  }
+
   function buildBundleUpsell() {
     if (!document.body.classList.contains('type-product')) return;
     if (document.getElementById('om-bundle')) return;
@@ -1964,7 +2114,7 @@
     var here = omNormPath(location.href);
     if (!here) return;
 
-    omLoadBundles().then(function (bundles) {
+    omLoadBundleCandidates().then(function (bundles) {
       var best = null;
       bundles.forEach(function (b) {
         if (b.path === here) return;
