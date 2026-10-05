@@ -1,0 +1,39 @@
+name: Obnovit složení balíčků
+
+# Jednou za hodinu přečte popisy balíčků na oldmans.cz ("Co je v balíčku:"),
+# spáruje je s produkty a uloží bundles.json, který web používá k bloku
+# "I v balíčku s dalšími produkty". Spustit ručně lze v záložce Actions.
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bundles
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-save jsdom
+      - run: node scripts/build-bundles.mjs bundles.json
+      - name: Uložit a vyčistit cache jsDelivr
+        run: |
+          if [ -n "$(git status --porcelain bundles.json)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add bundles.json
+            git commit -m "Obnovit složení balíčků (bundles.json)"
+            git push
+            curl -fsS "https://purge.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/bundles.json" || true
+          else
+            echo "Beze změny."
+          fi
