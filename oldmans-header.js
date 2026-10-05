@@ -2839,6 +2839,103 @@
 
   setTimeout(watchCart, 1000);
 
+  /* ── HERO BANNERY JAKO KARTY (5. 10. 2026, vzor Fermato / Big Boy) ─────────
+     Nativní Shoptet carousel (Vzhled a obsah → Bannery → Carousel) se přestaví
+     z jednoho širokého slidu na řadu vysokých karet 2:3, které jdou posouvat
+     (šipky, tečky, swipe). Text i tlačítko jsou přímo v grafice.
+     BEZPEČNÝ PŘEPÍNAČ: kartový režim se zapne jen když jsou VŠECHNY obrázky
+     v karuselu na výšku (poměr výška/šířka ≥ 1,2 podle atributů width/height,
+     které Shoptet zapisuje z reálného rozměru). Dokud jsou tam stará široká
+     grafika (1685×500), nic se nemění. */
+  function initHeroCards() {
+    var wc = document.querySelector('.wide-carousel');
+    if (!wc) return false;
+    if (wc.classList.contains('om-cards')) return true;
+    var inner = wc.querySelector('.carousel-inner');
+    var items = inner ? [].slice.call(inner.querySelectorAll('.item')) : [];
+    if (!items.length) return false;
+    var tall = items.every(function (it) {
+      var im = it.querySelector('img');
+      var w = parseInt(im && im.getAttribute('width'), 10);
+      var h = parseInt(im && im.getAttribute('height'), 10);
+      return w > 0 && h / w >= 1.2;
+    });
+    if (!tall) return true;
+
+    wc.classList.add('om-cards');
+    if (items.length > 4) wc.classList.add('om-cards--many');
+
+    /* Zastavit Bootstrap carousel (autoplay, klávesy, hover) – posouvání řešíme sami */
+    var car = wc.querySelector('.carousel');
+    try { if (window.jQuery && car) { window.jQuery(car).off('.bs.carousel').carousel('pause'); } } catch (e) {}
+    if (car) { car.removeAttribute('data-ride'); car.setAttribute('data-interval', 'false'); }
+    items.forEach(function (it) { it.classList.remove('active', 'next', 'prev'); });
+
+    var prev = wc.querySelector('.carousel-control.left');
+    var next = wc.querySelector('.carousel-control.right');
+    [prev, next].forEach(function (a) {
+      if (a) { a.removeAttribute('data-slide'); a.removeAttribute('href'); a.setAttribute('role', 'button'); a.setAttribute('tabindex', '0'); }
+    });
+
+    var dotsBox = document.createElement('div');
+    dotsBox.className = 'om-cards-dots';
+    wc.appendChild(dotsBox);
+
+    function step() {
+      var cw = items[0].getBoundingClientRect().width;
+      var gap = parseFloat(getComputedStyle(inner).columnGap || getComputedStyle(inner).gap) || 0;
+      return cw + gap;
+    }
+    function pageSize() { return Math.max(1, Math.floor(inner.clientWidth / step())) * step(); }
+    function pages() { return Math.max(1, Math.ceil((inner.scrollWidth - 2) / inner.clientWidth)); }
+    function go(dir) { inner.scrollBy({ left: dir * pageSize(), behavior: 'smooth' }); }
+    function goPage(i) {
+      var max = inner.scrollWidth - inner.clientWidth, n = pages();
+      inner.scrollTo({ left: n > 1 ? (max * i) / (n - 1) : 0, behavior: 'smooth' });
+    }
+    function buildDots() {
+      var n = pages();
+      if (dotsBox.children.length === n) return;
+      dotsBox.innerHTML = '';
+      for (var i = 0; i < n; i++) {
+        (function (idx) {
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.setAttribute('aria-label', 'Banner ' + (idx + 1));
+          b.addEventListener('click', function () { goPage(idx); });
+          dotsBox.appendChild(b);
+        })(i);
+      }
+    }
+    function update() {
+      buildDots();
+      var max = inner.scrollWidth - inner.clientWidth, x = inner.scrollLeft, n = pages();
+      wc.classList.toggle('om-cards--noscroll', max <= 2);
+      if (prev) prev.classList.toggle('om-ctrl-off', x <= 2);
+      if (next) next.classList.toggle('om-ctrl-off', x >= max - 2);
+      var on = n > 1 && max > 0 ? Math.round((x / max) * (n - 1)) : 0;
+      [].forEach.call(dotsBox.children, function (d, i) { d.classList.toggle('on', i === on); });
+    }
+    if (prev) { prev.addEventListener('click', function (e) { e.preventDefault(); go(-1); }); }
+    if (next) { next.addEventListener('click', function (e) { e.preventDefault(); go(1); }); }
+    inner.addEventListener('scroll', function () { window.requestAnimationFrame(update); }, { passive: true });
+    var rt;
+    window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(update, 120); });
+    update();
+    setTimeout(update, 400);
+    return true;
+  }
+  (function startHeroCards() {
+    var tries = 0;
+    function run() {
+      tries++;
+      var ok = false;
+      try { ok = initHeroCards(); } catch (e) { ok = true; if (window.console) console.error('OM hero cards', e); }
+      if (!ok && tries < 10) setTimeout(run, 300);
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+  })();
+
   /* Spustíme po načtení DOM */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', injectAll);
