@@ -1967,7 +1967,10 @@
      Prázdná adresa = vypnuto (platí starší logika přes Související produkty).
      Kód aktuálního produktu bereme z dataLayer (shoptet.product.code). */
   var OM_SETS_EXPORT_URL = '';
-  var OM_SETS_KEY = 'om_sets_v1';
+  /* Hlavní zdroj: bundles.json, který hodinově sestavuje GitHub Action
+     (scripts/build-bundles.mjs) z popisů balíčků ("Co je v balíčku:") na webu. */
+  var OM_BUNDLES_JSON_URL = 'https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/bundles.json';
+  var OM_SETS_KEY = 'om_sets_v2';
   var OM_SETS_TTL = 3 * 60 * 60 * 1000;
   var OM_RESOLVE_KEY = 'om_res_v1';
   var OM_RESOLVE_TTL = 60 * 60 * 1000;
@@ -2022,6 +2025,15 @@
     var cached = null;
     try { cached = JSON.parse(localStorage.getItem(OM_SETS_KEY) || 'null'); } catch (e) { cached = null; }
     if (cached && cached.t && cached.list && (Date.now() - cached.t) < OM_SETS_TTL) return Promise.resolve(cached.list);
+    if (!OM_SETS_EXPORT_URL && OM_BUNDLES_JSON_URL) {
+      return fetch(OM_BUNDLES_JSON_URL)
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+        .then(function (j) {
+          var list = (j && j.bundles || []).filter(function (s) { return s && s.code && s.items && s.items.length >= 2; });
+          try { localStorage.setItem(OM_SETS_KEY, JSON.stringify({ t: Date.now(), list: list })); } catch (e) { /* soukromý režim */ }
+          return list;
+        });
+    }
     return fetch(OM_SETS_EXPORT_URL, { credentials: 'same-origin' })
       .then(function (r) { return r.ok ? r.arrayBuffer() : Promise.reject(r.status); })
       .then(function (buf) {
@@ -2091,6 +2103,9 @@
             if (!r) return null; /* chybí produkt/cena → raději nic než špatné procento */
             items.push({ path: r.path, price: r.price * s.items[k].qty, img: r.img });
           }
+          /* pojistka proti chybně spárované ceně: úspora nad 60 % = podezřelé, raději nic */
+          var total = items.reduce(function (acc, i) { return acc + i.price; }, 0);
+          if (total <= bundle.price || (total - bundle.price) / total * 100 > 60) return null;
           return { path: bundle.path, price: bundle.price, items: items };
         });
       })).then(function (list) { return list.filter(Boolean); });
@@ -2100,7 +2115,7 @@
   /* Zdroj dat pro blok: export sad (je-li zapnutý a funguje), jinak Související produkty */
   function omLoadBundleCandidates() {
     var code = omProductCode();
-    if (OM_SETS_EXPORT_URL && code) {
+    if ((OM_SETS_EXPORT_URL || OM_BUNDLES_JSON_URL) && code) {
       return omBundlesForCode(code).catch(function () { return omLoadBundles(); });
     }
     return omLoadBundles();
