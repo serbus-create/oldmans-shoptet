@@ -1873,8 +1873,11 @@
      nezávisí na vzájemném párování u jednotlivých produktů.
      Data se na 1 h ukládají do localStorage (další návštěva nic nestahuje);
      při jakékoli chybě se blok prostě neukáže. */
-  var OM_BUNDLE_CACHE_KEY = 'om_bundles_v1';
-  var OM_BUNDLE_TTL = 60 * 60 * 1000;
+  var OM_BUNDLE_CACHE_KEY = 'om_bundles_v2';
+  var OM_BUNDLE_TTL = 3 * 60 * 60 * 1000;
+  var OM_BUNDLE_MAX = 24;      /* kolik balíčků z kategorie maximálně zpracovat */
+  var OM_BUNDLE_MAX_ITEMS = 6; /* víc "souvisejících" = Shoptet je doplnil sám, ne složení balíčku */
+  var OM_BUNDLE_MAX_PCT = 40;  /* úspora nad tohle = podezřelá data (nesmyslné související) */
   var OM_BUNDLE_CATEGORY = '/kategorie/balicky/';
 
   function omNormPath(href) {
@@ -1914,6 +1917,12 @@
       if (itemPath && pr > 0) items.push({ path: itemPath, price: pr, img: src });
     });
     if (isNaN(price) || price <= 0 || items.length < 2 || items.length !== cards.length) return null;
+    /* Ochrana proti špatně nastaveným "Souvisejícím": Shoptet u balíčku bez ručně
+       nastavených souvisejících vypisuje několik náhodných produktů (typicky 8).
+       Takový balíček radši vynecháme, než bychom ukázali nesmyslné procento. */
+    if (items.length > OM_BUNDLE_MAX_ITEMS) return null;
+    var sum = items.reduce(function (acc, i) { return acc + i.price; }, 0);
+    if (sum <= price || (sum - price) / sum * 100 > OM_BUNDLE_MAX_PCT) return null;
     return { path: path, price: price, items: items };
   }
 
@@ -1927,11 +1936,19 @@
       var seen = {}, paths = [];
       doc.querySelectorAll('.product a[href*="/zbozi/"]').forEach(function (a) {
         var pth = omNormPath(a.getAttribute('href'));
-        if (pth && !seen[pth] && paths.length < 6) { seen[pth] = 1; paths.push(pth); }
+        if (pth && !seen[pth] && paths.length < OM_BUNDLE_MAX) { seen[pth] = 1; paths.push(pth); }
       });
-      return Promise.all(paths.map(function (pth) {
-        return omFetchDoc(pth + '/').then(function (d) { return omParseBundle(d, pth); }).catch(function () { return null; });
-      }));
+      /* detaily balíčků po 4 souběžně (nezahlcovat prohlížeč ani server) */
+      var results = new Array(paths.length), next = 0;
+      function worker() {
+        if (next >= paths.length) return Promise.resolve();
+        var idx = next++;
+        return omFetchDoc(paths[idx] + '/')
+          .then(function (d) { results[idx] = omParseBundle(d, paths[idx]); })
+          .catch(function () { results[idx] = null; })
+          .then(worker);
+      }
+      return Promise.all([worker(), worker(), worker(), worker()]).then(function () { return results; });
     }).then(function (list) {
       list = list.filter(Boolean);
       try { localStorage.setItem(OM_BUNDLE_CACHE_KEY, JSON.stringify({ t: Date.now(), list: list })); } catch (e) { /* soukromý režim apod. */ }
