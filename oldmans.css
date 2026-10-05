@@ -4891,6 +4891,38 @@ body:has(#om-promo:not(.om-promo--solo):not(.om-promo--ended)) .om-sticky-cta-bt
 }
 
 
+/* CTA TLAČÍTKO NA HERO KARTÁCH (5. 10. 2026) — text z administrace (pole
+   "text odkazu" u banneru) Shoptet vypisuje jako span.extended-banner-link,
+   bílý a bez stylu, umístěný jeho vlastním CSS. Tady z něj děláme zelené
+   tlačítko stejné jako "Do košíku" (#79b530, hover #6aa028), vystředěné
+   dole na kartě. !important kvůli neznámé specificitě Shoptet CSS. Tlačítko je
+   jen vizuální (celá karta je odkaz), hover karty ho ztmaví. */
+.wide-carousel.om-cards .extended-banner-texts {
+  position: absolute !important; top: 0 !important; left: 0 !important;
+  right: 0 !important; bottom: 0 !important; pointer-events: none;
+}
+.wide-carousel.om-cards .extended-banner-link {
+  position: absolute !important; top: auto !important; right: auto !important;
+  left: 50% !important; bottom: 20px !important;
+  transform: translateX(-50%) !important;
+  width: auto !important; max-width: calc(100% - 28px) !important;
+  box-sizing: border-box; padding: 13px 26px !important;
+  background: #79b530; color: #fff !important;
+  font-family: inherit; font-size: 15px !important; font-weight: 700 !important;
+  line-height: 1; text-align: center; text-shadow: none;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,.28);
+  transition: background .25s ease, box-shadow .25s ease;
+}
+.wide-carousel.om-cards .item > a:hover .extended-banner-link {
+  background: #6aa028; box-shadow: 0 6px 18px rgba(0,0,0,.34);
+}
+.wide-carousel.om-cards .extended-banner-link:empty { display: none !important; }
+@media (max-width: 767px) {
+  .wide-carousel.om-cards .extended-banner-link { bottom: 16px !important; padding: 12px 22px !important; font-size: 14px !important; }
+}
+
+
 /* Nativní "modré kolečko slev" na fotce produktu (−23 %) v červené webu
    (21. 9. 2026, na žádost klienta). Třídu .om-discount-circle přidává JS
    (markDiscountCircle) JEN prvku uvnitř detailu produktu, který kolečko
