@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-07T00:43:19.734Z",
+ "generated": "2026-10-09T16:13:30.281Z",
  "bundles": [
   {
    "code": "1314",
@@ -248,5 +248,11 @@
    ]
   }
  ],
- "skipped": []
+ "skipped": [
+  {
+   "code": "1374",
+   "name": "Startovací Výbava - 4 nejprodávanější omáčky + Kečup, Hořčice, Olej & Pistácie",
+   "reason": "bez seznamu \"Co je v balíčku:\""
+  }
+ ]
 }
