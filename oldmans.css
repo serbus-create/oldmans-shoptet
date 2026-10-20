@@ -4936,6 +4936,19 @@ body:has(#om-promo:not(.om-promo--solo):not(.om-promo--ended)) .om-sticky-cta-bt
 }
 
 
+/* NÁZEV PRODUKTU NA MOBILU (21. 10. 2026, na žádost klienta) — dlouhé názvy
+   zabíraly moc místa (34 px → 3 až 5 řádků). Na mobilu Shoptet zobrazuje
+   duplicitní nadpis v .p-detail-inner-header-mobile (původní h1 je tam
+   display:none); velikost se plynule škáluje podle šířky telefonu
+   (360 px → ~21 px, 390 px → ~23 px, 430+ px → 25 až 26 px). Změřeno na
+   živém webu: olivový olej 123 → 64 px, nejdelší balíček 198 → 85 px. */
+body .p-detail-inner-header-mobile .h1 {
+  font-size: clamp(19px, 5.8vw, 26px) !important;
+  line-height: 1.18 !important;
+  margin-bottom: 6px !important;
+}
+
+
 /* Nativní "modré kolečko slev" na fotce produktu (−23 %) v červené webu
    (21. 9. 2026, na žádost klienta). Třídu .om-discount-circle přidává JS
    (markDiscountCircle) JEN prvku uvnitř detailu produktu, který kolečko
