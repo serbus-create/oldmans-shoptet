@@ -2941,6 +2941,121 @@
   enhanceProductDetail();
   buildBundleUpsell();
 
+  /* ── SLEVOVÝ KUPÓN NA DETAILU PRODUKTU (21. 10. 2026, na žádost klienta) ──
+     Černá "vstupenka" s tlačítkem Zkopírovat (kód do schránky). Umístění:
+     v nákupním boxu hned ZA blokem "I v balíčku" a PŘED hodnocením (u mobilu
+     před odznaky Vyrobeno v ČR, které jsou nad hodnocením).
+     Jde jen o zobrazení — samotný kupón (kód, minimální hodnota objednávky,
+     výše slevy) musí být založený v Shoptetu (Marketing → Slevové kupóny).
+     Změna kupónu = úprava tohoto objektu. `until` (nepovinné, "RRRR-MM-DD")
+     po daném dni kupón sám schová; prázdné = bez omezení. Prázdný `code`
+     kupón vypne. */
+  var OM_COUPON = { code: 'PODZIM250', amount: '250\u00a0Kč', min: '1\u00a0999\u00a0Kč', until: '' };
+
+  function omCopyText(text) {
+    if (navigator.clipboard && window.isSecureContext && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function (resolve, reject) {
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+        document.body.appendChild(ta);
+        ta.select();
+        ta.setSelectionRange(0, text.length);
+        var ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        if (ok) resolve(); else reject(new Error('execCommand'));
+      } catch (e) { reject(e); }
+    });
+  }
+
+  function buildCouponBox() {
+    var c = OM_COUPON;
+    if (!c || !c.code) return true;
+    if (c.until && Date.now() > new Date(c.until + 'T23:59:59').getTime()) return true;
+    var box = document.querySelector('.p-to-cart-block.om-price-box');
+    if (!box) return false;
+    /* čeká se, až je box dostavěný (odznaky / hodnocení vytváří enhanceProductDetail) */
+    var ref = document.getElementById('om-trust-badges-mobile') || box.querySelector('.om-summary-row');
+    if (!ref || !ref.parentNode) return false;
+
+    var el = document.getElementById('om-coupon');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'om-coupon';
+      el.className = 'om-coupon';
+
+      var main = document.createElement('div');
+      main.className = 'om-coupon-main';
+      var ico = document.createElement('span');
+      ico.className = 'om-coupon-ico';
+      ico.textContent = '🎟️';
+      var text = document.createElement('div');
+      text.className = 'om-coupon-text';
+      var strong = document.createElement('strong');
+      strong.textContent = 'Sleva ' + c.amount;
+      var sub = document.createElement('span');
+      sub.textContent = 'při nákupu nad ' + c.min;
+      text.appendChild(strong);
+      text.appendChild(sub);
+      main.appendChild(ico);
+      main.appendChild(text);
+
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'om-coupon-copy';
+      btn.setAttribute('aria-label', 'Zkopírovat slevový kód ' + c.code);
+      var code = document.createElement('span');
+      code.className = 'om-coupon-code';
+      code.textContent = c.code;
+      var act = document.createElement('span');
+      act.className = 'om-coupon-act';
+      act.setAttribute('aria-live', 'polite');
+      act.textContent = 'Zkopírovat';
+      btn.appendChild(code);
+      btn.appendChild(act);
+
+      var timer;
+      btn.addEventListener('click', function () {
+        omCopyText(c.code).then(function () {
+          btn.classList.add('is-copied');
+          act.textContent = 'Zkopírováno ✓';
+        }).catch(function () {
+          /* schránka nedostupná → alespoň kód označit, ať ho jde zkopírovat ručně */
+          try {
+            var rng = document.createRange();
+            rng.selectNodeContents(code);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(rng);
+          } catch (e) { /* ignorovat */ }
+          act.textContent = 'Označeno';
+        }).then(function () {
+          clearTimeout(timer);
+          timer = setTimeout(function () {
+            btn.classList.remove('is-copied');
+            act.textContent = 'Zkopírovat';
+          }, 2200);
+        });
+      });
+
+      el.appendChild(main);
+      el.appendChild(btn);
+    }
+    if (ref.previousElementSibling !== el) ref.parentNode.insertBefore(el, ref);
+    return true;
+  }
+  (function startCouponBox() {
+    if (buildCouponBox()) return;
+    [150, 500, 1200, 2500, 4500].forEach(function (ms) {
+      setTimeout(function () { if (!document.getElementById('om-coupon')) buildCouponBox(); }, ms);
+    });
+  })();
+
+
   /* Mobilní vlastní slider i pro sekce na detailu produktu (28. 7.
      2026, na žádost klienta — dřív jen homepage). Stejná funkce
      buildMobileProductSlider() funguje beze změny, protože obě
