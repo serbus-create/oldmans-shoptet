@@ -2333,8 +2333,8 @@
         var freeGift = document.createElement('div');
         freeGift.id = 'om-free-gift';
         freeGift.innerHTML = `
-          <div class="om-free-gift-label">🎁 Dárek ZDARMA ke každé objednávce</div>
           <div class="om-free-gift-box">
+            <div class="om-free-gift-label">🎁 Dárek ZDARMA ke každé objednávce</div>
             <img src="https://cdn.myshoptet.com/usr/788253.myshoptet.com/user/shop/big/1066_nachos-zdarma.webp?ff=1&x=100&y=100&q=85&ts=6a6906dd&sg=38cb01fe" alt="Balíček NACHOS (80g) - ZDARMA ke každé objednávce">
             <span>Balíček Nachos (80g)</span>
           </div>`;
