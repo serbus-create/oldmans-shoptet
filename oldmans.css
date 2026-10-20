@@ -2400,44 +2400,29 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
    žádná zvláštní mobilní varianta pozice není potřeba. */
 #om-free-gift {
   display: block;
-  margin: 0 0 14px;
-}
-.om-free-gift-label {
-  font-size: 20px;
-  font-weight: 800;
-  color: #1a1a1a;
-  margin-bottom: 10px;
-}
-@media (max-width: 480px) {
-  /* Na úzkém mobilu se text se stejnou velikostí jako na desktopu
-     zalomil na dva řádky (29. 7. 2026, klient chtěl jeden řádek).
-     OPRAVA — klient chtěl popisek vizuálně stejně dlouhý jako pruh
-     SKLADEM pod ním, ale BEZ roztahování mezer mezi slovy (radši
-     větší písmo). Zvýšený `vw` koeficient v clamp() ať se přiblíží
-     šířce SKLADEM pruhu. Pojistka pro extrémně úzké telefony, kde by
-     se i tak nevešlo: `overflow:hidden` + `text-overflow:ellipsis`
-     ořízne text (nikdy nezalomí na 2. řádek, jak klient výslovně
-     nechce). */
-  .om-free-gift-label {
-    font-size: clamp(12px, 5.2vw, 18px);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    /* Vycentrováno, ať je odsazení od levého i pravého okraje stejné
-       (29. 7. 2026, na žádost klienta). */
-    text-align: center;
-  }
-}
-.om-free-gift-box {
-  display: flex;
-  align-items: center;
-  gap: 16px;
   width: 100%;
   box-sizing: border-box;
+  align-self: stretch; /* v nákupním boxu se jinak smrskne na šířku obsahu */
+  margin: 0 0 12px;
+}
+/* KOMPAKTNÍ DÁREK (21. 10. 2026, na žádost klienta — zkrátit scroll):
+   nadpis už není samostatný řádek nad polem, ale červený "sticker"
+   přečnívající přes horní okraj žlutého pole (label je v JS UVNITŘ
+   .om-free-gift-box). Pole je jen jeden řádek: fotka 40 px + název dárku.
+   Výška bloku ~90 px místo ~158 px. Sticker se nikdy nezalomí (nowrap +
+   ellipsis na úzkém telefonu). */
+.om-free-gift-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 12px; /* místo pro přečnívající sticker */
   border: 2px dashed #f0c944;
   border-radius: 14px;
   background: #fffbea;
-  padding: 16px 20px;
+  padding: 15px 16px 9px;
   text-decoration: none !important;
   transition: background .2s, border-color .2s;
   /* Není to odkaz (klient chce jen informační box, ne prokliknutí),
@@ -2449,17 +2434,45 @@ body.in-podminky-ochrany-osobnich-udaju .content.narrow {
   background: #fdf3c9;
   border-color: #e6b800;
 }
+.om-free-gift-label {
+  position: absolute;
+  top: -12px;
+  left: 14px;
+  max-width: calc(100% - 28px);
+  box-sizing: border-box;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #9f1400;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: .2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transform: rotate(-1.5deg);
+  transform-origin: left center;
+  box-shadow: 0 2px 6px rgba(159, 20, 0, .35);
+}
+@media (max-width: 380px) {
+  .om-free-gift-label { font-size: 11px; padding: 4px 10px; }
+}
+@media (max-width: 340px) {
+  .om-free-gift-label { font-size: 10px; padding: 4px 8px; letter-spacing: 0; }
+}
 .om-free-gift-box img {
-  width: 64px;
-  height: 64px;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
-  border-radius: 10px;
+  border-radius: 8px;
   background: #fff;
   flex-shrink: 0;
 }
 .om-free-gift-box span {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
+  line-height: 1.2;
   color: #1a1a1a;
 }
 .om-price-box .om-availability-line {
