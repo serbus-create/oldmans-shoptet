@@ -4949,6 +4949,94 @@ body .p-detail-inner-header-mobile .h1 {
 }
 
 
+/* SLEVOVÝ KUPÓN NA DETAILU PRODUKTU (21. 10. 2026) — černá "vstupenka" se
+   žlutým kódem a tlačítkem Zkopírovat (JS buildCouponBox). Žlutá = žlutá
+   webu (#f7c91b), po zkopírování se tlačítko na 2 s přebarví na zelenou. */
+.om-coupon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 6px 0 14px;
+  padding: 12px 16px;
+  background: #1a1a1a;
+  color: #fff;
+  border-radius: 12px;
+}
+/* "výsek" vstupenky po stranách */
+.om-coupon::before,
+.om-coupon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin-top: -7px;
+  border-radius: 50%;
+  background: #fff;
+}
+.om-coupon::before { left: -7px; }
+.om-coupon::after { right: -7px; }
+.om-coupon-main { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.om-coupon-ico { font-size: 24px; line-height: 1; flex-shrink: 0; }
+.om-coupon-text { display: flex; flex-direction: column; gap: 2px; line-height: 1.2; min-width: 0; }
+.om-coupon-text strong { font-size: 16px; font-weight: 800; color: #f7c91b; }
+.om-coupon-text span { font-size: 12.5px; color: #e6e6e6; white-space: nowrap; }
+.om-coupon-copy {
+  display: inline-flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  border-radius: 10px;
+}
+.om-coupon-code {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1.5px dashed #f7c91b;
+  border-right: 0;
+  border-radius: 10px 0 0 10px;
+  color: #f7c91b;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .8px;
+}
+.om-coupon-act {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  padding: 8px 10px;
+  border-radius: 0 10px 10px 0;
+  background: #f7c91b;
+  color: #1a1a1a;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background .2s ease, color .2s ease;
+}
+.om-coupon-copy:hover .om-coupon-act { background: #ffd84a; }
+.om-coupon-copy.is-copied .om-coupon-act { background: #79b530; color: #fff; }
+.om-coupon-copy:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+@media (max-width: 480px) {
+  .om-coupon { flex-wrap: wrap; row-gap: 10px; padding: 12px 14px; }
+  .om-coupon-main { flex: 1 1 100%; }
+  .om-coupon-copy { flex: 1 1 100%; }
+  .om-coupon-code { flex: 1; justify-content: center; }
+}
+
+
 /* Nativní "modré kolečko slev" na fotce produktu (−23 %) v červené webu
    (21. 9. 2026, na žádost klienta). Třídu .om-discount-circle přidává JS
    (markDiscountCircle) JEN prvku uvnitř detailu produktu, který kolečko
