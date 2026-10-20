@@ -42,10 +42,14 @@ function cardInfo(card) {
   };
 }
 
-/* Položky ze seznamu "Co je v balíčku:" → [{ name, qty }] */
+/* Nadpisy, pod kterými je seznam položek: "Co je v balíčku:", "Co je ve výbavě:",
+   "Co je v sadě:", "Co obsahuje…", "Obsah balíčku/výbavy/sady" */
+const HEADING = /co je (v|ve) (bal[ií][cč]ku|výbavě|vybave|sadě|setu|boxu)|co obsahuje|obsah (bal[ií][cč]ku|výbavy|sady|setu)/i;
+
+/* Položky ze seznamu pod nadpisem (viz HEADING) → [{ name, qty }] */
 function parseComposition(doc) {
   const heads = [...doc.body.querySelectorAll('h1,h2,h3,h4,h5,p,strong,b')]
-    .filter((h) => h.children.length < 3 && /co je v bal[ií][cč]ku/i.test(h.textContent) && h.textContent.length < 60);
+    .filter((h) => h.children.length < 3 && HEADING.test(h.textContent) && h.textContent.length < 60);
   if (!heads.length) return null;
   let el = heads[0], ul = null;
   for (let up = 0; up < 3 && el && !ul; up++) {
@@ -110,7 +114,7 @@ for (const b of bundles) {
   await sleep(150);
   const doc = await getDoc(b.path);
   const comp = parseComposition(doc);
-  if (!comp || comp.length < 2) { skipped.push({ code: b.sku, name: b.name, reason: 'bez seznamu "Co je v balíčku:"' }); continue; }
+  if (!comp || comp.length < 2) { skipped.push({ code: b.sku, name: b.name, reason: 'bez seznamu pod nadpisem "Co je v balíčku:" (nebo "Co je ve výbavě:")' }); continue; }
   const items = [];
   let bad = '';
   for (const it of comp) {
@@ -123,6 +127,9 @@ for (const b of bundles) {
   out.push({ code: b.sku, items });
 }
 
+const byCode = (x, y) => String(x.code).localeCompare(String(y.code), 'cs', { numeric: true });
+out.sort(byCode);
+skipped.sort(byCode);
 const json = { generated: new Date().toISOString(), bundles: out, skipped };
 /* Pojistka: kdyby web přestal vracet seznamy (změna šablony, výpadek), nepřepsat
    fungující data prázdnými — raději běh ukončit chybou a nechat staré. */
