@@ -850,6 +850,45 @@
     /* -------------------------------------------------
        6. DYNAMICKÝ KOŠÍK – číst ze Shoptet DOM
     ------------------------------------------------- */
+    /* Košík mimo nativní hlavičku (21. 10. 2026): na stránce košíku (/kosik/)
+       a v krocích objednávky Shoptet nativní prvky hlavičky (.header-cart-total
+       apod.) NEMÁ, takže náš košík ukazoval "Prázdný košík 0", i když byly
+       v košíku produkty. Čteme tedy (1) částku a počty kusů přímo ze stránky
+       košíku — data-testid recapFullPrice a cartAmount, které Shoptet při
+       změně množství sám přepočítá — a (2) jako záložní zdroj dataLayer
+       (shoptet.cartInfo.cartItems = položky zboží, bez dárků za 0 Kč). */
+    function readFallbackCart() {
+      var onCartPage = /^\/kosik\/?$/.test(window.location.pathname);
+      var recap = onCartPage ? document.querySelector('[data-testid="recapFullPrice"]') : null;
+      if (recap) {
+        var n = 0;
+        Array.prototype.forEach.call(document.querySelectorAll('input[data-testid="cartAmount"]'), function (inp) {
+          var v = parseInt(inp.value, 10);
+          if (!isNaN(v) && v > 0) n += v;
+        });
+        var rp = (recap.textContent || '').replace(/\s+/g, ' ').trim();
+        if (rp) return { price: rp, count: n ? String(n) : '' };
+      }
+      var dl = window.dataLayer || [], info = null;
+      for (var i = dl.length - 1; i >= 0; i--) {
+        if (dl[i] && dl[i].shoptet && dl[i].shoptet.cartInfo) { info = dl[i].shoptet.cartInfo; break; }
+      }
+      if (info && info.cartItems && info.cartItems.length) {
+        var total = 0, units = 0;
+        info.cartItems.forEach(function (it) {
+          var p = parseFloat(it.priceWithVat), q = parseInt(it.quantity, 10);
+          if (!isNaN(p) && !isNaN(q) && p > 0 && q > 0) { total += p * q; units += q; }
+        });
+        if (total > 0) {
+          return {
+            price: total.toLocaleString('cs-CZ', { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + '\u00a0Kč',
+            count: String(units)
+          };
+        }
+      }
+      return null;
+    }
+
     function syncCart() {
       var priceEl = document.querySelector('.header-cart-total, .cart-total-price, [data-testid="headerCartPrice"]');
       var countEl = document.querySelector('.header-cart-items-count, .cart-count-value, [data-testid="headerCartCount"]');
@@ -859,6 +898,11 @@
 
       var price = priceEl ? priceEl.textContent.trim() : '';
       var count = countEl ? countEl.textContent.trim() : '';
+
+      if (!price) {
+        var fb = readFallbackCart();
+        if (fb) { price = fb.price; count = fb.count; }
+      }
 
       if (price && price !== '0' && price !== '0 Kč') {
         omPrice.textContent = (count ? count + ' × ' : '') + price;
@@ -876,6 +920,19 @@
     setTimeout(syncCart, 800);
     setTimeout(syncCart, 2000);
     document.addEventListener('click', function () { setTimeout(syncCart, 500); });
+    /* změna množství v košíku (psaní do pole, +/−) — Shoptet přepočítá košík
+       přes ajax, tak se hlavička zaktualizuje o chvíli později (2×, kdyby
+       odpověď přišla pomalu) a ještě hlídáme překreslení obsahu košíku */
+    document.addEventListener('change', function () { setTimeout(syncCart, 600); setTimeout(syncCart, 1800); });
+    document.addEventListener('click', function () { setTimeout(syncCart, 1600); });
+    (function watchCartPage() {
+      if (!window.MutationObserver || !/^\/(kosik|objednavka)/.test(window.location.pathname)) return;
+      var wrap = document.getElementById('cart-wrapper');
+      if (!wrap) return;
+      var t;
+      new MutationObserver(function () { clearTimeout(t); t = setTimeout(syncCart, 250); })
+        .observe(wrap, { childList: true, subtree: true, characterData: true });
+    })();
 
     /* -------------------------------------------------
        7. HOMEPAGE SEKCE
