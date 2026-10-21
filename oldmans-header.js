@@ -107,7 +107,48 @@
      refNode (volitelný): vloží se ZA tento element (homepage).
      Jinak se vloží PŘED Shoptetí .footer (copyright), aby copyright
      zůstal úplně dole. */
+  /* ── KOŠÍK A OBJEDNÁVKA BEZ PATIČKY (21. 10. 2026, na žádost klienta, vzor
+     Fermato) — na stránkách s body.ordering-process (/kosik/, /objednavka/…)
+     se místo červeného pruhu výhod a naší patičky ukáže jen úzký pruh důvěry
+     (bezpečná platba, doprava, výroba, zákazníci + pomoc s objednávkou).
+     Údaje jsou převzaté z toho, co web už uvádí (USP pruh, patička). Nativní
+     tenký pruh s copyrightem, logy plateb a odkazem na cookies zůstává. */
+  function injectOrderTrust() {
+    if (document.querySelector('.om-trust')) return;
+    var el = document.createElement('div');
+    el.className = 'om-trust';
+    el.innerHTML =
+      '<div class="om-trust-inner">' +
+        '<div class="om-trust-row">' +
+          '<div class="om-trust-item"><span class="om-trust-ico">🔒</span><div><strong>Zabezpečená platba</strong><span>Šifrované spojení a platební brána Comgate</span></div></div>' +
+          '<div class="om-trust-item"><span class="om-trust-ico">🚚</span><div><strong>Doprava zdarma</strong><span>u objednávek nad 1&nbsp;350&nbsp;Kč</span></div></div>' +
+          '<div class="om-trust-item"><span class="om-trust-ico">✅</span><div><strong>Čerstvá ruční výroba</strong><span>Vyrábíme v den Vaší objednávky</span></div></div>' +
+          '<div class="om-trust-item"><span class="om-trust-ico">👍</span><div><strong>350&nbsp;000+ zákazníků</strong><span>Spokojených zákazníků</span></div></div>' +
+        '</div>' +
+        '<div class="om-trust-bottom">' +
+          '<img class="om-trust-pay" src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/comgate-footer-logos.png" alt="Způsoby platby" loading="lazy">' +
+          '<div class="om-trust-help">Potřebujete poradit s objednávkou? ' +
+            '<a href="tel:+420774772405">📞 +420 774 772 405</a> ' +
+            '<a href="mailto:podpora@oldmans.cz">✉️ podpora@oldmans.cz</a></div>' +
+        '</div>' +
+      '</div>';
+    var shoptetFooter = document.querySelector('.footer');
+    var wrap = document.getElementById('content-wrapper');
+    if (shoptetFooter && shoptetFooter.parentNode) {
+      shoptetFooter.parentNode.insertBefore(el, shoptetFooter);
+    } else if (wrap && wrap.parentNode) {
+      wrap.parentNode.insertBefore(el, wrap.nextSibling);
+    } else {
+      document.body.appendChild(el);
+    }
+  }
+
   function injectUspAndFooter(refNode) {
+    /* Košík a objednávka: bez patičky, jen pruh důvěry */
+    if (document.body && document.body.classList.contains('ordering-process')) {
+      injectOrderTrust();
+      return;
+    }
     /* Pojistka proti dvojímu vložení */
     if (document.querySelector('.om-usp-bar') || document.querySelector('.om-custom-footer')) return;
 
