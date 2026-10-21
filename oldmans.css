@@ -1594,7 +1594,12 @@ body.type-category .products.products-page .product .quantity {
     width: 100% !important;
     box-sizing: border-box !important;
     padding: 10px 8px !important;
-    font-size: 14px !important;
+    font-size: 13px !important;
+    gap: 5px !important;
+  }
+  body.type-category .products.products-page .product .add-to-cart-button:before,
+  body.type-category .products.products-page .product .to-cart-button:before {
+    font-size: 12px !important;
   }
 
   /* název: max. 3 řádky a "…" (nativně má pevnou výšku a třetí řádek by se
@@ -1618,7 +1623,7 @@ body.type-category .products.products-page .product .quantity {
   body.type-category .products.products-page .product .p-tools .pr-action { padding: 0 !important; margin: 0 !important; }
   body.type-category .products.products-page .product .p-tools .add-to-cart-button,
   body.type-category .products.products-page .product .p-tools .to-cart-button {
-    padding: 9px 8px !important;
+    padding: 7px 8px !important;
     min-height: 0 !important;
   }
 
