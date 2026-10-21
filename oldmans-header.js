@@ -110,8 +110,9 @@
   /* ── KOŠÍK A OBJEDNÁVKA BEZ PATIČKY (21. 10. 2026, na žádost klienta, vzor
      Fermato) — na stránkách s body.ordering-process (/kosik/, /objednavka/…)
      se místo červeného pruhu výhod a naší patičky ukáže jen úzký pruh důvěry
-     (bezpečná platba, doprava, výroba, zákazníci + pomoc s objednávkou; logo plateb
-     je pod ním v nativní copyrightové liště).
+     (bezpečná platba, doprava, výroba, zákazníci + pomoc s objednávkou + loga
+     plateb — v objednávkovém procesu Shoptet nativní copyrightovou lištu s
+     logy nevykresluje, ověřeno na živém /kosik/).
      Údaje jsou převzaté z toho, co web už uvádí (USP pruh, patička). Nativní
      tenký pruh s copyrightem, logy plateb a odkazem na cookies zůstává. */
   function injectOrderTrust() {
@@ -130,6 +131,7 @@
           '<div class="om-trust-help">Potřebujete poradit s objednávkou? ' +
             '<a href="tel:+420774772405">📞 +420 774 772 405</a> ' +
             '<a href="mailto:podpora@oldmans.cz">✉️ podpora@oldmans.cz</a></div>' +
+          '<img class="om-trust-pay" src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/comgate-footer-logos.png" alt="Způsoby platby" loading="lazy">' +
         '</div>' +
       '</div>';
     var shoptetFooter = document.querySelector('.footer');
