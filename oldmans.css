@@ -5310,6 +5310,74 @@ body.in-krok-1 .checkout-box {
 body.in-krok-1 .om-trust { border-top: 1px solid #e3e3e3; }
 
 
+/* ── POKLADNA – DÁVKA 1 (21. 10. 2026, CRO na žádost klienta, vzor Fermato) ──
+   (a) VELKÉ ŠIROKÉ CTA na desktopu (≥ 992 px): v košíku (.next-step--cart) a
+       v kroku Doprava & platba (.next-step--step-1) je hlavní tlačítko přes
+       celou šířku sloupce se souhrnem (60 px), "Zpět" je jen textový odkaz
+       pod ním. Barva zůstává naše zelená (#79b530). Na mobilu beze změny.
+   (b) KROK "INFORMACE O VÁS" (body.in-krok-2): šedé pozadí #f5f5f5 jako u
+       Doprava & platba, rekapitulace a pomoc bílé, pole formuláře bílá.
+       Šedý pruh "Pokud jste registrovaný…" dostane od JS třídu
+       .om-notice-white (bílá karta). Přejmenování nadpisů dělá JS
+       (tidyOrderStep2); nadpis "Zůstaňme v kontaktu" dostane .om-hide-heading. */
+@media (min-width: 992px) {
+  body.ordering-process .next-step--cart,
+  body.ordering-process .next-step--step-1 {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+  }
+  body.ordering-process .next-step--cart .next-step-forward,
+  body.ordering-process .next-step--step-1 .next-step-forward {
+    order: 1 !important;
+    width: 100% !important;
+    min-height: 60px !important;
+    margin: 0 !important;
+    font-size: 19px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  body.ordering-process .next-step--cart .next-step-back,
+  body.ordering-process .next-step--step-1 .next-step-back {
+    order: 2 !important;
+    align-self: center !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 4px 10px !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    text-decoration: underline !important;
+    color: #555 !important;
+  }
+}
+body.in-krok-2 { background: #f5f5f5 !important; }
+body.in-krok-2 #content-wrapper { background: transparent !important; }
+body.in-krok-2 #summary-box,
+body.in-krok-2 .checkout-box {
+  background: #fff !important;
+  border-color: #e3e3e3 !important;
+  border-radius: 12px;
+}
+body.in-krok-2 input.form-control,
+body.in-krok-2 select.form-control,
+body.in-krok-2 textarea.form-control { background-color: #fff; }
+body.in-krok-2 .om-trust { border-top: 1px solid #e3e3e3; }
+body.ordering-process .om-notice-white {
+  background: #fff !important;
+  border: 1px solid #e3e3e3 !important;
+  border-radius: 12px;
+}
+body.ordering-process .om-hide-heading { display: none !important; }
+
+
 /* Nativní "modré kolečko slev" na fotce produktu (−23 %) v červené webu
    (21. 9. 2026, na žádost klienta). Třídu .om-discount-circle přidává JS
    (markDiscountCircle) JEN prvku uvnitř detailu produktu, který kolečko
