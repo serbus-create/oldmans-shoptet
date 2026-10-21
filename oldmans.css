@@ -1271,9 +1271,12 @@ body.type-category .products.products-page .product {
     width: 50% !important; max-width: 50% !important; flex: 0 0 50% !important;
   }
 }
+/* Mobil: DVA sloupce (21. 10. 2026, na žádost klienta — zkrátit scroll).
+   Dřív tu bylo 100 % = jedna karta na celou obrazovku. Vnitřek karty se pro
+   úzký sloupec přeskládá v bloku "KATEGORIE – MOBIL, 2 SLOUPCE" níže. */
 @media (max-width: 480px) {
   body.type-category .products.products-page .product {
-    width: 100% !important; max-width: 100% !important; flex: 0 0 100% !important;
+    width: 50% !important; max-width: 50% !important; flex: 0 0 50% !important;
   }
 }
 
@@ -1533,6 +1536,93 @@ body.type-category .products.products-page .product .p-desc,
 body.type-category .products.products-page .product .p-code,
 body.type-category .products.products-page .product .quantity {
   display: none !important;
+}
+
+/* ══════════════════════════════════════════════
+   KATEGORIE – MOBIL, 2 SLOUPCE (21. 10. 2026)
+   Karta v užším sloupci (~175 px): menší odsazení a písmo, cena nad
+   tlačítkem a tlačítko "Do košíku" jako POSLEDNÍ prvek přes celou šířku
+   karty (přání klienta). Tlačítko je v kartách přitlačené ke spodku
+   (.p-bottom margin-top:auto), takže jsou v řadě vyrovnané i při různě
+   dlouhých názvech. Pravidla jen pro .products-page v kategorii.
+────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  body.type-category .products.products-page .product { padding: 5px !important; }
+  body.type-category .products.products-page .product .p { border-radius: 12px !important; }
+  body.type-category .products.products-page .product .p-in-in { padding: 10px 10px 10px !important; }
+
+  /* název a dostupnost */
+  body.type-category .products.products-page .product .name { min-height: 0 !important; margin: 0 0 4px !important; }
+  body.type-category .products.products-page .product .name,
+  body.type-category .products.products-page .product .name span,
+  body.type-category .products.products-page .product .name a {
+    font-size: 14px !important;
+    line-height: 1.25 !important;
+  }
+  body.type-category .products.products-page .product .availability {
+    font-size: 12.5px !important;
+    margin-bottom: 8px !important;
+  }
+
+  /* spodní lišta: cena nahoře, tlačítko přes celou šířku jako poslední */
+  body.type-category .products.products-page .product .p-bottom > div {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    padding: 0 !important;
+  }
+  body.type-category .products.products-page .product .p-bottom .prices {
+    min-height: 36px !important;
+    justify-content: flex-end !important;
+  }
+  body.type-category .products.products-page .product .price-final { font-size: 16px !important; }
+  body.type-category .products.products-page .product .price-before { font-size: 11.5px !important; }
+  body.type-category .products.products-page .product .p-tools {
+    width: 100% !important;
+    margin: 0 !important;
+    flex: 0 0 auto !important;
+  }
+  body.type-category .products.products-page .product .pr-action {
+    display: block !important;
+    width: 100% !important;
+  }
+  body.type-category .products.products-page .product .add-to-cart-button,
+  body.type-category .products.products-page .product .to-cart-button,
+  body.type-category .products.products-page .product [class*="buy"] {
+    display: flex !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 10px 8px !important;
+    font-size: 14px !important;
+  }
+
+  /* štítky, stužka akce a odpočet na fotce — menší, ať se vejdou do úzké karty */
+  body.type-category .products.products-page .product .flags .flag {
+    font-size: 9.5px !important;
+    padding: 2px 6px !important;
+    line-height: 1.25 !important;
+  }
+  body.type-category .products.products-page .product a.image .price-save {
+    top: 10px !important;
+    right: -30px !important;
+    width: 104px !important;
+    font-size: 9.5px !important;
+    padding: 3px 0 !important;
+  }
+  body.type-category .products.products-page .product .om-card-cd-photo {
+    left: 6px !important;
+    bottom: 6px !important;
+    right: 6px !important;
+  }
+  body.type-category .products.products-page .product .om-card-cd {
+    font-size: 10px !important;
+    padding: 4px 7px !important;
+    border-radius: 8px !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
 }
 
 /* ══════════════════════════════════════════════
