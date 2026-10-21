@@ -5418,6 +5418,78 @@ body.ordering-process .om-notice-white {
 body.ordering-process .om-hide-heading { display: none !important; }
 
 
+/* ── POKLADNA V2 – SLOUČENÝ KOŠÍK (21. 10. 2026) ─────────────────────────────
+   JS (omBuildShipPay) vloží do /kosik/ nad souhrn dvě skupiny: doprava a
+   platba (nativní značení Shoptetu, jen přejmenovaná pole). Na desktopu vedle
+   sebe, na mobilu pod sebou. Nad tlačítkem Pokračovat je řádek "Celkem
+   k úhradě" i s dopravou. Přechodová obrazovka #om-v2-overlay překryje krok
+   /objednavka/krok-1/, než se volba odešle nativním formulářem. */
+.om-shippay {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 32px;
+  margin: 30px 0 10px;
+  padding: 0 4px;
+}
+.om-shippay-col { min-width: 0; }
+.om-shippay .shipping-billing-table {
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  border-radius: 12px;
+  padding: 0 18px;
+  box-sizing: border-box;
+}
+.om-shippay .radio-wrapper:last-child { border-bottom: 0 !important; }
+@media (max-width: 991px) {
+  .om-shippay { grid-template-columns: 1fr; gap: 4px; }
+}
+.om-shippay-total {
+  margin: 0 0 14px;
+  padding: 12px 0 0;
+  text-align: right;
+}
+.om-shippay-total > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 3px 0;
+  font-size: 14px;
+  color: #555;
+}
+.om-shippay-total b { color: #1a1a1a; font-weight: 700; }
+.om-shippay-total .om-shippay-grand {
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid #e3e3e3;
+  font-size: 18px;
+  color: #1a1a1a;
+}
+.om-shippay-total .om-shippay-grand b { font-size: 22px; font-weight: 800; }
+#om-v2-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  text-align: center;
+  font-size: 16px;
+  color: #444;
+}
+#om-v2-overlay p { margin: 14px 0 0; }
+.om-v2-spin {
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  border: 4px solid #e3e3e3;
+  border-top-color: #79b530;
+  border-radius: 50%;
+  animation: om-v2-spin .8s linear infinite;
+}
+@keyframes om-v2-spin { to { transform: rotate(360deg); } }
+
+
 /* Nativní "modré kolečko slev" na fotce produktu (−23 %) v červené webu
    (21. 9. 2026, na žádost klienta). Třídu .om-discount-circle přidává JS
    (markDiscountCircle) JEN prvku uvnitř detailu produktu, který kolečko
