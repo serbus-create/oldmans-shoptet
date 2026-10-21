@@ -5204,8 +5204,9 @@ body .p-detail-inner-header-mobile .h1 {
    záměrně STEJNÝ jako patička na hlavní straně (.om-custom-footer): světle
    šedé pozadí #f5f5f5 přes celou šířku, obsah max. 1400 px s odsazením 40 px,
    nadpisy 17 px tučně #111 (písmo nadpisů webu), text #444/#555, žlutá
-   #f7c91b jako akcent, hover odkazů #9f1400. Loga plateb sem nedáváme —
-   zobrazuje je hned pod pruhem nativní copyrightová lišta (.footer-bottom). */
+   #f7c91b jako akcent, hover odkazů #9f1400. Dole pomoc vlevo a loga plateb
+   vpravo (32 px, jako ve spodní liště patičky) — v objednávkovém procesu
+   Shoptet nativní copyrightovou lištu s logy nevykresluje. */
 body.ordering-process .om-usp-bar,
 body.ordering-process .om-custom-footer { display: none !important; }
 
@@ -5251,10 +5252,12 @@ body.ordering-process .om-custom-footer { display: none !important; }
   color: #555;
 }
 .om-trust-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 14px 28px;
   margin-top: 26px; padding-top: 18px;
   border-top: 1px solid #e3e3e3;
-  text-align: center;
 }
+.om-trust-pay { height: 32px; width: auto; max-width: 100%; display: block; flex-shrink: 0; }
 .om-trust-help { font-size: 15px; line-height: 1.7; color: #444; }
 .om-trust-help a {
   margin-left: 14px;
@@ -5273,7 +5276,7 @@ body.ordering-process .om-custom-footer { display: none !important; }
   .om-trust-ico { width: 38px; height: 38px; font-size: 18px; }
   .om-trust-item strong { font-size: 14.5px; }
   .om-trust-item div > span { font-size: 12.5px; }
-  .om-trust-bottom { text-align: left; margin-top: 20px; }
+  .om-trust-bottom { flex-direction: column; align-items: flex-start; margin-top: 20px; }
   .om-trust-help { font-size: 14px; }
   .om-trust-help a { display: inline-block; margin: 0 12px 0 0; }
 }
