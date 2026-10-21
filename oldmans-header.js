@@ -889,12 +889,30 @@
       return null;
     }
 
+    /* Sleva v košíku (21. 10. 2026): položkám se slevou > 0 dá .om-disc-on
+       (na mobilu se zobrazí jako štítek na fotce), ostatním (0 %, "–", prázdné)
+       .om-disc-off. Jen třídy — text se nemění (na mobilu doplňuje "−" CSS),
+       takže to nespouští pozorovatele košíku do smyčky. */
+    function tidyCartDiscounts() {
+      if (!/^\/kosik/.test(window.location.pathname)) return;
+      Array.prototype.forEach.call(document.querySelectorAll('.cart-table .p-discount'), function (td) {
+        var ac = td.querySelector('.acronym, .show-tooltip');
+        var txt = ac ? ac.textContent : '';
+        var m = String(txt).replace(',', '.').match(/(\d+(?:\.\d+)?)\s*%/);
+        var on = !!(m && parseFloat(m[1]) > 0);
+        td.classList.toggle('om-disc-on', on);
+        td.classList.toggle('om-disc-off', !on);
+      });
+    }
+
     function syncCart() {
       var priceEl = document.querySelector('.header-cart-total, .cart-total-price, [data-testid="headerCartPrice"]');
       var countEl = document.querySelector('.header-cart-items-count, .cart-count-value, [data-testid="headerCartCount"]');
       var omPrice = document.getElementById('om-cart-price');
       var omBadge = document.getElementById('om-cart-badge');
       if (!omPrice) return;
+
+      tidyCartDiscounts();
 
       var price = priceEl ? priceEl.textContent.trim() : '';
       var count = countEl ? countEl.textContent.trim() : '';
