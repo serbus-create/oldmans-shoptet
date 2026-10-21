@@ -5281,6 +5281,35 @@ body.ordering-process .om-custom-footer { display: none !important; }
   .om-trust-help a { display: inline-block; margin: 0 12px 0 0; }
 }
 
+/* ── OBJEDNÁVKA – KROK "DOPRAVA & PLATBA" (CRO, 21. 10. 2026) ────────────────
+   body.in-krok-1 = /objednavka/krok-1/. Na žádost klienta: pozadí stránky
+   #f5f5f5, aby bílá pole byla lépe vidět. Bílé zůstává: rekapitulace
+   (#summary-box), box "Potřebujete pomoc?" (.checkout-box), pole "Měna" a
+   hlavička webu (ta má vlastní bílé pozadí). Doprava a platba jsou
+   bílé "karty" (řádky uvnitř zůstávají oddělené linkami), nadpisy
+   zůstávají na šedé. Pruh důvěry má šedou stejně jako stránka, proto
+   nahoře linku. */
+body.in-krok-1 { background: #f5f5f5 !important; }
+body.in-krok-1 #content-wrapper { background: transparent !important; }
+body.in-krok-1 #order-shipping-methods,
+body.in-krok-1 #order-billing-methods {
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  border-radius: 12px;
+  padding: 0 18px;
+  box-sizing: border-box;
+}
+body.in-krok-1 #order-shipping-methods .radio-wrapper:last-child,
+body.in-krok-1 #order-billing-methods .radio-wrapper:last-child { border-bottom: 0 !important; }
+body.in-krok-1 #summary-box,
+body.in-krok-1 .checkout-box {
+  background: #fff !important;
+  border-color: #e3e3e3 !important;
+  border-radius: 12px;
+}
+body.in-krok-1 .om-trust { border-top: 1px solid #e3e3e3; }
+
+
 /* Nativní "modré kolečko slev" na fotce produktu (−23 %) v červené webu
    (21. 9. 2026, na žádost klienta). Třídu .om-discount-circle přidává JS
    (markDiscountCircle) JEN prvku uvnitř detailu produktu, který kolečko
