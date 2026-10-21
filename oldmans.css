@@ -1257,6 +1257,7 @@ body.type-category .products.products-page {
 body.type-category .products.products-page .product {
   width: 20% !important;
   max-width: 20% !important;
+  min-width: 0 !important; /* přebíjí .products-block .product { min-width: 84vw } (mobilní slider) — jinak karta v kategorii nejde zúžit na 50 % */
   flex: 0 0 20% !important;
   padding: 10px !important;
   box-sizing: border-box !important;
