@@ -1597,6 +1597,31 @@ body.type-category .products.products-page .product .quantity {
     font-size: 14px !important;
   }
 
+  /* název: max. 3 řádky a "…" (nativně má pevnou výšku a třetí řádek by se
+     uřízl uprostřed) */
+  body.type-category .products.products-page .product .name {
+    height: auto !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 3 !important;
+    line-clamp: 3 !important;
+    overflow: hidden !important;
+  }
+  /* spodní lišta: stejné boční odsazení jako text (10 px), cena vlevo;
+     nativní padding 22 px na .p-tools pryč (dělal mezeru a +44 px výšky) */
+  body.type-category .products.products-page .product .p-bottom { padding: 0 10px 1px !important; }
+  body.type-category .products.products-page .product .p-bottom .prices {
+    align-items: flex-start !important;
+    text-align: left !important;
+  }
+  body.type-category .products.products-page .product .p-tools { padding: 0 !important; }
+  body.type-category .products.products-page .product .p-tools .pr-action { padding: 0 !important; margin: 0 !important; }
+  body.type-category .products.products-page .product .p-tools .add-to-cart-button,
+  body.type-category .products.products-page .product .p-tools .to-cart-button {
+    padding: 9px 8px !important;
+    min-height: 0 !important;
+  }
+
   /* štítky, stužka akce a odpočet na fotce — menší, ať se vejdou do úzké karty */
   body.type-category .products.products-page .product .flags .flag {
     font-size: 9.5px !important;
