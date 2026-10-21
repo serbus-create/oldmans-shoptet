@@ -995,6 +995,65 @@
         .observe(wrap, { childList: true, subtree: true, characterData: true });
     })();
 
+    /* Krok "Informace o vás" (/objednavka/krok-2/), 21. 10. 2026, na žádost
+       klienta: "Osobní údaje" → "Kontakt", "Fakturační adresa" → "Doručení"
+       (po zapnutí "Doručit na jinou adresu" se první blok vrací na
+       "Fakturační adresa", ať název neklame), nadpis "Zůstaňme v kontaktu"
+       pryč (zaškrtávátka pod ním ZŮSTÁVAJÍ — jde o souhlasy), šedý pruh
+       "Pokud jste registrovaný…" na bílou kartu. Prvky se hledají podle
+       TEXTU, ne podle tříd Shoptetu (ty se u tohoto kroku neověřovaly).
+       Opakuje se po změně formuláře; nic z toho nemění odesílaná data. */
+    function omSetHeadingText(h, text) {
+      var done = false;
+      Array.prototype.forEach.call(h.childNodes, function (n) {
+        if (n.nodeType === 3 && n.nodeValue.replace(/\s+/g, '') && !done) {
+          if (n.nodeValue.trim() !== text) n.nodeValue = text;
+          done = true;
+        }
+      });
+      if (!done && !h.children.length) h.textContent = text;
+    }
+    function tidyOrderStep2() {
+      if (!/^\/objednavka\/krok-2/.test(window.location.pathname)) return;
+      var otherAddr = false;
+      Array.prototype.forEach.call(document.querySelectorAll('label'), function (lb) {
+        if (/doručit na jinou adresu/i.test(lb.textContent || '')) {
+          var inp = lb.querySelector('input[type="checkbox"]') || (lb.htmlFor && document.getElementById(lb.htmlFor));
+          if (inp && inp.checked) otherAddr = true;
+        }
+      });
+      Array.prototype.forEach.call(document.querySelectorAll('h1,h2,h3,h4,h5,h6,legend'), function (h) {
+        if (h.children.length > 2) return;
+        var t = (h.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+        if (t === 'osobní údaje') omSetHeadingText(h, 'Kontakt');
+        else if (t === 'fakturační adresa' || t === 'doručení') omSetHeadingText(h, otherAddr ? 'Fakturační adresa' : 'Doručení');
+        else if (t === 'zůstaňme v kontaktu') h.classList.add('om-hide-heading');
+      });
+      /* věta obsahuje odkaz ("přihlášení"), proto se hledá NEJHLUBŠÍ prvek, který
+         jí začíná (ne koncový prvek bez potomků) */
+      var starts = function (e) { return /^pokud jste registrovaný/i.test((e.textContent || '').trim()); };
+      var leaf = Array.prototype.filter.call(document.querySelectorAll('div,p,span'), function (e) {
+        return starts(e) && !Array.prototype.some.call(e.children, starts);
+      })[0];
+      if (leaf) {
+        for (var p = leaf, k = 0; p && k < 5 && p.id !== 'content-wrapper'; p = p.parentElement, k++) {
+          var m = window.getComputedStyle(p).backgroundColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?/);
+          if (m && (m[4] === undefined || parseFloat(m[4]) > 0.3) && !(+m[1] > 250 && +m[2] > 250 && +m[3] > 250)) { p.classList.add('om-notice-white'); break; }
+        }
+      }
+    }
+    (function watchOrderStep2() {
+      if (!/^\/objednavka\/krok-2/.test(window.location.pathname)) return;
+      var t;
+      function run() { try { tidyOrderStep2(); } catch (e) { /* nikdy nerozbít objednávku */ } }
+      [300, 900, 2000, 4000].forEach(function (ms) { setTimeout(run, ms); });
+      document.addEventListener('change', function () { setTimeout(run, 30); });
+      var wrap = document.getElementById('content-wrapper');
+      if (wrap && window.MutationObserver) {
+        new MutationObserver(function () { clearTimeout(t); t = setTimeout(run, 150); }).observe(wrap, { childList: true, subtree: true });
+      }
+    })();
+
     /* -------------------------------------------------
        7. HOMEPAGE SEKCE
        Vkládáme za .benefitBanner (USP lišta Shoptetu)
