@@ -3299,6 +3299,12 @@
 
   /* Po přidání do košíku → přesměrovat na košík */
   function watchCart() {
+    /* Na stránce košíku a objednávky se NEPŘESMĚROVÁVÁ (21. 10. 2026): jsme
+       tam už, a hlavička košíku se tu přepisuje při každé změně množství
+       (syncCart čte částku ze stránky). Přesměrování na /kosik/ by stránku
+       půl sekundy po kliknutí na +/− přenačetlo a PŘERUŠILO ukládací požadavek
+       Shoptetu → množství se nezměnilo. */
+    if (/^\/(kosik|objednavka)/.test(window.location.pathname)) return;
     /* Sledujeme změnu našeho #om-cart-price elementu */
     var cartPrice = document.getElementById('om-cart-price');
     if (cartPrice) {
