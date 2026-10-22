@@ -5444,6 +5444,11 @@ body.ordering-process .om-hide-heading { display: none !important; }
   padding: 0 4px;
 }
 .om-shippay-col { min-width: 0; }
+/* .cart-inner je flex a jeho děti mají vlastní order (Upsell: tabulka 1,
+   nabídky 3, dárky 4, souhrn 4). order: 4 + vložení těsně před souhrn =
+   sekce je pod dárky a nad souhrnem (ověřeno na živém /kosik/). */
+.om-shippay { order: 4; }
+.om-shippay h2.order-icon { text-align: left; }
 .om-shippay .shipping-billing-table {
   background: #fff;
   border: 1px solid #e3e3e3;
