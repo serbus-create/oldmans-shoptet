@@ -1257,6 +1257,7 @@ body.type-category .products.products-page {
 body.type-category .products.products-page .product {
   width: 20% !important;
   max-width: 20% !important;
+  min-width: 0 !important; /* přebíjí .products-block .product { min-width: 84vw } (mobilní slider) — jinak karta v kategorii nejde zúžit na 50 % */
   flex: 0 0 20% !important;
   padding: 10px !important;
   box-sizing: border-box !important;
@@ -1271,9 +1272,12 @@ body.type-category .products.products-page .product {
     width: 50% !important; max-width: 50% !important; flex: 0 0 50% !important;
   }
 }
+/* Mobil: DVA sloupce (21. 10. 2026, na žádost klienta — zkrátit scroll).
+   Dřív tu bylo 100 % = jedna karta na celou obrazovku. Vnitřek karty se pro
+   úzký sloupec přeskládá v bloku "KATEGORIE – MOBIL, 2 SLOUPCE" níže. */
 @media (max-width: 480px) {
   body.type-category .products.products-page .product {
-    width: 100% !important; max-width: 100% !important; flex: 0 0 100% !important;
+    width: 50% !important; max-width: 50% !important; flex: 0 0 50% !important;
   }
 }
 
@@ -1533,6 +1537,123 @@ body.type-category .products.products-page .product .p-desc,
 body.type-category .products.products-page .product .p-code,
 body.type-category .products.products-page .product .quantity {
   display: none !important;
+}
+
+/* ══════════════════════════════════════════════
+   KATEGORIE – MOBIL, 2 SLOUPCE (21. 10. 2026)
+   Karta v užším sloupci (~175 px): menší odsazení a písmo, cena nad
+   tlačítkem a tlačítko "Do košíku" jako POSLEDNÍ prvek přes celou šířku
+   karty (přání klienta). Tlačítko je v kartách přitlačené ke spodku
+   (.p-bottom margin-top:auto), takže jsou v řadě vyrovnané i při různě
+   dlouhých názvech. Pravidla jen pro .products-page v kategorii.
+────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  body.type-category .products.products-page .product { padding: 5px !important; }
+  body.type-category .products.products-page .product .p { border-radius: 12px !important; }
+  body.type-category .products.products-page .product .p-in-in { padding: 10px 10px 10px !important; }
+
+  /* název a dostupnost */
+  body.type-category .products.products-page .product .name { min-height: 0 !important; margin: 0 0 4px !important; }
+  body.type-category .products.products-page .product .name,
+  body.type-category .products.products-page .product .name span,
+  body.type-category .products.products-page .product .name a {
+    font-size: 14px !important;
+    line-height: 1.25 !important;
+  }
+  body.type-category .products.products-page .product .availability {
+    font-size: 12.5px !important;
+    margin-bottom: 8px !important;
+  }
+
+  /* spodní lišta: cena nahoře, tlačítko přes celou šířku jako poslední */
+  body.type-category .products.products-page .product .p-bottom > div {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    padding: 0 !important;
+  }
+  body.type-category .products.products-page .product .p-bottom .prices {
+    min-height: 36px !important;
+    justify-content: flex-end !important;
+  }
+  body.type-category .products.products-page .product .price-final { font-size: 16px !important; }
+  body.type-category .products.products-page .product .price-before { font-size: 11.5px !important; }
+  body.type-category .products.products-page .product .p-tools {
+    width: 100% !important;
+    margin: 0 !important;
+    flex: 0 0 auto !important;
+  }
+  body.type-category .products.products-page .product .pr-action {
+    display: block !important;
+    width: 100% !important;
+  }
+  body.type-category .products.products-page .product .add-to-cart-button,
+  body.type-category .products.products-page .product .to-cart-button,
+  body.type-category .products.products-page .product [class*="buy"] {
+    display: flex !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 10px 8px !important;
+    font-size: 13px !important;
+    gap: 5px !important;
+  }
+  body.type-category .products.products-page .product .add-to-cart-button:before,
+  body.type-category .products.products-page .product .to-cart-button:before {
+    font-size: 12px !important;
+  }
+
+  /* název: max. 3 řádky a "…" (nativně má pevnou výšku a třetí řádek by se
+     uřízl uprostřed) */
+  body.type-category .products.products-page .product .name {
+    height: auto !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 3 !important;
+    line-clamp: 3 !important;
+    overflow: hidden !important;
+  }
+  /* spodní lišta: stejné boční odsazení jako text (10 px), cena vlevo;
+     nativní padding 22 px na .p-tools pryč (dělal mezeru a +44 px výšky) */
+  body.type-category .products.products-page .product .p-bottom { padding: 0 10px 1px !important; }
+  body.type-category .products.products-page .product .p-bottom .prices {
+    align-items: flex-start !important;
+    text-align: left !important;
+  }
+  body.type-category .products.products-page .product .p-tools { padding: 0 !important; }
+  body.type-category .products.products-page .product .p-tools .pr-action { padding: 0 !important; margin: 0 !important; }
+  body.type-category .products.products-page .product .p-tools .add-to-cart-button,
+  body.type-category .products.products-page .product .p-tools .to-cart-button {
+    padding: 7px 8px !important;
+    min-height: 0 !important;
+  }
+
+  /* štítky, stužka akce a odpočet na fotce — menší, ať se vejdou do úzké karty */
+  body.type-category .products.products-page .product .flags .flag {
+    font-size: 9.5px !important;
+    padding: 2px 6px !important;
+    line-height: 1.25 !important;
+  }
+  body.type-category .products.products-page .product a.image .price-save {
+    top: 10px !important;
+    right: -30px !important;
+    width: 104px !important;
+    font-size: 9.5px !important;
+    padding: 3px 0 !important;
+  }
+  body.type-category .products.products-page .product .om-card-cd-photo {
+    left: 6px !important;
+    bottom: 6px !important;
+    right: 6px !important;
+  }
+  body.type-category .products.products-page .product .om-card-cd {
+    font-size: 10px !important;
+    padding: 4px 7px !important;
+    border-radius: 8px !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
 }
 
 /* ══════════════════════════════════════════════
@@ -4949,9 +5070,10 @@ body .p-detail-inner-header-mobile .h1 {
 }
 
 
-/* SLEVOVÝ KUPÓN NA DETAILU PRODUKTU (21. 10. 2026) — černá "vstupenka" se
-   žlutým kódem a tlačítkem Zkopírovat (JS buildCouponBox). Žlutá = žlutá
-   webu (#f7c91b), po zkopírování se tlačítko na 2 s přebarví na zelenou. */
+/* SLEVOVÝ KUPÓN NA DETAILU PRODUKTU (21. 10. 2026) — červená "vstupenka"
+   v barvách webu (červená značky #9f1400, žlutá #f7c91b, zelená tlačítka
+   #79b530 jako "Přidat do košíku"); JS buildCouponBox. Po zkopírování se
+   tlačítko na 2 s přebarví na tmavší zelenou. */
 .om-coupon {
   position: relative;
   display: flex;
@@ -4962,9 +5084,10 @@ body .p-detail-inner-header-mobile .h1 {
   box-sizing: border-box;
   margin: 6px 0 14px;
   padding: 12px 16px;
-  background: #1a1a1a;
+  background: #9f1400;
   color: #fff;
   border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(159, 20, 0, .22);
 }
 /* "výsek" vstupenky po stranách */
 .om-coupon::before,
@@ -4981,10 +5104,28 @@ body .p-detail-inner-header-mobile .h1 {
 .om-coupon::before { left: -7px; }
 .om-coupon::after { right: -7px; }
 .om-coupon-main { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.om-coupon-ico { font-size: 24px; line-height: 1; flex-shrink: 0; }
+.om-coupon-ico {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; flex-shrink: 0;
+  border-radius: 9px; background: #fff;
+  font-size: 20px; line-height: 1;
+}
 .om-coupon-text { display: flex; flex-direction: column; gap: 2px; line-height: 1.2; min-width: 0; }
-.om-coupon-text strong { font-size: 16px; font-weight: 800; color: #f7c91b; }
-.om-coupon-text span { font-size: 12.5px; color: #e6e6e6; white-space: nowrap; }
+.om-coupon-text strong { font-size: 17px; font-weight: 800; color: #f7c91b; }
+.om-coupon-text span { font-size: 12.5px; color: #fff; opacity: .92; white-space: nowrap; }
+/* štítek "Doprava zdarma" pod podtitulem (bílá pilulka, červený text) */
+.om-coupon-text span.om-coupon-ship {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: #fff;
+  color: #9f1400;
+  font-size: 11.5px;
+  font-weight: 800;
+  line-height: 1.5;
+  opacity: 1;
+}
 .om-coupon-copy {
   display: inline-flex;
   align-items: stretch;
@@ -4995,20 +5136,20 @@ body .p-detail-inner-header-mobile .h1 {
   background: none;
   font: inherit;
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 .om-coupon-code {
   display: flex;
   align-items: center;
   padding: 8px 10px;
-  border: 1.5px dashed #f7c91b;
+  border: 1.5px dashed rgba(255, 255, 255, .85);
   border-right: 0;
-  border-radius: 10px 0 0 10px;
-  color: #f7c91b;
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  font-size: 13px;
+  border-radius: 8px 0 0 8px;
+  background: rgba(0, 0, 0, .14);
+  color: #fff;
+  font-size: 14px;
   font-weight: 800;
-  letter-spacing: .8px;
+  letter-spacing: 1px;
 }
 .om-coupon-act {
   display: flex;
@@ -5016,19 +5157,19 @@ body .p-detail-inner-header-mobile .h1 {
   justify-content: center;
   min-width: 100px;
   padding: 8px 10px;
-  border-radius: 0 10px 10px 0;
-  background: #f7c91b;
-  color: #1a1a1a;
+  border-radius: 0 8px 8px 0;
+  background: #79b530;
+  color: #fff;
   font-size: 11.5px;
   font-weight: 800;
   letter-spacing: .3px;
   text-transform: uppercase;
   white-space: nowrap;
-  transition: background .2s ease, color .2s ease;
+  transition: background .2s ease;
 }
-.om-coupon-copy:hover .om-coupon-act { background: #ffd84a; }
-.om-coupon-copy.is-copied .om-coupon-act { background: #79b530; color: #fff; }
-.om-coupon-copy:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.om-coupon-copy:hover .om-coupon-act { background: #6aa028; }
+.om-coupon-copy.is-copied .om-coupon-act { background: #4f8a14; }
+.om-coupon-copy:focus-visible { outline: 2px solid #f7c91b; outline-offset: 2px; }
 @media (max-width: 480px) {
   .om-coupon { flex-wrap: wrap; row-gap: 10px; padding: 12px 14px; }
   .om-coupon-main { flex: 1 1 100%; }
