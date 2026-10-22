@@ -2947,10 +2947,11 @@
      před odznaky Vyrobeno v ČR, které jsou nad hodnocením).
      Jde jen o zobrazení — samotný kupón (kód, minimální hodnota objednávky,
      výše slevy) musí být založený v Shoptetu (Marketing → Slevové kupóny).
-     Změna kupónu = úprava tohoto objektu. `until` (nepovinné, "RRRR-MM-DD")
+     Změna kupónu = úprava tohoto objektu (`freeShipping: true` přidá štítek
+     "Doprava zdarma"). `until` (nepovinné, "RRRR-MM-DD")
      po daném dni kupón sám schová; prázdné = bez omezení. Prázdný `code`
      kupón vypne. */
-  var OM_COUPON = { code: 'PODZIM250', amount: '250\u00a0Kč', min: '1\u00a0999\u00a0Kč', until: '' };
+  var OM_COUPON = { code: 'PODZIM250', amount: '250\u00a0Kč', min: '1\u00a0699\u00a0Kč', freeShipping: true, until: '' };
 
   function omCopyText(text) {
     if (navigator.clipboard && window.isSecureContext && navigator.clipboard.writeText) {
@@ -3001,6 +3002,15 @@
       sub.textContent = 'při nákupu nad ' + c.min;
       text.appendChild(strong);
       text.appendChild(sub);
+      /* "Doprava zdarma" s kupónem (freeShipping: true) — jen zobrazení; že
+         kupón skutečně dává dopravu zdarma, musí být nastaveno v Shoptetu
+         (Marketing → Slevové kupóny). */
+      if (c.freeShipping) {
+        var ship = document.createElement('span');
+        ship.className = 'om-coupon-ship';
+        ship.textContent = '🚚 Doprava zdarma';
+        text.appendChild(ship);
+      }
       main.appendChild(ico);
       main.appendChild(text);
 
