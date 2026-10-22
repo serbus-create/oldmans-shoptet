@@ -3437,6 +3437,211 @@
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
   })();
 
+  /* ── POKLADNA V2 (21. 10. 2026, na žádost klienta) ─────────────────────────
+     Nový postup: 1) /kosik/ = košík + výběr dopravy a platby na jedné
+     stránce, 2) /objednavka/krok-1/ = přihlášení/registrace (brána — přijde
+     v další etapě), 3) /objednavka/krok-2/ = údaje a potvrzení (beze změny).
+     URL zůstávají. ODESÍLÁNÍ dělá pořád Shoptet: volba z košíku se uloží a na
+     /objednavka/krok-1/ se přenese do SKUTEČNÉHO nativního formuláře, který
+     odešle nativní tlačítko — žádné vlastní POSTy. Když cokoliv selže, zákazník
+     vidí původní stránku (záloha).
+     ZAPNUTÍ: zatím jen náhled — otevřít /kosik/?om-nahled=1 (platí v tomto
+     panelu prohlížeče), vypnout ?om-nahled=0. Pro všechny: OM_V2_DEFAULT = true. */
+  var OM_V2_DEFAULT = false;
+  var OM_V2_SEL = 'om_v2_sel';
+  var OM_V2_APPLIED = 'om_v2_applied';
+
+  function omV2On() {
+    try {
+      var q = window.location.search.match(/[?&]om-nahled=([01])/);
+      if (q) window.sessionStorage.setItem('om_v2', q[1]);
+      return OM_V2_DEFAULT || window.sessionStorage.getItem('om_v2') === '1';
+    } catch (e) { return OM_V2_DEFAULT; }
+  }
+  function omKcNum(t) {
+    t = String(t || '').replace(/\u00a0/g, ' ');
+    if (/zdarma/i.test(t)) return 0;
+    var m = t.match(/(\d[\d ]*(?:[.,]\d+)?)\s*Kč/);
+    return m ? parseFloat(m[1].replace(/ /g, '').replace(',', '.')) : NaN;
+  }
+  function omFmtKc(n) {
+    return n.toLocaleString('cs-CZ', { minimumFractionDigits: 0, maximumFractionDigits: 2 }).replace(/\u00a0/g, ' ') + ' Kč';
+  }
+  function omGetSel() {
+    try { return JSON.parse(window.sessionStorage.getItem(OM_V2_SEL) || 'null') || {}; } catch (e) { return {}; }
+  }
+  function omSetSel(sel) {
+    try { window.sessionStorage.setItem(OM_V2_SEL, JSON.stringify(sel)); } catch (e) { /* ignorovat */ }
+  }
+
+  /* Seznam doprav a plateb = stejná data, která Shoptet ukazuje na /objednavka/krok-1/ */
+  function omFetchShipPay() {
+    return fetch('/objednavka/krok-1/', { credentials: 'same-origin' })
+      .then(function (r) { return r.ok ? r.text() : Promise.reject(r.status); })
+      .then(function (t) {
+        var d = new DOMParser().parseFromString(t, 'text/html');
+        var ship = d.getElementById('order-shipping-methods');
+        var bill = d.getElementById('order-billing-methods');
+        return (ship && bill) ? { ship: ship, bill: bill } : null; /* prázdný košík apod. */
+      });
+  }
+
+  function omPriceOf(wrapper) {
+    var el = wrapper && (wrapper.querySelector('.payment-shipping-price') || wrapper.querySelector('label strong'));
+    return el ? omKcNum(el.textContent) : NaN;
+  }
+  function omPickedWrapper(box, name) {
+    var r = box.querySelector('input[name="' + name + '"]:checked');
+    return r ? r.closest('.radio-wrapper') : null;
+  }
+
+  function omUpdateShipPayTotal(box) {
+    var recap = document.querySelector('[data-testid="recapFullPrice"]');
+    var host = document.querySelector('.cart-inner .next-step--cart');
+    if (!recap || !host || !host.parentNode) return;
+    var goods = omKcNum(recap.textContent);
+    var sw = omPickedWrapper(box, 'omShip'), bw = omPickedWrapper(box, 'omBill');
+    var sp = omPriceOf(sw), bp = omPriceOf(bw);
+    var el = document.querySelector('.om-shippay-total');
+    if (!el) {
+      el = document.createElement('div');
+      el.className = 'om-shippay-total';
+      host.parentNode.insertBefore(el, host);
+    }
+    if (isNaN(goods) || isNaN(sp) || isNaN(bp)) { el.style.display = 'none'; return; }
+    el.style.display = '';
+    el.innerHTML =
+      '<div><span>Doprava</span><b>' + (sp ? omFmtKc(sp) : 'ZDARMA') + '</b></div>' +
+      '<div><span>Platba</span><b>' + (bp ? omFmtKc(bp) : 'ZDARMA') + '</b></div>' +
+      '<div class="om-shippay-grand"><span>Celkem k úhradě</span><b>' + omFmtKc(goods + sp + bp) + '</b></div>';
+  }
+
+  function omBuildShipPay(frag) {
+    var anchor = document.querySelector('.cart-inner .row.summary');
+    if (!anchor || !anchor.parentNode) return;
+    var box = document.getElementById('om-shippay');
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'om-shippay';
+      box.className = 'om-shippay';
+      anchor.parentNode.insertBefore(box, anchor);
+    }
+    var sel = omGetSel();
+    box.innerHTML = '';
+    [
+      { key: 'ship', src: frag.ship, title: 'Zvolte způsob dopravy', icon: 'order-delivery', from: 'shippingId', to: 'omShip' },
+      { key: 'bill', src: frag.bill, title: 'Zvolte způsob platby', icon: 'order-payment', from: 'billingId', to: 'omBill' }
+    ].forEach(function (g) {
+      var col = document.createElement('div');
+      col.className = 'om-shippay-col';
+      var h = document.createElement('h2');
+      h.className = 'order-icon ' + g.icon;
+      h.textContent = g.title;
+      col.appendChild(h);
+      var node = g.src.cloneNode(true);
+      node.removeAttribute('id');
+      /* unikátní id/name, ať se nic nepere s nativním formulářem */
+      var idMap = {};
+      Array.prototype.forEach.call(node.querySelectorAll('[id]'), function (e) { idMap[e.id] = 'om-' + e.id; e.id = 'om-' + e.id; });
+      Array.prototype.forEach.call(node.querySelectorAll('label[for]'), function (l) { if (idMap[l.htmlFor]) l.htmlFor = idMap[l.htmlFor]; });
+      var radios = node.querySelectorAll('input[type="radio"][name="' + g.from + '"]');
+      var nativeChecked = null, wanted = null;
+      Array.prototype.forEach.call(radios, function (r) {
+        r.name = g.to;
+        r.setAttribute('data-om-value', r.value);
+        if (r.checked) nativeChecked = r;
+        if (String(sel[g.key]) === String(r.value)) wanted = r;
+      });
+      var pick = wanted || nativeChecked || radios[0];
+      Array.prototype.forEach.call(radios, function (r) {
+        r.checked = (r === pick);
+        var w = r.closest('.radio-wrapper');
+        if (w) w.classList.toggle('active', r === pick);
+        var lb = node.querySelector('label[for="' + r.id + '"]');
+        if (lb && lb.classList.contains('billing-name')) lb.classList.toggle('active', r === pick);
+      });
+      if (pick) sel[g.key] = pick.value;
+      node.addEventListener('change', function (e) {
+        var t = e.target;
+        if (!t || t.type !== 'radio') return;
+        var s2 = omGetSel();
+        s2[g.key] = t.getAttribute('data-om-value');
+        omSetSel(s2);
+        Array.prototype.forEach.call(node.querySelectorAll('input[type="radio"]'), function (r) {
+          var w = r.closest('.radio-wrapper');
+          if (w) w.classList.toggle('active', r.checked);
+          var lb = node.querySelector('label[for="' + r.id + '"]');
+          if (lb && lb.classList.contains('billing-name')) lb.classList.toggle('active', r.checked);
+        });
+        omUpdateShipPayTotal(box);
+      });
+      col.appendChild(node);
+      box.appendChild(col);
+    });
+    omSetSel(sel);
+    omUpdateShipPayTotal(box);
+  }
+
+  function omInitCartV2() {
+    if (!/^\/kosik\/?$/.test(window.location.pathname) || !omV2On()) return;
+    var busy = false, timer;
+    function load() {
+      if (busy) return;
+      busy = true;
+      omFetchShipPay()
+        .then(function (frag) { if (frag) omBuildShipPay(frag); })
+        .catch(function () { /* bez výběru se zákazník dostane na původní krok */ })
+        .then(function () { busy = false; });
+    }
+    load();
+    var wrap = document.getElementById('cart-wrapper');
+    if (wrap && window.MutationObserver) {
+      new MutationObserver(function (muts) {
+        var own = muts.every(function (m) {
+          return m.target && m.target.closest && m.target.closest('#om-shippay, .om-shippay-total');
+        });
+        if (own) return;
+        clearTimeout(timer);
+        timer = setTimeout(load, 700);
+      }).observe(wrap, { childList: true, subtree: true });
+    }
+  }
+
+  /* /objednavka/krok-1/ — přenos volby z košíku do nativního formuláře a jeho odeslání */
+  function omInitStep1V2() {
+    if (!/^\/objednavka\/krok-1\/?$/.test(window.location.pathname) || !omV2On()) return;
+    var sel = omGetSel();
+    if (!sel.ship || !sel.bill) return;
+    /* přišel zákazník zpět z dalšího kroku, nebo už jsme to před chvílí zkoušeli → nativní stránka */
+    if (/\/objednavka\/krok-2/.test(document.referrer || '')) return;
+    var last = 0;
+    try { last = parseInt(window.sessionStorage.getItem(OM_V2_APPLIED) || '0', 10) || 0; } catch (e) { last = 0; }
+    if (last && Date.now() - last < 30000) {
+      try { window.sessionStorage.removeItem(OM_V2_APPLIED); } catch (e) { /* ignorovat */ }
+      return;
+    }
+    var ship = document.getElementById('shippingId-' + sel.ship);
+    var bill = document.getElementById('billingId-' + sel.bill);
+    var btn = document.getElementById('orderFormButton');
+    if (!ship || !bill || !btn) return;
+    var ov = document.createElement('div');
+    ov.id = 'om-v2-overlay';
+    ov.innerHTML = '<div><span class="om-v2-spin"></span><p>Pokračujeme…</p></div>';
+    document.body.appendChild(ov);
+    try { window.sessionStorage.setItem(OM_V2_APPLIED, String(Date.now())); } catch (e) { /* ignorovat */ }
+    [ship, bill].forEach(function (r) { if (!r.checked) r.click(); });
+    setTimeout(function () { btn.click(); }, 500);
+    /* záloha: nepřešlo-li se dál (např. nativní kontrola), odkryjeme původní stránku */
+    setTimeout(function () { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 6000);
+  }
+
+  (function startCheckoutV2() {
+    function run() {
+      try { omInitCartV2(); omInitStep1V2(); } catch (e) { if (window.console) console.error('OM checkout v2', e); }
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+  })();
+
   /* Spustíme po načtení DOM */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', injectAll);
