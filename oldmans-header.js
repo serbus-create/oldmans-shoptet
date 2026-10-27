@@ -2381,6 +2381,59 @@
     }).catch(function () { /* bez balíčku / chyba sítě: blok se prostě neukáže */ });
   }
 
+  /* Rozbalovací řádek Specifikace převezme vzhled nativních řádků "Značka / Diskuze / Hodnocení"
+     (velikost a řez písma, barva, výška řádku, velikost šipky) přímo z nich — nehádáme čísla. */
+  function syncSpecsAccStyle() {
+    var acc = document.querySelector('.om-specs-acc');
+    if (!acc) return;
+    var head = acc.querySelector('.om-specs-acc-head');
+    if (!head) return;
+    var labels = ['Značka Old Man\'s', 'Diskuze', 'Hodnocení'];
+    var root = document.getElementById('content') || document.body;
+    var found = [];
+    var els = root.querySelectorAll('*');
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      if (el.closest('.om-specs-acc') || el.closest('#p-detail-tabs')) continue;
+      var own = '';
+      for (var n = el.firstChild; n; n = n.nextSibling) if (n.nodeType === 3) own += n.nodeValue;
+      own = own.replace(/\s+/g, ' ').trim();
+      if (labels.indexOf(own) === -1) continue;
+      var r = el.getBoundingClientRect();
+      if (r.height < 8 || r.width < 8) continue;
+      found.push(el);
+    }
+    if (!found.length) return;
+    var ref = found[0];
+    var cs = window.getComputedStyle(ref);
+    var label = head.querySelector('span');
+    var target = label || head;
+    target.style.fontSize = cs.fontSize;
+    target.style.fontWeight = cs.fontWeight;
+    target.style.fontFamily = cs.fontFamily;
+    target.style.lineHeight = cs.lineHeight;
+    target.style.letterSpacing = cs.letterSpacing;
+    target.style.textTransform = cs.textTransform;
+    head.style.color = cs.color;
+    /* výška řádku = rozestup mezi nativními nadpisy */
+    var tops = found.map(function (e) { return e.getBoundingClientRect().top; }).sort(function (a, b) { return a - b; });
+    if (tops.length > 1) {
+      var pitch = Math.round(tops[1] - tops[0]);
+      if (pitch >= 30 && pitch <= 140) head.style.minHeight = pitch + 'px';
+    }
+    /* šipka: stejná velikost jako nativní (pokud je to <svg> / ikona v řádku) */
+    var row = ref.closest('li, button, a, div');
+    var ico = row ? row.querySelector('svg') : null;
+    if (ico) {
+      var ir = ico.getBoundingClientRect();
+      var arrow = head.querySelector('svg');
+      if (arrow && ir.width >= 10 && ir.width <= 40) {
+        arrow.setAttribute('width', Math.round(ir.width));
+        arrow.setAttribute('height', Math.round(ir.width));
+      }
+    }
+  }
+
   /* Specifikace na MOBILU (do 767 px): rozbalovací řádek jako "Značka / Diskuze / Hodnocení" (27. 10. 2026).
      Vložíme ho přímo na místo, kde tabulka v popisu stojí, a tabulku v něm schováme (sbalené). */
   function buildSpecsAccordion() {
@@ -2423,6 +2476,7 @@
       head.setAttribute('aria-expanded', open ? 'false' : 'true');
       body.hidden = open;
     });
+    [0, 600, 1800, 4000].forEach(function (ms) { setTimeout(function () { try { syncSpecsAccStyle(); } catch (e) { /* nic */ } }, ms); });
     return true;
   }
 
