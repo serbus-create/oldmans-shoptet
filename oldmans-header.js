@@ -2381,12 +2381,58 @@
     }).catch(function () { /* bez balíčku / chyba sítě: blok se prostě neukáže */ });
   }
 
+  /* Specifikace na MOBILU (do 767 px): rozbalovací řádek jako "Značka / Diskuze / Hodnocení" (27. 10. 2026).
+     Vložíme ho přímo na místo, kde tabulka v popisu stojí, a tabulku v něm schováme (sbalené). */
+  function buildSpecsAccordion() {
+    if (document.getElementById('specifications')) return true;
+    var descriptionPane = document.getElementById('description');
+    var specsTable = descriptionPane ? descriptionPane.querySelector('table.detail-parameters') : null;
+    if (!specsTable) {
+      var all = document.querySelectorAll('table.detail-parameters');
+      for (var i = 0; i < all.length; i++) {
+        if (all[i].closest('form') || all[i].classList.contains('om-specs-table')) continue;
+        specsTable = all[i];
+        break;
+      }
+    }
+    if (!specsTable || !specsTable.parentNode) return false;
+    var acc = document.createElement('div');
+    acc.id = 'specifications';
+    acc.className = 'om-specs-acc';
+    var head = document.createElement('button');
+    head.type = 'button';
+    head.className = 'om-specs-acc-head';
+    head.setAttribute('aria-expanded', 'false');
+    head.setAttribute('aria-controls', 'om-specs-acc-body');
+    head.innerHTML = '<span>Specifikace</span><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 8l8 8 8-8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var body = document.createElement('div');
+    body.className = 'om-specs-acc-body';
+    body.id = 'om-specs-acc-body';
+    body.hidden = true;
+    var wrap = document.createElement('div');
+    wrap.className = 'om-specs-wrap';
+    specsTable.parentNode.insertBefore(acc, specsTable);
+    wrap.appendChild(specsTable);
+    body.appendChild(wrap);
+    acc.appendChild(head);
+    acc.appendChild(body);
+    specsTable.style.removeProperty('display');
+    specsTable.classList.add('om-specs-table');
+    head.addEventListener('click', function () {
+      var open = head.getAttribute('aria-expanded') === 'true';
+      head.setAttribute('aria-expanded', open ? 'false' : 'true');
+      body.hidden = open;
+    });
+    return true;
+  }
+
   /* Záložka "Specifikace" — tabulku (Kategorie / Minimální trvanlivost / Hmotnost / Složení)
      přesuneme z Popisu do vlastní záložky. Volá se hned a pak ještě několikrát (27. 10. 2026):
      na mobilu bývají záložky nebo popis hotové později, případně jinak uložené.
      final === true: pokud žádné záložky neexistují, vytvoříme aspoň samostatnou sekci Specifikace. */
   function buildSpecsTab(final) {
     if (document.getElementById('specifications')) return true;
+    if (window.matchMedia && window.matchMedia('(max-width: 767px)').matches) return buildSpecsAccordion();
     var descriptionPane = document.getElementById('description');
     var specsTable = descriptionPane ? descriptionPane.querySelector('table.detail-parameters') : null;
     if (!specsTable) {
