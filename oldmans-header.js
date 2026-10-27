@@ -2381,6 +2381,73 @@
     }).catch(function () { /* bez balíčku / chyba sítě: blok se prostě neukáže */ });
   }
 
+  /* Záložka "Specifikace" — tabulku (Kategorie / Minimální trvanlivost / Hmotnost / Složení)
+     přesuneme z Popisu do vlastní záložky. Volá se hned a pak ještě několikrát (27. 10. 2026):
+     na mobilu bývají záložky nebo popis hotové později, případně jinak uložené.
+     final === true: pokud žádné záložky neexistují, vytvoříme aspoň samostatnou sekci Specifikace. */
+  function buildSpecsTab(final) {
+    if (document.getElementById('specifications')) return true;
+    var descriptionPane = document.getElementById('description');
+    var specsTable = descriptionPane ? descriptionPane.querySelector('table.detail-parameters') : null;
+    if (!specsTable) {
+      var all = document.querySelectorAll('table.detail-parameters');
+      for (var i = 0; i < all.length; i++) {
+        if (all[i].closest('form') || all[i].classList.contains('om-specs-table')) continue;
+        specsTable = all[i];
+        break;
+      }
+    }
+    if (!specsTable) return false;
+    var tabsList = document.getElementById('p-detail-tabs') || document.querySelector('ul.shp-tabs, ul.nav-tabs, [role="tablist"]');
+    var tabContent = document.getElementById('tab-content') || (descriptionPane && descriptionPane.parentNode);
+    if (tabsList && tabContent) {
+      /* Tab tlačítko */
+      var specsTabLi = document.createElement('li');
+      specsTabLi.className = 'shp-tab';
+      specsTabLi.setAttribute('data-testid', 'tabSpecifications');
+      specsTabLi.innerHTML = '<a href="#specifications" class="shp-tab-link" role="tab" data-toggle="tab">Specifikace</a>';
+      var descTabLi = tabsList.querySelector('.shp-tab[data-testid="tabDescription"]');
+      if (descTabLi && descTabLi.parentNode) {
+        descTabLi.parentNode.insertBefore(specsTabLi, descTabLi.nextSibling);
+      } else {
+        tabsList.appendChild(specsTabLi);
+      }
+
+      /* Obsah záložky */
+      var specsPane = document.createElement('div');
+      specsPane.id = 'specifications';
+      specsPane.className = 'tab-pane fade wide-tab';
+      specsPane.setAttribute('role', 'tabpanel');
+      var specsWrap = document.createElement('div');
+      specsWrap.className = 'om-specs-wrap';
+      specsWrap.appendChild(specsTable);
+      specsPane.appendChild(specsWrap);
+      tabContent.appendChild(specsPane);
+      specsTable.style.removeProperty('display');
+      specsTable.classList.add('om-specs-table');
+      return true;
+    }
+    if (final === true && descriptionPane && descriptionPane.parentNode) {
+      /* Nouzově bez záložek: samostatná sekce pod popisem */
+      var sec = document.createElement('div');
+      sec.id = 'specifications';
+      sec.className = 'om-specs-section';
+      var ttl = document.createElement('h3');
+      ttl.className = 'om-specs-title';
+      ttl.textContent = 'Specifikace';
+      var wrap2 = document.createElement('div');
+      wrap2.className = 'om-specs-wrap';
+      wrap2.appendChild(specsTable);
+      sec.appendChild(ttl);
+      sec.appendChild(wrap2);
+      descriptionPane.parentNode.insertBefore(sec, descriptionPane.nextSibling);
+      specsTable.style.removeProperty('display');
+      specsTable.classList.add('om-specs-table');
+      return true;
+    }
+    return false;
+  }
+
   function enhanceProductDetail() {
     if (!document.body.classList.contains('type-product')) return;
 
@@ -2734,35 +2801,7 @@
       }
     }
 
-    var specsTable = descriptionPane ? descriptionPane.querySelector('table.detail-parameters') : null;
-    var tabsList = document.getElementById('p-detail-tabs');
-    var tabContent = document.getElementById('tab-content');
-    if (specsTable && tabsList && tabContent && !document.getElementById('specifications')) {
-      /* Tab tlačítko */
-      var specsTabLi = document.createElement('li');
-      specsTabLi.className = 'shp-tab';
-      specsTabLi.setAttribute('data-testid', 'tabSpecifications');
-      specsTabLi.innerHTML = '<a href="#specifications" class="shp-tab-link" role="tab" data-toggle="tab">Specifikace</a>';
-      var descTabLi = tabsList.querySelector('.shp-tab[data-testid="tabDescription"]');
-      if (descTabLi && descTabLi.parentNode) {
-        descTabLi.parentNode.insertBefore(specsTabLi, descTabLi.nextSibling);
-      } else {
-        tabsList.appendChild(specsTabLi);
-      }
-
-      /* Obsah záložky */
-      var specsPane = document.createElement('div');
-      specsPane.id = 'specifications';
-      specsPane.className = 'tab-pane fade wide-tab';
-      specsPane.setAttribute('role', 'tabpanel');
-      var specsWrap = document.createElement('div');
-      specsWrap.className = 'om-specs-wrap';
-      specsWrap.appendChild(specsTable);
-      specsPane.appendChild(specsWrap);
-      tabContent.appendChild(specsPane);
-      specsTable.style.removeProperty('display');
-      specsTable.classList.add('om-specs-table');
-    }
+    buildSpecsTab(false);
 
     /* 6. Přejmenovat nadpis "Podobné produkty" */
     Array.from(document.querySelectorAll('h2, h3, h4')).forEach(function(h) {
@@ -3454,6 +3493,18 @@
       try { renameWarrantyLabel(); setTimeout(renameWarrantyLabel, 1500); } catch (e) { /* nic */ }
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+  })();
+
+  /* Specifikace: opakované pokusy (mobil — záložky/popis se mohou objevit později) */
+  (function retrySpecsTab() {
+    if (!document.body || !/\btype-product\b/.test(document.body.className || '')) {
+      document.addEventListener('DOMContentLoaded', function () {
+        if (document.body.classList.contains('type-product')) retrySpecsTab();
+      });
+      return;
+    }
+    [800, 2000, 4000].forEach(function (ms) { setTimeout(function () { try { buildSpecsTab(false); } catch (e) { /* nic */ } }, ms); });
+    setTimeout(function () { try { buildSpecsTab(true); } catch (e) { /* nic */ } }, 6000);
   })();
 
   /* Spustíme po načtení DOM */
