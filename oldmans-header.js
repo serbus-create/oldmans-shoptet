@@ -3437,6 +3437,25 @@
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
   })();
 
+  /* ── Specifikace produktu: "Záruka" → "Minimální trvanlivost" (27. 10. 2026, přání klienta)
+     Řádek je vestavěný ve Shoptetu (th > span.row-header-label), takže se mění
+     jen zobrazený text. Hodnota (např. "6 měsíců") zůstává z pole Záruka u
+     produktu. Mění se pouze přesný text "Záruka", jiné řádky se nedotknou. */
+  function renameWarrantyLabel() {
+    var labels = document.querySelectorAll('th .row-header-label');
+    Array.prototype.forEach.call(labels, function (l) {
+      var node = l.firstChild;
+      while (node && !(node.nodeType === 3 && node.nodeValue.trim())) node = node.nextSibling;
+      if (node && node.nodeValue.trim() === 'Záruka') node.nodeValue = 'Minimální trvanlivost';
+    });
+  }
+  (function startRenameWarranty() {
+    function run() {
+      try { renameWarrantyLabel(); setTimeout(renameWarrantyLabel, 1500); } catch (e) { /* nic */ }
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+  })();
+
   /* Spustíme po načtení DOM */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', injectAll);
