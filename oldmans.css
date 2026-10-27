@@ -3484,6 +3484,46 @@ table.om-specs-table a {
   font-weight: 800;
   margin: 28px 0 6px;
 }
+
+/* Specifikace jako rozbalovací řádek na mobilu (27. 10. 2026) */
+.om-specs-acc {
+  border-top: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
+  margin: 22px 0 0;
+}
+.om-specs-acc-head {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 4px;
+  margin: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: #1a1a1a;
+  font: inherit;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+}
+.om-specs-acc-head svg {
+  flex: 0 0 22px;
+  transition: transform .2s ease;
+}
+.om-specs-acc-head[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+.om-specs-acc-body[hidden] {
+  display: none !important;
+}
+.om-specs-acc .om-specs-wrap {
+  padding: 0 0 14px !important;
+}
 .shp-tabs-row {
   border-bottom: 1px solid #e2e2e2 !important;
   padding-left: 0 !important;
