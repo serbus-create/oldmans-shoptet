@@ -1054,6 +1054,37 @@
       }
     })();
 
+    /* Objednávka (krok 1 a rekapitulace): na žádost klienta se doprava ZOBRAZUJE jako
+       „Chlazená čerstvá doprava“ (pouze text na stránce — název v Shoptetu a v e-mailech
+       zůstává) a pole „Měna“ je jen malé okénko. Nic z toho nemění odesílaná data. */
+    var OM_SHIP_NAME_RE = /^doručení na adresu\s*[–—-]\s*chlazená přeprava$/i;
+    var OM_SHIP_NAME_NEW = 'Chlazená čerstvá doprava';
+    function tidyOrderStep1() {
+      if (!/^\/objednavka\//.test(window.location.pathname)) return;
+      Array.prototype.forEach.call(document.querySelectorAll('#content-wrapper *'), function (e) {
+        if (e.children.length || !e.textContent || e.textContent.length > 80) return;
+        var t = e.textContent.replace(/\s+/g, ' ').trim();
+        if (OM_SHIP_NAME_RE.test(t) && t !== OM_SHIP_NAME_NEW) e.textContent = OM_SHIP_NAME_NEW;
+      });
+      var cur = document.getElementById('payment-currency');
+      if (cur) {
+        var grp = cur.closest ? cur.closest('.form-group') : null;
+        if (grp && !grp.classList.contains('om-currency-small')) grp.classList.add('om-currency-small');
+      }
+    }
+    (function watchOrderStep1() {
+      if (!/^\/objednavka\//.test(window.location.pathname)) return;
+      var t;
+      function run() { try { tidyOrderStep1(); } catch (e) { /* nikdy nerozbít objednávku */ } }
+      run();
+      [300, 900, 2000, 4000].forEach(function (ms) { setTimeout(run, ms); });
+      document.addEventListener('change', function () { setTimeout(run, 30); });
+      var wrap = document.getElementById('content-wrapper');
+      if (wrap && window.MutationObserver) {
+        new MutationObserver(function () { clearTimeout(t); t = setTimeout(run, 120); }).observe(wrap, { childList: true, subtree: true });
+      }
+    })();
+
     /* -------------------------------------------------
        7. HOMEPAGE SEKCE
        Vkládáme za .benefitBanner (USP lišta Shoptetu)
