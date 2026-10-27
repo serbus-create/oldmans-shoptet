@@ -5653,3 +5653,9 @@ body.ordering-process .om-hide-heading { display: none !important; }
   #om-bundle .om-bundle-th,
   #om-bundle .om-bundle-more { width: 42px; height: 42px; }
 }
+
+
+/* Objednávka: pole „Měna“ jen jako malé okénko (na žádost klienta) */
+.om-currency-small { max-width: 150px !important; }
+.om-currency-small .form-control,
+.om-currency-small select { width: 100% !important; }
