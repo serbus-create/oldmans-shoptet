@@ -3466,6 +3466,24 @@ table.om-specs-table a {
   color: #1a1a1a !important;
   text-decoration: none !important;
 }
+
+/* Specifikace na mobilu (27. 10. 2026): užší buňky, popisek se může zalomit; nouzová sekce bez záložek */
+@media (max-width: 600px) {
+  table.om-specs-table th,
+  table.om-specs-table td {
+    padding: 11px 12px !important;
+    font-size: 14px !important;
+  }
+  table.om-specs-table th {
+    width: 38% !important;
+    white-space: normal !important;
+  }
+}
+.om-specs-title {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 28px 0 6px;
+}
 .shp-tabs-row {
   border-bottom: 1px solid #e2e2e2 !important;
   padding-left: 0 !important;
