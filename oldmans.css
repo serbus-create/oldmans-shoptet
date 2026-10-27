@@ -3485,19 +3485,22 @@ table.om-specs-table a {
   margin: 28px 0 6px;
 }
 
-/* Specifikace jako rozbalovací řádek na mobilu (27. 10. 2026) */
+/* Specifikace jako rozbalovací řádek na mobilu (27. 10. 2026)
+   Bez čar a odsazení — navazuje plynule na nativní řádky Značka / Diskuze / Hodnocení.
+   Velikost písma a výšku řádku si JS (syncSpecsAccStyle) zkopíruje z nativních řádků. */
 .om-specs-acc {
-  border-top: 1px solid #e6e6e6;
-  border-bottom: 1px solid #e6e6e6;
-  margin: 22px 0 0;
+  border: 0;
+  margin: 0;
+  padding: 0;
 }
 .om-specs-acc-head {
   display: flex;
   width: 100%;
+  min-height: 64px;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 20px 4px;
+  padding: 0;
   margin: 0;
   background: none;
   border: 0;
@@ -3505,14 +3508,18 @@ table.om-specs-table a {
   box-shadow: none;
   color: #1a1a1a;
   font: inherit;
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 700;
   line-height: 1.2;
   text-align: left;
   cursor: pointer;
 }
+.om-specs-acc-head span {
+  font-size: inherit;
+  font-weight: inherit;
+}
 .om-specs-acc-head svg {
-  flex: 0 0 22px;
+  flex: 0 0 auto;
   transition: transform .2s ease;
 }
 .om-specs-acc-head[aria-expanded="true"] svg {
