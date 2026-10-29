@@ -25,6 +25,8 @@ jobs:
           node-version: 20
       - run: npm install --no-save jsdom
       - run: node scripts/build-bundles.mjs bundles.json
+        env:
+          SHOPTET_EXPORT_URL: ${{ secrets.SHOPTET_EXPORT_URL }}
       - name: Uložit a vyčistit cache jsDelivr
         run: |
           if [ -n "$(git status --porcelain bundles.json)" ]; then
