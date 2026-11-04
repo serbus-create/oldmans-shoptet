@@ -5552,6 +5552,8 @@ body.ordering-process .om-hide-heading { display: none !important; }
    ══════════════════════════════════════════════ */
 #om-bundle {
   box-sizing: border-box;
+  width: 100%;
+  align-self: stretch;
   margin: 18px 0 8px;
   padding: 14px 12px 12px;
   background: #9f1400;
