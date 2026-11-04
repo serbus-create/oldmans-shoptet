@@ -2180,7 +2180,7 @@
   var OM_BUNDLES_JSON_URL = 'https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/bundles.json';
   var OM_SETS_KEY = 'om_sets_v2';
   var OM_SETS_TTL = 3 * 60 * 60 * 1000;
-  var OM_RESOLVE_KEY = 'om_res_v1';
+  var OM_RESOLVE_KEY = 'om_res_v2';
   var OM_RESOLVE_TTL = 60 * 60 * 1000;
 
   function omCsvRows(text) {
@@ -2279,7 +2279,9 @@
         var pr = omParseKc(pf ? pf.textContent : (card.querySelector('[data-micro="offer"]') || {}).textContent);
         var img = card.querySelector('img');
         var src = img ? (img.getAttribute('data-src') || img.getAttribute('src') || '') : '';
-        if (a && pr > 0) found = { code: code, path: omNormPath(a.getAttribute('href')), price: pr, img: src };
+        var nmEl = card.querySelector('[data-micro="name"]');
+        var nm = nmEl ? String(nmEl.textContent || '').replace(/\s+/g, ' ').trim() : '';
+        if (a && pr > 0) found = { code: code, path: omNormPath(a.getAttribute('href')), price: pr, img: src, name: nm };
       });
       try {
         var st = JSON.parse(localStorage.getItem(OM_RESOLVE_KEY) || '{}') || {};
@@ -2314,7 +2316,7 @@
           /* pojistka proti chybně spárované ceně: úspora nad 60 % = podezřelé, raději nic */
           var total = items.reduce(function (acc, i) { return acc + i.price; }, 0);
           if (total <= bundle.price || (total - bundle.price) / total * 100 > 60) return null;
-          return { path: bundle.path, price: bundle.price, items: items };
+          return { path: bundle.path, price: bundle.price, name: bundle.name || '', items: items };
         });
       })).then(function (list) { return list.filter(Boolean); });
     });
@@ -2329,6 +2331,19 @@
     return omLoadBundles();
   }
 
+  function omFmtKc(n) {
+    return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0') + '\u00a0Kč';
+  }
+  /* "Steakhouse Trio - Ranch, Texas BBQ & Černý Pepř" → "Steakhouse Trio" */
+  function omShortBundleName(n) {
+    n = String(n || '').replace(/\s+/g, ' ').trim();
+    var first = n.split(/\s[-–—]\s/)[0].trim();
+    return first || n || 'Balíček';
+  }
+
+  /* Blok balíčků na detailu produktu (30. 10. 2026): červený box, nahoře nadpis „Ušetři až X %“,
+     pod ním řádek pro KAŽDÝ balíček, který produkt obsahuje (max. 3): kroužky produktů vlevo,
+     název + cena + sleva, vpravo tlačítko „Zobrazit“. Bez balíčku se blok vůbec neukáže. */
   function buildBundleUpsell() {
     if (!document.body.classList.contains('type-product')) return;
     if (document.getElementById('om-bundle')) return;
@@ -2338,7 +2353,7 @@
     if (!here) return;
 
     omLoadBundleCandidates().then(function (bundles) {
-      var best = null;
+      var list = [];
       bundles.forEach(function (b) {
         if (b.path === here) return;
         var inBundle = b.items.some(function (i) { return i.path === here; });
@@ -2346,66 +2361,91 @@
         var sum = b.items.reduce(function (acc, i) { return acc + i.price; }, 0);
         var pct = Math.round((sum - b.price) / sum * 100);
         if (pct < 1) return;
-        if (!best || pct > best.pct) best = { b: b, pct: pct };
+        list.push({ b: b, pct: pct });
       });
-      if (!best || document.getElementById('om-bundle')) return;
+      if (!list.length || document.getElementById('om-bundle')) return;
+      list.sort(function (x, y) { return y.pct - x.pct; });
+      list = list.slice(0, 3);
 
-      var a = document.createElement('a');
-      a.id = 'om-bundle';
-      a.className = 'om-bundle';
-      a.href = best.b.path + '/';
+      var box = document.createElement('div');
+      box.id = 'om-bundle';
+      box.className = 'om-bundle';
 
+      var head = document.createElement('div');
+      head.className = 'om-bundle-head';
       var ico = document.createElement('span');
       ico.className = 'om-bundle-ico';
-      ico.appendChild(document.createTextNode('📦'));
-      var badge = document.createElement('span');
-      badge.className = 'om-bundle-pct';
-      badge.textContent = '−' + best.pct + '\u00a0%';
-      ico.appendChild(badge);
-      a.appendChild(ico);
-
-      var txt = document.createElement('span');
-      txt.className = 'om-bundle-txt';
+      ico.textContent = '📦';
       var title = document.createElement('b');
-      title.textContent = 'I v balíčku s dalšími produkty';
-      var sub = document.createElement('small');
-      sub.textContent = 'Klikněte a ušetřete';
-      txt.appendChild(title);
-      txt.appendChild(sub);
-      a.appendChild(txt);
+      title.textContent = list.length > 1
+        ? 'Ušetři až ' + list[0].pct + '\u00a0% nákupem jednoho z balíčků'
+        : 'Ušetři ' + list[0].pct + '\u00a0% v balíčku s dalšími produkty';
+      head.appendChild(ico);
+      head.appendChild(title);
+      box.appendChild(head);
 
-      /* Kroužky = VŽDY produkty z balíčku (max 3, zbytek jako "+N") */
-      var thumbs = document.createElement('span');
-      thumbs.className = 'om-bundle-thumbs';
-      best.b.items.slice(0, 3).forEach(function (it) {
-        var t = document.createElement('span');
-        t.className = 'om-bundle-th';
-        if (it.img) {
-          var im = document.createElement('img');
-          im.src = it.img;
-          im.alt = '';
-          im.loading = 'lazy';
-          t.appendChild(im);
+      list.forEach(function (it) {
+        var row = document.createElement('a');
+        row.className = 'om-bundle-row';
+        row.href = it.b.path + '/';
+
+        /* Kroužky = VŽDY produkty z balíčku (max 3, zbytek jako "+N") */
+        var thumbs = document.createElement('span');
+        thumbs.className = 'om-bundle-thumbs';
+        it.b.items.slice(0, 3).forEach(function (p) {
+          var t = document.createElement('span');
+          t.className = 'om-bundle-th';
+          if (p.img) {
+            var im = document.createElement('img');
+            im.src = p.img;
+            im.alt = '';
+            im.loading = 'lazy';
+            t.appendChild(im);
+          }
+          thumbs.appendChild(t);
+        });
+        if (it.b.items.length > 3) {
+          var more = document.createElement('span');
+          more.className = 'om-bundle-more';
+          more.textContent = '+' + (it.b.items.length - 3);
+          thumbs.appendChild(more);
         }
-        thumbs.appendChild(t);
+        row.appendChild(thumbs);
+
+        var info = document.createElement('span');
+        info.className = 'om-bundle-info';
+        var nm = document.createElement('b');
+        nm.className = 'om-bundle-name';
+        nm.textContent = omShortBundleName(it.b.name);
+        var pr = document.createElement('span');
+        pr.className = 'om-bundle-price';
+        var pv = document.createElement('strong');
+        pv.textContent = omFmtKc(it.b.price);
+        var chip = document.createElement('em');
+        chip.className = 'om-bundle-pct';
+        chip.textContent = '−' + it.pct + '\u00a0%';
+        pr.appendChild(pv);
+        pr.appendChild(chip);
+        info.appendChild(nm);
+        info.appendChild(pr);
+        row.appendChild(info);
+
+        var cta = document.createElement('span');
+        cta.className = 'om-bundle-cta';
+        cta.textContent = 'Zobrazit ›';
+        row.appendChild(cta);
+        box.appendChild(row);
       });
-      if (best.b.items.length > 3) {
-        var more = document.createElement('span');
-        more.className = 'om-bundle-more';
-        more.textContent = '+' + (best.b.items.length - 3);
-        thumbs.appendChild(more);
-      }
-      a.appendChild(thumbs);
 
       /* výchozí (záložní) pozice: hned za nákupním boxem */
-      priceBlock.parentNode.insertBefore(a, priceBlock.nextSibling);
+      priceBlock.parentNode.insertBefore(box, priceBlock.nextSibling);
       /* cílová pozice (přání klienta): uvnitř nákupního boxu mezi odkaz
          "Pro firmy – Nabídka na míru" a řádek s hodnocením. Odkaz "Pro firmy"
          vytváří náš JS, tak se pár pokusů počká, kdyby ještě nebyl hotový. */
       function placeBundle() {
         var pf = document.querySelector('a.om-pro-firmy');
-        if (!pf || !pf.parentNode || !a.parentNode) return false;
-        if (pf.nextSibling !== a) pf.parentNode.insertBefore(a, pf.nextSibling);
+        if (!pf || !pf.parentNode || !box.parentNode) return false;
+        if (pf.nextSibling !== box) pf.parentNode.insertBefore(box, pf.nextSibling);
         return true;
       }
       if (!placeBundle()) { [150, 500, 1200, 2500].forEach(function (ms) { setTimeout(placeBundle, ms); }); }
@@ -3371,7 +3411,27 @@
       var act = document.createElement('span');
       act.className = 'om-coupon-act';
       act.setAttribute('aria-live', 'polite');
-      act.textContent = 'Zkopírovat';
+      var NS = 'http://www.w3.org/2000/svg';
+      var svg = document.createElementNS(NS, 'svg');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.setAttribute('width', '14');
+      svg.setAttribute('height', '14');
+      svg.setAttribute('fill', 'none');
+      svg.setAttribute('stroke', 'currentColor');
+      svg.setAttribute('stroke-width', '2.2');
+      svg.setAttribute('stroke-linecap', 'round');
+      svg.setAttribute('stroke-linejoin', 'round');
+      svg.setAttribute('aria-hidden', 'true');
+      var r1 = document.createElementNS(NS, 'rect');
+      r1.setAttribute('x', '9'); r1.setAttribute('y', '9'); r1.setAttribute('width', '13'); r1.setAttribute('height', '13'); r1.setAttribute('rx', '2');
+      var p1 = document.createElementNS(NS, 'path');
+      p1.setAttribute('d', 'M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1');
+      svg.appendChild(r1);
+      svg.appendChild(p1);
+      var lab = document.createElement('span');
+      lab.textContent = 'Zkopírovat';
+      act.appendChild(svg);
+      act.appendChild(lab);
       btn.appendChild(code);
       btn.appendChild(act);
 
@@ -3379,7 +3439,7 @@
       btn.addEventListener('click', function () {
         omCopyText(c.code).then(function () {
           btn.classList.add('is-copied');
-          act.textContent = 'Zkopírováno ✓';
+          lab.textContent = 'Zkopírováno ✓';
         }).catch(function () {
           /* schránka nedostupná → alespoň kód označit, ať ho jde zkopírovat ručně */
           try {
@@ -3389,12 +3449,12 @@
             sel.removeAllRanges();
             sel.addRange(rng);
           } catch (e) { /* ignorovat */ }
-          act.textContent = 'Označeno';
+          lab.textContent = 'Označeno';
         }).then(function () {
           clearTimeout(timer);
           timer = setTimeout(function () {
             btn.classList.remove('is-copied');
-            act.textContent = 'Zkopírovat';
+            lab.textContent = 'Zkopírovat';
           }, 2200);
         });
       });
