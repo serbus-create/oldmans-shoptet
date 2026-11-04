@@ -5759,3 +5759,27 @@ body.ordering-process .om-hide-heading { display: none !important; }
   .om-mobile-contact-sub { color: #f1c8c0; }
   .om-mobile-contact, .om-mobile-contact-text { color: #fff; }
 }
+
+
+/* Box hodnocení obchodu (statické): řádek = ikona zdroje + skóre + hvězdičky (výplň podle skóre) */
+.om-shoprate {
+  flex: 1.25 1 0; min-width: 0; box-sizing: border-box;
+  background: #f7f7f7; border-radius: 10px; padding: 4px 14px;
+}
+.om-shoprate-row {
+  display: flex; align-items: center; gap: 10px; min-height: 38px;
+  color: #1a1a1a; text-decoration: none;
+}
+.om-shoprate-row + .om-shoprate-row { border-top: 1px solid #e7e7e7; }
+a.om-shoprate-row:hover .om-shoprate-val { text-decoration: underline; }
+.om-shoprate-ico { width: 26px; height: 26px; flex: none; display: block; object-fit: contain; }
+.om-shoprate-val { font-weight: 800; font-size: 16px; min-width: 30px; color: #1a1a1a; }
+.om-shoprate-stars {
+  font-size: 19px; letter-spacing: 1px; line-height: 1;
+  background: linear-gradient(90deg, #f7c91b var(--p, 100%), #d8d8d8 var(--p, 100%));
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent; -webkit-text-fill-color: transparent;
+}
+@media (max-width: 768px) {
+  .om-shoprate { flex: 1 1 auto; padding: 4px 16px; }
+}
