@@ -122,7 +122,7 @@
     el.innerHTML =
       '<div class="om-trust-inner">' +
         '<div class="om-trust-row">' +
-          '<div class="om-trust-item"><span class="om-trust-ico">🔒</span><div><strong>Zabezpečená platba</strong><span>Šifrované spojení a platební brána Comgate</span></div></div>' +
+          '<div class="om-trust-item"><span class="om-trust-ico">🔒</span><div><strong>Zabezpečená platba</strong><span>Šifrované spojení a platební brána Adyen</span></div></div>' +
           '<div class="om-trust-item"><span class="om-trust-ico">🚚</span><div><strong>Doprava zdarma</strong><span>u objednávek nad 1&nbsp;350&nbsp;Kč</span></div></div>' +
           '<div class="om-trust-item"><span class="om-trust-ico">✅</span><div><strong>Čerstvá ruční výroba</strong><span>Vyrábíme v den Vaší objednávky</span></div></div>' +
           '<div class="om-trust-item"><span class="om-trust-ico">👍</span><div><strong>350&nbsp;000+ zákazníků</strong><span>Spokojených zákazníků</span></div></div>' +
@@ -131,7 +131,7 @@
           '<div class="om-trust-help">Potřebujete poradit s objednávkou? ' +
             '<a href="tel:+420774772405">📞 +420 774 772 405</a> ' +
             '<a href="mailto:podpora@oldmans.cz">✉️ podpora@oldmans.cz</a></div>' +
-          '<img class="om-trust-pay" src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/comgate-footer-logos.png" alt="Způsoby platby" loading="lazy">' +
+          '<img class="om-trust-pay" src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@3c556a304a6de9b7c3ab8c9be41edd0683f8da82/adyen-footer-logos.png" alt="Způsoby platby" loading="lazy">' +
         '</div>' +
       '</div>';
     var shoptetFooter = document.querySelector('.footer');
@@ -347,13 +347,13 @@
         copyright.innerHTML = '© Copyright 2026 <strong>Old Man\'s</strong>. Všechna práva vyhrazena. ' + cookiesHtml;
       }
 
-      /* Loga platebních metod (Comgate, Visa, Mastercard, GPay, ApplePay)
+      /* Loga platebních metod (Adyen, Visa, Mastercard, GPay, ApplePay)
          — jeden obrázek nahraný na GitHubu, zobrazený v KAŽDÉ patičce
          na webu (na všech typech stránek), stejně jako na oldmans.cz. */
       if (!footerBottom.querySelector('.om-footer-payments')) {
         var paymentsImg = document.createElement('img');
         paymentsImg.className = 'om-footer-payments';
-        paymentsImg.src = 'https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/comgate-footer-logos.png';
+        paymentsImg.src = 'https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@3c556a304a6de9b7c3ab8c9be41edd0683f8da82/adyen-footer-logos.png';
         paymentsImg.alt = 'Způsoby platby';
         footerBottom.appendChild(paymentsImg);
       }
