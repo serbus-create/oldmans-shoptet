@@ -5673,7 +5673,7 @@ body.ordering-process .om-hide-heading { display: none !important; }
    ══════════════════════════════════════════════════════════════════════════ */
 
 /* ── Horní lišta ── */
-#om-topbar { background: #850f00; border-bottom: 0; color: #f6d9d3; }
+#om-topbar { background: #9f1400; border-bottom: 0; color: #f6d9d3; }
 #om-topbar, #om-topbar a { color: #f6d9d3; }
 #om-topbar a:hover { color: #fff; }
 
