@@ -5203,10 +5203,10 @@ body .p-detail-inner-header-mobile .h1 {
   box-sizing: border-box;
   margin: 6px 0 14px;
   padding: 12px 16px;
-  background: #9f1400;
-  color: #fff;
+  background: #f6f0e6;
+  color: #111;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(159, 20, 0, .22);
+  box-shadow: none;
 }
 /* "výsek" vstupenky po stranách */
 .om-coupon::before,
@@ -5230,8 +5230,8 @@ body .p-detail-inner-header-mobile .h1 {
   font-size: 20px; line-height: 1;
 }
 .om-coupon-text { display: flex; flex-direction: column; gap: 2px; line-height: 1.2; min-width: 0; }
-.om-coupon-text strong { font-size: 17px; font-weight: 800; color: #f7c91b; }
-.om-coupon-text span { font-size: 12.5px; color: #fff; opacity: .92; white-space: nowrap; }
+.om-coupon-text strong { font-size: 17px; font-weight: 800; color: #9f1400; }
+.om-coupon-text span { font-size: 12.5px; color: #444; white-space: nowrap; }
 /* štítek "Doprava zdarma" pod podtitulkem (bílá pilulka, červený text) */
 .om-coupon-text span.om-coupon-ship {
   align-self: flex-start;
@@ -5261,11 +5261,11 @@ body .p-detail-inner-header-mobile .h1 {
   display: flex;
   align-items: center;
   padding: 8px 10px;
-  border: 1.5px dashed rgba(255, 255, 255, .85);
+  border: 1.5px dashed #9f9482;
   border-right: 0;
   border-radius: 8px 0 0 8px;
-  background: rgba(0, 0, 0, .14);
-  color: #fff;
+  background: #fffdf8;
+  color: #111;
   font-size: 14px;
   font-weight: 800;
   letter-spacing: 1px;
@@ -5276,8 +5276,9 @@ body .p-detail-inner-header-mobile .h1 {
   justify-content: center;
   min-width: 100px;
   padding: 8px 10px;
+  gap: 7px;
   border-radius: 0 8px 8px 0;
-  background: #79b530;
+  background: #111;
   color: #fff;
   font-size: 11.5px;
   font-weight: 800;
@@ -5286,8 +5287,9 @@ body .p-detail-inner-header-mobile .h1 {
   white-space: nowrap;
   transition: background .2s ease;
 }
-.om-coupon-copy:hover .om-coupon-act { background: #6aa028; }
-.om-coupon-copy.is-copied .om-coupon-act { background: #4f8a14; }
+.om-coupon-copy:hover .om-coupon-act { background: #333; }
+.om-coupon-copy.is-copied .om-coupon-act { background: #3b7a1a; }
+.om-coupon-act svg { flex: 0 0 auto; }
 .om-coupon-copy:focus-visible { outline: 2px solid #f7c91b; outline-offset: 2px; }
 @media (max-width: 480px) {
   .om-coupon { flex-wrap: wrap; row-gap: 10px; padding: 12px 14px; }
@@ -5549,95 +5551,66 @@ body.ordering-process .om-hide-heading { display: none !important; }
    odznak na ikoně 📦. Bez ceny.
    ══════════════════════════════════════════════ */
 #om-bundle {
-  display: flex !important;
-  align-items: center !important;
-  gap: 16px !important;
-  box-sizing: border-box !important;
-  margin: 18px 0 8px !important;
-  padding: 16px 18px !important;
-  background: #fdf8f0 !important;
-  border-radius: 16px !important;
-  color: #1a1a1a !important;
-  text-decoration: none !important;
-  transition: box-shadow .15s ease, transform .15s ease;
+  box-sizing: border-box;
+  margin: 18px 0 8px;
+  padding: 14px 12px 12px;
+  background: #9f1400;
+  border-radius: 16px;
+  color: #fff;
 }
-#om-bundle:hover {
-  box-shadow: 0 4px 14px rgba(0, 0, 0, .09) !important;
-  transform: translateY(-1px);
-}
-#om-bundle .om-bundle-ico {
-  position: relative;
-  flex: 0 0 auto;
-  width: 52px;
-  height: 52px;
+#om-bundle .om-bundle-head {
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: #fff;
-  border-radius: 14px;
-  font-size: 26px;
-  line-height: 1;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+  gap: 10px;
+  margin: 0 4px 10px;
 }
-#om-bundle .om-bundle-pct {
-  position: absolute;
-  right: -10px;
-  bottom: -8px;
-  padding: 3px 7px;
-  background: #9f1400;
-  color: #fff;
-  border: 2px solid #fdf8f0;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 800;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-#om-bundle .om-bundle-txt {
-  flex: 1 1 140px;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-#om-bundle .om-bundle-txt b {
-  font-size: 16px;
+#om-bundle .om-bundle-ico { font-size: 22px; line-height: 1; }
+#om-bundle .om-bundle-head b {
+  font-size: 17px;
   font-weight: 800;
   line-height: 1.25;
-  color: #1a1a1a;
+  color: #fff;
 }
-#om-bundle .om-bundle-txt small {
-  font-size: 13px;
-  color: #8a7d5c;
-}
-#om-bundle .om-bundle-thumbs {
-  flex: 0 0 auto;
+#om-bundle .om-bundle-row {
   display: flex;
   align-items: center;
+  gap: 12px;
+  box-sizing: border-box;
+  margin-top: 8px;
+  padding: 10px 12px;
+  background: #fff;
+  border-radius: 12px;
+  color: #111;
+  text-decoration: none;
+  transition: box-shadow .15s ease, transform .15s ease;
 }
+#om-bundle .om-bundle-row:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .18);
+  transform: translateY(-1px);
+}
+#om-bundle .om-bundle-thumbs { flex: 0 0 auto; display: flex; align-items: center; }
 #om-bundle .om-bundle-th,
 #om-bundle .om-bundle-more {
   box-sizing: border-box;
   flex: 0 0 auto;
-  width: 46px;
-  height: 46px;
-  margin-left: -10px;
+  width: 44px;
+  height: 44px;
+  margin-left: -13px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #fff;
+  border: 3px solid #fff;
   border-radius: 50%;
   overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .18);
 }
 #om-bundle .om-bundle-th:first-child { margin-left: 0; }
-#om-bundle .om-bundle-th {
-  background: #eee6d5;
-  box-shadow: 0 0 0 1px #e2ddd0;
-}
+#om-bundle .om-bundle-th { background: #ececec; }
 #om-bundle .om-bundle-th img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  transform: scale(1.7);
   display: block;
 }
 #om-bundle .om-bundle-more {
@@ -5646,10 +5619,36 @@ body.ordering-process .om-hide-heading { display: none !important; }
   font-size: 13px;
   font-weight: 800;
 }
+#om-bundle .om-bundle-info { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; line-height: 1.25; }
+#om-bundle .om-bundle-name { font-size: 15px; font-weight: 800; color: #111; }
+#om-bundle .om-bundle-price { display: flex; align-items: center; gap: 8px; font-size: 15px; }
+#om-bundle .om-bundle-price strong { font-size: 16px; font-weight: 800; color: #111; }
+#om-bundle .om-bundle-pct {
+  font-style: normal;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: #fde6e2;
+  color: #9f1400;
+  font-size: 12px;
+  font-weight: 800;
+}
+#om-bundle .om-bundle-cta {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 8px;
+  background: #f7c91b;
+  color: #111;
+  font-size: 13.5px;
+  font-weight: 800;
+  white-space: nowrap;
+}
 @media (max-width: 480px) {
-  #om-bundle { flex-wrap: wrap !important; gap: 12px 14px !important; padding: 14px !important; }
-  #om-bundle .om-bundle-txt { flex-basis: 0; min-width: 120px; }
-  #om-bundle .om-bundle-thumbs { margin-left: 66px; }
+  #om-bundle .om-bundle-row { flex-wrap: wrap; gap: 10px 12px; }
+  #om-bundle .om-bundle-info { flex: 1 1 0; }
+  #om-bundle .om-bundle-cta { flex: 1 1 100%; justify-content: center; }
   #om-bundle .om-bundle-th,
   #om-bundle .om-bundle-more { width: 42px; height: 42px; }
 }
