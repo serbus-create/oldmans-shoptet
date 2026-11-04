@@ -2899,37 +2899,62 @@
          v kroku 0 přesunutý hned pod nadpis — čteme z NĚJ (klonujeme
          hodnoty, ne uzel), ať nezasahujeme do nativního chování odkazu
          "Podrobnosti hodnocení". */
-      var starsWrapper = document.querySelector('.stars-wrapper');
-      if (starsWrapper) {
-        var starsOnCount = starsWrapper.querySelectorAll('.star.star-on').length;
-        var starsLabelEl = starsWrapper.querySelector('.stars-label');
-        var reviewCountText = starsLabelEl ? starsLabelEl.textContent.trim() : '';
-        var ariaText = starsWrapper.getAttribute('aria-label') || starsWrapper.textContent || '';
-        var ratingMatch = ariaText.match(/(\d+[,.]\d+)\s*z\s*5/i);
-        var ratingValue = ratingMatch ? ratingMatch[1].replace(',', '.') : (starsOnCount ? starsOnCount + '.0' : '');
-
-        var summaryRow = document.createElement('div');
-        summaryRow.className = 'om-summary-row';
-        summaryRow.innerHTML =
-          '<a class="om-rating-box" href="#ratingTab" data-toggle="tab" data-external="1" data-force-scroll="1">' +
-            '<div class="om-rating-top">' +
-              '<span class="om-rating-stars">' + '★'.repeat(starsOnCount) + '☆'.repeat(5 - starsOnCount) + '</span>' +
-              '<span class="om-rating-value">' + ratingValue + '</span>' +
-            '</div>' +
-            '<div class="om-rating-count">' + reviewCountText + '</div>' +
-          '</a>' +
-          '<div class="om-customers-box">' +
-            '<span class="om-customers-icon">👥</span>' +
-            '<span class="om-customers-text"><strong>350 000+</strong><span>spokojených zákazníků</span></span>' +
-          '</div>';
-        priceBlock.appendChild(summaryRow);
-
-        /* Poznámka pod boxy hodnocení/zákazníků (podle klientova vzoru) */
-        var pricingNote = document.createElement('div');
-        pricingNote.className = 'om-pricing-note';
-        pricingNote.textContent = 'Uvedené ceny jsou včetně DPH | Uvedená sleva se počítá z běžné ceny';
-        priceBlock.appendChild(pricingNote);
+      /* Box hodnocení OBCHODU (statické, 5. 11. 2026, na žádost klienta) + box spokojených
+         zákazníků — pod tlačítkem Do košíku. Hodnoty se píšou ručně sem (žádné napojení na
+         Google / Zboží / Heureku), jen výsledné skóre jako hvězdičky, bez počtu hodnocení.
+         Musí odpovídat SKUTEČNÉMU hodnocení u daného zdroje: při změně hodnotu aktualizovat.
+          (profil obchodu u zdroje) je nepovinný — s ním je řádek odkaz (nový panel),
+         bez něj jen text. Heureku přidat AŽ BUDOU REÁLNÁ DATA (řádek níže odkomentovat). */
+      var OM_RATING_CDN = 'https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@daaf45e9e2ab85bca2857d7ee2eeae17f4fff808/';
+      var OM_SHOP_RATINGS = [
+        { name: 'Google', icon: 'google-g.png', value: 4.8, url: '' },
+        { name: 'Zboží.cz', icon: 'zbozi-icon.svg', value: 5.0, url: '' }
+        /* , { name: 'Heureka', icon: 'heureka-icon.svg', value: 5.0, url: '' } */
+      ];
+      var summaryRow = document.createElement('div');
+      summaryRow.className = 'om-summary-row';
+      if (OM_SHOP_RATINGS.length) {
+        var rateBox = document.createElement('div');
+        rateBox.className = 'om-shoprate';
+        OM_SHOP_RATINGS.forEach(function (r) {
+          var txtVal = r.value.toFixed(1).replace('.', ',');
+          var row = document.createElement(r.url ? 'a' : 'div');
+          row.className = 'om-shoprate-row';
+          if (r.url) { row.href = r.url; row.target = '_blank'; row.rel = 'noopener nofollow'; }
+          row.title = 'Hodnocení zákazníků na ' + r.name + ': ' + txtVal + ' z 5';
+          var ico = document.createElement('img');
+          ico.className = 'om-shoprate-ico';
+          ico.src = OM_RATING_CDN + r.icon;
+          ico.alt = r.name;
+          ico.width = 26; ico.height = 26;
+          var val = document.createElement('strong');
+          val.className = 'om-shoprate-val';
+          val.textContent = txtVal;
+          var st = document.createElement('span');
+          st.className = 'om-shoprate-stars';
+          st.style.setProperty('--p', (r.value / 5 * 100) + '%');
+          st.setAttribute('aria-label', txtVal + ' z 5 hvězdiček');
+          st.textContent = '★★★★★';
+          row.appendChild(ico);
+          row.appendChild(val);
+          row.appendChild(st);
+          rateBox.appendChild(row);
+        });
+        summaryRow.appendChild(rateBox);
       }
+      var customersBox = document.createElement('div');
+      customersBox.className = 'om-customers-box';
+      customersBox.innerHTML =
+        '<span class="om-customers-icon">👥</span>' +
+        '<span class="om-customers-text"><strong>350 000+</strong><span>spokojených zákazníků</span></span>';
+      summaryRow.appendChild(customersBox);
+      priceBlock.appendChild(summaryRow);
+
+      /* Poznámka pod boxy hodnocení/zákazníků (podle klientova vzoru) */
+      var pricingNote = document.createElement('div');
+      pricingNote.className = 'om-pricing-note';
+      pricingNote.textContent = 'Uvedené ceny jsou včetně DPH | Uvedená sleva se počítá z běžné ceny';
+      priceBlock.appendChild(pricingNote);
     }
 
     /* 4. Loga partnerů — do PRAVÉHO sloupce (.p-data-wrapper), hned pod box s cenou */
