@@ -1092,7 +1092,7 @@ li.om-cat-dynamic.om-obchod-enhanced:hover .om-obchod-dropdown {
   transition: background .3s;
   white-space: nowrap;
 }
-.om-custom-footer .om-footer-ig:hover { background: #e6b800 !important; color: #000 !important; }
+.om-custom-footer .om-footer-col a.om-footer-ig:hover { background: #e6b800 !important; color: #000 !important; }
 @media (max-width: 1200px) {
   .om-footer-inner { grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
 }
@@ -5679,7 +5679,7 @@ body.ordering-process .om-hide-heading { display: none !important; }
 
 /* ── Hlavní hlavička ── */
 #om-header { background: #9f1400; border-bottom: 0; box-shadow: none; }
-#om-header .om-logo img { filter: brightness(0) invert(1); }
+#om-header .om-logo img { filter: invert(1); }
 #om-header .om-contact-icon { background: #fff; border-radius: 50%; padding: 6px; box-sizing: border-box; }
 #om-header .om-contact-numb { color: #fff; }
 #om-header .om-contact-text { color: #f1c8c0; }
@@ -5717,14 +5717,15 @@ body.ordering-process .om-hide-heading { display: none !important; }
 .om-custom-footer .om-footer-col a { color: #fff !important; }
 .om-custom-footer .om-footer-col a:hover { color: #f7c91b !important; }
 .om-footer-col ul li, .om-footer-col ul li a { color: #fff !important; }
-.om-custom-footer .om-footer-ig { background: #f7c91b !important; color: #000 !important; }
-.om-custom-footer .om-footer-ig:hover { background: #e6b800 !important; color: #000 !important; }
+.om-custom-footer .om-footer-col a.om-footer-ig, .om-custom-footer .om-footer-col a.om-footer-ig * { background-color: transparent; color: #000 !important; }
+.om-custom-footer .om-footer-col a.om-footer-ig { background: #f7c91b !important; }
+.om-custom-footer .om-footer-col a.om-footer-ig:hover { background: #e6b800 !important; color: #000 !important; }
 
 #footer, footer.footer {
   position: relative;
   background: #9f1400 !important; background-color: #9f1400 !important;
   color: #f6d9d3 !important; border-top: 0 !important;
-  margin-bottom: min(27.6vw, 397px);
+  margin-bottom: min(29.3vw, 421px);
 }
 #footer *, footer.footer * { color: #f6d9d3 !important; }
 #footer a, footer.footer a { color: #fff !important; }
@@ -5734,9 +5735,9 @@ body.ordering-process .om-hide-heading { display: none !important; }
 /* kapky pod patičkou (mimo její box, ať se červená nerozlije do celé výšky) */
 #footer::after, footer.footer::after {
   content: ""; position: absolute; left: 0; right: 0; top: calc(100% - 1px);
-  height: min(27.6vw, 397px); pointer-events: none;
+  height: min(29.3vw, 421px); pointer-events: none;
   background:
-    url("https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@e55e0d93cd79f9d235ef416afe6886fbbae34c02/footer-drip.svg") center top / min(100%, 1440px) auto no-repeat,
+    url("https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@e55e0d93cd79f9d235ef416afe6886fbbae34c02/footer-drip.svg") center top / min(106%, 1560px) auto no-repeat,
     linear-gradient(#9f1400, #9f1400) top / 100% 36px no-repeat;
 }
 
@@ -5759,6 +5760,6 @@ body.ordering-process .om-hide-heading { display: none !important; }
   .om-mobile-contact-email { color: #fff; }
   .om-mobile-contact-sub { color: #f1c8c0; }
   .om-mobile-contact, .om-mobile-contact-text { color: #fff; }
-  #footer, footer.footer { margin-bottom: 27.6vw; }
-  #footer::after, footer.footer::after { height: 27.6vw; }
+  #footer, footer.footer { margin-bottom: 29.3vw; }
+  #footer::after, footer.footer::after { height: 29.3vw; }
 }
