@@ -5660,3 +5660,105 @@ body.ordering-process .om-hide-heading { display: none !important; }
 .om-currency-small { max-width: 150px !important; }
 .om-currency-small .form-control,
 .om-currency-small select { width: 100% !important; }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ČERVENÁ HLAVIČKA A PATIČKA S "ROZTEKLOU OMÁČKOU" (4. 11. 2026)
+   Hlavička (#om-topbar, #om-header, #om-cat-menu) a patička (USP pruh,
+   sloupce, spodní lišta) jsou v sytě červené #9f1400, dole s okrajem z kapek
+   (menu-drip.svg a footer-drip.svg). Postup převzatý z reference: kapky jsou
+   pseudo-prvek ::after s pozadím SVG (hlavička: opakuje se do šířky, na mobilu
+   se ořízne na střed), kliknutí propouští (pointer-events: none).
+   Dole v souboru záměrně, ať přebije starší (světlá) pravidla výše.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Horní lišta ── */
+#om-topbar { background: #850f00; border-bottom: 0; color: #f6d9d3; }
+#om-topbar, #om-topbar a { color: #f6d9d3; }
+#om-topbar a:hover { color: #fff; }
+
+/* ── Hlavní hlavička ── */
+#om-header { background: #9f1400; border-bottom: 0; box-shadow: none; }
+#om-header .om-logo img { filter: brightness(0) invert(1); }
+#om-header .om-contact-icon { background: #fff; border-radius: 50%; padding: 6px; box-sizing: border-box; }
+#om-header .om-contact-numb { color: #fff; }
+#om-header .om-contact-text { color: #f1c8c0; }
+#om-header .om-search form { background: #fff; }
+#om-header .om-search button:hover { background: #333; }
+#om-header .om-nav a { color: #fff; }
+#om-header .om-nav a:hover { color: #fff; background: rgba(255,255,255,.14); }
+#om-header .om-login a { color: #fff; }
+#om-header .om-login a:hover { color: #f7c91b; }
+#om-header .om-cart a { background: rgba(255,255,255,.16); color: #fff; }
+#om-header .om-cart a:hover { background: rgba(255,255,255,.26); }
+
+/* ── Lišta kategorií + kapky pod ní ── */
+#om-cat-menu { background: #9f1400; border-bottom: 0; position: relative; margin-bottom: 20px; }
+#om-cat-menu::after {
+  content: ""; position: absolute; left: 0; right: 0; top: calc(100% - 1px);
+  height: 40px; pointer-events: none; z-index: 5;
+  background: url("https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@e55e0d93cd79f9d235ef416afe6886fbbae34c02/menu-drip.svg") center top / 100% 100% no-repeat;
+}
+.om-cat-list > li > a { color: #fff; }
+.om-cat-list > li:hover { background: rgba(255,255,255,.14); }
+.om-cat-list .cat-favorite > a { color: #f7c91b; }
+.om-cat-list .cat-favorite:hover { background: rgba(255,255,255,.14) !important; }
+.om-cat-list .cat-sale > a { background: #fff; color: #9f1400; border-radius: 50px; padding: 4px 14px; margin: 0 4px; }
+.om-cat-list .cat-sale:hover { background: transparent !important; }
+.om-more-btn > span { color: #fff; }
+.om-more-submenu li a { color: #000; }
+
+/* ── Patička: USP pruh + sloupce + spodní lišta = jeden červený blok ── */
+.om-custom-footer { background: #9f1400 !important; border-top: 1px solid rgba(255,255,255,.2); }
+.om-custom-footer * { color: #fff !important; }
+.om-custom-footer .om-footer-col h4 { color: #f7c91b !important; }
+.om-custom-footer .om-footer-col p { color: #f6d9d3 !important; }
+.om-custom-footer .om-footer-col p strong { color: #fff !important; }
+.om-custom-footer .om-footer-col a { color: #fff !important; }
+.om-custom-footer .om-footer-col a:hover { color: #f7c91b !important; }
+.om-footer-col ul li, .om-footer-col ul li a { color: #fff !important; }
+.om-custom-footer .om-footer-ig { background: #f7c91b !important; color: #000 !important; }
+.om-custom-footer .om-footer-ig:hover { background: #e6b800 !important; color: #000 !important; }
+
+#footer, footer.footer {
+  position: relative;
+  background: #9f1400 !important; background-color: #9f1400 !important;
+  color: #f6d9d3 !important; border-top: 0 !important;
+  margin-bottom: min(27.6vw, 397px);
+}
+#footer *, footer.footer * { color: #f6d9d3 !important; }
+#footer a, footer.footer a { color: #fff !important; }
+#footer a:hover, footer.footer a:hover { color: #f7c91b !important; }
+#footer .footer-bottom { border-top: 1px solid rgba(255,255,255,.2) !important; }
+.om-footer-payments { background: #fff; border-radius: 8px; padding: 5px 12px; height: 42px !important; box-sizing: border-box; }
+/* kapky pod patičkou (mimo její box, ať se červená nerozlije do celé výšky) */
+#footer::after, footer.footer::after {
+  content: ""; position: absolute; left: 0; right: 0; top: calc(100% - 1px);
+  height: min(27.6vw, 397px); pointer-events: none;
+  background:
+    url("https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@e55e0d93cd79f9d235ef416afe6886fbbae34c02/footer-drip.svg") center top / min(100%, 1440px) auto no-repeat,
+    linear-gradient(#9f1400, #9f1400) top / 100% 36px no-repeat;
+}
+
+/* ── Mobil: červená hlavička s kapkami pod ní, červený drawer ── */
+@media (max-width: 768px) {
+  #om-header::after {
+    content: ""; position: absolute; left: 0; right: 0; top: calc(100% - 1px);
+    height: 28px; pointer-events: none; z-index: 5;
+    background: url("https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@e55e0d93cd79f9d235ef416afe6886fbbae34c02/menu-drip.svg") center top / auto 100% repeat-x;
+  }
+  #om-cat-menu::after { display: none; }
+  .om-mobile-menu-btn span { background: #fff; }
+  .om-mobile-drawer { background: #9f1400; color: #fff; }
+  .om-mobile-cats li { border-bottom-color: rgba(255,255,255,.2); }
+  .om-mobile-cats li a { color: #fff; }
+  .om-mobile-cats li.cat-favorite a { color: #f7c91b !important; }
+  .om-mobile-cats li.cat-sale a { color: #9f1400 !important; background: #fff; border-radius: 50px; padding: 4px 14px; display: inline-block; }
+  .om-mobile-quicklinks { background: rgba(255,255,255,.12); }
+  .om-mobile-quicklink { color: #fff; }
+  .om-mobile-contact-email { color: #fff; }
+  .om-mobile-contact-sub { color: #f1c8c0; }
+  .om-mobile-contact, .om-mobile-contact-text { color: #fff; }
+  #footer, footer.footer { margin-bottom: 27.6vw; }
+  #footer::after, footer.footer::after { height: 27.6vw; }
+}
