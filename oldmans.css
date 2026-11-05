@@ -5823,7 +5823,7 @@ a.om-shoprate-row:hover .om-shoprate-val { text-decoration: underline; }
     box-shadow: 0 10px 40px rgba(0, 0, 0, .18);
     max-height: calc(100vh - 32px);
     overflow-y: auto;
-    animation: omFloatIn .22s ease-out;
+    will-change: transform, opacity;
   }
   form#product-detail-form.om-float .om-float-title {
     display: block;
