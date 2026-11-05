@@ -3355,7 +3355,40 @@
     }
   }
 
+  /* PDP na desktopu (5. 11. 2026): pravý sloupec s cenou jede při scrollování dolů (jako Fermato).
+     Samotné přilepení dělá CSS (mřížka + position: sticky). Tady se jen dopočítá horní odsazení
+     --om-sticky-top: je-li sloupec vyšší než okno, přilepí se od "nákupního boxu" (formulář), takže
+     nahoře zmizí název s popiskem, ale dárek, cena, tlačítko, balíčky a kupón zůstanou vidět.
+     Přepočet při změně velikosti okna i při změně výšky sloupce (box balíčků se doplňuje až po načtení). */
+  function initStickyProductColumn() {
+    if (!document.body.classList.contains('type-product')) return;
+    var holder = document.querySelector('.p-detail');
+    var col = document.querySelector('.p-detail-inner > .p-data-wrapper');
+    var form = document.getElementById('product-detail-form');
+    if (!holder || !col || !form) return;
+    var GAP = 16;
+    function calc() {
+      if (window.innerWidth < 992) { holder.style.removeProperty('--om-sticky-top'); return; }
+      var hdr = document.getElementById('om-header');
+      var hh = hdr ? hdr.getBoundingClientRect().height : 0;
+      var avail = window.innerHeight - hh - 2 * GAP;
+      var colH = col.offsetHeight;
+      var top = hh + GAP;
+      if (colH > avail) {
+        var off = form.getBoundingClientRect().top - col.getBoundingClientRect().top;
+        top -= Math.max(0, Math.min(off, colH - avail));
+      }
+      holder.style.setProperty('--om-sticky-top', Math.round(top) + 'px');
+    }
+    calc();
+    window.addEventListener('resize', calc);
+    window.addEventListener('load', calc);
+    if (window.ResizeObserver) new ResizeObserver(calc).observe(col);
+    else [800, 2000, 4000].forEach(function (ms) { setTimeout(calc, ms); });
+  }
+
   enhanceProductDetail();
+  initStickyProductColumn();
   buildBundleUpsell();
 
   /* ── SLEVOVÝ KUPÓN NA DETAILU PRODUKTU (21. 10. 2026, na žádost klienta) ──
