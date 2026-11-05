@@ -5832,3 +5832,21 @@ a.om-shoprate-row:hover .om-shoprate-val { text-decoration: underline; }
   body.type-product .p-detail > .products-alternative-header,
   body.type-product .p-detail > .products-alternative-wrapper { grid-column: 1 / -1; }
 }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PDP DESKTOP: KOMPAKTNÍ PRAVÝ SLOUPEC (5. 11. 2026, návrh klienta)
+   Vpravo jen název + nákupní box; odznaky, odrážky s popiskem a "Pro firmy" jdou vlevo pod obrázek
+   (#om-pdp-extra, vytváří JS initPdpLeftExtra). Hvězdy pod názvem (Neohodnoceno / Podrobnosti
+   hodnocení) se na desktopu schovají — hodnocení produktu zůstává v záložce Hodnocení.
+   ══════════════════════════════════════════════════════════════════════════ */
+#om-pdp-extra { display: none; }
+@media (min-width: 992px) {
+  #om-pdp-extra { display: block; margin-top: 26px; max-width: 800px; }
+  #om-pdp-extra #om-trust-badges { display: flex !important; margin: 0; }
+  #om-pdp-extra .om-short-clone { margin-top: 22px; }
+  #om-pdp-extra .om-pro-firmy-clone { display: inline-flex; margin-top: 18px; }
+  body.type-product .p-data-wrapper .p-short-description,
+  body.type-product .p-data-wrapper .ratings-and-brand,
+  body.type-product .p-data-wrapper .om-pro-firmy { display: none !important; }
+}
