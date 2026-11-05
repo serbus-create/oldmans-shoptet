@@ -5945,3 +5945,31 @@ a.om-shoprate-row:hover .om-shoprate-val { text-decoration: underline; }
   .wide-carousel.om-cards .item > a:hover { animation: omCardShake .75s ease-in-out; }
   .wide-carousel.om-cards .item > a:hover::after { animation: omCardShine .8s ease-out .12s both; }
 }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   KAPKY POD HLAVIČKOU – NATEČENÍ PŘI NAČTENÍ STRÁNKY (5. 11. 2026, nápad klienta)
+   Okraj z kapek (#om-cat-menu::after na desktopu, #om-header::after na mobilu) se při načtení
+   "vylije" shora dolů do své polohy: roztáhne se od lišty dolů, mírně přeteče a usadí se
+   (~1,3 s, jednou za načtení). Kapky jen mění výšku, klikání neblokují (pointer-events: none).
+   Nehraje se při nastavení "omezit pohyb". Bez animace stránka vypadá přesně jako dosud.
+   ══════════════════════════════════════════════════════════════════════════ */
+@keyframes omDripFlow {
+  0%   { transform: scaleY(0); }
+  50%  { transform: scaleY(1.22); }
+  68%  { transform: scaleY(.92); }
+  84%  { transform: scaleY(1.05); }
+  100% { transform: scaleY(1); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  #om-cat-menu::after {
+    transform-origin: 50% 0;
+    animation: omDripFlow 1.3s cubic-bezier(.3, .6, .4, 1) .15s both;
+  }
+  @media (max-width: 768px) {
+    #om-header::after {
+      transform-origin: 50% 0;
+      animation: omDripFlow 1.3s cubic-bezier(.3, .6, .4, 1) .15s both;
+    }
+  }
+}
