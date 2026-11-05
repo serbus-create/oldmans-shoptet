@@ -5948,30 +5948,50 @@ a.om-shoprate-row:hover .om-shoprate-val { text-decoration: underline; }
 
 
 /* ══════════════════════════════════════════════════════════════════════════
-   KAPKY POD HLAVIČKOU – NATEČENÍ PŘI NAČTENÍ STRÁNKY (5. 11. 2026, nápad klienta)
-   Okraj z kapek (#om-cat-menu::after na desktopu, #om-header::after na mobilu) se při načtení
-   "vylije" shora dolů do své polohy: roztáhne se od lišty dolů, přeteče a usadí se
-   (~3 s, pomalu a vazce: nejdřív se nalévá, pak přeteče a rozteče se, nakonec usadí; jednou za načtení) a JEN na hlavní stránce (body.type-index); na ostatních stránkách
-   zůstávají kapky beze změny. Kapky jen mění výšku, klikání neblokují (pointer-events: none).
-   Nehraje se při nastavení "omezit pohyb". Bez animace stránka vypadá přesně jako dosud.
+   ČERVENÁ HLAVIČKA SE PŘI NAČTENÍ "VYLIJE" SHORA (5. 11. 2026, nápad klienta)
+   Jen na hlavní stránce (body.type-index). Celá červená lišta (horní lišta + hlavička + menu)
+   pomalu steče shora dolů do své polohy (~3,6 s), kapky na jejím spodním okraji se při tom
+   protáhnou, na konci mírně přeteče a usadí se. Všechny tři části používají STEJNOU animaci
+   se stejným posunem, takže jedou jako jeden celek. Po skončení se žádný transform nenechává
+   (fill-mode: backwards), takže nic nerozbíjí. Při "omezit pohyb" se nehraje.
    ══════════════════════════════════════════════════════════════════════════ */
-@keyframes omDripFlow {
-  0%   { transform: scaleY(0);   animation-timing-function: cubic-bezier(.5, 0, .75, .4); }
-  30%  { transform: scaleY(.35); animation-timing-function: cubic-bezier(.3, .2, .5, 1); }
-  62%  { transform: scaleY(1.45); animation-timing-function: ease-in-out; }
-  78%  { transform: scaleY(.86); animation-timing-function: ease-in-out; }
-  90%  { transform: scaleY(1.08); animation-timing-function: ease-in-out; }
+@keyframes omHdrDrop {
+  0%   { transform: translateY(var(--om-drop-from, -230px)); }
+  80%  { transform: translateY(9px); }
+  91%  { transform: translateY(-3px); }
+  100% { transform: none; }
+}
+/* horní lišta navíc "drží" červenou nad sebou, ať při přetečení nevykoukne bílý proužek */
+@keyframes omHdrDropTop {
+  0%   { transform: translateY(var(--om-drop-from, -230px)); box-shadow: 0 -120px 0 #9f1400; }
+  80%  { transform: translateY(9px); box-shadow: 0 -120px 0 #9f1400; }
+  91%  { transform: translateY(-3px); box-shadow: 0 -120px 0 #9f1400; }
+  100% { transform: none; box-shadow: none; }
+}
+@keyframes omDripStretch {
+  0%   { transform: scaleY(1.7); }
+  62%  { transform: scaleY(1.85); }
+  80%  { transform: scaleY(.85); }
+  91%  { transform: scaleY(1.07); }
   100% { transform: scaleY(1); }
 }
 @media (prefers-reduced-motion: no-preference) {
+  body.type-index #om-header,
+  body.type-index #om-cat-menu {
+    animation: omHdrDrop 3.6s cubic-bezier(.42, .02, .22, 1) .2s backwards;
+  }
+  body.type-index #om-topbar {
+    animation: omHdrDropTop 3.6s cubic-bezier(.42, .02, .22, 1) .2s backwards;
+  }
   body.type-index #om-cat-menu::after {
     transform-origin: 50% 0;
-    animation: omDripFlow 3s linear .3s both;
+    animation: omDripStretch 3.6s cubic-bezier(.42, .02, .22, 1) .2s backwards;
   }
   @media (max-width: 768px) {
+    body.type-index { --om-drop-from: -150px; }
     body.type-index #om-header::after {
       transform-origin: 50% 0;
-      animation: omDripFlow 3s linear .3s both;
+      animation: omDripStretch 3.6s cubic-bezier(.42, .02, .22, 1) .2s backwards;
     }
   }
 }
