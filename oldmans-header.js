@@ -3400,7 +3400,9 @@
       return h ? Math.max(0, h.getBoundingClientRect().bottom) : 0;
     }
     /* plovoucí box jen na záložce POPIS (ostatní záložky ho nemají) */
+    var tabHint = null;   /* po kliknutí na záložku platí její volba hned (obsah se přepíná se zpožděním) */
     function isDescTab() {
+      if (tabHint !== null) return tabHint;
       var d = document.getElementById('description');
       return !!d && d.offsetHeight > 0 && window.getComputedStyle(d).display !== 'none';
     }
@@ -3486,8 +3488,11 @@
     window.addEventListener('resize', onScroll);
     /* přepnutí záložky: box se na jiné záložce než Popis schová */
     document.addEventListener('click', function (e) {
-      var t = e.target && e.target.closest ? e.target.closest('#p-detail-tabs') : null;
-      if (t) { setTimeout(update, 80); setTimeout(update, 450); }
+      var a = e.target && e.target.closest ? e.target.closest('#p-detail-tabs a') : null;
+      if (!a) return;
+      tabHint = (a.getAttribute('href') === '#description');
+      update();
+      setTimeout(function () { tabHint = null; update(); }, 650);
     });
     update();
   }
