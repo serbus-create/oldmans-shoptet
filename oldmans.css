@@ -5864,3 +5864,47 @@ a.om-shoprate-row:hover .om-shoprate-val { text-decoration: underline; }
     padding-left: 0 !important;
   }
 }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ANIMACE TLAČÍTKA "PŘIDAT DO KOŠÍKU" (5. 11. 2026, varianta C)
+   Tlačítko se jemně zavrtí a ikonka tašky se zhoupne jako zvoneček (~1,1 s). Třídu .om-cta-wiggle
+   přidává JS initCtaWiggle() (max. 3× za návštěvu, vždy jen na viditelném tlačítku). Při nastavení
+   "omezit pohyb" se nehraje. Mobilní lišta má teď stejnou ikonku tašky jako hlavní tlačítko.
+   ══════════════════════════════════════════════════════════════════════════ */
+.om-sticky-cta-btn::after {
+  content: "";
+  display: block;
+  width: 19px;
+  height: 19px;
+  flex: 0 0 auto;
+  background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M6%202%203%206v14a2%202%200%200%200%202%202h14a2%202%200%200%200%202-2V6l-3-4Z%22%3E%3C/path%3E%3Cpath%20d%3D%22M3%206h18%22%3E%3C/path%3E%3Cpath%20d%3D%22M16%2010a4%204%200%200%201-8%200%22%3E%3C/path%3E%3C/svg%3E") center / contain no-repeat;
+}
+@keyframes omCtaWiggle {
+  0%, 100% { transform: none; }
+  8%  { transform: translateX(-4px) rotate(-1.2deg); }
+  18% { transform: translateX(4px) rotate(1.2deg); }
+  28% { transform: translateX(-3px) rotate(-.9deg); }
+  38% { transform: translateX(3px) rotate(.9deg); }
+  48% { transform: translateX(-2px) rotate(-.6deg); }
+  58% { transform: translateX(2px) rotate(.6deg); }
+  68% { transform: translateX(-1px) rotate(-.3deg); }
+  78% { transform: translateX(1px) rotate(.3deg); }
+  88% { transform: none; }
+}
+@keyframes omCtaBell {
+  0%, 100% { transform: rotate(0); }
+  10% { transform: rotate(-20deg); }
+  22% { transform: rotate(18deg); }
+  34% { transform: rotate(-14deg); }
+  46% { transform: rotate(10deg); }
+  58% { transform: rotate(-7deg); }
+  70% { transform: rotate(4deg); }
+  82% { transform: rotate(-2deg); }
+}
+.om-cta-wiggle { animation: omCtaWiggle 1.1s ease-in-out; }
+.om-cta-wiggle::after { transform-origin: 50% 8%; animation: omCtaBell 1.1s ease-in-out; }
+@media (prefers-reduced-motion: reduce) {
+  .om-cta-wiggle,
+  .om-cta-wiggle::after { animation: none !important; }
+}
