@@ -4307,22 +4307,37 @@ html, body {
   }
   .om-sticky-cta-inner {
     display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .om-sticky-cta-top {
+    display: flex;
     align-items: center;
-    gap: 12px;
+    justify-content: center;
+    gap: 20px;
+  }
+  .om-sticky-cta-price {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 800;
+    font-size: 21px;
+    color: #1a1a1a;
+    white-space: nowrap;
   }
   .om-sticky-cta-qty {
     display: flex;
     align-items: center;
-    border: 1px solid #ddd;
+    border: 1.5px solid #222;
     border-radius: 8px;
     overflow: hidden;
     flex-shrink: 0;
+    height: 46px;
+    box-sizing: border-box;
   }
   .om-sticky-cta-minus,
   .om-sticky-cta-plus {
-    width: 42px;
-    height: 44px;
-    background: #f7f7f7;
+    width: 40px;
+    height: 100%;
+    background: #fff;
     border: none;
     font-size: 18px;
     font-weight: 700;
@@ -4343,8 +4358,9 @@ html, body {
     color: #1a1a1a;
   }
   .om-sticky-cta-btn {
-    flex: 1 1 auto;
-    height: 44px;
+    flex: none;
+    width: 100%;
+    height: 46px;
     background: #79b530;
     color: #fff;
     border: none;
