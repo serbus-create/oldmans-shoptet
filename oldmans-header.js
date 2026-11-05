@@ -2825,12 +2825,17 @@
 
         var stickyBar = document.createElement('div');
         stickyBar.id = 'om-sticky-cta';
+        /* 5. 11. 2026 (varianta B, schválil klient): nahoře vystředěná cena + počet kusů,
+           pod tím tlačítko přes celou šířku. Cena zrcadlí hlavní cenu (mění se s množstevní slevou). */
         stickyBar.innerHTML =
           '<div class="om-sticky-cta-inner">' +
-            '<div class="om-sticky-cta-qty">' +
-              '<button type="button" class="om-sticky-cta-minus" aria-label="Snížit množství">−</button>' +
-              '<span class="om-sticky-cta-count">1</span>' +
-              '<button type="button" class="om-sticky-cta-plus" aria-label="Zvýšit množství">+</button>' +
+            '<div class="om-sticky-cta-top">' +
+              '<span class="om-sticky-cta-price"></span>' +
+              '<div class="om-sticky-cta-qty">' +
+                '<button type="button" class="om-sticky-cta-minus" aria-label="Snížit množství">−</button>' +
+                '<span class="om-sticky-cta-count">1</span>' +
+                '<button type="button" class="om-sticky-cta-plus" aria-label="Zvýšit množství">+</button>' +
+              '</div>' +
             '</div>' +
             '<button type="button" class="om-sticky-cta-btn">Přidat do košíku</button>' +
           '</div>';
@@ -2840,6 +2845,18 @@
         var stickyMinus = stickyBar.querySelector('.om-sticky-cta-minus');
         var stickyPlus = stickyBar.querySelector('.om-sticky-cta-plus');
         var stickyAddBtn = stickyBar.querySelector('.om-sticky-cta-btn');
+
+        /* Cena na liště = text hlavní ceny (.price-final); MutationObserver ji drží aktuální při změně počtu kusů */
+        var stickyPrice = stickyBar.querySelector('.om-sticky-cta-price');
+        var priceSrc = priceBlock.querySelector('.price-final');
+        function syncStickyPrice() {
+          if (!priceSrc) { stickyPrice.style.display = 'none'; return; }
+          stickyPrice.textContent = (priceSrc.textContent || '').replace(/\s+/g, ' ').trim();
+        }
+        syncStickyPrice();
+        if (priceSrc && window.MutationObserver) {
+          new MutationObserver(syncStickyPrice).observe(priceSrc, { childList: true, characterData: true, subtree: true });
+        }
 
         function syncStickyCount() {
           stickyCount.textContent = qtyInput.value || '1';
