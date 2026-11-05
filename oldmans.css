@@ -5950,27 +5950,28 @@ a.om-shoprate-row:hover .om-shoprate-val { text-decoration: underline; }
 /* ══════════════════════════════════════════════════════════════════════════
    KAPKY POD HLAVIČKOU – NATEČENÍ PŘI NAČTENÍ STRÁNKY (5. 11. 2026, nápad klienta)
    Okraj z kapek (#om-cat-menu::after na desktopu, #om-header::after na mobilu) se při načtení
-   "vylije" shora dolů do své polohy: roztáhne se od lišty dolů, mírně přeteče a usadí se
-   (~1,3 s, jednou za načtení) a JEN na hlavní stránce (body.type-index); na ostatních stránkách
+   "vylije" shora dolů do své polohy: roztáhne se od lišty dolů, přeteče a usadí se
+   (~3 s, pomalu a vazce: nejdřív se nalévá, pak přeteče a rozteče se, nakonec usadí; jednou za načtení) a JEN na hlavní stránce (body.type-index); na ostatních stránkách
    zůstávají kapky beze změny. Kapky jen mění výšku, klikání neblokují (pointer-events: none).
    Nehraje se při nastavení "omezit pohyb". Bez animace stránka vypadá přesně jako dosud.
    ══════════════════════════════════════════════════════════════════════════ */
 @keyframes omDripFlow {
-  0%   { transform: scaleY(0); }
-  50%  { transform: scaleY(1.22); }
-  68%  { transform: scaleY(.92); }
-  84%  { transform: scaleY(1.05); }
+  0%   { transform: scaleY(0);   animation-timing-function: cubic-bezier(.5, 0, .75, .4); }
+  30%  { transform: scaleY(.35); animation-timing-function: cubic-bezier(.3, .2, .5, 1); }
+  62%  { transform: scaleY(1.45); animation-timing-function: ease-in-out; }
+  78%  { transform: scaleY(.86); animation-timing-function: ease-in-out; }
+  90%  { transform: scaleY(1.08); animation-timing-function: ease-in-out; }
   100% { transform: scaleY(1); }
 }
 @media (prefers-reduced-motion: no-preference) {
   body.type-index #om-cat-menu::after {
     transform-origin: 50% 0;
-    animation: omDripFlow 1.3s cubic-bezier(.3, .6, .4, 1) .15s both;
+    animation: omDripFlow 3s linear .3s both;
   }
   @media (max-width: 768px) {
     body.type-index #om-header::after {
       transform-origin: 50% 0;
-      animation: omDripFlow 1.3s cubic-bezier(.3, .6, .4, 1) .15s both;
+      animation: omDripFlow 3s linear .3s both;
     }
   }
 }
