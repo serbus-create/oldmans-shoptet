@@ -1086,6 +1086,58 @@
     })();
 
     /* -------------------------------------------------
+       6z. STARÝ VZHLED POD ANIMACÍ (jen hlavní strana)
+       Při načtení hlavní strany se nová červená hlavička s kapkami "vylije" shora
+       (viz CSS, omHdrDrop) přes původní světlou hlavičku. Ta se sem vloží jako
+       nepoužitelná kopie (klon topbaru, headeru a menu) vzhledem ze CSS #om-old-skin
+       a po animaci zase zmizí. Při "omezit pohyb" se nevytváří.
+    ------------------------------------------------- */
+    (function buildOldSkin() {
+      try {
+        if (!document.body.classList.contains('type-index')) return;
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var tb = document.getElementById('om-topbar');
+        var hd = document.getElementById('om-header');
+        var cm = document.getElementById('om-cat-menu');
+        if (!tb || !hd || !cm) return;
+        var anchor = document.createElement('div');
+        anchor.id = 'om-old-skin-anchor';
+        var skin = document.createElement('div');
+        skin.id = 'om-old-skin';
+        skin.setAttribute('aria-hidden', 'true');
+        skin.setAttribute('inert', '');
+        function fill() {
+          skin.innerHTML = '';
+          [tb, hd, cm].forEach(function (el) {
+            var c = el.cloneNode(true);
+            c.querySelectorAll('[id]').forEach(function (n) { n.removeAttribute('id'); });
+            c.querySelectorAll('[name]').forEach(function (n) { n.removeAttribute('name'); });
+            c.querySelectorAll('a, input, button').forEach(function (n) { n.setAttribute('tabindex', '-1'); });
+            c.id = el.id.replace('om-', 'om-old-');
+            skin.appendChild(c);
+          });
+        }
+        fill();
+        anchor.appendChild(skin);
+        tb.parentNode.insertBefore(anchor, tb);
+        /* menu ("Více", tlačítko Obchod), košík apod. se doplňují za běhu – klon je průběžně obnovujeme */
+        var pending = false;
+        var mo = new MutationObserver(function () {
+          if (pending) return;
+          pending = true;
+          requestAnimationFrame(function () { pending = false; if (anchor.parentNode) fill(); });
+        });
+        [tb, hd, cm].forEach(function (el) {
+          mo.observe(el, { childList: true, subtree: true, attributes: true, characterData: true });
+        });
+        setTimeout(function () {
+          mo.disconnect();
+          if (anchor.parentNode) anchor.parentNode.removeChild(anchor);
+        }, 5000);
+      } catch (e) { /* animace je jen ozdoba */ }
+    })();
+
+    /* -------------------------------------------------
        7. HOMEPAGE SEKCE
        Vkládáme za .benefitBanner (USP lišta Shoptetu)
     ------------------------------------------------- */
