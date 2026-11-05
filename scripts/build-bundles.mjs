@@ -35,6 +35,11 @@ const doc = new JSDOM(xml, { contentType: 'text/xml' }).window.document;
 const txt = (el, sel) => { const n = el.querySelector(':scope > ' + sel); return n ? n.textContent.trim() : ''; };
 const shopItems = [...doc.documentElement.children].filter((e) => e.tagName === 'SHOPITEM');
 const known = new Set(shopItems.map((s) => txt(s, 'CODE')));
+/* STANDARDNÍ cena produktu (PRICE_VAT, s DPH) — z ní web počítá slevu balíčku:
+   (součet standardních cen položek − cena balíčku) / součet standardních cen.
+   Akční cena položek se záměrně nepoužívá, aby sleva ukazovala úsporu proti
+   nákupu produktů samostatně BEZ slev. */
+const stdByCode = new Map(shopItems.map((s) => [txt(s, 'CODE'), parseFloat(txt(s, 'PRICE_VAT'))]));
 
 const out = [], skipped = [];
 for (const s of shopItems) {
@@ -44,7 +49,10 @@ for (const s of shopItems) {
   const items = [...s.querySelectorAll(':scope > SET_ITEMS > SET_ITEM')].map((it) => ({
     code: txt(it, 'CODE'),
     qty: Math.max(1, Math.round(parseFloat(txt(it, 'AMOUNT')) || 1)),
-  })).filter((x) => x.code);
+  })).filter((x) => x.code).map((x) => {
+    const std = stdByCode.get(x.code);
+    return Number.isFinite(std) && std > 0 ? { ...x, std: Math.round(std * 100) / 100 } : x;
+  });
   if (items.length < 2) { skipped.push({ code, name, reason: 'sada má méně než 2 položky' }); continue; }
   const missing = items.find((x) => !known.has(x.code));
   if (missing) { skipped.push({ code, name, reason: 'položka ' + missing.code + ' není v exportu' }); continue; }
