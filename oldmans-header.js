@@ -54,7 +54,7 @@
           <h4>Kontaktní údaje</h4>
           <p><strong>Adresa kanceláře</strong> : Areál VRL Praha<br>Ke Kablu 378, 102 00, Praha - Dolní Měcholupy</p>
           <p><strong>E-mail</strong> : <a href="mailto:podpora@oldmans.cz">podpora@oldmans.cz</a></p>
-          <p><strong>Telefon</strong> : <a href="tel:+420774772405">+420 774 772 405</a></p>
+          <p><strong>Telefon</strong> : <a href="tel:+420778208029">+420 778 208 029</a></p>
           <p class="om-footer-ig-label"><strong>Sledujte nás na instagramu</strong></p>
           <a href="https://www.instagram.com/old_mans_style/" target="_blank" class="om-footer-ig">📷 SLEDOVAT @OLD_MANS_STYLE</a>
         </div>
@@ -129,7 +129,7 @@
         '</div>' +
         '<div class="om-trust-bottom">' +
           '<div class="om-trust-help">Potřebujete poradit s objednávkou? ' +
-            '<a href="tel:+420774772405">📞 +420 774 772 405</a> ' +
+            '<a href="tel:+420778208029">📞 +420 778 208 029</a> ' +
             '<a href="mailto:podpora@oldmans.cz">✉️ podpora@oldmans.cz</a></div>' +
           '<img class="om-trust-pay" src="https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@3c556a304a6de9b7c3ab8c9be41edd0683f8da82/adyen-footer-logos.png" alt="Způsoby platby" loading="lazy">' +
         '</div>' +
@@ -431,7 +431,7 @@
     ------------------------------------------------- */
     var topbar = document.createElement('div');
     topbar.id = 'om-topbar';
-    topbar.innerHTML = '<div class="om-topbar-inner"><a href="tel:+420774772405">📞 +420 774 772 405</a><div><a href="/jak-nakupovat/">Jak nakupovat</a> | <a href="/obchodni-podminky/">Obchodní podmínky</a></div></div>';
+    topbar.innerHTML = '<div class="om-topbar-inner"><a href="tel:+420778208029">📞 +420 778 208 029</a><div><a href="/jak-nakupovat/">Jak nakupovat</a> | <a href="/obchodni-podminky/">Obchodní podmínky</a></div></div>';
 
     /* -------------------------------------------------
        3. HLAVNÍ HEADER
