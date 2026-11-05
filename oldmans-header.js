@@ -3392,12 +3392,19 @@
     form.insertBefore(titleEl, form.firstChild);
 
     var MIN_W = 992, GAP = 16;
-    var holder = null, on = false, ticking = false, lastBoxH = 620;
+    var RANGE = 260;               /* px scrollu, na kterých se box plynule vysune (nájezd je vázaný na scroll) */
+    var holder = null, on = false, ticking = false, lastBoxH = 620, softTimer = null;
     /* spodní okraj hlavičky, jak je právě VIDĚT (přilepená = 75 px; ujetá z okna = 0) */
     function headerH() {
       var h = document.getElementById('om-header');
       return h ? Math.max(0, h.getBoundingClientRect().bottom) : 0;
     }
+    /* plovoucí box jen na záložce POPIS (ostatní záložky ho nemají) */
+    function isDescTab() {
+      var d = document.getElementById('description');
+      return !!d && d.offsetHeight > 0 && window.getComputedStyle(d).display !== 'none';
+    }
+    function ease(t) { return t * t * (3 - 2 * t); }
     function place() {
       var cr = col.getBoundingClientRect();
       var r = tabsWrap.getBoundingClientRect();
@@ -3409,7 +3416,15 @@
       /* výška boxu nikdy nepřeroste okno (zbytek by se případně posouval uvnitř boxu) */
       form.style.maxHeight = Math.max(240, Math.round(window.innerHeight - Math.max(top, GAP) - GAP)) + 'px';
     }
+    /* nájezd: průhlednost a posun podle toho, jak daleko je scroll (0 = schovaný, 1 = na místě) */
+    function apply(p) {
+      var e = ease(p);
+      form.style.opacity = String(e);
+      form.style.transform = 'translateY(' + Math.round(-(1 - e) * 44) + 'px)';
+      form.style.pointerEvents = p > 0.6 ? '' : 'none';
+    }
     function enable() {
+      if (softTimer) { clearTimeout(softTimer); softTimer = null; form.style.transition = ''; }
       var rect = form.getBoundingClientRect();
       var cs = window.getComputedStyle(form);
       holder = document.createElement('div');
@@ -3419,34 +3434,61 @@
       form.parentNode.insertBefore(holder, form);
       form.classList.add('om-float');
       document.body.classList.add('om-float-buy');
-      place();
       on = true;
+      place();
       lastBoxH = form.getBoundingClientRect().height || lastBoxH;
     }
-    function disable() {
+    function reallyDisable() {
+      softTimer = null;
       form.classList.remove('om-float');
       form.style.left = form.style.width = form.style.top = form.style.maxHeight = '';
+      form.style.opacity = form.style.transform = form.style.pointerEvents = form.style.transition = '';
       document.body.classList.remove('om-float-buy');
       if (holder && holder.parentNode) holder.parentNode.removeChild(holder);
       holder = null;
       on = false;
     }
+    /* soft = krátké zprůhlednění (přepnutí záložky), jinak hned (scroll už ho schoval) */
+    function disable(soft) {
+      if (!on) return;
+      if (soft) {
+        if (softTimer) return;
+        form.style.transition = 'opacity .18s ease';
+        form.style.opacity = '0';
+        form.style.pointerEvents = 'none';
+        softTimer = setTimeout(reallyDisable, 190);
+      } else {
+        reallyDisable();
+      }
+    }
     function update() {
       ticking = false;
-      if (window.innerWidth < MIN_W) { if (on) disable(); return; }
+      if (window.innerWidth < MIN_W) { disable(false); return; }
+      if (!isDescTab()) { disable(true); return; }
+      if (softTimer) return;
       var hh = headerH();
       var r = tabsWrap.getBoundingClientRect();
-      /* zapnout, až záložky dojedou pod hlavičku; vypnout, až popis skončí nad hlavičkou */
-      var want = r.top <= hh + 60 && r.bottom > hh + 40;
+      /* p: 0 = záložky jsou ještě daleko pod hlavičkou, 1 = dojely nahoru */
+      var p = Math.max(0, Math.min(1, 1 - (r.top - (hh + 60)) / RANGE));
+      var want = p > 0 && r.bottom > hh + 40;
       if (want && !on) enable();
-      else if (!want && on) disable();
-      else if (on) { place(); lastBoxH = form.getBoundingClientRect().height || lastBoxH; }
+      else if (!want && on) disable(false);
+      if (on) {
+        place();
+        apply(p);
+        lastBoxH = form.getBoundingClientRect().height || lastBoxH;
+      }
     }
     function onScroll() {
       if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
     }
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
+    /* přepnutí záložky: box se na jiné záložce než Popis schová */
+    document.addEventListener('click', function (e) {
+      var t = e.target && e.target.closest ? e.target.closest('#p-detail-tabs') : null;
+      if (t) { setTimeout(update, 80); setTimeout(update, 450); }
+    });
     update();
   }
 
