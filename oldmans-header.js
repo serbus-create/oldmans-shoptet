@@ -3499,18 +3499,21 @@
 
   /* Animace hlavního tlačítka "Přidat do košíku" (5. 11. 2026, varianta C: tlačítko se jemně zavrtí a
      ikonka tašky se zhoupne jako zvoneček). Jen na detailu produktu, na desktopu (tlačítko v nákupním
-     boxu i v plovoucím boxu) i na mobilu (přilepená lišta). Chování, ať to nenervuje:
-       • první spuštění ~4 s po načtení, pak každých ~8 s, celkem 3× a pak už ne,
-       • přehraje se jen na tlačítku, které je právě vidět,
-       • zastaví se navždy, jakmile uživatel s nákupním boxem začne pracovat (kliknutí/dotyk, najetí na
-         tlačítko, počet kusů, množstevní slevy),
-       • nehraje se při nastavení systému "omezit pohyb" (prefers-reduced-motion) a v neaktivním panelu.
+     boxu i v plovoucím boxu) i na mobilu (přilepená lišta).
+       • SMYČKA: první přehrání ~4 s po načtení, pak pořád dokola každých 10 s (EVERY),
+       • přehraje se jen na tlačítku, které je právě vidět a jen když je karta prohlížeče aktivní,
+       • NAJETÍ MYŠÍ nebo DOTYK PRSTEM na tlačítko spustí animaci hned (s krátkou pauzou, ať se neopakuje
+         při každém záchvěvu); smyčka se při najetí myší na tlačítko nepřehrává navíc,
+       • po kliknutí na tlačítko (přidání do košíku) se smyčka na téhle stránce vypne,
+       • nehraje se při nastavení systému "omezit pohyb" (prefers-reduced-motion).
+     Zátěž je zanedbatelná: ~1 s CSS animace (jen transform = grafická vrstva) jednou za 10 s a jeden
+     časovač, který se jednou za 1,5 s jen podívá, jestli je tlačítko vidět.
      Samotný pohyb je v CSS (.om-cta-wiggle). Vypnutí celé funkce: smazat volání initCtaWiggle(). */
   function initCtaWiggle() {
     if (!document.body.classList.contains('type-product')) return;
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var FIRST = 4000, EVERY = 8000, MAX = 3, GIVE_UP = 120000;
-    var plays = 0, stopped = false, started = Date.now(), lastPlay = 0, poll = null;
+    var FIRST = 4000, EVERY = 10000, COOLDOWN = 1800, LOOK = 1500;
+    var started = Date.now(), lastPlay = 0, loopOn = true, hovering = false, timer = null;
     function targets() {
       return [
         document.querySelector('.om-buy-row .add-to-cart-button'),
@@ -3523,39 +3526,46 @@
       return r.width > 40 && r.height > 20 && r.bottom > 0 && r.top < window.innerHeight - 4 &&
         window.getComputedStyle(el).visibility !== 'hidden';
     }
-    function stop() {
-      stopped = true;
-      if (poll) { clearInterval(poll); poll = null; }
-      targets().forEach(function (t) { t.classList.remove('om-cta-wiggle'); });
-    }
-    function play(el) {
-      el.classList.remove('om-cta-wiggle');
-      void el.offsetWidth;                       /* restart animace */
+    function play(el, manual) {
+      var now = Date.now();
+      if (el.classList.contains('om-cta-wiggle')) return;
+      if (manual && now - lastPlay < COOLDOWN) return;
       el.classList.add('om-cta-wiggle');
+      lastPlay = now;
       setTimeout(function () { el.classList.remove('om-cta-wiggle'); }, 1300);
-      plays++;
-      lastPlay = Date.now();
-      /* po posledním přehrání už jen vypnout kontrolu (třídu odebere časovač výše, ať se animace dohraje) */
-      if (plays >= MAX) { stopped = true; if (poll) { clearInterval(poll); poll = null; } }
     }
     function tick() {
-      if (stopped) return;
+      timer = null;
+      if (!loopOn) return;
       var now = Date.now();
-      if (now - started > GIVE_UP || document.hidden) { if (now - started > GIVE_UP) stop(); return; }
-      var due = plays === 0 ? (now - started >= FIRST) : (now - lastPlay >= EVERY);
-      if (!due) return;
-      var vis = targets().filter(visible);
-      if (vis.length) play(vis[0]);
+      var due = lastPlay ? (now - lastPlay >= EVERY) : (now - started >= FIRST);
+      if (due && !hovering && !document.hidden) {
+        var vis = targets().filter(visible)[0];
+        if (vis) play(vis, false);
+      }
+      timer = setTimeout(tick, LOOK);
     }
-    /* uživatel s boxem pracuje → konec animací */
-    ['pointerdown', 'keydown'].forEach(function (ev) {
-      document.addEventListener(ev, function (e) {
-        var t = e.target;
-        if (t && t.closest && t.closest('#product-detail-form, #om-sticky-cta')) stop();
-      }, true);
+    targets().forEach(function (t) {
+      /* myš: najetí = animace; dotyk prstem: stisk = animace */
+      t.addEventListener('pointerenter', function (e) {
+        if (e.pointerType === 'mouse') { hovering = true; play(t, true); }
+      });
+      t.addEventListener('pointerleave', function (e) {
+        if (e.pointerType === 'mouse') hovering = false;
+      });
+      t.addEventListener('pointerdown', function (e) {
+        if (e.pointerType === 'touch') play(t, true);
+      });
     });
-    targets().forEach(function (t) { t.addEventListener('mouseenter', stop); t.addEventListener('focus', stop); });
-    poll = setInterval(tick, 1000);
+    /* po kliknutí na tlačítko (přidání do košíku) smyčku na této stránce vypnout */
+    document.addEventListener('click', function (e) {
+      var t = e.target;
+      if (t && t.closest && t.closest('.om-buy-row .add-to-cart-button, #om-sticky-cta .om-sticky-cta-btn')) {
+        loopOn = false;
+        if (timer) { clearTimeout(timer); timer = null; }
+      }
+    }, true);
+    timer = setTimeout(tick, LOOK);
   }
 
   enhanceProductDetail();
