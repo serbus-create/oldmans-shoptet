@@ -5799,36 +5799,3 @@ a.om-shoprate-row:hover .om-shoprate-val { text-decoration: underline; }
 @media (max-width: 768px) {
   .om-shoprate { flex: 1 1 auto; padding: 4px 16px; }
 }
-
-
-/* ══════════════════════════════════════════════════════════════════════════
-   PDP NA DESKTOPU: PRAVÝ SLOUPEC JEDE PŘI SCROLLOVÁNÍ (5. 11. 2026, jako Fermato)
-   Obrázek a popis (záložky) jsou vlevo ve sloupci 1, informace/cena/tlačítko vpravo ve sloupci 2,
-   který je position: sticky přes celou výšku obou řádků (obrázek + popis). Mřížku dělá
-   .p-detail; .p-detail-inner má display: contents, aby jeho děti byly přímo v mřížce.
-   Související produkty (pod tím) jdou přes celou šířku — sloupec se tam uvolní.
-   Horní odsazení (--om-sticky-top) dopočítává JS initStickyProductColumn().
-   body overflow-x: clip místo hidden — "hidden" z body dělá scroll kontejner a sticky přestane fungovat.
-   ══════════════════════════════════════════════════════════════════════════ */
-@media (min-width: 992px) {
-  body.type-product { overflow-x: clip !important; overflow-y: visible !important; }
-  body.type-product .p-detail {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) 460px;
-    column-gap: 24px;
-    align-items: start;
-  }
-  body.type-product .p-detail-inner { display: contents !important; }
-  body.type-product .p-detail-inner > .p-image-wrapper {
-    grid-column: 1; grid-row: 1;
-    position: static !important; width: auto !important; max-width: none !important; flex: none !important;
-  }
-  body.type-product .p-detail > .shp-tabs-wrapper { grid-column: 1; grid-row: 2; min-width: 0; }
-  body.type-product .p-detail-inner > .p-data-wrapper {
-    grid-column: 2; grid-row: 1 / span 2;
-    position: sticky !important; top: var(--om-sticky-top, 110px); align-self: start;
-    width: auto !important; max-width: none !important;
-  }
-  body.type-product .p-detail > .products-alternative-header,
-  body.type-product .p-detail > .products-alternative-wrapper { grid-column: 1 / -1; }
-}
