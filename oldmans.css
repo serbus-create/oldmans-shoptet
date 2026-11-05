@@ -5768,6 +5768,8 @@ body.ordering-process .om-hide-heading { display: none !important; }
   .om-mobile-cats li { border-bottom-color: rgba(255,255,255,.2); }
   .om-mobile-cats li a { color: #fff; }
   .om-mobile-cats li.cat-favorite a { color: #f7c91b !important; }
+  /* "V akci" = bílá pilulka; řádek ale musí mít stejnou výšku jako ostatní (61 px) → li je flex s min. výškou */
+  .om-mobile-cats li.cat-sale { display: flex; align-items: center; min-height: 61px; box-sizing: border-box; }
   .om-mobile-cats li.cat-sale a { color: #9f1400 !important; background: #fff; border-radius: 50px; padding: 4px 14px; display: inline-block; }
   .om-mobile-quicklinks { background: rgba(255,255,255,.12); }
   .om-mobile-quicklink { color: #fff; }
