@@ -3405,8 +3405,7 @@
       pfClone.classList.add('om-pro-firmy-clone');
       extra.appendChild(pfClone);
     }
-    /* až na konec bloku s obrázkem — pod miniatury galerie */
-    if (extra.children.length) imgWrap.appendChild(extra);
+    if (extra.children.length) anchor.parentNode.insertBefore(extra, anchor.nextSibling);
   }
 
   function initStickyProductColumn() {
