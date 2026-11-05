@@ -5951,7 +5951,8 @@ a.om-shoprate-row:hover .om-shoprate-val { text-decoration: underline; }
    KAPKY POD HLAVIČKOU – NATEČENÍ PŘI NAČTENÍ STRÁNKY (5. 11. 2026, nápad klienta)
    Okraj z kapek (#om-cat-menu::after na desktopu, #om-header::after na mobilu) se při načtení
    "vylije" shora dolů do své polohy: roztáhne se od lišty dolů, mírně přeteče a usadí se
-   (~1,3 s, jednou za načtení). Kapky jen mění výšku, klikání neblokují (pointer-events: none).
+   (~1,3 s, jednou za načtení) a JEN na hlavní stránce (body.type-index); na ostatních stránkách
+   zůstávají kapky beze změny. Kapky jen mění výšku, klikání neblokují (pointer-events: none).
    Nehraje se při nastavení "omezit pohyb". Bez animace stránka vypadá přesně jako dosud.
    ══════════════════════════════════════════════════════════════════════════ */
 @keyframes omDripFlow {
@@ -5962,12 +5963,12 @@ a.om-shoprate-row:hover .om-shoprate-val { text-decoration: underline; }
   100% { transform: scaleY(1); }
 }
 @media (prefers-reduced-motion: no-preference) {
-  #om-cat-menu::after {
+  body.type-index #om-cat-menu::after {
     transform-origin: 50% 0;
     animation: omDripFlow 1.3s cubic-bezier(.3, .6, .4, 1) .15s both;
   }
   @media (max-width: 768px) {
-    #om-header::after {
+    body.type-index #om-header::after {
       transform-origin: 50% 0;
       animation: omDripFlow 1.3s cubic-bezier(.3, .6, .4, 1) .15s both;
     }
