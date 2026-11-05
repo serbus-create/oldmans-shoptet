@@ -2311,7 +2311,10 @@
           for (var k = 0; k < s.items.length; k++) {
             var r = map[s.items[k].code];
             if (!r) return null; /* chybí produkt/cena → raději nic než špatné procento */
-            items.push({ path: r.path, price: r.price * s.items[k].qty, img: r.img });
+            /* Sleva balíčku se počítá ze STANDARDNÍCH cen položek (bez jejich slev) — ty dodává
+               bundles.json z exportu (std). Chybí-li (starší data), použije se živá cena z karty. */
+            var unit = (typeof s.items[k].std === 'number' && s.items[k].std > 0) ? s.items[k].std : r.price;
+            items.push({ path: r.path, price: unit * s.items[k].qty, img: r.img });
           }
           /* pojistka proti chybně spárované ceně: úspora nad 60 % = podezřelé, raději nic */
           var total = items.reduce(function (acc, i) { return acc + i.price; }, 0);
