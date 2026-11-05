@@ -3372,7 +3372,80 @@
     }
   }
 
+  /* PDP na desktopu (5. 11. 2026): PLOVOUCÍ NÁKUPNÍ BOX NAD STRÁNKOU. Jakmile uživatel doscrolluje k popisu
+     (záložky), nákupní formulář se (bez přesunu v DOM) přepne na position: fixed vpravo pod hlavičkou a CSS
+     ho zkompaktní (název + množstevní slevy + dárek + cena/tlačítko + balíčky + kupón). Na původním místě
+     zůstane prázdný držák stejné výšky, takže se struktura stránky ani popis nepohnou. Je to TENTÝŽ formulář
+     (karty slev, počet kusů, tlačítko, balíčky, kupón fungují beze změny). Na konci popisu se box schová
+     (aby nezakrýval Související produkty). Jen od 992 px; na mobilu se neděje nic. */
+  function initFloatingBuyBox() {
+    if (!document.body.classList.contains('type-product')) return;
+    var form = document.getElementById('product-detail-form');
+    var col = document.querySelector('.p-detail-inner > .p-data-wrapper');
+    var tabsWrap = document.querySelector('.shp-tabs-wrapper');
+    if (!form || !col || !tabsWrap || document.getElementById('om-float-title')) return;
+    var h1 = document.querySelector('.p-detail-inner-header h1') || document.querySelector('h1');
+    var titleEl = document.createElement('div');
+    titleEl.id = 'om-float-title';
+    titleEl.className = 'om-float-title';
+    titleEl.textContent = h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : '';
+    form.insertBefore(titleEl, form.firstChild);
+
+    var MIN_W = 992, GAP = 16;
+    var holder = null, on = false, ticking = false, lastBoxH = 620;
+    function headerH() {
+      var h = document.getElementById('om-header');
+      return h ? h.getBoundingClientRect().height : 0;
+    }
+    function place() {
+      var cr = col.getBoundingClientRect();
+      form.style.left = Math.round(cr.left) + 'px';
+      form.style.width = Math.round(cr.width) + 'px';
+      form.style.top = Math.round(headerH() + GAP) + 'px';
+    }
+    function enable() {
+      var rect = form.getBoundingClientRect();
+      var cs = window.getComputedStyle(form);
+      holder = document.createElement('div');
+      holder.className = 'om-float-holder';
+      holder.style.height = Math.round(rect.height) + 'px';
+      holder.style.margin = cs.margin;
+      form.parentNode.insertBefore(holder, form);
+      form.classList.add('om-float');
+      document.body.classList.add('om-float-buy');
+      place();
+      on = true;
+      lastBoxH = form.getBoundingClientRect().height || lastBoxH;
+    }
+    function disable() {
+      form.classList.remove('om-float');
+      form.style.left = form.style.width = form.style.top = '';
+      document.body.classList.remove('om-float-buy');
+      if (holder && holder.parentNode) holder.parentNode.removeChild(holder);
+      holder = null;
+      on = false;
+    }
+    function update() {
+      ticking = false;
+      if (window.innerWidth < MIN_W) { if (on) disable(); return; }
+      var hh = headerH();
+      var r = tabsWrap.getBoundingClientRect();
+      /* zapnout, až záložky dojedou pod hlavičku; vypnout, když by zbytek popisu byl nižší než box */
+      var want = r.top <= hh + 60 && (r.bottom - (hh + GAP + lastBoxH)) > 0;
+      if (want && !on) enable();
+      else if (!want && on) disable();
+      else if (on) { place(); lastBoxH = form.getBoundingClientRect().height || lastBoxH; }
+    }
+    function onScroll() {
+      if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  }
+
   enhanceProductDetail();
+  initFloatingBuyBox();
   buildBundleUpsell();
 
   /* ── SLEVOVÝ KUPÓN NA DETAILU PRODUKTU (21. 10. 2026, na žádost klienta) ──
