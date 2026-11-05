@@ -2178,7 +2178,7 @@
   /* Hlavní zdroj: bundles.json, který hodinově sestavuje GitHub Action
      (scripts/build-bundles.mjs) z popisů balíčků ("Co je v balíčku:") na webu. */
   var OM_BUNDLES_JSON_URL = 'https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/bundles.json';
-  var OM_SETS_KEY = 'om_sets_v2';
+  var OM_SETS_KEY = 'om_sets_v3'; /* v3 (5. 11. 2026): nový formát se standardními cenami → všem se hned načte znovu */
   var OM_SETS_TTL = 3 * 60 * 60 * 1000;
   var OM_RESOLVE_KEY = 'om_res_v2';
   var OM_RESOLVE_TTL = 60 * 60 * 1000;
@@ -2234,7 +2234,9 @@
     try { cached = JSON.parse(localStorage.getItem(OM_SETS_KEY) || 'null'); } catch (e) { cached = null; }
     if (cached && cached.t && cached.list && (Date.now() - cached.t) < OM_SETS_TTL) return Promise.resolve(cached.list);
     if (!OM_SETS_EXPORT_URL && OM_BUNDLES_JSON_URL) {
-      return fetch(OM_BUNDLES_JSON_URL)
+      /* cache: 'no-cache' = prohlížeč se vždy zeptá CDN, jestli se soubor nezměnil (304 = beze změny,
+         skoro zadarmo); jinak by si ho mohl držet z HTTP cache až týden. Jinak platí 3h paměť v localStorage. */
+      return fetch(OM_BUNDLES_JSON_URL, { cache: 'no-cache' })
         .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
         .then(function (j) {
           var list = (j && j.bundles || []).filter(function (s) { return s && s.code && s.items && s.items.length >= 2; });
