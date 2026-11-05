@@ -3406,6 +3406,8 @@
       form.style.left = Math.round(cr.left) + 'px';
       form.style.width = Math.round(cr.width) + 'px';
       form.style.top = Math.round(top) + 'px';
+      /* výška boxu nikdy nepřeroste okno (zbytek by se případně posouval uvnitř boxu) */
+      form.style.maxHeight = Math.max(240, Math.round(window.innerHeight - Math.max(top, GAP) - GAP)) + 'px';
     }
     function enable() {
       var rect = form.getBoundingClientRect();
@@ -3423,7 +3425,7 @@
     }
     function disable() {
       form.classList.remove('om-float');
-      form.style.left = form.style.width = form.style.top = '';
+      form.style.left = form.style.width = form.style.top = form.style.maxHeight = '';
       document.body.classList.remove('om-float-buy');
       if (holder && holder.parentNode) holder.parentNode.removeChild(holder);
       holder = null;
