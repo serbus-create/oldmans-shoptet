@@ -3377,6 +3377,37 @@
      --om-sticky-top: je-li sloupec vyšší než okno, přilepí se od "nákupního boxu" (formulář), takže
      nahoře zmizí název s popiskem, ale dárek, cena, tlačítko, balíčky a kupón zůstanou vidět.
      Přepočet při změně velikosti okna i při změně výšky sloupce (box balíčků se doplňuje až po načtení). */
+  /* PDP na desktopu (5. 11. 2026): pravý sloupec je kompaktní — název + nákupní box (množstevní slevy,
+     dárek, cena, tlačítko, balíčky, kupón, hodnocení). Co z něj odešlo (odznaky Vyrobeno v ČR…, odrážky
+     s krátkým popiskem, odkaz Pro firmy) se ukáže vlevo POD OBRÁZKEM v bloku #om-pdp-extra (CSS ho zobrazí
+     jen od 992 px; na mobilu zůstává vše na původním místě). Odznaky se PŘESOUVAJÍ (na mobilu je hlídá
+     vlastní kopie #om-trust-badges-mobile), popisek a Pro firmy se KLONUJÍ (originály se na desktopu jen
+     schovají, na mobilu fungují beze změny). */
+  function initPdpLeftExtra() {
+    if (!document.body.classList.contains('type-product')) return;
+    if (document.getElementById('om-pdp-extra')) return;
+    var imgWrap = document.querySelector('.p-detail-inner > .p-image-wrapper');
+    var anchor = imgWrap ? imgWrap.querySelector('.p-image') : null;
+    if (!imgWrap || !anchor) return;
+    var extra = document.createElement('div');
+    extra.id = 'om-pdp-extra';
+    var badges = document.getElementById('om-trust-badges');
+    if (badges) extra.appendChild(badges);
+    var sd = document.querySelector('.p-data-wrapper .p-short-description');
+    if (sd) {
+      var sdClone = sd.cloneNode(true);
+      sdClone.classList.add('om-short-clone');
+      extra.appendChild(sdClone);
+    }
+    var pf = document.querySelector('.om-pro-firmy');
+    if (pf) {
+      var pfClone = pf.cloneNode(true);
+      pfClone.classList.add('om-pro-firmy-clone');
+      extra.appendChild(pfClone);
+    }
+    if (extra.children.length) anchor.parentNode.insertBefore(extra, anchor.nextSibling);
+  }
+
   function initStickyProductColumn() {
     if (!document.body.classList.contains('type-product')) return;
     var holder = document.querySelector('.p-detail');
@@ -3405,6 +3436,7 @@
   }
 
   enhanceProductDetail();
+  initPdpLeftExtra();
   initStickyProductColumn();
   buildBundleUpsell();
 
