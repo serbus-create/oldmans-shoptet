@@ -5908,3 +5908,40 @@ a.om-shoprate-row:hover .om-shoprate-val { text-decoration: underline; }
   .om-cta-wiggle,
   .om-cta-wiggle::after { animation: none !important; }
 }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   HERO KARTY – HOVER: ZATŘESENÍ + LESK (5. 11. 2026, nápad klienta)
+   Při najetí myší na kartu se karta krátce zatřese (jako tlačítko Přidat do košíku)
+   a přes ni přejede diagonální záblesk. Hraje se jednou za najetí (~0,9 s).
+   Jen pro zařízení s myší (hover: hover) a ne při nastavení "omezit pohyb".
+   Ikonky/obrázky se nijak nemění, vše je čisté CSS (žádný JS).
+   ══════════════════════════════════════════════════════════════════════════ */
+.wide-carousel.om-cards .item > a::after {
+  content: "";
+  position: absolute; top: 0; left: 0; z-index: 2;
+  width: 55%; height: 100%;
+  background: linear-gradient(105deg, rgba(255,255,255,0) 25%, rgba(255,255,255,.6) 50%, rgba(255,255,255,0) 75%);
+  transform: translateX(-140%) skewX(-18deg);
+  opacity: 0; pointer-events: none;
+}
+@keyframes omCardShake {
+  0%, 100% { transform: translateY(-4px); }
+  10% { transform: translateY(-4px) translateX(-4px) rotate(-1.4deg); }
+  22% { transform: translateY(-4px) translateX(4px) rotate(1.4deg); }
+  34% { transform: translateY(-4px) translateX(-3px) rotate(-1deg); }
+  46% { transform: translateY(-4px) translateX(3px) rotate(1deg); }
+  58% { transform: translateY(-4px) translateX(-2px) rotate(-.6deg); }
+  70% { transform: translateY(-4px) translateX(2px) rotate(.6deg); }
+  82% { transform: translateY(-4px) translateX(-1px) rotate(-.3deg); }
+}
+@keyframes omCardShine {
+  0%   { transform: translateX(-140%) skewX(-18deg); opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { transform: translateX(300%) skewX(-18deg); opacity: 0; }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .wide-carousel.om-cards .item > a:hover { animation: omCardShake .75s ease-in-out; }
+  .wide-carousel.om-cards .item > a:hover::after { animation: omCardShine .8s ease-out .12s both; }
+}
