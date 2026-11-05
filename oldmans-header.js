@@ -3535,7 +3535,8 @@
       setTimeout(function () { el.classList.remove('om-cta-wiggle'); }, 1300);
       plays++;
       lastPlay = Date.now();
-      if (plays >= MAX) stop();
+      /* po posledním přehrání už jen vypnout kontrolu (třídu odebere časovač výše, ať se animace dohraje) */
+      if (plays >= MAX) { stopped = true; if (poll) { clearInterval(poll); poll = null; } }
     }
     function tick() {
       if (stopped) return;
