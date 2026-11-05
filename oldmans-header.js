@@ -3393,15 +3393,19 @@
 
     var MIN_W = 992, GAP = 16;
     var holder = null, on = false, ticking = false, lastBoxH = 620;
+    /* spodní okraj hlavičky, jak je právě VIDĚT (přilepená = 75 px; ujetá z okna = 0) */
     function headerH() {
       var h = document.getElementById('om-header');
-      return h ? h.getBoundingClientRect().height : 0;
+      return h ? Math.max(0, h.getBoundingClientRect().bottom) : 0;
     }
     function place() {
       var cr = col.getBoundingClientRect();
+      var r = tabsWrap.getBoundingClientRect();
+      /* box drží pod hlavičkou; na konci popisu "zakotví" k jeho spodku a odjede s ním */
+      var top = Math.min(headerH() + GAP, r.bottom - (lastBoxH || 0) - 8);
       form.style.left = Math.round(cr.left) + 'px';
       form.style.width = Math.round(cr.width) + 'px';
-      form.style.top = Math.round(headerH() + GAP) + 'px';
+      form.style.top = Math.round(top) + 'px';
     }
     function enable() {
       var rect = form.getBoundingClientRect();
@@ -3430,8 +3434,8 @@
       if (window.innerWidth < MIN_W) { if (on) disable(); return; }
       var hh = headerH();
       var r = tabsWrap.getBoundingClientRect();
-      /* zapnout, až záložky dojedou pod hlavičku; vypnout, když by zbytek popisu byl nižší než box */
-      var want = r.top <= hh + 60 && (r.bottom - (hh + GAP + lastBoxH)) > 0;
+      /* zapnout, až záložky dojedou pod hlavičku; vypnout, až popis skončí nad hlavičkou */
+      var want = r.top <= hh + 60 && r.bottom > hh + 40;
       if (want && !on) enable();
       else if (!want && on) disable();
       else if (on) { place(); lastBoxH = form.getBoundingClientRect().height || lastBoxH; }
