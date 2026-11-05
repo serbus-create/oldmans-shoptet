@@ -5949,11 +5949,12 @@ a.om-shoprate-row:hover .om-shoprate-val { text-decoration: underline; }
 
 /* ══════════════════════════════════════════════════════════════════════════
    ČERVENÁ HLAVIČKA SE PŘI NAČTENÍ "VYLIJE" SHORA (5. 11. 2026, nápad klienta)
-   Jen na hlavní stránce (body.type-index). Celá červená lišta (horní lišta + hlavička + menu)
-   pomalu steče shora dolů do své polohy (~3,6 s), kapky na jejím spodním okraji se při tom
-   protáhnou, na konci mírně přeteče a usadí se. Všechny tři části používají STEJNOU animaci
-   se stejným posunem, takže jedou jako jeden celek. Po skončení se žádný transform nenechává
-   (fill-mode: backwards), takže nic nerozbíjí. Při "omezit pohyb" se nehraje.
+   Jen na hlavní stránce (body.type-index). Pohybuje se POUZE červené pozadí (omáčka) s kapkami:
+   pomalu steče shora dolů do své polohy (~3,6 s), kapky se při tom protáhnou, na konci mírně
+   přeteče a usadí se. Obsah (logo, hledání, menu, košík…) zůstává celou dobu na místě: každá část
+   se posouvá dolů a její vnitřek se o stejnou hodnotu posouvá zpět (stejná animace, opačné
+   znaménko), takže se vyruší. Všechny tři části jedou jako jeden celek. Po skončení se žádný
+   transform nenechává (fill-mode: backwards). Při "omezit pohyb" se nehraje.
    ══════════════════════════════════════════════════════════════════════════ */
 @keyframes omHdrDrop {
   0%   { transform: translateY(var(--om-drop-from, -230px)); }
@@ -5967,6 +5968,13 @@ a.om-shoprate-row:hover .om-shoprate-val { text-decoration: underline; }
   80%  { transform: translateY(9px); box-shadow: 0 -120px 0 #9f1400; }
   91%  { transform: translateY(-3px); box-shadow: 0 -120px 0 #9f1400; }
   100% { transform: none; box-shadow: none; }
+}
+/* vnitřek lišt: přesně opačný posun než omHdrDrop → obsah zůstane na místě */
+@keyframes omHdrHold {
+  0%   { transform: translateY(calc(-1 * var(--om-drop-from, -230px))); }
+  80%  { transform: translateY(-9px); }
+  91%  { transform: translateY(3px); }
+  100% { transform: none; }
 }
 @keyframes omDripStretch {
   0%   { transform: scaleY(1.7); }
@@ -5982,6 +5990,11 @@ a.om-shoprate-row:hover .om-shoprate-val { text-decoration: underline; }
   }
   body.type-index #om-topbar {
     animation: omHdrDropTop 3.6s cubic-bezier(.42, .02, .22, 1) .2s backwards;
+  }
+  body.type-index #om-topbar > *,
+  body.type-index #om-header > *,
+  body.type-index #om-cat-menu > * {
+    animation: omHdrHold 3.6s cubic-bezier(.42, .02, .22, 1) .2s backwards;
   }
   body.type-index #om-cat-menu::after {
     transform-origin: 50% 0;
