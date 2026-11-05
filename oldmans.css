@@ -5948,50 +5948,67 @@ a.om-shoprate-row:hover .om-shoprate-val { text-decoration: underline; }
 
 
 /* ══════════════════════════════════════════════════════════════════════════
-   ČERVENÁ HLAVIČKA SE PŘI NAČTENÍ "VYLIJE" SHORA (5. 11. 2026, nápad klienta)
+   ČERVENÁ HLAVIČKA SE PŘI NAČTENÍ "VYLIJE" SHORA (5.–6. 11. 2026, nápad klienta)
    Jen na hlavní stránce (body.type-index). Nová červená hlavička (horní lišta + hlavička + menu)
-   pomalu steče shora dolů do své polohy (~3,6 s) PŘES původní světlou hlavičku, která je pod ní
-   (klon z JS, #om-old-skin, vzhled ze starého CSS níže). Kapky se při pádu protáhnou, na konci
-   omáčka mírně přeteče a usadí se. Všechny tři části jedou jako jeden celek. Po skončení se žádný
-   transform nenechává (fill-mode: backwards) a klon zmizí. Při "omezit pohyb" se nehraje.
+   steče shora dolů (~2 s) PŘES původní světlou hlavičku pod ní (klon z JS, #om-old-skin).
+   "Plastický" dojem: hustá hmota zrychlí a před cílem pomalu dojíždí (bez odskoku), kapky se při
+   pádu dlouze protáhnou a pak pomalu stáhnou zpět (povrchové napětí), kapky vrhají stín na původní
+   hlavičku a po jejich špičkách přejíždí lesk, který se na konci ztratí. Všechny tři části jedou
+   jako jeden celek. Po skončení nezůstane žádný transform ani stín (fill-mode: backwards).
+   Při "omezit pohyb" se nehraje.
    ══════════════════════════════════════════════════════════════════════════ */
 @keyframes omHdrDrop {
-  0%   { transform: translateY(var(--om-drop-from, -230px)); }
-  80%  { transform: translateY(9px); }
-  91%  { transform: translateY(-3px); }
+  0%   { transform: translateY(var(--om-drop-from, -230px)); animation-timing-function: cubic-bezier(.5, 0, .3, 1); }
+  86%  { transform: translateY(4px); animation-timing-function: cubic-bezier(.4, 0, .2, 1); }
   100% { transform: none; }
 }
-/* horní lišta navíc "drží" červenou nad sebou, ať při přetečení nevykoukne bílý proužek */
+/* horní lišta navíc "drží" červenou nad sebou, ať při dojezdu nevykoukne bílý proužek */
 @keyframes omHdrDropTop {
-  0%   { transform: translateY(var(--om-drop-from, -230px)); box-shadow: 0 -120px 0 #9f1400; }
-  80%  { transform: translateY(9px); box-shadow: 0 -120px 0 #9f1400; }
-  91%  { transform: translateY(-3px); box-shadow: 0 -120px 0 #9f1400; }
+  0%   { transform: translateY(var(--om-drop-from, -230px)); box-shadow: 0 -120px 0 #9f1400; animation-timing-function: cubic-bezier(.5, 0, .3, 1); }
+  86%  { transform: translateY(4px); box-shadow: 0 -120px 0 #9f1400; animation-timing-function: cubic-bezier(.4, 0, .2, 1); }
   100% { transform: none; box-shadow: none; }
 }
 @keyframes omDripStretch {
-  0%   { transform: scaleY(1.7); }
-  62%  { transform: scaleY(1.85); }
-  80%  { transform: scaleY(.85); }
-  91%  { transform: scaleY(1.07); }
-  100% { transform: scaleY(1); }
+  0%   { transform: scaleY(1.75); filter: drop-shadow(0 3px 4px rgba(40, 0, 0, .34)); animation-timing-function: ease-out; }
+  52%  { transform: scaleY(2.15); filter: drop-shadow(0 4px 5px rgba(40, 0, 0, .34)); animation-timing-function: cubic-bezier(.3, .1, .3, 1); }
+  84%  { transform: scaleY(.96); filter: drop-shadow(0 2px 3px rgba(40, 0, 0, .2)); animation-timing-function: ease-in-out; }
+  93%  { transform: scaleY(1.02); animation-timing-function: ease-in-out; }
+  100% { transform: scaleY(1); filter: drop-shadow(0 0 0 rgba(40, 0, 0, 0)); }
+}
+@keyframes omDripGloss {
+  0%   { transform: scaleY(1.75); opacity: 0; }
+  20%  { opacity: 1; }
+  52%  { transform: scaleY(2.15); opacity: 1; animation-timing-function: cubic-bezier(.3, .1, .3, 1); }
+  84%  { transform: scaleY(.96); opacity: .8; }
+  100% { transform: scaleY(1); opacity: 0; }
 }
 @media (prefers-reduced-motion: no-preference) {
   body.type-index #om-header,
   body.type-index #om-cat-menu {
-    animation: omHdrDrop 3.6s cubic-bezier(.42, .02, .22, 1) .2s backwards;
+    animation: omHdrDrop 2s linear .12s backwards;
   }
   body.type-index #om-topbar {
-    animation: omHdrDropTop 3.6s cubic-bezier(.42, .02, .22, 1) .2s backwards;
+    animation: omHdrDropTop 2s linear .12s backwards;
   }
   body.type-index #om-cat-menu::after {
     transform-origin: 50% 0;
-    animation: omDripStretch 3.6s cubic-bezier(.42, .02, .22, 1) .2s backwards;
+    animation: omDripStretch 2s linear .12s backwards;
+  }
+  /* lesk na kapkách: stejný tvar jako kapky (maska), jen pro desktop menu */
+  body.type-index #om-cat-menu::before {
+    content: ""; position: absolute; left: 0; right: 0; top: calc(100% - 1px);
+    height: 44px; pointer-events: none; z-index: 6; transform-origin: 50% 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0) 8%, rgba(255,255,255,.34) 52%, rgba(255,255,255,0) 92%);
+    -webkit-mask: url("https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@9f76aa2c4412458a76c0114812557ce2d3fd4bee/menu-drip.svg") center top / 100% 100% no-repeat;
+            mask: url("https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@9f76aa2c4412458a76c0114812557ce2d3fd4bee/menu-drip.svg") center top / 100% 100% no-repeat;
+    animation: omDripGloss 2s linear .12s both;
   }
   @media (max-width: 768px) {
     body.type-index { --om-drop-from: -150px; }
+    body.type-index #om-cat-menu::before { display: none; }
     body.type-index #om-header::after {
       transform-origin: 50% 0;
-      animation: omDripStretch 3.6s cubic-bezier(.42, .02, .22, 1) .2s backwards;
+      animation: omDripStretch 2s linear .12s backwards;
     }
   }
 }
@@ -6005,7 +6022,7 @@ body.type-index #om-header { position: relative; }
 #om-old-skin {
   position: absolute; top: 0; left: 0; right: 0;
   pointer-events: none; user-select: none;
-  animation: omOldSkinOff .01s linear 3.8s forwards;
+  animation: omOldSkinOff .01s linear 2.2s forwards;
 }
 @keyframes omOldSkinOff { to { visibility: hidden; } }
 #om-old-skin #om-old-header { position: static !important; z-index: auto !important; }
