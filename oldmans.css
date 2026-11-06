@@ -6303,3 +6303,13 @@ body.type-index #om-header { position: relative; }
   #om-old-skin #om-old-header .om-cart-icon svg { width: 20px !important; height: 20px !important; }
   #om-old-skin #om-old-header .om-cart .cart-price { display: none !important; }
 }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PRODUKTOVÉ KARTY V KATEGORII – bez čtvercového rámečku a stínu okolo karty (6. 11. 2026)
+   Šablona dává při najetí na buňku produktu (.products-block > div) čtvercový stín
+   (0 0 10px rgba(0,0,0,.16)), který vypadá jako bílý rámeček s ostrými rohy kolem zakulacené karty.
+   Stín pryč – rámeček tím zmizí. Vlastní hover karty (.p: černý okraj + měkký stín) zůstává.
+   ══════════════════════════════════════════════════════════════════════════ */
+.products-block > div:hover,
+.products-block > div.product:hover { box-shadow: none !important; }
