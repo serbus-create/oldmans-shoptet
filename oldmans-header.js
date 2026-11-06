@@ -1143,6 +1143,241 @@
     document.addEventListener('touchstart', function () {}, { passive: true });
 
     /* -------------------------------------------------
+       6y. ČASTO KUPOVÁNO SPOLEČNĚ (detail produktu)
+       Widget ve stylu Amazonu: nahoře fotky se "+", vpravo celkem + tlačítko, pod tím seznam
+       s fajfkami. Produkty bere z "Související produkty" u produktu (admin Shoptetu → produkt →
+       Související). Nikdy nenabízí balíčky (kódy balíčků jsou v bundles.json) a nezobrazí se
+       u balíčků, u produktů s variantami ani u produktů bez souvisejících.
+       Tlačítko přidá zaškrtnuté produkty po jednom do košíku (stejný požadavek jako tlačítka
+       "Do košíku" v kartách) a otevře /kosik/ — stejně jako hlavní tlačítko Přidat do košíku.
+       Umístění: desktop pod galerii (levý sloupec), mobil mezi hlavní část a Popis.
+    ------------------------------------------------- */
+    (function omFbt() {
+      var BUNDLES_URL = 'https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/bundles.json';
+      var MAX_RELATED = 4;
+      try {
+        if (!document.body.classList.contains('type-product')) return;
+        if (document.getElementById('omfbt')) return;
+
+        function el(tag, cls, text) {
+          var e = document.createElement(tag);
+          if (cls) e.className = cls;
+          if (text != null) e.textContent = text;
+          return e;
+        }
+        function num(t) {
+          var m = String(t || '').replace(/[\s\u00a0]/g, '').replace(',', '.').match(/[0-9]+(\.[0-9]+)?/);
+          return m ? parseFloat(m[0]) : 0;
+        }
+        function fmt(n) {
+          var r = Math.round(n * 100) / 100;
+          var s = r.toLocaleString('cs-CZ', { minimumFractionDigits: (r % 1 ? 2 : 0), maximumFractionDigits: 2 });
+          return s.replace(/\s/g, '\u00a0') + '\u00a0Kč';
+        }
+        function imgSrc(img) {
+          if (!img) return '';
+          var real = img.currentSrc || img.getAttribute('src') || '';
+          var lazy = img.getAttribute('data-src') || '';
+          if (/^data:/.test(real) && lazy) return lazy;                /* lazy-load zástupný obrázek */
+          return real || lazy;
+        }
+        function dlProduct() {
+          var dl = window.dataLayer || [];
+          for (var i = 0; i < dl.length; i++) {
+            if (dl[i] && dl[i].shoptet && dl[i].shoptet.product) return dl[i].shoptet.product;
+          }
+          return null;
+        }
+        function hidden(form, name) {
+          var i = form && form.querySelector('input[name="' + name + '"]');
+          return i ? i.value : '';
+        }
+
+        var prod, mainForm, lang, mainPrice, h1, mainImg, related = [];
+
+        function init(p) {
+          prod = p;
+          if (prod.hasVariants) return;                                /* produkty s variantami ne */
+          mainForm = document.querySelector('.p-detail-inner form.pr-action');
+          if (!mainForm || !hidden(mainForm, 'productId') || !hidden(mainForm, 'priceId')) return;
+          lang = hidden(mainForm, 'language') || 'cs';
+
+          /* cena za 1 ks: z dataLayeru (nezávislá na zvoleném množství), záloha z DOMu */
+          mainPrice = num(prod.priceWithVat);
+          if (!mainPrice) {
+            var mp = document.querySelector('.p-final-price-wrapper .price-final') || document.querySelector('.p-detail-inner .price-final');
+            mainPrice = num(mp && mp.textContent);
+          }
+          h1 = document.querySelector('h1');
+          var thumb = document.querySelector('.p-thumbnails-inner a.p-thumbnail img');
+          mainImg = imgSrc(document.querySelector('.p-image img')) || imgSrc(thumb);   /* hlavní fotka je už načtená (cache) */
+          if (!mainPrice || !h1 || !mainImg) return;
+
+          /* související produkty (jen ty, které jdou rovnou koupit = mají formulář do košíku) */
+          var cards = Array.prototype.slice.call(document.querySelectorAll('.products-related .product'));
+          var seen = {};
+          seen[hidden(mainForm, 'productId')] = true;                  /* hlavní produkt se v nabídce neopakuje */
+          cards.forEach(function (c) {
+            var f = c.querySelector('form.pr-action');
+            var a = c.querySelector('a.name');
+            var pe = c.querySelector('.price-final strong') || c.querySelector('.price-final');
+            var skuEl = c.querySelector('[data-micro="sku"]');
+            if (!f || !a || !pe || !hidden(f, 'productId') || !hidden(f, 'priceId')) return;
+            if (seen[hidden(f, 'productId')]) return;                    /* duplicity (klony karuselu) */
+            seen[hidden(f, 'productId')] = true;
+            var item = {
+              name: a.textContent.replace(/\s+/g, ' ').trim(),
+              price: num(pe.textContent),
+              img: imgSrc(c.querySelector('img')),
+              productId: hidden(f, 'productId'),
+              priceId: hidden(f, 'priceId'),
+              code: skuEl ? skuEl.textContent.trim() : ''
+            };
+            if (item.price && item.img && item.name) related.push(item);
+          });
+          if (!related.length) return;
+
+          fetch(BUNDLES_URL, { cache: 'no-cache' })
+            .then(function (r) { if (!r.ok) throw new Error('bundles'); return r.json(); })
+            .then(function (data) {
+              var bundleCodes = {};
+              (data.bundles || []).forEach(function (b) { bundleCodes[String(b.code)] = true; });
+              if (bundleCodes[String(prod.code)]) return;             /* na balíčku widget není */
+              related = related.filter(function (r) { return !bundleCodes[r.code]; }).slice(0, MAX_RELATED);
+              if (!related.length) return;
+              if (document.getElementById('omfbt')) return;
+              build(related);
+            })
+            .catch(function () { /* bez seznamu balíčků nic nezobrazíme (nechceme nabízet balíčky) */ });
+        }
+
+        /* údaje o produktu se v dataLayeru objeví s mírným zpožděním – chvíli čekáme */
+        var tries = 0;
+        (function wait() {
+          var p = dlProduct();
+          if (p) { init(p); return; }
+          if (++tries < 40) setTimeout(wait, 200);
+        })();
+
+        function build(rel) {
+          var items = [{
+            name: h1.textContent.replace(/\s+/g, ' ').trim(), price: mainPrice, img: mainImg,
+            productId: hidden(mainForm, 'productId'), priceId: hidden(mainForm, 'priceId')
+          }].concat(rel);
+          var n = items.length;
+
+          var root = el('div', 'omfbt');
+          root.id = 'omfbt';
+          root.setAttribute('data-n', n);
+          root.style.setProperty('--n', n);
+          root.appendChild(el('h3', null, 'Často kupováno společně'));
+          root.appendChild(el('p', 'sub', 'Zaškrtni, co chceš, a přidej to do košíku jedním klikem.'));
+
+          var top = el('div', 'top');
+          var strip = el('div', 'strip');
+          var list = el('div', 'list');
+          var rows = [];
+          items.forEach(function (it, i) {
+            var st = el('div', 'st');
+            if (i > 0) st.appendChild(el('div', 'pl', '+'));
+            var ph = el('div', 'ph');
+            var im = document.createElement('img');
+            im.src = it.img; im.alt = ''; im.loading = 'lazy';
+            ph.appendChild(im); st.appendChild(ph); strip.appendChild(st);
+
+            var li = el('label', 'li');
+            var cb = document.createElement('input');
+            cb.type = 'checkbox'; cb.checked = true;
+            var box = el('span', 'cb');
+            box.innerHTML = '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.5 3.5L12 3" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+            li.appendChild(cb); li.appendChild(box);
+            li.appendChild(el('span', 't', it.name));
+            li.appendChild(el('span', 'p', fmt(it.price)));
+            list.appendChild(li);
+            rows.push({ item: it, cb: cb, li: li, st: st });
+          });
+
+          var sum = el('div', 'sum');
+          var tot = el('div', 'tot');
+          tot.appendChild(el('span', 'tl', 'Celkem'));
+          var tv = el('b', 'tv', '');
+          tot.appendChild(tv);
+          var cta = el('button', 'cta');
+          cta.type = 'button';
+          cta.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>';
+          var ctaTxt = el('span', null, 'Přidat vybrané do košíku');
+          cta.appendChild(ctaTxt);
+          var err = el('div', 'err', '');
+          err.hidden = true;
+          sum.appendChild(tot); sum.appendChild(cta); sum.appendChild(err);
+          top.appendChild(strip); top.appendChild(sum);
+          root.appendChild(top); root.appendChild(list);
+
+          function update() {
+            var total = 0, cnt = 0;
+            rows.forEach(function (r) {
+              var on = r.cb.checked;
+              r.li.classList.toggle('off', !on);
+              r.st.classList.toggle('off', !on);
+              if (on) { total += r.item.price; cnt++; }
+            });
+            tv.textContent = fmt(total);
+            cta.disabled = cnt === 0;
+          }
+          rows.forEach(function (r) { r.cb.addEventListener('change', update); });
+          update();
+
+          function post(it) {
+            var body = 'language=' + encodeURIComponent(lang) + '&priceId=' + encodeURIComponent(it.priceId) +
+                       '&productId=' + encodeURIComponent(it.productId) + '&amount=1';
+            if (window.shoptet && shoptet.csrf && shoptet.csrf.enabled && shoptet.csrf.token) {
+              body += '&__csrf__=' + encodeURIComponent(shoptet.csrf.token);
+            }
+            return fetch('/action/Cart/addCartItem/?simple_ajax_cart=1', {
+              method: 'POST', credentials: 'same-origin',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8', 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
+              body: body
+            }).then(function (r) { return r.json(); }).then(function (j) {
+              if (!j || j.code !== 200) throw new Error('add');
+            });
+          }
+
+          var busy = false;
+          cta.addEventListener('click', function () {
+            if (busy || cta.disabled) return;
+            var chosen = rows.filter(function (r) { return r.cb.checked; }).map(function (r) { return r.item; });
+            if (!chosen.length) return;
+            busy = true; cta.disabled = true; err.hidden = true;
+            ctaTxt.textContent = 'Přidávám…';
+            var ok = 0;
+            chosen.reduce(function (p, it) {
+              return p.then(function () { return post(it).then(function () { ok++; }); });
+            }, Promise.resolve()).catch(function () { /* chybu řešíme níže */ }).then(function () {
+              if (ok > 0) { window.location.href = '/kosik/'; return; }   /* hlavní tlačítko jde také do košíku */
+              busy = false; cta.disabled = false;
+              ctaTxt.textContent = 'Přidat vybrané do košíku';
+              err.textContent = 'Nepodařilo se přidat do košíku. Zkus to prosím znovu.';
+              err.hidden = false;
+            });
+          });
+
+          var mq = window.matchMedia ? window.matchMedia('(min-width: 992px)') : { matches: true };
+          function place() {
+            var desk = mq.matches;
+            var gallery = document.querySelector('.p-image-wrapper');
+            var tabs = document.querySelector('.p-detail-tabs-wrapper');
+            if (desk && gallery) { gallery.appendChild(root); return; }
+            if (tabs) { tabs.parentNode.insertBefore(root, tabs); return; }
+            if (gallery) gallery.appendChild(root);
+          }
+          place();
+          if (mq.addEventListener) mq.addEventListener('change', place);
+          else if (mq.addListener) mq.addListener(place);
+        }
+      } catch (e) { /* widget je jen doplněk */ }
+    })();
+
+    /* -------------------------------------------------
        7. HOMEPAGE SEKCE
        Vkládáme za .benefitBanner (USP lišta Shoptetu)
     ------------------------------------------------- */
@@ -4007,259 +4242,4 @@
     injectAll();
   }
 
-})();
-
-/* =====================================================
-   ČASTO KUPOVÁNO SPOLEČNĚ – samostatný blok mimo hlavní inicializaci hlavičky, aby ho případná chyba
-   v jiné části skriptu nepřeskočila (6. 11. 2026)
-   ===================================================== */
-(function () {
-  function runOmFbt() {
-    /* -------------------------------------------------
-       6y. ČASTO KUPOVÁNO SPOLEČNĚ (detail produktu)
-       Widget ve stylu Amazonu: nahoře fotky se "+", vpravo celkem + tlačítko, pod tím seznam
-       s fajfkami. V nabídce je samotný produkt (první) + jeho související produkty (admin Shoptetu
-       → produkt → Související). Nikdy nenabízí balíčky (kódy balíčků jsou v bundles.json) a nezobrazí
-       se u balíčků, u produktů s variantami ani u produktů bez souvisejících.
-       Tlačítko přidá zaškrtnuté produkty po jednom do košíku (stejný požadavek jako tlačítka "Do košíku"
-       v kartách) a otevře /kosik/ – stejně jako všechna ostatní přidání v e-shopu (watchCart v hlavičce).
-       Umístění: desktop pod galerii (levý sloupec), mobil mezi hlavní část a Popis.
-    ------------------------------------------------- */
-    (function omFbt() {
-      var BUNDLES_URL = 'https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@main/bundles.json';
-      var MAX_RELATED = 4;
-      try {
-        if (!document.body.classList.contains('type-product')) return;
-        if (document.getElementById('omfbt')) return;
-
-        function el(tag, cls, text) {
-          var e = document.createElement(tag);
-          if (cls) e.className = cls;
-          if (text != null) e.textContent = text;
-          return e;
-        }
-        function num(t) {
-          var m = String(t || '').replace(/[\s\u00a0]/g, '').replace(',', '.').match(/[0-9]+(\.[0-9]+)?/);
-          return m ? parseFloat(m[0]) : 0;
-        }
-        function fmt(n) {
-          var r = Math.round(n * 100) / 100;
-          var s = r.toLocaleString('cs-CZ', { minimumFractionDigits: (r % 1 ? 2 : 0), maximumFractionDigits: 2 });
-          return s.replace(/\s/g, '\u00a0') + '\u00a0Kč';
-        }
-        function imgSrc(img) {
-          if (!img) return '';
-          var real = img.currentSrc || img.getAttribute('src') || '';
-          var lazy = img.getAttribute('data-src') || '';
-          if (/^data:/.test(real) && lazy) return lazy;                /* lazy-load zástupný obrázek */
-          return real || lazy;
-        }
-        function dlProduct() {
-          var dl = window.dataLayer || [];
-          for (var i = 0; i < dl.length; i++) {
-            if (dl[i] && dl[i].shoptet && dl[i].shoptet.product) return dl[i].shoptet.product;
-          }
-          return null;
-        }
-        function hidden(form, name) {
-          var i = form && form.querySelector('input[name="' + name + '"]');
-          return i ? i.value : '';
-        }
-
-        var prod = null, initTries = 0;
-
-        function init() {
-          if (!prod || prod.hasVariants) return;                       /* produkty s variantami ne */
-          var mainForm = document.querySelector('.p-detail-inner form.pr-action');
-          if (!mainForm || !hidden(mainForm, 'productId') || !hidden(mainForm, 'priceId')) return;
-          /* cena za 1 ks: z dataLayeru (nezávislá na zvoleném množství), záloha z DOMu */
-          var mainPrice = num(prod.priceWithVat);
-          if (!mainPrice) {
-            var mp = document.querySelector('.p-final-price-wrapper .price-final') || document.querySelector('.p-detail-inner .price-final');
-            mainPrice = num(mp && mp.textContent);
-          }
-          var h1 = document.querySelector('h1');
-          var mainImg = imgSrc(document.querySelector('.p-image img')) || imgSrc(document.querySelector('.p-thumbnails-inner a.p-thumbnail img'));
-          if (!mainPrice || !h1 || !mainImg) return;
-          var mainItem = {
-            name: h1.textContent.replace(/\s+/g, ' ').trim(), price: mainPrice, img: mainImg,
-            productId: hidden(mainForm, 'productId'), priceId: hidden(mainForm, 'priceId'), lang: hidden(mainForm, 'language') || 'cs', code: ''
-          };
-          var seen = {};
-          seen[mainItem.productId] = true;                              /* samotný produkt se nenabízí podruhé jako související */
-          var related = [];
-          Array.prototype.slice.call(document.querySelectorAll('.products-related .product')).forEach(function (c) {
-            var f = c.querySelector('form.pr-action');
-            var a = c.querySelector('a.name');
-            var pe = c.querySelector('.price-final strong') || c.querySelector('.price-final');
-            var skuEl = c.querySelector('[data-micro="sku"]');
-            if (!f || !a || !pe || !hidden(f, 'productId') || !hidden(f, 'priceId')) return;   /* jen přímo koupitelné */
-            var pid = hidden(f, 'productId');
-            if (seen[pid]) return;                                      /* duplicity (klony karuselu) */
-            seen[pid] = true;
-            var item = {
-              name: a.textContent.replace(/\s+/g, ' ').trim(),
-              price: num(pe.textContent),
-              img: imgSrc(c.querySelector('img')),
-              productId: pid,
-              priceId: hidden(f, 'priceId'),
-              lang: hidden(f, 'language') || 'cs',
-              code: skuEl ? skuEl.textContent.trim() : '',
-              form: f
-            };
-            if (item.price && item.img && item.name) related.push(item);
-          });
-          if (!related.length) {
-            /* karty souvisejících se někdy dorenderují až po načtení stránky – chvíli zkoušíme znovu */
-            if (++initTries < 40) setTimeout(init, 250);
-            return;
-          }
-
-          fetch(BUNDLES_URL, { cache: 'no-cache' })
-            .then(function (r) { if (!r.ok) throw new Error('bundles'); return r.json(); })
-            .then(function (data) {
-              var bundleCodes = {};
-              (data.bundles || []).forEach(function (b) { bundleCodes[String(b.code)] = true; });
-              if (prod && bundleCodes[String(prod.code)]) return;       /* na balíčku widget není */
-              related = related.filter(function (r) { return !bundleCodes[r.code]; }).slice(0, MAX_RELATED);
-              if (!related.length) return;
-              if (document.getElementById('omfbt')) return;
-              build([mainItem].concat(related));                        /* hlavní produkt je v nabídce první */
-            })
-            .catch(function () { /* bez seznamu balíčků nic nezobrazíme (nechceme nabízet balíčky) */ });
-        }
-
-        /* údaje o produktu v dataLayeru se někdy objeví s mírným zpožděním – čekáme až 8 s */
-        var tries = 0;
-        (function wait() {
-          var p = dlProduct();
-          if (p) { prod = p; init(); return; }
-          if (++tries < 40) setTimeout(wait, 200);
-        })();
-
-        function build(items) {
-          var n = items.length;
-          var root = el('div', 'omfbt');
-          root.id = 'omfbt';
-          root.setAttribute('data-n', n);
-          root.style.setProperty('--n', n);
-          root.appendChild(el('h3', null, 'Často kupováno společně'));
-          root.appendChild(el('p', 'sub', 'Zaškrtni, co chceš, a přidej to do košíku jedním klikem.'));
-
-          var top = el('div', 'top');
-          var strip = el('div', 'strip');
-          var list = el('div', 'list');
-          var rows = [];
-          items.forEach(function (it, i) {
-            var st = el('div', 'st');
-            if (i > 0) st.appendChild(el('div', 'pl', '+'));
-            var ph = el('div', 'ph');
-            var im = document.createElement('img');
-            im.src = it.img; im.alt = ''; im.loading = 'lazy';
-            ph.appendChild(im); st.appendChild(ph); strip.appendChild(st);
-
-            var li = el('label', 'li');
-            var cb = document.createElement('input');
-            cb.type = 'checkbox'; cb.checked = true;
-            var box = el('span', 'cb');
-            box.innerHTML = '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.5 3.5L12 3" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-            li.appendChild(cb); li.appendChild(box);
-            li.appendChild(el('span', 't', it.name));
-            li.appendChild(el('span', 'p', fmt(it.price)));
-            list.appendChild(li);
-            rows.push({ item: it, cb: cb, li: li, st: st });
-          });
-
-          var sum = el('div', 'sum');
-          var tot = el('div', 'tot');
-          tot.appendChild(el('span', 'tl', 'Celkem'));
-          var tv = el('b', 'tv', '');
-          tot.appendChild(tv);
-          var cta = el('button', 'cta');
-          cta.type = 'button';
-          cta.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>';
-          var ctaTxt = el('span', null, 'Přidat vybrané do košíku');
-          cta.appendChild(ctaTxt);
-          var msg = el('div', 'omfbt-msg', '');
-          msg.hidden = true;
-          sum.appendChild(tot); sum.appendChild(cta); sum.appendChild(msg);
-          top.appendChild(strip); top.appendChild(sum);
-          root.appendChild(top); root.appendChild(list);
-
-          function showMsg(kind, text) {
-            msg.className = 'omfbt-msg ' + kind;      /* pozor: třída .msg Shoptet sám maže (dismissMessages) */
-            msg.textContent = text;
-            msg.hidden = false;
-          }
-
-          function update() {
-            var total = 0, cnt = 0;
-            rows.forEach(function (r) {
-              var on = r.cb.checked;
-              r.li.classList.toggle('off', !on);
-              r.st.classList.toggle('off', !on);
-              if (on) { total += r.item.price; cnt++; }
-            });
-            tv.textContent = fmt(total);
-            cta.disabled = cnt === 0;
-          }
-          rows.forEach(function (r) {
-            r.cb.addEventListener('change', function () { msg.hidden = true; update(); });
-          });
-          update();
-
-          /* přidání jedné položky: stejný požadavek, který posílá tlačítko "Do košíku" v kartě (viz
-             /action/Cart/addCartItem/). Shoptet po přidání jinak vždy přesměruje do košíku, což by u více
-             produktů přerušilo přidávání, proto posíláme požadavky přímo a do košíku jdeme až po posledním. */
-          function addOne(it) {
-            var body = 'language=' + encodeURIComponent(it.lang) + '&priceId=' + encodeURIComponent(it.priceId) +
-                       '&productId=' + encodeURIComponent(it.productId) + '&amount=1';
-            if (window.shoptet && shoptet.csrf && shoptet.csrf.enabled && shoptet.csrf.token) {
-              body += '&__csrf__=' + encodeURIComponent(shoptet.csrf.token);
-            }
-            return fetch('/action/Cart/addCartItem/?simple_ajax_cart=1', {
-              method: 'POST', credentials: 'same-origin',
-              headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8', 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
-              body: body
-            }).then(function (r) { return r.json(); }).then(function (j) {
-              if (!j || j.code !== 200) throw new Error('add');
-              return j.payload || null;
-            });
-          }
-          var busy = false;
-          cta.addEventListener('click', function () {
-            if (busy || cta.disabled) return;
-            var chosen = rows.filter(function (r) { return r.cb.checked; }).map(function (r) { return r.item; });
-            if (!chosen.length) return;
-            busy = true; cta.disabled = true; msg.hidden = true;
-            ctaTxt.textContent = 'Přidávám…';
-            var ok = 0;
-            chosen.reduce(function (p, it) {
-              return p.then(function () { return addOne(it).then(function () { ok++; }); });
-            }, Promise.resolve()).catch(function () { /* výsledek hodnotíme níže */ }).then(function () {
-              if (ok > 0) { window.location.href = '/kosik/'; return; }   /* stejně jako všude jinde v e-shopu: po přidání do košíku */
-              busy = false;
-              ctaTxt.textContent = 'Přidat vybrané do košíku';
-              update();
-              showMsg('err', 'Nepodařilo se přidat do košíku. Zkus to prosím znovu.');
-            });
-          });
-
-          var mq = window.matchMedia ? window.matchMedia('(min-width: 992px)') : { matches: true };
-          function place() {
-            var desk = mq.matches;
-            var gallery = document.querySelector('.p-image-wrapper');
-            var tabs = document.querySelector('.p-detail-tabs-wrapper');
-            if (desk && gallery) { gallery.appendChild(root); return; }
-            if (tabs) { tabs.parentNode.insertBefore(root, tabs); return; }
-            if (gallery) gallery.appendChild(root);
-          }
-          place();
-          if (mq.addEventListener) mq.addEventListener('change', place);
-          else if (mq.addListener) mq.addListener(place);
-        }
-      } catch (e) { /* widget je jen doplněk */ }
-    })();
-  }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', runOmFbt); else runOmFbt();
 })();
