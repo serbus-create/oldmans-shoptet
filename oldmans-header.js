@@ -3098,79 +3098,62 @@
         buyRow.appendChild(cartBtn);
       }
 
-      /* ── MOBILNÍ STICKY CTA LIŠTA (28. 7. 2026, na žádost klienta) ──
-         Přilepená lišta dole s počítadlem kusů + tlačítkem Přidat do
-         košíku, aktivuje se JEN když hlavní CTA (.om-buy-row) není
-         vidět (odscrollováno pryč) — přes IntersectionObserver.
-         Žádné duplicitní přepočty cen/slev: tlačítka +/- na sticky
-         liště jen PROKLIKÁVAJÍ nativní tlačítka Shoptetu
-         (button.increase/.decrease), a tlačítko Přidat do košíku jen
-         PROKLIKÁVÁ nativní cartBtn — veškerá logika množstevní slevy
-         (přepočet ceny, "ušetříte", mobilní karty) zůstává beze změny,
-         protože běží přes stejný input#amount a jeho 'input' event,
-         který už posloucháme jinde (updateMainPrice,
-         updateMobileQtySelection). Karty množstevní slevy se na
-         sticky liště NEZOBRAZUJÍ (jen počet + tlačítko), podle zadání. */
+      /* ── MOBILNÍ STICKY CTA LIŠTA (28. 7. 2026, na žádost klienta; přepracováno 6. 11. 2026) ──
+         Přilepená lišta dole, aktivuje se JEN když hlavní CTA (.om-buy-row) není vidět (odscrollováno
+         pryč) — přes IntersectionObserver. Jeden řádek: vlevo CENA (zrcadlí hlavní .price-final, takže
+         sleduje zvolený počet kusů a množstevní slevu) s PŘEŠKRTNUTOU cenou před slevou a procentem,
+         vpravo tlačítko Přidat do košíku. Počet kusů se mění jen v hlavním boxu nahoře na stránce
+         (v liště už není — klient chtěl zrušit bílý pruh nad tlačítkem).
+         Žádné duplicitní přepočty: tlačítko jen PROKLIKÁVÁ nativní cartBtn. Přeškrtnutá cena =
+         .price-standard (akce), jinak cena za 1 ks při načtení stránky (množstevní sleva); zobrazí se
+         jen když je aktuální cena nižší. Červené tlačítko u akce řeší CSS (body:has(#om-promo…)). */
       if (buyRow && qtyInput && cartBtn && !document.getElementById('om-sticky-cta')) {
-        var nativeIncreaseBtn = qtyWrap.querySelector('button.increase');
-        var nativeDecreaseBtn = qtyWrap.querySelector('button.decrease');
-
         var stickyBar = document.createElement('div');
         stickyBar.id = 'om-sticky-cta';
-        /* 5. 11. 2026 (varianta B, schválil klient): nahoře vystředěná cena + počet kusů,
-           pod tím tlačítko přes celou šířku. Cena zrcadlí hlavní cenu (mění se s množstevní slevou). */
         stickyBar.innerHTML =
           '<div class="om-sticky-cta-inner">' +
-            '<div class="om-sticky-cta-top">' +
-              '<span class="om-sticky-cta-price"></span>' +
-              '<div class="om-sticky-cta-qty">' +
-                '<button type="button" class="om-sticky-cta-minus" aria-label="Snížit množství">−</button>' +
-                '<span class="om-sticky-cta-count">1</span>' +
-                '<button type="button" class="om-sticky-cta-plus" aria-label="Zvýšit množství">+</button>' +
-              '</div>' +
+            '<div class="om-sticky-cta-pr">' +
+              '<div class="om-sticky-cta-old"><s></s><span class="om-sticky-cta-pct"></span></div>' +
+              '<div class="om-sticky-cta-price"></div>' +
             '</div>' +
             '<button type="button" class="om-sticky-cta-btn">Přidat do košíku</button>' +
           '</div>';
         document.body.appendChild(stickyBar);
 
-        var stickyCount = stickyBar.querySelector('.om-sticky-cta-count');
-        var stickyMinus = stickyBar.querySelector('.om-sticky-cta-minus');
-        var stickyPlus = stickyBar.querySelector('.om-sticky-cta-plus');
         var stickyAddBtn = stickyBar.querySelector('.om-sticky-cta-btn');
-
-        /* Cena na liště = text hlavní ceny (.price-final); MutationObserver ji drží aktuální při změně počtu kusů */
         var stickyPrice = stickyBar.querySelector('.om-sticky-cta-price');
+        var stickyOld = stickyBar.querySelector('.om-sticky-cta-old s');
+        var stickyPct = stickyBar.querySelector('.om-sticky-cta-pct');
         var priceSrc = priceBlock.querySelector('.price-final');
+
+        function stickyClean(t) { return String(t || '').replace(/\s+/g, ' ').trim(); }
+        function stickyNum(t) {
+          var m = String(t || '').replace(/[\s\u00a0]/g, '').replace(',', '.').match(/[0-9]+(\.[0-9]+)?/);
+          return m ? parseFloat(m[0]) : 0;
+        }
+        /* cena za 1 ks při načtení stránky (základ pro množstevní slevu) */
+        var stickyBase = (priceSrc && (qtyInput.value || '1') === '1') ? stickyClean(priceSrc.textContent) : '';
+
         function syncStickyPrice() {
           if (!priceSrc) { stickyPrice.style.display = 'none'; return; }
-          stickyPrice.textContent = (priceSrc.textContent || '').replace(/\s+/g, ' ').trim();
+          var nowTxt = stickyClean(priceSrc.textContent);
+          stickyPrice.textContent = nowTxt;
+          var stdEl = priceBlock.querySelector('.price-standard') || document.querySelector('.p-final-price-wrapper .price-standard');
+          var refTxt = stdEl ? stickyClean(stdEl.textContent) : stickyBase;
+          var now = stickyNum(nowTxt), ref = stickyNum(refTxt);
+          var show = ref > 0 && now > 0 && now < ref - 0.005;
+          stickyBar.classList.toggle('om-sticky-cta-solo', !show);
+          if (show) {
+            stickyOld.textContent = refTxt;
+            stickyPct.textContent = '\u2212' + Math.round((1 - now / ref) * 100) + '\u00a0%';
+          }
         }
         syncStickyPrice();
-        if (priceSrc && window.MutationObserver) {
-          new MutationObserver(syncStickyPrice).observe(priceSrc, { childList: true, characterData: true, subtree: true });
+        if (window.MutationObserver) {
+          new MutationObserver(syncStickyPrice).observe(priceBlock, { childList: true, characterData: true, subtree: true });
         }
+        qtyInput.addEventListener('input', syncStickyPrice);
 
-        function syncStickyCount() {
-          stickyCount.textContent = qtyInput.value || '1';
-        }
-        syncStickyCount();
-        qtyInput.addEventListener('input', syncStickyCount);
-
-        stickyMinus.addEventListener('click', function () {
-          if (nativeDecreaseBtn) nativeDecreaseBtn.click();
-          /* Nativní tlačítko Shoptetu mění hodnotu inputu synchronně,
-             ale ne vždy vyvolá 'input' event, na který spoléhá
-             syncStickyCount() výše (28. 7. 2026 — klient hlásil, že
-             se počet na sticky liště po kliknutí neaktualizoval).
-             Přímé zavolání HNED po kliknutí je spolehlivé bez ohledu
-             na to, jaký event (pokud vůbec nějaký) Shoptet interně
-             používá. */
-          syncStickyCount();
-        });
-        stickyPlus.addEventListener('click', function () {
-          if (nativeIncreaseBtn) nativeIncreaseBtn.click();
-          syncStickyCount();
-        });
         stickyAddBtn.addEventListener('click', function () {
           cartBtn.click();
         });
