@@ -1054,11 +1054,13 @@
       }
     })();
 
-    /* Objednávka (krok 1 a rekapitulace): na žádost klienta se doprava ZOBRAZUJE jako
-       „Chlazená čerstvá doprava“ (pouze text na stránce — název v Shoptetu a v e-mailech
-       zůstává) a pole „Měna“ je jen malé okénko. Nic z toho nemění odesílaná data. */
-    var OM_SHIP_NAME_RE = /^doručení na adresu\s*[–—-]\s*chlazená přeprava$/i;
-    var OM_SHIP_NAME_NEW = 'Chlazená čerstvá doprava';
+    /* Objednávka (krok 1 a rekapitulace): doprava se ZOBRAZUJE jako
+       „Doručení na adresu – chlazená přeprava“ (na žádost klienta 6. 11. 2026; dřív tu bylo
+       „Chlazená čerstvá doprava“). Pouze text na stránce — název v Shoptetu a v e-mailech zůstává.
+       Sjednocuje se jen typ pomlčky (- / — / –) na půlčtverčíkovou. Pole „Měna“ je jen malé okénko.
+       Nic z toho nemění odesílaná data. */
+    var OM_SHIP_NAME_RE = /^(doručení na adresu\s*[–—-]\s*chlazená přeprava|chlazená čerstvá doprava)$/i;
+    var OM_SHIP_NAME_NEW = 'Doručení na adresu – chlazená přeprava';
     function tidyOrderStep1() {
       if (!/^\/objednavka\//.test(window.location.pathname)) return;
       Array.prototype.forEach.call(document.querySelectorAll('#content-wrapper *'), function (e) {
