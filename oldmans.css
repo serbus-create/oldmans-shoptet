@@ -6352,7 +6352,7 @@ body.type-index #om-header { position: relative; }
      z 28. 7. 2026 — klient teď chce galerii bez mezer),
    - řada náhledů má přesně šířku hlavní fotky: 5 stejných čtverců s mezerou 12 px
      (velikost z šířky řady přes container query: 100cqw), zaoblené 10 px,
-   - aktivní náhled (.highlighted) má tenký tmavý okraj, ostatní jsou lehce zesvětlené,
+   - aktivní náhled (.highlighted) má tenký okraj v naší červené #9f1400 (klient 6. 11. 2026), ostatní jsou lehce zesvětlené,
    - šipka karuselu zůstává jen u produktů s víc než 5 fotkami (Shoptet JS karusel dál funguje),
    - hlavní fotka a lightbox (kliknutí) se nemění.
    ══════════════════════════════════════════════════════════════════════════ */
@@ -6385,7 +6385,7 @@ body.type-index #om-header { position: relative; }
     content: ""; position: absolute; inset: 0; border-radius: inherit;
     border: 1.5px solid transparent; pointer-events: none;
   }
-  body.type-product .p-thumbnail.highlighted::after { border-color: #1f1f1f; }
+  body.type-product .p-thumbnail.highlighted::after { border-color: #9f1400; }
   /* šipky karuselu jen když má produkt víc než 5 fotek (6. náhled = 11. odkaz, každý náhled má za sebou skrytý .cbox-gal) */
   body.type-product .p-thumbnails:not(:has(.p-thumbnails-inner a:nth-of-type(11))) .thumbnail-next,
   body.type-product .p-thumbnails:not(:has(.p-thumbnails-inner a:nth-of-type(11))) .thumbnail-prev { display: none !important; }
