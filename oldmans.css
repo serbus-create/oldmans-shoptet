@@ -5689,12 +5689,14 @@ body.ordering-process .om-hide-heading { display: none !important; }
    ══════════════════════════════════════════════════════════════════════════ */
 
 /* ── Horní lišta ── */
-#om-topbar { background: #9f1400; border-bottom: 0; color: #f6d9d3; }
+#om-topbar { background: #9f1400; border-bottom: 0; color: #f6d9d3; box-shadow: 0 1px 0 #9f1400; }
 #om-topbar, #om-topbar a { color: #f6d9d3; }
 #om-topbar a:hover { color: #fff; }
 
 /* ── Hlavní hlavička ── */
-#om-header { background: #9f1400; border-bottom: 0; box-shadow: none; }
+/* box-shadow 1px nahoru i dolů ve stejné červené = překryv na styku topbar / header / menu: při scrollu na zlomkových pixelech
+   (jiná vrstva = sticky/z-index) jinak mezi plochami prosvítne 1px světlá čára (6. 11. 2026, hlášení klienta) */
+#om-header { background: #9f1400; border-bottom: 0; box-shadow: 0 -1px 0 #9f1400, 0 1px 0 #9f1400; }
 #om-header .om-logo img { filter: invert(1); }
 #om-header .om-contact-icon { background: #fff; border-radius: 50%; padding: 6px; box-sizing: border-box; }
 #om-header .om-contact-numb { color: #fff; }
