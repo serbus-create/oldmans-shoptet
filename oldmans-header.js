@@ -3142,22 +3142,23 @@
           var s = r.toLocaleString('cs-CZ', { minimumFractionDigits: (r % 1 ? 2 : 0), maximumFractionDigits: 2 });
           return s.replace(/\s/g, '\u00a0') + '\u00a0Kč';
         }
-        /* cena za 1 ks při načtení stránky (základ pro množstevní slevu) */
-        var stickyBase = (priceSrc && (qtyInput.value || '1') === '1') ? stickyClean(priceSrc.textContent) : '';
         var stickyLast = '';
 
         function syncStickyPrice() {
           if (!priceSrc) { stickyPrice.style.display = 'none'; return; }
-          var unitTxt = stickyClean(priceSrc.textContent);
-          var qty = Math.max(1, parseInt(qtyInput.value, 10) || 1);
-          var key = unitTxt + '|' + qty + '|' + (priceBlock.querySelector('.price-standard') ? stickyClean(priceBlock.querySelector('.price-standard').textContent) : '');
+          var m = window.omQtyPrice;                                    /* společný výpočet hlavní ceny (viz omQtyPrice) */
+          var stdEl = priceBlock.querySelector('.price-standard') || document.querySelector('.p-final-price-wrapper .price-standard');
+          var unit, qty, ref;
+          if (m && m.unit > 0) { unit = m.unit; qty = m.qty; ref = m.ref || 0; }
+          else {                                                        /* záloha (např. produkty s variantami): ceny za 1 ks jako na stránce */
+            unit = stickyNum(stickyClean(priceSrc.textContent)); qty = 1;
+            ref = stickyNum(stdEl ? stickyClean(stdEl.textContent) : '');
+          }
+          var key = unit + '|' + qty + '|' + ref;
           if (key === stickyLast) return;                              /* nic se nezměnilo */
           stickyLast = key;
-          var unit = stickyNum(unitTxt);
           stickyPrice.textContent = stickyFmt(unit * qty);              /* celkem za zvolený počet kusů */
           stickyCnt.textContent = qty > 1 ? qty + '\u00a0ks' : '';
-          var stdEl = priceBlock.querySelector('.price-standard') || document.querySelector('.p-final-price-wrapper .price-standard');
-          var ref = stickyNum(stdEl ? stickyClean(stdEl.textContent) : stickyBase);
           var show = ref > 0 && unit > 0 && unit < ref - 0.005;
           stickyBar.classList.toggle('om-sticky-cta-solo', !show);
           if (show) {
@@ -3549,6 +3550,33 @@
       }
     }
 
+    /* ── Cena za zvolený počet kusů (6. 11. 2026, na žádost klienta) ──
+       Hlavní cena na stránce ukazuje CELKOVOU částku za zvolený počet kusů (cena za 1 ks × počet),
+       přeškrtnutá cena a "Ušetříte X Kč" jsou také celkem a pod cenou je malý řádek "3 ks × 211,65 Kč".
+       Při 1 ks vypadá vše jako dřív. Aktuální stav (počet, cena za kus, referenční cena před slevou)
+       si ukládáme do window.omQtyPrice — čte ho i přilepená lišta na mobilu, ať se čísla neliší. */
+    window.omQtyPrice = null;
+    function omFmtKc(value) {
+      var r = Math.round(value * 100) / 100;
+      var s = r.toLocaleString('cs-CZ', { minimumFractionDigits: (r % 1 ? 2 : 0), maximumFractionDigits: 2 });
+      return s.replace(/\s/g, '\u00a0') + '\u00a0Kč';
+    }
+    function omNum(t) {
+      var m = String(t || '').replace(/[\s\u00a0]/g, '').replace(',', '.').match(/[0-9]+(\.[0-9]+)?/);
+      return m ? parseFloat(m[0]) : 0;
+    }
+    function omUnitNote(wrap, qty, unit) {
+      if (!wrap) return;
+      var n = wrap.querySelector('.om-price-unit');
+      if (!n) {
+        n = document.createElement('span');
+        n.className = 'om-price-unit';
+        wrap.appendChild(n);
+      }
+      if (qty > 1) { n.textContent = qty + '\u00a0ks × ' + omFmtKc(unit); n.hidden = false; }
+      else { n.hidden = true; }
+    }
+
     /* 8. Hlavní cena se má měnit podle zadaného počtu kusů (dle množstevní slevy).
        Vychází z data-orig-price na .quantity-discounts__table a data-amount/
        data-price-ratio na jednotlivých .quantity-discounts__item (zůstávají
@@ -3583,11 +3611,10 @@
           priceFinalEl.parentNode.appendChild(saveEl);
         }
 
-        var formatPrice = function(value) {
-          var rounded = Math.round(value * 100) / 100;
-          var text = (rounded % 1 === 0) ? String(rounded) : rounded.toFixed(2).replace('.', ',');
-          return text + ' Kč';
-        };
+        var formatPrice = omFmtKc;
+        /* přeškrtnutá cena před akcí (akční box) — základ pro přepočet na zvolený počet kusů */
+        var promoStrikeEl = document.querySelector('.om-price-box .om-promo-strike > span') || document.querySelector('.om-price-box .om-promo-strike');
+        var stdBase = promoStrikeEl ? omNum(promoStrikeEl.textContent) : 0;
 
         var updateMainPrice = function() {
           var qtyInput = document.querySelector('#product-detail-form input[name="amount"], #product-detail-form input[type="number"]');
@@ -3599,15 +3626,20 @@
             if (qty >= t.amount && t.amount >= applicable.amount) applicable = t;
           });
 
-          priceFinalEl.textContent = formatPrice(origPrice * applicable.ratio);
+          var unit = origPrice * applicable.ratio;
+          priceFinalEl.textContent = formatPrice(unit * qty);            /* celkem za zvolený počet kusů */
+          priceFinalEl.setAttribute('data-om-unit', String(unit));
           if (origPriceEl) {
             if (applicable.ratio < 1) {
-              origPriceEl.textContent = formatPrice(origPrice);
+              origPriceEl.textContent = formatPrice(origPrice * qty);    /* před množstevní slevou, celkem */
               origPriceEl.style.display = 'inline';
             } else {
               origPriceEl.style.display = 'none';
             }
           }
+          if (promoStrikeEl && stdBase) promoStrikeEl.textContent = formatPrice(stdBase * qty);   /* před akcí, celkem */
+          window.omQtyPrice = { qty: qty, unit: unit, ref: applicable.ratio < 1 ? origPrice : stdBase };
+          omUnitNote(priceFinalEl.parentNode, qty, unit);
           if (saveEl) {
             saveEl.style.display = (applicable.ratio < 1) ? '' : 'none';
           }
@@ -3647,6 +3679,35 @@
           }
         });
       }
+    } else {
+      /* Produkty BEZ množstevní slevy: nativní cena se při změně počtu kusů nemění (je za 1 ks) — taky
+         ukážeme celkem za zvolený počet. Produkty s variantami (výběr varianty = select/radio ve formuláři)
+         necháváme beze změny, cena závisí na vybrané variantě. */
+      (function () {
+        var form = document.getElementById('product-detail-form');
+        var pf = document.querySelector('.om-price-box .price-final');
+        var qi = document.querySelector('#product-detail-form input[name="amount"], #product-detail-form input[type="number"]');
+        if (!form || !pf || !qi || form.querySelector('select, input[type="radio"]')) return;
+        var unit = omNum(pf.textContent);
+        if (!(unit > 0)) return;
+        var strike = document.querySelector('.om-price-box .om-promo-strike > span') || document.querySelector('.om-price-box .om-promo-strike');
+        var std = strike ? omNum(strike.textContent) : 0;
+        var holder = pf.querySelector('.price-final-holder') || pf;
+        var apply = function () {
+          var q = Math.max(1, parseInt(qi.value, 10) || 1);
+          holder.textContent = omFmtKc(unit * q);
+          pf.setAttribute('data-om-unit', String(unit));
+          if (strike && std) strike.textContent = omFmtKc(std * q);
+          window.omQtyPrice = { qty: q, unit: unit, ref: std };
+          omUnitNote(pf.parentNode, q, unit);
+        };
+        apply();
+        document.addEventListener('input', function (e) { if (e.target === qi) apply(); });
+        document.addEventListener('change', function (e) { if (e.target === qi) apply(); });
+        document.addEventListener('click', function (e) {
+          if (e.target.closest && e.target.closest('#product-detail-form')) { setTimeout(apply, 50); setTimeout(apply, 500); }
+        });
+      })();
     }
 
     /* 9. "Hlídat dostupnost" u vyprodaných/nedostupných produktů
