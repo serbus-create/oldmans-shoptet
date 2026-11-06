@@ -6471,7 +6471,18 @@ body.type-index #om-header { position: relative; }
 }
 
 
-/* Cena za zvolený počet kusů (6. 11. 2026): malý řádek pod cenou "3 ks × 211,65 Kč" – JS omUnitNote() */
-.om-price-unit { flex: 0 0 100%; order: 9; font-size: 13px; line-height: 1.3; font-weight: 500; color: #6b6b6b; margin-top: 1px; }
+/* Cena za zvolený počet kusů (6. 11. 2026): malý text "3 ks × 211,65 Kč" VEDLE ceny na stejném řádku
+   (je uvnitř prvku s cenou – JS omUnitNote()), ať se rozložení stránky neposouvá */
+.om-price-unit {
+  display: inline-block;
+  margin-left: 10px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  color: #6b6b6b;
+  white-space: nowrap;
+}
 .om-price-unit[hidden] { display: none !important; }
-.om-promo .om-promo-right > * > .om-price-unit { order: 9; flex: 0 0 100%; }
+.om-price-unit--short .om-pu-u { display: none; }
+.om-price-unit--off { display: none !important; }

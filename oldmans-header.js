@@ -3565,17 +3565,45 @@
       var m = String(t || '').replace(/[\s\u00a0]/g, '').replace(',', '.').match(/[0-9]+(\.[0-9]+)?/);
       return m ? parseFloat(m[0]) : 0;
     }
-    function omUnitNote(wrap, qty, unit) {
-      if (!wrap) return;
-      var n = wrap.querySelector('.om-price-unit');
+    /* Řádek "3 ks × 211,65 Kč" je přímo UVNITŘ prvku s cenou (.price-final), takže se zobrazí vedle ceny na
+       stejném řádku a nepřidává další řádek (6. 11. 2026, klient: nechtěl posun rozložení stránky).
+       Co se vejde: celý text → jen "3 ks" → nic (omFitNote měří, jestli by se řádek zalomil).
+       Prvek se po každém přepsání ceny zakládá znovu (textContent ho smaže), proto se volá po každé změně. */
+    function omFitNote(priceEl) {
+      var n = priceEl && priceEl.querySelector('.om-price-unit');
+      if (!n || n.hidden) return;
+      var wrap = priceEl.closest('.p-final-price-wrapper') || priceEl.parentNode;
+      function h() { return wrap.getBoundingClientRect().height; }   /* výška řádku s cenou: zalomení = vyšší */
+      n.classList.remove('om-price-unit--short', 'om-price-unit--off');
+      n.classList.add('om-price-unit--off');
+      var base = h();                                             /* výška bez poznámky */
+      n.classList.remove('om-price-unit--off');
+      if (h() <= base + 4) return;                                /* vejde se celá */
+      n.classList.add('om-price-unit--short');
+      if (h() <= base + 4) return;                                /* vejde se aspoň "3 ks" */
+      n.classList.remove('om-price-unit--short');
+      n.classList.add('om-price-unit--off');                      /* nevejde se nic → raději nic (žádný posun) */
+    }
+    function omUnitNote(priceEl, qty, unit) {
+      if (!priceEl) return;
+      var holder = priceEl.querySelector('.price-final-holder') || priceEl;
+      var n = priceEl.querySelector('.om-price-unit');
       if (!n) {
         n = document.createElement('span');
         n.className = 'om-price-unit';
-        wrap.appendChild(n);
+        holder.appendChild(n);
       }
-      if (qty > 1) { n.textContent = qty + '\u00a0ks × ' + omFmtKc(unit); n.hidden = false; }
-      else { n.hidden = true; }
+      if (qty > 1) {
+        n.innerHTML = '<span class="om-pu-n"></span><span class="om-pu-u"></span>';
+        n.firstChild.textContent = qty + '\u00a0ks';
+        n.lastChild.textContent = ' × ' + omFmtKc(unit);
+        n.hidden = false;
+        omFitNote(priceEl);
+        window.omNotePrice = priceEl;
+      } else { n.hidden = true; }
     }
+    window.addEventListener('resize', function () { if (window.omNotePrice) omFitNote(window.omNotePrice); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (window.omNotePrice) omFitNote(window.omNotePrice); });
 
     /* 8. Hlavní cena se má měnit podle zadaného počtu kusů (dle množstevní slevy).
        Vychází z data-orig-price na .quantity-discounts__table a data-amount/
@@ -3639,7 +3667,7 @@
           }
           if (promoStrikeEl && stdBase) promoStrikeEl.textContent = formatPrice(stdBase * qty);   /* před akcí, celkem */
           window.omQtyPrice = { qty: qty, unit: unit, ref: applicable.ratio < 1 ? origPrice : stdBase };
-          omUnitNote(priceFinalEl.parentNode, qty, unit);
+          omUnitNote(priceFinalEl, qty, unit);
           if (saveEl) {
             saveEl.style.display = (applicable.ratio < 1) ? '' : 'none';
           }
@@ -3695,11 +3723,11 @@
         var holder = pf.querySelector('.price-final-holder') || pf;
         var apply = function () {
           var q = Math.max(1, parseInt(qi.value, 10) || 1);
-          holder.textContent = omFmtKc(unit * q);
+          holder.textContent = omFmtKc(unit * q);                 /* přepíše i poznámku – omUnitNote ji založí znovu */
           pf.setAttribute('data-om-unit', String(unit));
           if (strike && std) strike.textContent = omFmtKc(std * q);
           window.omQtyPrice = { qty: q, unit: unit, ref: std };
-          omUnitNote(pf.parentNode, q, unit);
+          omUnitNote(pf, q, unit);
         };
         apply();
         document.addEventListener('input', function (e) { if (e.target === qi) apply(); });
