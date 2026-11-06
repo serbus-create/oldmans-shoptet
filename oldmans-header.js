@@ -3584,6 +3584,21 @@
       n.classList.remove('om-price-unit--short');
       n.classList.add('om-price-unit--off');                      /* nevejde se nic → raději nic (žádný posun) */
     }
+    /* Přeškrtnutá akční cena (.om-promo-strike): akční box se vykresluje až po načtení, proto základ čteme průběžně
+       (ne jednou při startu) a uložíme ho do data-om-base, než ho přepíšeme na celkovou částku. */
+    function omStrikeEl() {
+      return document.querySelector('.om-price-box .om-promo-strike > span') || document.querySelector('.om-price-box .om-promo-strike');
+    }
+    function omStdBase() {
+      var s = omStrikeEl();
+      if (!s) return 0;
+      var b = parseFloat(s.getAttribute('data-om-base'));
+      if (!(b > 0)) {
+        b = omNum(s.textContent);
+        if (b > 0) s.setAttribute('data-om-base', String(b));
+      }
+      return b > 0 ? b : 0;
+    }
     function omUnitNote(priceEl, qty, unit) {
       if (!priceEl) return;
       var holder = priceEl.querySelector('.price-final-holder') || priceEl;
@@ -3644,8 +3659,6 @@
 
         var formatPrice = omFmtKc;
         /* přeškrtnutá cena před akcí (akční box) — základ pro přepočet na zvolený počet kusů */
-        var promoStrikeEl = document.querySelector('.om-price-box .om-promo-strike > span') || document.querySelector('.om-price-box .om-promo-strike');
-        var stdBase = promoStrikeEl ? omNum(promoStrikeEl.textContent) : 0;
 
         var updateMainPrice = function() {
           var qtyInput = document.querySelector('#product-detail-form input[name="amount"], #product-detail-form input[type="number"]');
@@ -3657,6 +3670,8 @@
             if (qty >= t.amount && t.amount >= applicable.amount) applicable = t;
           });
 
+          var promoStrikeEl = omStrikeEl();
+          var stdBase = omStdBase();
           var unit = origPrice * applicable.ratio;
           priceFinalEl.textContent = formatPrice(unit * qty);            /* celkem za zvolený počet kusů */
           priceFinalEl.setAttribute('data-om-unit', String(unit));
@@ -3699,6 +3714,9 @@
         }
 
         updateMainPrice();
+        /* akční box se doskládává až po startu – chvíli přepočítáváme, ať je model (omQtyPrice) hned úplný */
+        var mpTries = 0;
+        var mpIv = setInterval(function () { updateMainPrice(); if (++mpTries >= 16) clearInterval(mpIv); }, 500);
         document.addEventListener('input', function(e) {
           if (e.target.matches('#product-detail-form input[name="amount"], #product-detail-form input[type="number"]')) {
             updateMainPrice();
@@ -3721,11 +3739,11 @@
         if (!form || !pf || !qi || form.querySelector('select, input[type="radio"]')) return;
         var unit = omNum(pf.textContent);
         if (!(unit > 0)) return;
-        var strike = document.querySelector('.om-price-box .om-promo-strike > span') || document.querySelector('.om-price-box .om-promo-strike');
-        var std = strike ? omNum(strike.textContent) : 0;
         var holder = pf.querySelector('.price-final-holder') || pf;
         var apply = function () {
           var q = Math.max(1, parseInt(qi.value, 10) || 1);
+          var strike = omStrikeEl();
+          var std = omStdBase();
           holder.textContent = omFmtKc(unit * q);                 /* přepíše i poznámku – omUnitNote ji založí znovu */
           pf.setAttribute('data-om-unit', String(unit));
           if (strike && std) strike.textContent = omFmtKc(std * q);
@@ -3733,6 +3751,9 @@
           omUnitNote(pf, q, unit);
         };
         apply();
+        /* akční box a další prvky se doskládávají až po startu – chvíli přepočítáváme, ať je model hned úplný */
+        var omTries = 0;
+        var omIv = setInterval(function () { apply(); if (++omTries >= 16) clearInterval(omIv); }, 500);
         document.addEventListener('input', function (e) { if (e.target === qi) apply(); });
         document.addEventListener('change', function (e) { if (e.target === qi) apply(); });
         document.addEventListener('click', function (e) {
