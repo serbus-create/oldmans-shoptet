@@ -1137,6 +1137,9 @@
       } catch (e) { /* animace je jen ozdoba */ }
     })();
 
+    /* Aby fungovalo :active (zatřesení produktu při dotyku) i v iOS Safari, stačí mít na dokumentu touchstart posluchač. */
+    document.addEventListener('touchstart', function () {}, { passive: true });
+
     /* -------------------------------------------------
        7. HOMEPAGE SEKCE
        Vkládáme za .benefitBanner (USP lišta Shoptetu)
