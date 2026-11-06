@@ -6390,3 +6390,88 @@ body.type-index #om-header { position: relative; }
   body.type-product .p-thumbnails:not(:has(.p-thumbnails-inner a:nth-of-type(11))) .thumbnail-next,
   body.type-product .p-thumbnails:not(:has(.p-thumbnails-inner a:nth-of-type(11))) .thumbnail-prev { display: none !important; }
 }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ČASTO KUPOVÁNO SPOLEČNĚ (6. 11. 2026) – widget na detailu produktu, JS: oldmans-header.js (6y)
+   Desktop: fotky se "+" vlevo, vpravo Celkem + malé zelené tlačítko, pod tím seznam s fajfkami.
+   Mobil: nadpis, podnadpis, fotky, seznam, dole Celkem + tlačítko přes šířku. Barvy: nadpis a součet
+   červená #9f1400, fajfky červené, tlačítko zelené #79b530. Při 4–5 produktech na desktopu
+   přechází Celkem + tlačítko pod fotky (nevešlo by se vedle).
+   ══════════════════════════════════════════════════════════════════════════ */
+.omfbt {
+  container-type: inline-size; box-sizing: border-box; margin: 26px 0 0; background: #fff;
+  border: 1px solid #e3e1dc; border-radius: 12px; padding: 18px 20px 10px; color: #1f1f1f;
+  font-family: 'Source Sans 3', sans-serif; --gap: 20px; --pl: 20px;
+}
+.omfbt *, .omfbt *::before, .omfbt *::after { box-sizing: border-box; }
+.omfbt h3 { font-family: 'Exo 2', sans-serif; font-weight: 700; font-size: 19px; line-height: 1.2; margin: 0 0 14px; padding: 0; color: #9f1400; text-transform: none; }
+.omfbt .sub { display: none; margin: 0; }
+.omfbt .top { display: flex; align-items: center; gap: 18px; }
+.omfbt .strip { display: flex; gap: var(--gap); flex: 1; min-width: 0; }
+.omfbt .st { position: relative; flex: none; width: 80px; }
+.omfbt .st .ph { aspect-ratio: 1 / 1; border-radius: 10px; overflow: hidden; background: #ececea; transition: opacity .15s; }
+.omfbt .st .ph img { width: 100%; height: 100%; object-fit: cover; display: block; border: 0; margin: 0; }
+.omfbt .st.off .ph { opacity: .3; }
+.omfbt .pl {
+  position: absolute; left: calc(-1 * (var(--gap) + var(--pl)) / 2); top: 50%; transform: translateY(-50%); z-index: 2;
+  width: var(--pl); height: var(--pl); border-radius: 50%; border: 1px solid #d9d6d0; background: #fff;
+  display: flex; align-items: center; justify-content: center; font-size: 15px; line-height: 1; color: #6b6b6b;
+}
+.omfbt .sum { flex: none; width: 240px; border-left: 1px solid #e3e1dc; padding-left: 20px; }
+.omfbt .tl { display: block; font-size: 13px; color: #6b6b6b; }
+.omfbt .tv { display: block; font-family: 'Exo 2', sans-serif; font-size: 26px; font-weight: 700; line-height: 1.1; color: #9f1400; margin: 2px 0 10px; }
+.omfbt .cta {
+  -webkit-appearance: none; appearance: none; width: 100%; height: 36px; padding: 0 10px; margin: 0; border: 0; border-radius: 7px;
+  background: #79b530; color: #fff; font-family: 'Source Sans 3', sans-serif; font-size: 13px; font-weight: 900; line-height: 1;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px; white-space: nowrap; cursor: pointer; text-transform: none;
+  transition: background .2s;
+}
+.omfbt .cta:hover { background: #6aa327; }
+.omfbt .cta[disabled] { background: #bdbab3; cursor: default; }
+.omfbt .cta svg { width: 16px; height: 16px; flex: none; }
+.omfbt .err { margin-top: 8px; font-size: 13px; color: #9f1400; }
+.omfbt .list { margin-top: 16px; border-top: 1px solid #e3e1dc; padding-top: 8px; }
+.omfbt .li { position: relative; display: flex; align-items: center; gap: 12px; padding: 7px 0; margin: 0; font-size: 14px; line-height: 1.3; cursor: pointer; font-weight: 400; }
+.omfbt .li input { position: absolute; opacity: 0; width: 0; height: 0; margin: 0; pointer-events: none; }
+.omfbt .cb { flex: none; width: 20px; height: 20px; border-radius: 6px; border: 2px solid #bdbab3; background: #fff; display: flex; align-items: center; justify-content: center; }
+.omfbt .li:not(.off) .cb { background: #9f1400; border-color: #9f1400; }
+.omfbt .li input:focus-visible + .cb { outline: 2px solid #f7c91b; outline-offset: 2px; }
+.omfbt .cb svg { width: 12px; height: 12px; opacity: 0; }
+.omfbt .li:not(.off) .cb svg { opacity: 1; }
+.omfbt .li .t { flex: 1; min-width: 0; }
+.omfbt .li .p { flex: none; font-family: 'Exo 2', sans-serif; font-weight: 700; font-size: 15px; white-space: nowrap; }
+.omfbt .li.off .t, .omfbt .li.off .p { color: #8a8a8a; }
+
+/* 4 a 5 produktů na desktopu: Celkem + tlačítko pod fotkami */
+.omfbt[data-n="4"], .omfbt[data-n="5"] { --gap: 24px; }
+.omfbt[data-n="5"] { --gap: 20px; }
+.omfbt[data-n="4"] .top, .omfbt[data-n="5"] .top { flex-direction: column; align-items: stretch; gap: 14px; }
+.omfbt[data-n="4"] .strip, .omfbt[data-n="5"] .strip { flex: none; width: 100%; }
+.omfbt[data-n="4"] .st, .omfbt[data-n="5"] .st { width: clamp(52px, calc((100cqw - (var(--n) - 1) * var(--gap)) / var(--n)), 112px); }
+.omfbt[data-n="4"] .sum, .omfbt[data-n="5"] .sum {
+  width: auto; border-left: 0; border-top: 1px solid #e3e1dc; padding: 12px 0 0;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px;
+}
+.omfbt[data-n="4"] .tv, .omfbt[data-n="5"] .tv { margin: 0; }
+.omfbt[data-n="4"] .cta, .omfbt[data-n="5"] .cta { width: auto; padding: 0 16px; }
+.omfbt[data-n="4"] .err, .omfbt[data-n="5"] .err { flex-basis: 100%; margin-top: 0; }
+
+/* mobil */
+@media (max-width: 991px) {
+  .omfbt { display: flex; flex-direction: column; margin: 18px 0 8px; padding: 16px 12px 14px; --gap: 14px; --pl: 18px; }
+  .omfbt[data-n="5"] { --gap: 12px; --pl: 16px; }
+  .omfbt h3 { order: 0; font-size: 18px; margin: 0 0 4px; }
+  .omfbt .sub { display: block; order: 1; font-size: 13px; line-height: 1.4; color: #6b6b6b; margin: 0 0 12px; }
+  .omfbt .top { display: contents; }
+  .omfbt .strip, .omfbt[data-n="4"] .strip, .omfbt[data-n="5"] .strip { order: 2; flex: none; width: 100%; margin-bottom: 16px; }
+  .omfbt .st, .omfbt[data-n="4"] .st, .omfbt[data-n="5"] .st { width: clamp(52px, calc((100cqw - (var(--n) - 1) * var(--gap)) / var(--n)), 112px); }
+  .omfbt .list { order: 3; margin-top: 0; }
+  .omfbt .li { font-size: 14px; }
+  .omfbt .sum, .omfbt[data-n="4"] .sum, .omfbt[data-n="5"] .sum {
+    order: 4; width: auto; margin-top: 10px; border-left: 0; border-top: 1px solid #e3e1dc; padding: 14px 0 0; display: block;
+  }
+  .omfbt .tot { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; }
+  .omfbt .tv, .omfbt[data-n="4"] .tv, .omfbt[data-n="5"] .tv { margin: 0; font-size: 22px; }
+  .omfbt .cta, .omfbt[data-n="4"] .cta, .omfbt[data-n="5"] .cta { width: 100%; height: 38px; padding: 0 12px; font-size: 14px; }
+}
