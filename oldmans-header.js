@@ -4018,12 +4018,11 @@
     /* -------------------------------------------------
        6y. ČASTO KUPOVÁNO SPOLEČNĚ (detail produktu)
        Widget ve stylu Amazonu: nahoře fotky se "+", vpravo celkem + tlačítko, pod tím seznam
-       s fajfkami. Nabízí POUZE související produkty (admin Shoptetu → produkt → Související),
-       nikdy ne samotný produkt, na jehož stránce je zákazník, a nikdy balíčky (kódy balíčků jsou
-       v bundles.json). Nezobrazí se u balíčků ani u produktů bez souvisejících.
+       s fajfkami. V nabídce je samotný produkt (první) + jeho související produkty (admin Shoptetu
+       → produkt → Související). Nikdy nenabízí balíčky (kódy balíčků jsou v bundles.json) a nezobrazí
+       se u balíčků, u produktů s variantami ani u produktů bez souvisejících.
        Tlačítko přidá zaškrtnuté produkty po jednom do košíku (stejný požadavek jako tlačítka "Do košíku"
-       v kartách) a otevře /kosik/ – stejně jako všechna ostatní přidání v e-shopu (watchCart v hlavičce)
-       a pod tlačítkem ukáže potvrzení s odkazem do košíku.
+       v kartách) a otevře /kosik/ – stejně jako všechna ostatní přidání v e-shopu (watchCart v hlavičce).
        Umístění: desktop pod galerii (levý sloupec), mobil mezi hlavní část a Popis.
     ------------------------------------------------- */
     (function omFbt() {
@@ -4070,9 +4069,24 @@
         var prod = null, initTries = 0;
 
         function init() {
+          if (!prod || prod.hasVariants) return;                       /* produkty s variantami ne */
           var mainForm = document.querySelector('.p-detail-inner form.pr-action');
+          if (!mainForm || !hidden(mainForm, 'productId') || !hidden(mainForm, 'priceId')) return;
+          /* cena za 1 ks: z dataLayeru (nezávislá na zvoleném množství), záloha z DOMu */
+          var mainPrice = num(prod.priceWithVat);
+          if (!mainPrice) {
+            var mp = document.querySelector('.p-final-price-wrapper .price-final') || document.querySelector('.p-detail-inner .price-final');
+            mainPrice = num(mp && mp.textContent);
+          }
+          var h1 = document.querySelector('h1');
+          var mainImg = imgSrc(document.querySelector('.p-image img')) || imgSrc(document.querySelector('.p-thumbnails-inner a.p-thumbnail img'));
+          if (!mainPrice || !h1 || !mainImg) return;
+          var mainItem = {
+            name: h1.textContent.replace(/\s+/g, ' ').trim(), price: mainPrice, img: mainImg,
+            productId: hidden(mainForm, 'productId'), priceId: hidden(mainForm, 'priceId'), lang: hidden(mainForm, 'language') || 'cs', code: ''
+          };
           var seen = {};
-          if (mainForm) seen[hidden(mainForm, 'productId')] = true;    /* samotný produkt se nenabízí */
+          seen[mainItem.productId] = true;                              /* samotný produkt se nenabízí podruhé jako související */
           var related = [];
           Array.prototype.slice.call(document.querySelectorAll('.products-related .product')).forEach(function (c) {
             var f = c.querySelector('form.pr-action');
@@ -4110,17 +4124,17 @@
               related = related.filter(function (r) { return !bundleCodes[r.code]; }).slice(0, MAX_RELATED);
               if (!related.length) return;
               if (document.getElementById('omfbt')) return;
-              build(related);
+              build([mainItem].concat(related));                        /* hlavní produkt je v nabídce první */
             })
             .catch(function () { /* bez seznamu balíčků nic nezobrazíme (nechceme nabízet balíčky) */ });
         }
 
-        /* údaje o produktu v dataLayeru se někdy objeví s mírným zpožděním – chvíli čekáme (jen kvůli kontrole balíčku) */
+        /* údaje o produktu v dataLayeru se někdy objeví s mírným zpožděním – čekáme až 8 s */
         var tries = 0;
         (function wait() {
           var p = dlProduct();
           if (p) { prod = p; init(); return; }
-          if (++tries < 15) setTimeout(wait, 200); else init();
+          if (++tries < 40) setTimeout(wait, 200);
         })();
 
         function build(items) {
