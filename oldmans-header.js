@@ -3100,13 +3100,17 @@
 
       /* ── MOBILNÍ STICKY CTA LIŠTA (28. 7. 2026, na žádost klienta; přepracováno 6. 11. 2026) ──
          Přilepená lišta dole, aktivuje se JEN když hlavní CTA (.om-buy-row) není vidět (odscrollováno
-         pryč) — přes IntersectionObserver. Jeden řádek: vlevo CENA (zrcadlí hlavní .price-final, takže
-         sleduje zvolený počet kusů a množstevní slevu) s PŘEŠKRTNUTOU cenou před slevou a procentem,
-         vpravo tlačítko Přidat do košíku. Počet kusů se mění jen v hlavním boxu nahoře na stránce
-         (v liště už není — klient chtěl zrušit bílý pruh nad tlačítkem).
-         Žádné duplicitní přepočty: tlačítko jen PROKLIKÁVÁ nativní cartBtn. Přeškrtnutá cena =
-         .price-standard (akce), jinak cena za 1 ks při načtení stránky (množstevní sleva); zobrazí se
-         jen když je aktuální cena nižší. Červené tlačítko u akce řeší CSS (body:has(#om-promo…)). */
+         pryč) — přes IntersectionObserver. Jeden řádek: vlevo CELKOVÁ ČÁSTKA za zvolený počet kusů
+         (cena za 1 ks z hlavního .price-final × počet kusů; sleduje množstevní slevu), nad ní PŘEŠKRTNUTÁ
+         celková cena před slevou + pilulka s ÚSPOROU v Kč, pod ní "N ks" (jen při více kusech); vpravo
+         tlačítko Přidat do košíku. Počet kusů se mění jen v hlavním boxu nahoře na stránce (v liště
+         už není — klient chtěl zrušit bílý pruh nad tlačítkem).
+         Žádné duplicitní přepočty cen: tlačítko jen PROKLIKÁVÁ nativní cartBtn. Referenční cena =
+         .price-standard (akce), jinak cena za 1 ks při načtení stránky (množstevní sleva); přeškrtnutá
+         cena a úspora se zobrazí jen když je aktuální cena za kus nižší. Úspora se zaokrouhluje na celé
+         Kč (stejně jako "ušetříte X Kč" v kartách množstevní slevy). Červené tlačítko u akce řeší CSS
+         (body:has(#om-promo…)). Počet kusů hlídáme i časovačem, protože nativní tlačítka +/- ne vždy
+         vyvolají událost (změna počtu v rámci jednoho pásma slevy nezmění text ceny za kus). */
       if (buyRow && qtyInput && cartBtn && !document.getElementById('om-sticky-cta')) {
         var stickyBar = document.createElement('div');
         stickyBar.id = 'om-sticky-cta';
@@ -3115,6 +3119,7 @@
             '<div class="om-sticky-cta-pr">' +
               '<div class="om-sticky-cta-old"><s></s><span class="om-sticky-cta-pct"></span></div>' +
               '<div class="om-sticky-cta-price"></div>' +
+              '<div class="om-sticky-cta-cnt"></div>' +
             '</div>' +
             '<button type="button" class="om-sticky-cta-btn">Přidat do košíku</button>' +
           '</div>';
@@ -3124,6 +3129,7 @@
         var stickyPrice = stickyBar.querySelector('.om-sticky-cta-price');
         var stickyOld = stickyBar.querySelector('.om-sticky-cta-old s');
         var stickyPct = stickyBar.querySelector('.om-sticky-cta-pct');
+        var stickyCnt = stickyBar.querySelector('.om-sticky-cta-cnt');
         var priceSrc = priceBlock.querySelector('.price-final');
 
         function stickyClean(t) { return String(t || '').replace(/\s+/g, ' ').trim(); }
@@ -3131,21 +3137,32 @@
           var m = String(t || '').replace(/[\s\u00a0]/g, '').replace(',', '.').match(/[0-9]+(\.[0-9]+)?/);
           return m ? parseFloat(m[0]) : 0;
         }
+        function stickyFmt(n) {
+          var r = Math.round(n * 100) / 100;
+          var s = r.toLocaleString('cs-CZ', { minimumFractionDigits: (r % 1 ? 2 : 0), maximumFractionDigits: 2 });
+          return s.replace(/\s/g, '\u00a0') + '\u00a0Kč';
+        }
         /* cena za 1 ks při načtení stránky (základ pro množstevní slevu) */
         var stickyBase = (priceSrc && (qtyInput.value || '1') === '1') ? stickyClean(priceSrc.textContent) : '';
+        var stickyLast = '';
 
         function syncStickyPrice() {
           if (!priceSrc) { stickyPrice.style.display = 'none'; return; }
-          var nowTxt = stickyClean(priceSrc.textContent);
-          stickyPrice.textContent = nowTxt;
+          var unitTxt = stickyClean(priceSrc.textContent);
+          var qty = Math.max(1, parseInt(qtyInput.value, 10) || 1);
+          var key = unitTxt + '|' + qty + '|' + (priceBlock.querySelector('.price-standard') ? stickyClean(priceBlock.querySelector('.price-standard').textContent) : '');
+          if (key === stickyLast) return;                              /* nic se nezměnilo */
+          stickyLast = key;
+          var unit = stickyNum(unitTxt);
+          stickyPrice.textContent = stickyFmt(unit * qty);              /* celkem za zvolený počet kusů */
+          stickyCnt.textContent = qty > 1 ? qty + '\u00a0ks' : '';
           var stdEl = priceBlock.querySelector('.price-standard') || document.querySelector('.p-final-price-wrapper .price-standard');
-          var refTxt = stdEl ? stickyClean(stdEl.textContent) : stickyBase;
-          var now = stickyNum(nowTxt), ref = stickyNum(refTxt);
-          var show = ref > 0 && now > 0 && now < ref - 0.005;
+          var ref = stickyNum(stdEl ? stickyClean(stdEl.textContent) : stickyBase);
+          var show = ref > 0 && unit > 0 && unit < ref - 0.005;
           stickyBar.classList.toggle('om-sticky-cta-solo', !show);
           if (show) {
-            stickyOld.textContent = refTxt;
-            stickyPct.textContent = '\u2212' + Math.round((1 - now / ref) * 100) + '\u00a0%';
+            stickyOld.textContent = stickyFmt(ref * qty);
+            stickyPct.textContent = '\u2212' + Math.round(ref * qty - unit * qty) + '\u00a0Kč';
           }
         }
         syncStickyPrice();
@@ -3153,6 +3170,9 @@
           new MutationObserver(syncStickyPrice).observe(priceBlock, { childList: true, characterData: true, subtree: true });
         }
         qtyInput.addEventListener('input', syncStickyPrice);
+        qtyInput.addEventListener('change', syncStickyPrice);
+        document.addEventListener('click', function () { setTimeout(syncStickyPrice, 120); setTimeout(syncStickyPrice, 700); });
+        setInterval(syncStickyPrice, 400);
 
         stickyAddBtn.addEventListener('click', function () {
           cartBtn.click();

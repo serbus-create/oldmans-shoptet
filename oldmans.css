@@ -4343,6 +4343,13 @@ html, body {
     white-space: nowrap;
   }
   #om-sticky-cta.om-sticky-cta-solo .om-sticky-cta-price { font-size: 24px; }
+  .om-sticky-cta-cnt {
+    font-size: 12px;
+    line-height: 1;
+    color: #6b6b6b;
+    margin-top: 3px;
+  }
+  .om-sticky-cta-cnt:empty { display: none; }
   .om-sticky-cta-btn {
     flex: 1;
     min-width: 0;
