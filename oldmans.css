@@ -6343,3 +6343,50 @@ body.type-index #om-header { position: relative; }
     body.type-category .products-block > div.product:active .p { animation: omProdShake .65s ease-in-out; }
   }
 }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   GALERIE PRODUKTU – ZAOBLENÍ, ŽÁDNÉ MEZERY, 5 NÁHLEDŮ NA ŠÍŘKU FOTKY (6. 11. 2026, klient)
+   Jen desktop (≥ 992 px; mobil má fotku přes celou šířku obrazovky, tam zaoblení nedává smysl).
+   - hlavní fotka zaoblená (16 px), mezera pod ní jen 14 px (dřív 22 px padding + 100 px margin
+     z 28. 7. 2026 — klient teď chce galerii bez mezer),
+   - řada náhledů má přesně šířku hlavní fotky: 5 stejných čtverců s mezerou 12 px
+     (velikost z šířky řady přes container query: 100cqw), zaoblené 10 px,
+   - aktivní náhled (.highlighted) má tenký tmavý okraj, ostatní jsou lehce zesvětlené,
+   - šipka karuselu zůstává jen u produktů s víc než 5 fotkami (Shoptet JS karusel dál funguje),
+   - hlavní fotka a lightbox (kliknutí) se nemění.
+   ══════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 992px) {
+  body.type-product .p-image-wrapper .p-image { padding-bottom: 0 !important; height: auto !important; }
+  body.type-product .p-image-wrapper .p-image .p-main-image { display: block; border-radius: 16px; overflow: hidden; }
+  body.type-product .p-image-wrapper .p-image img { border-radius: 16px; }
+  body.type-product .p-image-wrapper .row { margin-top: 14px !important; }
+
+  body.type-product .p-thumbnails-wrapper { container-type: inline-size; }
+  body.type-product .p-thumbnails {
+    height: calc((100cqw - 48px) / 5) !important;
+    margin-bottom: 0 !important;
+  }
+  body.type-product .p-thumbnail {
+    width: calc((100cqw - 48px) / 5) !important;
+    height: calc((100cqw - 48px) / 5) !important;
+    margin: 0 !important;
+    border-radius: 10px; overflow: hidden;
+    opacity: .65; transition: opacity .15s ease;
+    border: 0 !important; box-shadow: none !important; outline: 0 !important;
+  }
+  body.type-product .p-thumbnail ~ .p-thumbnail { margin-left: 12px !important; }
+  body.type-product .p-thumbnail img {
+    width: 100% !important; height: 100% !important; object-fit: cover; border: 0 !important; border-radius: 0;
+  }
+  body.type-product .p-thumbnail:hover,
+  body.type-product .p-thumbnail.highlighted { opacity: 1; }
+  body.type-product .p-thumbnail::after {
+    content: ""; position: absolute; inset: 0; border-radius: inherit;
+    border: 1.5px solid transparent; pointer-events: none;
+  }
+  body.type-product .p-thumbnail.highlighted::after { border-color: #1f1f1f; }
+  /* šipky karuselu jen když má produkt víc než 5 fotek (6. náhled = 11. odkaz, každý náhled má za sebou skrytý .cbox-gal) */
+  body.type-product .p-thumbnails:not(:has(.p-thumbnails-inner a:nth-of-type(11))) .thumbnail-next,
+  body.type-product .p-thumbnails:not(:has(.p-thumbnails-inner a:nth-of-type(11))) .thumbnail-prev { display: none !important; }
+}
