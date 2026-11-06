@@ -3598,8 +3598,11 @@
         n.firstChild.textContent = qty + '\u00a0ks';
         n.lastChild.textContent = ' × ' + omFmtKc(unit);
         n.hidden = false;
-        omFitNote(priceEl);
+        n.classList.add('om-price-unit--off');                       /* nejdřív skrytá (žádné problikávání zalomení) */
         window.omNotePrice = priceEl;
+        /* měříme až po dokončení aktualizace (pilulka "Ušetříte" se zobrazuje až po nastavení ceny) */
+        if (window.requestAnimationFrame) window.requestAnimationFrame(function () { omFitNote(priceEl); });
+        setTimeout(function () { omFitNote(priceEl); }, 150);
       } else { n.hidden = true; }
     }
     window.addEventListener('resize', function () { if (window.omNotePrice) omFitNote(window.omNotePrice); });

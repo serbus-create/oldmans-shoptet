@@ -6486,3 +6486,17 @@ body.type-index #om-header { position: relative; }
 .om-price-unit[hidden] { display: none !important; }
 .om-price-unit--short .om-pu-u { display: none; }
 .om-price-unit--off { display: none !important; }
+
+
+/* Přeškrtnutá cena v AKČNÍM boxu (6. 11. 2026, klient): vlastní řádek hned pod nadpisem "🔥 AKCE" a nad skutečnou cenou,
+   menší písmo (dřív 16 px vedle ceny působila příliš velká). Platí pro obě přeškrtnuté ceny, které se v boxu střídají:
+   původní akční cena (.om-promo-strike, při 1 ks) i cena před množstevní slevou (.om-price-orig, při slevě za množství).
+   Vždy je vidět jen jedna z nich, takže se při změně počtu kusů výška boxu nemění. */
+.om-promo .om-promo-right > * > .om-promo-strike,
+.om-promo .om-promo-right > * > .om-price-orig {
+  order: -1 !important;
+  flex: 0 0 100% !important;
+  font-size: 14px !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+}
