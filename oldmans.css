@@ -5111,7 +5111,7 @@ body:has(#om-promo:not(.om-promo--solo):not(.om-promo--ended)) .om-sticky-cta-bt
   display: block; position: relative; overflow: hidden; border-radius: 14px;
   transition: transform .25s ease, box-shadow .25s ease;
 }
-.wide-carousel.om-cards .item > a:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(0,0,0,.18); }
+.wide-carousel.om-cards .item > a:hover { transform: translateY(-4px); } /* stín při hoveru pryč (6. 11.): ořezával se do čtverce o overflow carouselu */
 .wide-carousel.om-cards img,
 .wide-carousel.om-cards #carousel img {
   width: 100% !important; height: auto !important; aspect-ratio: 2 / 3;
