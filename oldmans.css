@@ -440,8 +440,7 @@ li.om-cat-dynamic.om-obchod-enhanced:hover .om-obchod-chevron {
   overflow: hidden;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(6px);
-  transition: opacity .2s ease, transform .2s ease, visibility .2s;
+  transition: none;
   z-index: 1002;
 }
 li.om-cat-dynamic.om-obchod-enhanced:hover .om-obchod-dropdown {
@@ -574,14 +573,11 @@ li.om-cat-dynamic.om-obchod-enhanced:hover .om-obchod-dropdown {
 .om-partners-track { overflow: hidden; }
 .om-partners-list {
   display: flex; align-items: center; gap: 50px;
-  animation: om-scroll 30s linear infinite; width: max-content;
+  flex-wrap: wrap; justify-content: center; gap: 24px 44px; width: auto;   /* bez posouvání (klient 7. 11.) */
 }
 .om-partners-list img { height: 55px; width: auto; object-fit: contain; filter: grayscale(20%); transition: .3s; }
 .om-partners-list img:hover { filter: none; }
-@keyframes om-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
+.om-partners-list img:nth-child(n+16) { display: none; }   /* duplicitní konec seznamu sloužil jen ke smyčce posouvání */
 
 /* ──────────────────────────────────────────────
    O NAS
@@ -667,7 +663,6 @@ li.om-cat-dynamic.om-obchod-enhanced:hover .om-obchod-dropdown {
 .om-recipes .om-recipe-item:hover {
   border-color: #ddd;
   box-shadow: 0 10px 30px rgba(0,0,0,.10);
-  transform: translateY(-4px);
 }
 .om-recipes .om-recipe-item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
 .om-recipes .om-recipe-title {
@@ -697,7 +692,7 @@ li.om-cat-dynamic.om-obchod-enhanced:hover .om-obchod-dropdown {
   transition: background .2s, transform .2s;
 }
 .om-recipe-nav svg { width: 20px; height: 20px; display: block; }
-.om-recipe-nav:hover { background: #e6b800 !important; transform: translateY(-50%) scale(1.05); }
+.om-recipe-nav:hover { background: #e6b800 !important; transform: translateY(-50%); }
 .om-recipe-nav:focus { outline: none !important; box-shadow: none !important; }
 .om-recipe-nav-prev { left: -20px; }
 .om-recipe-nav-next { right: -20px; }
@@ -934,7 +929,6 @@ li.om-cat-dynamic.om-obchod-enhanced:hover .om-obchod-dropdown {
 .product-slider .add-to-cart-button:hover {
   background: #6aa028 !important;
   box-shadow: 0 4px 12px rgba(121,181,48,.30) !important;
-  transform: translateY(-1px) !important;
 }
 /* Pojistka — i vnitřní text/span bílý */
 .products-block .add-to-cart-button *,
@@ -1295,7 +1289,6 @@ body.type-category .products.products-page .product .p {
 body.type-category .products.products-page .product .p:hover {
   border-color: #ddd !important;
   box-shadow: 0 10px 30px rgba(0,0,0,.10) !important;
-  transform: translateY(-4px) !important;
 }
 
 /* ── Obrázek — čtverec, jednotné šedé pozadí, foto contain ── */
@@ -1529,7 +1522,6 @@ body.type-category .products.products-page .product .add-to-cart-button:hover,
 body.type-category .products.products-page .product .to-cart-button:hover {
   background: #6aa028 !important;
   box-shadow: 0 4px 12px rgba(121,181,48,.30) !important;
-  transform: translateY(-1px) !important;
 }
 
 /* ── Skrýt popisky, kód, quantity ── */
@@ -1675,7 +1667,6 @@ body.type-category .products.products-page .product .quantity {
 .products-alternative .product .p:hover {
   border-color: #ddd !important;
   box-shadow: 0 10px 30px rgba(0,0,0,.10) !important;
-  transform: translateY(-4px) !important;
 }
 .products-alternative .product .image,
 .products-alternative .product a.image {
@@ -1888,7 +1879,6 @@ body.type-category .products.products-page .product .quantity {
 .products-alternative .product .to-cart-button:hover {
   background: #6aa028 !important;
   box-shadow: 0 4px 12px rgba(121,181,48,.30) !important;
-  transform: translateY(-1px) !important;
 }
 .products-alternative .product .p-desc,
 .products-alternative .product .p-code,
@@ -1918,7 +1908,6 @@ h2.products-alternative-header {
 .product-slider-holder .product .p:hover {
   border-color: #ddd !important;
   box-shadow: 0 10px 30px rgba(0,0,0,.10) !important;
-  transform: translateY(-4px) !important;
 }
 .product-slider-holder .product .image,
 .product-slider-holder .product a.image {
@@ -2131,7 +2120,6 @@ h2.products-alternative-header {
 .product-slider-holder .product .to-cart-button:hover {
   background: #6aa028 !important;
   box-shadow: 0 4px 12px rgba(121,181,48,.30) !important;
-  transform: translateY(-1px) !important;
 }
 .product-slider-holder .product .p-desc,
 .product-slider-holder .product .p-code,
@@ -2309,7 +2297,6 @@ body.in-recepty h1 {
 .om-recipe-card:hover {
   border-color: #ddd !important;
   box-shadow: 0 10px 30px rgba(0,0,0,.10) !important;
-  transform: translateY(-4px) !important;
 }
 
 /* Foto — čtvercové, cover */
@@ -4300,7 +4287,6 @@ html, body {
     /* Skrytá mimo obrazovku dole, dokud JS nepřidá
        .om-sticky-cta-visible (hlavní CTA odscrollováno pryč) */
     transform: translateY(100%);
-    transition: transform .3s ease;
   }
   #om-sticky-cta.om-sticky-cta-visible {
     transform: translateY(0);
@@ -5105,7 +5091,6 @@ body:has(#om-promo:not(.om-promo--solo):not(.om-promo--ended)) .om-sticky-cta-bt
   display: block; position: relative; overflow: hidden; border-radius: 14px;
   transition: transform .25s ease, box-shadow .25s ease;
 }
-.wide-carousel.om-cards .item > a:hover { transform: translateY(-4px); } /* stín při hoveru pryč (6. 11.): ořezával se do čtverce o overflow carouselu */
 .wide-carousel.om-cards img,
 .wide-carousel.om-cards #carousel img {
   width: 100% !important; height: auto !important; aspect-ratio: 2 / 3;
@@ -5598,7 +5583,6 @@ body.ordering-process .om-hide-heading { display: none !important; }
 }
 #om-bundle .om-bundle-row:hover {
   box-shadow: 0 4px 14px rgba(0, 0, 0, .18);
-  transform: translateY(-1px);
 }
 #om-bundle .om-bundle-thumbs { flex: 0 0 auto; display: flex; align-items: center; }
 #om-bundle .om-bundle-th,
@@ -5847,7 +5831,6 @@ a.om-shoprate-row:hover .om-shoprate-val { text-decoration: underline; }
 @media (min-width: 992px) and (max-height: 780px) {
   form#product-detail-form.om-float #om-bundle { display: none; }
 }
-@keyframes omFloatIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
 /* Záložky Specifikace / Hodnocení / Značka: zarovnat vlevo (jako Popis), aby plovoucí box vpravo nic nepřekrýval */
 @media (min-width: 992px) {
@@ -5907,401 +5890,6 @@ a.om-shoprate-row:hover .om-shoprate-val { text-decoration: underline; }
 
 
 /* ══════════════════════════════════════════════════════════════════════════
-   HERO KARTY – HOVER: ZATŘESENÍ + LESK (5. 11. 2026, nápad klienta)
-   Při najetí myší na kartu se karta krátce zatřese (jako tlačítko Přidat do košíku)
-   a přes ni přejede diagonální záblesk. Hraje se jednou za najetí (~0,9 s).
-   Jen pro zařízení s myší (hover: hover) a ne při nastavení "omezit pohyb".
-   Ikonky/obrázky se nijak nemění, vše je čisté CSS (žádný JS).
-   ══════════════════════════════════════════════════════════════════════════ */
-.wide-carousel.om-cards .item > a::after {
-  content: "";
-  position: absolute; top: 0; left: 0; z-index: 2;
-  width: 55%; height: 100%;
-  background: linear-gradient(105deg, rgba(255,255,255,0) 25%, rgba(255,255,255,.6) 50%, rgba(255,255,255,0) 75%);
-  transform: translateX(-140%) skewX(-18deg);
-  opacity: 0; pointer-events: none;
-}
-@keyframes omCardShake {
-  0%, 100% { transform: translateY(-4px); }
-  10% { transform: translateY(-4px) translateX(-4px) rotate(-1.4deg); }
-  22% { transform: translateY(-4px) translateX(4px) rotate(1.4deg); }
-  34% { transform: translateY(-4px) translateX(-3px) rotate(-1deg); }
-  46% { transform: translateY(-4px) translateX(3px) rotate(1deg); }
-  58% { transform: translateY(-4px) translateX(-2px) rotate(-.6deg); }
-  70% { transform: translateY(-4px) translateX(2px) rotate(.6deg); }
-  82% { transform: translateY(-4px) translateX(-1px) rotate(-.3deg); }
-}
-@keyframes omCardShine {
-  0%   { transform: translateX(-140%) skewX(-18deg); opacity: 0; }
-  12%  { opacity: 1; }
-  88%  { opacity: 1; }
-  100% { transform: translateX(300%) skewX(-18deg); opacity: 0; }
-}
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .wide-carousel.om-cards .item > a:hover { animation: omCardShake .75s ease-in-out; }
-  .wide-carousel.om-cards .item > a:hover::after { animation: omCardShine .8s ease-out .12s both; }
-}
-
-
-/* ══════════════════════════════════════════════════════════════════════════
-   ČERVENÁ HLAVIČKA SE PŘI NAČTENÍ "VYLIJE" SHORA (5.–6. 11. 2026, nápad klienta)
-   Jen na hlavní stránce (body.type-index). Nová červená hlavička (horní lišta + hlavička + menu)
-   steče shora dolů (~2 s) PŘES původní světlou hlavičku pod ní (klon z JS, #om-old-skin).
-   "Plastický" dojem: hustá hmota zrychlí a před cílem pomalu dojíždí (bez odskoku), kapky se při
-   pádu dlouze protáhnou a pak pomalu stáhnou zpět (povrchové napětí), kapky vrhají stín na původní
-   hlavičku a po jejich špičkách přejíždí lesk, který se na konci ztratí. Všechny tři části jedou
-   jako jeden celek. Po skončení nezůstane žádný transform ani stín (fill-mode: backwards).
-   Při "omezit pohyb" se nehraje.
-   ══════════════════════════════════════════════════════════════════════════ */
-@keyframes omHdrDrop {
-  0%   { transform: translateY(var(--om-drop-from, -230px)); animation-timing-function: cubic-bezier(.5, 0, .3, 1); }
-  86%  { transform: translateY(4px); animation-timing-function: cubic-bezier(.4, 0, .2, 1); }
-  100% { transform: none; }
-}
-/* horní lišta navíc "drží" červenou nad sebou, ať při dojezdu nevykoukne bílý proužek */
-@keyframes omHdrDropTop {
-  0%   { transform: translateY(var(--om-drop-from, -230px)); box-shadow: 0 -120px 0 #9f1400; animation-timing-function: cubic-bezier(.5, 0, .3, 1); }
-  86%  { transform: translateY(4px); box-shadow: 0 -120px 0 #9f1400; animation-timing-function: cubic-bezier(.4, 0, .2, 1); }
-  100% { transform: none; box-shadow: none; }
-}
-@keyframes omDripStretch {
-  0%   { transform: scaleY(1.75); filter: drop-shadow(0 3px 4px rgba(40, 0, 0, .34)); animation-timing-function: ease-out; }
-  52%  { transform: scaleY(2.15); filter: drop-shadow(0 4px 5px rgba(40, 0, 0, .34)); animation-timing-function: cubic-bezier(.3, .1, .3, 1); }
-  84%  { transform: scaleY(.96); filter: drop-shadow(0 2px 3px rgba(40, 0, 0, .2)); animation-timing-function: ease-in-out; }
-  93%  { transform: scaleY(1.02); animation-timing-function: ease-in-out; }
-  100% { transform: scaleY(1); filter: drop-shadow(0 0 0 rgba(40, 0, 0, 0)); }
-}
-@keyframes omDripGloss {
-  0%   { transform: scaleY(1.75); opacity: 0; }
-  20%  { opacity: 1; }
-  52%  { transform: scaleY(2.15); opacity: 1; animation-timing-function: cubic-bezier(.3, .1, .3, 1); }
-  84%  { transform: scaleY(.96); opacity: .8; }
-  100% { transform: scaleY(1); opacity: 0; }
-}
-@media (prefers-reduced-motion: no-preference) {
-  body.type-index #om-header,
-  body.type-index #om-cat-menu {
-    animation: omHdrDrop 2s linear .12s backwards;
-  }
-  body.type-index #om-topbar {
-    animation: omHdrDropTop 2s linear .12s backwards;
-  }
-  body.type-index #om-cat-menu::after {
-    transform-origin: 50% 0;
-    animation: omDripStretch 2s linear .12s backwards;
-  }
-  /* lesk na kapkách: stejný tvar jako kapky (maska), jen pro desktop menu */
-  body.type-index #om-cat-menu::before {
-    content: ""; position: absolute; left: 0; right: 0; top: calc(100% - 1px);
-    height: 44px; pointer-events: none; z-index: 6; transform-origin: 50% 0;
-    background: linear-gradient(180deg, rgba(255,255,255,0) 8%, rgba(255,255,255,.34) 52%, rgba(255,255,255,0) 92%);
-    -webkit-mask: url("https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@9f76aa2c4412458a76c0114812557ce2d3fd4bee/menu-drip.svg") center top / 100% 100% no-repeat;
-            mask: url("https://cdn.jsdelivr.net/gh/serbus-create/oldmans-shoptet@9f76aa2c4412458a76c0114812557ce2d3fd4bee/menu-drip.svg") center top / 100% 100% no-repeat;
-    animation: omDripGloss 2s linear .12s both;
-  }
-  @media (max-width: 768px) {
-    body.type-index { --om-drop-from: -150px; }
-    body.type-index #om-cat-menu::before { display: none; }
-    body.type-index #om-header::after {
-      transform-origin: 50% 0;
-      animation: omDripStretch 2s linear .12s backwards;
-    }
-  }
-}
-
-/* topbar a header jsou při animaci nad klonem (poloha relative, stejně jako menu) */
-body.type-index #om-topbar,
-body.type-index #om-header { position: relative; }
-
-/* ── Klon původní světlé hlavičky pod animací ── */
-#om-old-skin-anchor { position: relative; height: 0; margin: 0; padding: 0; }
-#om-old-skin {
-  position: absolute; top: 0; left: 0; right: 0;
-  pointer-events: none; user-select: none;
-  animation: omOldSkinOff .01s linear 2.2s forwards;
-}
-@keyframes omOldSkinOff { to { visibility: hidden; } }
-#om-old-skin #om-old-header { position: static !important; z-index: auto !important; }
-#om-old-skin * { animation: none !important; }
-/* původní pravidla světlé hlavičky (stav před červeným redesignem), oscopovaná na klon */
-#om-old-skin #om-old-topbar {
-  background: #fff;
-  border-bottom: 1px solid #f0f0f0;
-  font-size: 13px;
-  color: #666;
-  padding: 6px 0;
-}
-#om-old-skin #om-old-topbar .om-topbar-inner {
-  max-width: 1400px; margin: 0 auto; padding: 0 20px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-#om-old-skin #om-old-topbar a { color: #666; text-decoration: none; }
-#om-old-skin #om-old-topbar a:hover { color: #000; }
-#om-old-skin #om-old-header {
-  background: #fff;
-  border-bottom: 1px solid #eee;
-  padding: 10px 0;
-  position: sticky;
-  top: 0;
-  
-  z-index: 1010;
-  box-shadow: 0 2px 10px rgba(0,0,0,.06);
-}
-#om-old-skin #om-old-header .om-header-inner {
-  max-width: 1400px; margin: 0 auto; padding: 0 20px;
-  display: flex; align-items: center; justify-content: space-between; gap: 20px;
-}
-#om-old-skin #om-old-header .om-logo img { height: 55px; width: auto; display: block; }
-#om-old-skin #om-old-header .om-contact { display: flex; align-items: center; gap: 16px; color: #000; text-decoration: none; flex-shrink: 0; }
-#om-old-skin #om-old-header .om-contact-icon { width: 44px; height: 44px; }
-#om-old-skin #om-old-header .om-contact-icon img { width: 100%; height: 100%; }
-#om-old-skin #om-old-header .om-contact-numb { font-weight: 600; color: #11c65d; font-size: 16px; line-height: 1.5; margin-bottom: -5px; }
-#om-old-skin #om-old-header .om-contact-text { color: #999; font-size: 13px; }
-#om-old-skin #om-old-header .om-contact:hover .om-contact-numb { text-decoration: underline; }
-#om-old-skin #om-old-header .om-search {
-  flex: 1; max-width: 848px; margin: 0 16px; position: relative;
-  
-  z-index: 1010;
-}
-#om-old-skin #om-old-header .om-search form {
-  display: flex; align-items: center; background: #f3f3f4;
-  border-radius: 50px; padding: 4px 4px 4px 0; height: 52px;
-  transition: box-shadow .3s; position: relative;
-}
-#om-old-skin #om-old-header .om-search input:focus { outline: none !important; box-shadow: none !important; }
-#om-old-skin #om-old-header .om-search form:hover { box-shadow: 0 0 0 2px #f7c91b; }
-#om-old-skin #om-old-header .om-search form:focus-within { box-shadow: 0 0 0 2px #f7c91b !important; }
-#om-old-skin #om-old-header .om-search input,
-#om-old-skin #om-old-header .om-search input:focus,
-#om-old-skin #om-old-header .om-search input:active {
-  outline: none !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-#om-old-skin #om-old-header .om-search input {
-  flex: 1; border: none; background: transparent;
-  padding: 0 8px 0 50px; font-size: 15px; color: #000;
-  outline: none; height: 100%;
-}
-#om-old-skin #om-old-header .om-search form:before {
-  content: "🔍"; position: absolute; left: 18px;
-  font-size: 16px; pointer-events: none;
-}
-#om-old-skin #om-old-header .om-search button {
-  background: #000; color: #fff; border: none; border-radius: 50px;
-  padding: 0 22px; height: 44px; font-size: 15px;
-  font-weight: 600; cursor: pointer; white-space: nowrap; transition: .3s;
-}
-#om-old-skin #om-old-header .om-search button:hover { background: #9f1400; }
-#om-old-skin #om-old-header .om-nav { display: flex; gap: 7px; list-style: none; margin: 0; padding: 0; flex-shrink: 0; }
-#om-old-skin #om-old-header .om-nav a {
-  color: #666; font-size: 15px; padding: 17px 13px;
-  display: flex; align-items: center; gap: 7px;
-  text-decoration: none; white-space: nowrap; transition: .3s;
-}
-#om-old-skin #om-old-header .om-nav a:hover { color: #000; background: rgba(247,201,27,.1); border-radius: 5px; }
-#om-old-skin #om-old-header .om-icons { display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
-#om-old-skin #om-old-header .om-login a { font-size: 24px; color: #000; text-decoration: none; display: flex; transition: .3s; }
-#om-old-skin #om-old-header .om-login a:hover { color: #f7c91b; }
-#om-old-skin #om-old-header .om-cart a {
-  display: flex; align-items: center; column-gap: 12px;
-  background: #f3f3f4; border-radius: 50px;
-  padding: 4px 20px 4px 4px; height: 52px;
-  font-weight: 600; color: #000; font-size: 15px;
-  text-decoration: none; transition: .3s;
-  min-width: 160px; white-space: nowrap; overflow: hidden;
-}
-#om-old-skin #om-old-header .om-cart-icon {
-  display: flex; width: 44px; height: 44px;
-  background: #f7c91b; border-radius: 50px;
-  align-items: center; justify-content: center;
-  flex-shrink: 0; color: #1a1a1a;
-}
-#om-old-skin #om-old-header .om-cart-icon svg { width: 20px; height: 20px; display: block; }
-#om-old-skin #om-old-header .om-cart a:hover { background: #ebebeb; }
-#om-old-skin #om-old-cat-menu {
-  background: #fff;
-  border-bottom: 1px solid #f0f0f0;
-  width: 100%;
-}
-#om-old-skin #om-old-cat-menu .om-cat-menu-inner {
-  max-width: 1400px; margin: 0 auto; padding: 0 20px;
-}
-#om-old-skin .om-cat-list {
-  display: flex; flex-wrap: nowrap; list-style: none;
-  margin: 0; padding: 0; align-items: center;
-  overflow: visible; position: relative;
-}
-#om-old-skin .om-cat-list > li {
-  display: inline-flex; white-space: nowrap;
-  font-size: 17px; font-weight: 700; border-radius: 5px;
-  transition: .3s; align-items: center;
-  
-  font-family: 'Baloo 2', sans-serif;
-}
-#om-old-skin .om-cat-list > li > a {
-  color: #000; padding: 14px 13px;
-  display: flex; align-items: center; gap: 5px;
-  text-decoration: none;
-}
-#om-old-skin .om-cat-list > li:hover { background: rgba(247,201,27,.1); }
-#om-old-skin .om-cat-list .cat-favorite > a { color: #79b530; }
-#om-old-skin .om-cat-list .cat-sale > a { color: #E74E1B; }
-#om-old-skin .om-cat-list .cat-favorite:hover { background: rgba(121,181,48,.1) !important; }
-#om-old-skin .om-cat-list .cat-sale:hover { background: rgba(231,78,27,.1) !important; }
-#om-old-skin .om-more-btn { margin-left: auto; position: relative; cursor: pointer; }
-#om-old-skin .om-more-btn > span { padding: 14px 13px; display: flex; align-items: center; color: #000; }
-#om-old-skin .om-more-submenu {
-  display: none; position: absolute; right: 0; top: 100%;
-  background: #fff; box-shadow: 0 6px 20px rgba(0,0,0,.08);
-  padding: 10px; border-radius: 0 0 10px 10px;
-  min-width: 200px; z-index: 1001; list-style: none;
-}
-#om-old-skin .om-more-submenu li { display: flex !important; padding: 8px 12px; }
-#om-old-skin .om-more-submenu li a { color: #000; text-decoration: none; }
-#om-old-skin li.om-cat-dynamic.om-obchod-enhanced {
-  position: relative;
-}
-#om-old-skin li.om-cat-dynamic.om-obchod-enhanced > a.om-obchod-btn {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 7px !important;
-  background: #f7c91b !important;
-  color: #1a1a1a !important;
-  padding: 9px 18px !important;
-  margin: 8px 0 !important;
-  border-radius: 6px !important;
-  font-weight: 700 !important;
-}
-#om-old-skin li.om-cat-dynamic.om-obchod-enhanced:hover > a.om-obchod-btn {
-  background: #e6b800 !important;
-}
-#om-old-skin .om-obchod-chevron {
-  width: 8px;
-  height: 8px;
-  border-right: 2px solid #1a1a1a;
-  border-bottom: 2px solid #1a1a1a;
-  transform: rotate(45deg);
-  margin-top: -4px;
-  margin-left: 2px;
-  transition: transform .2s;
-  display: inline-block;
-}
-#om-old-skin li.om-cat-dynamic.om-obchod-enhanced:hover .om-obchod-chevron {
-  transform: rotate(225deg);
-  margin-top: 4px;
-}
-#om-old-skin .om-obchod-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.15);
-  padding: 16px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  
-  width: 880px;
-  max-width: 92vw;
-  overflow: hidden;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(6px);
-  transition: opacity .2s ease, transform .2s ease, visibility .2s;
-  z-index: 1002;
-}
-#om-old-skin li.om-cat-dynamic.om-obchod-enhanced:hover .om-obchod-dropdown {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-#om-old-skin .om-obchod-dropdown-item {
-  display: flex !important;
-  align-items: center !important;
-  gap: 10px !important;
-  padding: 10px 12px !important;
-  border: 1px solid #e5e5e5 !important;
-  border-radius: 10px !important;
-  text-decoration: none !important;
-  color: #1a1a1a !important;
-  font-weight: 600 !important;
-  font-size: 14px !important;
-  transition: border-color .2s, background .2s !important;
-  
-  min-width: 0 !important;
-}
-#om-old-skin .om-obchod-dropdown-item:hover {
-  border-color: #79b530 !important;
-  background: #f9fdf5 !important;
-}
-#om-old-skin .om-obchod-dropdown-item img {
-  width: 28px !important;
-  height: 28px !important;
-  object-fit: contain !important;
-  flex-shrink: 0 !important;
-}
-#om-old-skin .om-obchod-dropdown-item .om-obchod-arrow {
-  margin-left: auto !important;
-  color: #79b530 !important;
-  font-weight: 800 !important;
-}
-@media (max-width: 992px) {
-  #om-old-skin .om-obchod-dropdown {
-    width: 90vw;
-  }
-}
-@media (max-width: 1399px) {
-  #om-old-skin #om-old-header .om-contact { display: none; }
-}
-@media (max-width: 1199px) {
-  #om-old-skin #om-old-header .om-cart a { font-size: 0; padding-inline: 3px; }
-}
-@media (max-width: 992px) {
-  #om-old-skin #om-old-header .om-nav { display: none; }
-  #om-old-skin #om-old-header .om-search { margin-inline: 0; max-width: 100%; }
-}
-@media (max-width: 768px) {
-  #om-old-skin #om-old-topbar { display: none !important; }
-  #om-old-skin #om-old-header .om-header-inner {
-    flex-wrap: nowrap;
-    gap: 10px;
-  }
-  #om-old-skin #om-old-header .om-logo { order: 1; }
-  #om-old-skin #om-old-header .om-logo img { height: 40px; }
-  #om-old-skin #om-old-header .om-icons { order: 2; margin-left: auto; gap: 14px; }
-  #om-old-skin #om-old-header .om-search,
-#om-old-skin #om-old-header .om-nav,
-#om-old-skin #om-old-cat-menu {
-    display: none !important;
-  }
-  #om-old-skin #om-old-header .om-cart a {
-    position: relative !important;
-    min-width: 0 !important;
-    width: 44px !important;
-    height: 44px !important;
-    padding: 0 !important;
-    column-gap: 0 !important;
-    background: #f7c91b !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    overflow: visible !important;
-    z-index: 1;
-  }
-  #om-old-skin #om-old-header .om-cart-icon {
-    background: transparent !important;
-    width: auto !important;
-    height: auto !important;
-    color: #1a1a1a;
-  }
-  #om-old-skin #om-old-header .om-cart-icon svg { width: 20px !important; height: 20px !important; }
-  #om-old-skin #om-old-header .om-cart .cart-price { display: none !important; }
-}
-
-
-/* ══════════════════════════════════════════════════════════════════════════
    PRODUKTOVÉ KARTY V KATEGORII – bez čtvercového rámečku a stínu okolo karty (6. 11. 2026)
    Šablona dává při najetí na buňku produktu (.products-block > div) čtvercový stín
    (0 0 10px rgba(0,0,0,.16)), který vypadá jako bílý rámeček s ostrými rohy kolem zakulacené karty.
@@ -6309,34 +5897,6 @@ body.type-index #om-header { position: relative; }
    ══════════════════════════════════════════════════════════════════════════ */
 .products-block > div:hover,
 .products-block > div.product:hover { box-shadow: none !important; }
-
-
-/* ══════════════════════════════════════════════════════════════════════════
-   PRODUKTOVÉ KARTY V KATEGORII – ZATŘESENÍ PŘI NAJETÍ / DOTEKU (6. 11. 2026, nápad klienta)
-   Jen na stránkách kategorií (body.type-category). Karta (.p) se krátce zatřese:
-   - na zařízeních s myší při najetí (:hover),
-   - na dotykových zařízeních (hover: none) při dotyku prstu (:active).
-   Třese se vnitřní karta, ne buňka, takže se nepohne mřížka. Nehraje se při "omezit pohyb".
-   ══════════════════════════════════════════════════════════════════════════ */
-/* pozn.: používáme samostatné vlastnosti translate/rotate, protože šablona má na .p:hover
-   "transform: translateY(-4px) !important", které by animaci přes transform přebilo */
-@keyframes omProdShake {
-  0%, 100% { translate: 0 0; rotate: 0deg; }
-  12% { translate: -3px 0; rotate: -1deg; }
-  26% { translate: 3px 0; rotate: 1deg; }
-  40% { translate: -2.5px 0; rotate: -.8deg; }
-  54% { translate: 2.5px 0; rotate: .8deg; }
-  68% { translate: -1.5px 0; rotate: -.4deg; }
-  82% { translate: 1px 0; rotate: .2deg; }
-}
-@media (prefers-reduced-motion: no-preference) {
-  @media (hover: hover) {
-    body.type-category .products-block > div.product:hover .p { animation: omProdShake .65s ease-in-out; }
-  }
-  @media (hover: none) {
-    body.type-category .products-block > div.product:active .p { animation: omProdShake .65s ease-in-out; }
-  }
-}
 
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -6500,3 +6060,9 @@ body.type-index #om-header { position: relative; }
   line-height: 1.2 !important;
   margin: 0 !important;
 }
+
+
+/* Bez animací (klient 7. 11. 2026): všechny pohyby a efekty pryč, zůstává JEN animace u tlačítka Přidat do košíku (.om-cta-wiggle).
+   Odstraněno: posouvání partnerů, "stékání" hlavičky na hlavní straně, zatřesení a lesk karet, zatřesení produktů v kategorii,
+   zvedání karet/tlačítek při najetí, vysouvání sticky lišty a menu. Níže vypínáme ještě animaci sloupců hodnocení ze šablony Shoptetu. */
+.rate-bar { animation: none !important; transform: none !important; }
