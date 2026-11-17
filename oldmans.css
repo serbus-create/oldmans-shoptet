@@ -6066,3 +6066,30 @@ a.om-shoprate-row:hover .om-shoprate-val { text-decoration: underline; }
    Odstraněno: posouvání partnerů, "stékání" hlavičky na hlavní straně, zatřesení a lesk karet, zatřesení produktů v kategorii,
    zvedání karet/tlačítek při najetí, vysouvání sticky lišty a menu. Níže vypínáme ještě animaci sloupců hodnocení ze šablony Shoptetu. */
 .rate-bar { animation: none !important; transform: none !important; }
+
+
+/* ── Menu: Vánoce — zelené tlačítko se stromečkem (17. 11. 2026) ──
+   Stejná geometrie jako žluté „Obchod“ (zaoblení 6px), firemní zelená
+   #79b530 jako hlavní CTA. */
+.om-cat-list > li.om-cat-vanoce > a {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: #79b530 !important;
+  color: #fff !important;
+  padding: 9px 18px !important;
+  margin: 8px 0 !important;
+  border-radius: 6px !important;
+  font-weight: 700 !important;
+}
+.om-cat-list > li.om-cat-vanoce:hover { background: transparent !important; }
+.om-cat-list > li.om-cat-vanoce:hover > a { background: #6aa02a !important; }
+.om-mobile-cats li.om-cat-vanoce { display: flex; align-items: center; min-height: 61px; box-sizing: border-box; }
+.om-mobile-cats li.om-cat-vanoce a {
+  background: #79b530 !important;
+  color: #fff !important;
+  border-radius: 6px !important;
+  padding: 6px 14px !important;
+  display: inline-block !important;
+  font-weight: 700 !important;
+}

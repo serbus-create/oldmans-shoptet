@@ -702,6 +702,15 @@
           icon.textContent = '📦';
           a.appendChild(icon);
           a.appendChild(document.createTextNode(' ' + cat.name));
+        } else if (cat.href.indexOf('/kategorie/vanoce/') !== -1) {
+          /* Vánoce: zelené tlačítko se stromečkem (na žádost klienta,
+             17. 11. 2026). Cíleno na URL, ne na text. */
+          li.classList.add('om-cat-vanoce');
+          var xi = document.createElement('span');
+          xi.className = 'cat-icon';
+          xi.textContent = '\uD83C\uDF84';
+          a.appendChild(xi);
+          a.appendChild(document.createTextNode(' ' + cat.name));
         } else {
           a.textContent = cat.name;
         }
