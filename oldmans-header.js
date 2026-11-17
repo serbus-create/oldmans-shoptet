@@ -715,7 +715,9 @@
           a.textContent = cat.name;
         }
         li.appendChild(a);
-        list.insertBefore(li, moreBtn);
+        /* Vánoce úplně první v menu (před Bestsellerem) — 17. 11. 2026 */
+        if (li.classList.contains('om-cat-vanoce')) list.insertBefore(li, list.firstChild);
+        else list.insertBefore(li, moreBtn);
       });
       return true;
     }
