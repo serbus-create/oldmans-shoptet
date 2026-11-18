@@ -23,10 +23,24 @@ if (FILE) {
     console.error('SHOPTET_EXPORT_URL není nastaveno (GitHub Secret) — ponechávám stávající bundles.json.');
     process.exit(0);
   }
-  let r;
-  try { r = await fetch(url, { headers: { 'user-agent': 'oldmans-bundles-builder' } }); }
-  catch (e) { console.error('CHYBA: export se nepodařilo stáhnout (síť).'); process.exit(1); }
-  if (!r.ok) { console.error('CHYBA: export vrátil HTTP ' + r.status + ' — ponechávám stará data.'); process.exit(1); }
+  /* Export z Shoptetu občas (nárazově) vrátí HTTP 403/5xx nebo spadne spojení.
+     Zkusíme to až 4× s rostoucí pauzou. Když se to nepovede ani tak, ponecháme
+     stávající bundles.json a běh neoznačíme za chybu (data jsou jen o hodinu
+     starší, další běh to dožene) — jen varování. */
+  const UA = 'Mozilla/5.0 (compatible; oldmans-bundles-builder/1.1; +https://www.oldmans.cz)';
+  let r = null, lastErr = '';
+  for (let i = 1; i <= 4; i++) {
+    try {
+      r = await fetch(url, { headers: { 'user-agent': UA, 'accept': 'application/xml,text/xml,*/*' } });
+      if (r.ok) break;
+      lastErr = 'HTTP ' + r.status;
+    } catch (e) { lastErr = 'síť'; r = null; }
+    if (i < 4) await new Promise(res => setTimeout(res, i * 15000));
+  }
+  if (!r || !r.ok) {
+    console.log('::warning::Export Shoptetu nedostupný (' + lastErr + ' po 4 pokusech) — ponechávám stávající bundles.json.');
+    process.exit(0);
+  }
   xml = await r.text();
 }
 if (!/<SHOPITEM[\s>]/.test(xml)) { console.error('CHYBA: v exportu nejsou žádné produkty — ponechávám stará data.'); process.exit(1); }
