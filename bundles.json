@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-20T20:19:17.223Z",
+ "generated": "2026-11-21T02:14:04.419Z",
  "bundles": [
   {
    "code": "1314",
@@ -395,7 +395,38 @@
      "std": 249
     }
    ]
+  },
+  {
+   "code": "1558",
+   "items": [
+    {
+     "code": "926",
+     "qty": 1,
+     "std": 199
+    },
+    {
+     "code": "2524",
+     "qty": 1,
+     "std": 239
+    },
+    {
+     "code": "931",
+     "qty": 1,
+     "std": 279
+    },
+    {
+     "code": "939",
+     "qty": 1,
+     "std": 249
+    }
+   ]
   }
  ],
- "skipped": []
+ "skipped": [
+  {
+   "code": "1561",
+   "name": "Vánoční česká klasika – Kečup, Hořčice a Uzená hořčice, 3× 500 g",
+   "reason": "sada má méně než 2 položky"
+  }
+ ]
 }
